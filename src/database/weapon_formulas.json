@@ -1,0 +1,797 @@
+{
+    "COMMENTS": {
+        "MossyMax": "for all the pve scaling numbers and some base damage values",
+        "archetypeNotes": [
+            "because of how infrequently some values vary they have had been made reliant upon defaualts",
+            "isExplosive is defaulted to false, if true dmg*critmult is impact. so dmg of 100 and crit mult of 0.3 would be 30 impact",
+            "oneAmmoBurst is defaulted to false, if the gun shoots multiple bullets in a \"burst\" but only uses one ammo per burst set this to true",
+            "isCharge is defaulted to false, if the gun has a charge time set this to true"
+    ]
+    },
+    "INDEX": {
+        "6": "Auto Rifle",
+        "31": "Combat Bow",
+        "11": "Fusion Rifle",
+        "23": "Grenade Launcher",
+        "9": "Hand Cannon",
+        "22": "Linear Fusion Rifle",
+        "8": "Machine Gun",
+        "13": "Pulse Rifle",
+        "10": "Rocket Launcher",
+        "14": "Scout Rifle",
+        "7": "Shotgun",
+        "12": "Sniper Rifle",
+        "24": "Submachine Gun",
+        "18": "Sword",
+        "33": "Glaive",
+        "25": "Trace Rifle",
+        "17": "Sidearm"
+    },
+    "Auto Rifle": {
+        "878286503":  {"name": "Rapid-Fire Frame",   "category": "default", "archetype": "Rapid-Fire",  "pveMult":1.00},
+        "944506345":  {"name": "SUROS Regime",       "category": "default", "archetype": "Precision",   "pveMult":1.00},
+        "961505134":  {"name": "Tommy's Matchbook",  "category": "default", "archetype": "Rapid-Fire",  "pveMult":1.00},
+        "1019291327": {"name": "High-Impact Frame",  "category": "default", "archetype": "High-Impact", "pveMult":1.00},
+        "1294026524": {"name": "Adaptive Frame",     "category": "default", "archetype": "Adaptive",    "pveMult":1.00},
+        "1458010786": {"name": "Lightweight",        "category": "default", "archetype": "Adaptive",    "pveMult":1.00},
+        "1484442054": {"name": "Monte Carlo",        "category": "default", "archetype": "Precision",   "pveMult":1.00},
+        "1636108362": {"name": "Precision Frame",    "category": "default", "archetype": "Precision",   "pveMult":1.00},
+        "3208839961": {"name": "Cerberus+1",        "category": "Cerberus", "archetype": "Cerberus",    "pveMult":1.00},
+        "3610814281": {"name": "Hard Light",         "category": "default", "archetype": "Precision",   "pveMult":1.00},
+        "3755070117": {"name": "Sweet Business",     "category": "default", "archetype": "SweetBuiss",  "pveMult":1.15},
+        "3602718766": {"name": "Quicksilver Storm",  "category": "default", "archetype": "Rapid-Fire",  "pveMult":1.00},
+
+        "category": {
+            "default": {
+                "range":    {"zrm": 1.575, "zrm_tier": 16, "vpp": 0.0963, "base_min": 11.87, "base_max": 40.8, "scale": false, "floorPercent": 0.5},
+                "reload":   {"a": 0.0000855689, "b": -0.0242021, "c": 2.80673006666667},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.15, "boss": 1.15, "miniboss": 1.2, "elite": 1.3, "minor": 1.3}
+            },
+            "Cerberus":{
+                "range":    null,
+                "reload":   {"a": 0.0000855689, "b": -0.0242021, "c": 2.80673006666667},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.15, "boss": 1.15, "miniboss": 1.2, "elite": 1.3, "minor": 1.3}
+            },
+            "hard_light": {
+                "range":    {"zrm": 1.575, "zrm_tier": 16, "vpp": 0.0963, "base_min": 11.87, "base_max": 40.8, "scale": false, "floorPercent": 0.7},
+                "reload":   {"a": 0.0000855689, "b": -0.0242021, "c": 2.80673006666667},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.15, "boss": 1.15, "miniboss": 1.2, "elite": 1.3, "minor": 1.3}
+            }
+        },
+
+        "archetype": {
+            "Rapid-Fire":  {"damage": 13.4, "critMult": 1.5, "burstDelay": 0.083333, "burstSize": 1, "burstDuration": 0},
+            "High-Impact": {"damage": 22.0, "critMult": 1.6, "burstDelay": 0.166667, "burstSize": 1, "burstDuration": 0},
+            "Adaptive":    {"damage": 14.3, "critMult": 1.6, "burstDelay": 0.1     , "burstSize": 1, "burstDuration": 0},
+            "Precision":   {"damage": 20.0, "critMult": 1.6, "burstDelay": 0.133333, "burstSize": 1, "burstDuration": 0},
+            "Cerberus":    {"damage": 18.0, "critMult": 1.7, "burstDelay": 0.166667, "burstSize": 4, "burstDuration": 0},
+            "SweetBuiss":  {"damage": 15.0, "critMult": 1.4, "burstDelay": 0.133333, "burstSize": 1, "burstDuration": 0}
+        }
+    },
+    "Combat Bow": {
+        "715195141":  {"name": "Precision Frame",    "category": "default", "archetype": "", "pveMult":1.00},
+        "1470121888": {"name": "Wish-Ender",         "category": "exotic",  "archetype": "", "pveMult":1.00},
+        "1573888036": {"name": "Trinity Ghoul",      "category": "exotic",  "archetype": "", "pveMult":1.00},
+        "1699724249": {"name": "Leviathan's Breath", "category": "exotic",  "archetype": "", "pveMult":1.00},
+        "2108556049": {"name": "Lightweight Frame",  "category": "default", "archetype": "", "pveMult":1.00},
+        "2186532310": {"name": "Le Monarque",        "category": "exotic",  "archetype": "", "pveMult":1.00},
+        "3239299468": {"name": "Ticuu's Divination", "category": "exotic",  "archetype": "", "pveMult":1.00},
+        "2226793914": {"name": "Hierarchy Of Needs", "category": "exotic",  "archetype": "", "pveMult":1.00},
+
+        "category": {
+            "default": {
+                "range":    null,
+                "reload":   null,
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.5, "boss": 1.5, "miniboss": 1.5, "elite": 1.9, "minor": 2.3}
+            },
+            "exotic": {
+                "range":    null,
+                "reload":   null,
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.5, "boss": 1.5, "miniboss": 1.5, "elite": 1.9, "minor": 2.5}
+            }
+        }
+    },
+    "Fusion Rifle":{
+        "656200654":  {"name": "Merciless",           "category": "default", "pveMult":1.20},
+        "878286503":  {"name": "Rapid-Fire Frame",    "category": "default", "pveMult":1.20},
+        "1019291327": {"name": "High-Impact Frame",   "category": "default", "pveMult":1.20},
+        "1186480754": {"name": "Bastion",             "category": "default", "pveMult":1.00},
+        "1294026524": {"name": "Adaptive Frame",      "category": "default", "pveMult":1.15},
+        "1636108362": {"name": "Precision Frame",     "category": "default", "pveMult":1.00},
+        "1656957541": {"name": "Jötunn",              "category": "Jotunn",  "pveMult":1.00},
+        "1657056865": {"name": "One Thousand Voices", "category": "1KV",     "pveMult":1.00},
+        "1927916065": {"name": "Telesto",             "category": "Telesto", "pveMult":1.00},
+        "2518716062": {"name": "Aggressive Frame",    "category": "default", "pveMult":1.00},
+        "3610750208": {"name": "Vex Mythoclast",      "category": "Vex",     "pveMult":1.00},
+        "2585427437": {"name": "Delicate Tomb",       "category": "default", "pveMult":1.00},
+
+        "category": {
+            "default": {
+                "range":    {"zrm": 1.3, "zrm_tier": null, "vpp": 0.0324, "base_min": 10.56, "base_max": 15.1, "scale": true},
+                "reload":   {"a": 0.0000615281, "b": -0.0198054, "c": 2.82857040000000, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.18, "boss": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
+            },
+            "1KV": {
+                "range":    null,
+                "reload":   null,
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.63, "boss": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
+            },
+            "Telesto": {
+                "range":    null,
+                "reload":   {"a": 0.0000615281, "b": -0.0198054, "c": 2.82857040000000, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.18, "boss": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
+            },
+            "Jotunn": {
+                "range":    null,
+                "reload":   {"a": 0.0000615281, "b": -0.0198054, "c": 2.82857040000000, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.18, "boss": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
+            },
+            "Vex": {
+                "range":    {"zrm": 1.475, "zrm_tier": 15, "vpp": 0.0963, "base_min": 11.87, "base_max": 40.8, "scale": true, "floorPercent": 0.5},
+                "reload":   {"a": 0.0000855689, "b": -0.0242021, "c": 2.80673006666667, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.0, "boss": 2.0, "miniboss": 2.0, "elite": 2.0, "minor": 2.0}
+            }
+        },
+
+        "archetype": {
+            "Rapid-Fire":  {"damage": 27.22, "critMult": 1.0, "burstDelay": 0.500, "burstSize": 9, "burstDuration": 0.233, "oneAmmoBurst": true},
+            "High-Impact": {"damage": 66.00, "critMult": 1.0, "burstDelay": 0.960, "burstSize": 5, "burstDuration": 0.233, "oneAmmoBurst": true},
+            "Precision":   {"damage": 40.00, "critMult": 1.0, "burstDelay": 0.780, "burstSize": 7, "burstDuration": 0.233, "oneAmmoBurst": true},
+            "Adaptive":    {"damage": 38.60, "critMult": 1.0, "burstDelay": 0.66 , "burstSize": 7, "burstDuration": 0.233, "oneAmmoBurst": true},
+            "Aggressive":  {"damage": 38.60, "critMult": 1.0, "burstDelay": 0.66 , "burstSize": 7, "burstDuration": 0.000, "oneAmmoBurst": true},
+            "Jotunn":      {"damage": 326.0, "critMult": 1.0, "burstDelay": 0.767, "burstSize": 1, "burstDuration": 0.000, "oneAmmoBurst": true},
+            "Bastion":     {"damage": 26.50, "critMult": 1.0, "burstDelay": 0.733, "burstSize": 21,"burstDuration": 0.000, "oneAmmoBurst": true},
+            "Vex":         {"damage": 22.00, "critMult": 1.6, "burstDelay": 0.153, "burstSize": 1, "burstDuration": 0.000}
+        }
+    },
+    "Grenade Launcher": {
+        "389268985":  {"name": "Anarchy",           "category": "anarchy",  "pveMult":1.00},
+        "425960662":  {"name": "Fighting Lion",     "category": "special",  "pveMult":0.78},
+        "474269988":  {"name": "Lightweight Frame", "category": "special",  "pveMult":1.10},
+        "1294026524": {"name": "Adaptive Frame",    "category": "heavy",    "pveMult":1.00},
+        "1315870387": {"name": "Salvation's Grip",  "category": "heavy",    "pveMult":1.00},
+        "1395789926": {"name": "Wave Frame",        "category": "lion",     "pveMult":1.50},
+        "1458010786": {"name": "Lightweight Frame", "category": "special",  "pveMult":1.00},
+        "2353477480": {"name": "Rapid-Fire Frame",  "category": "heavy",    "pveMult":1.00},
+        "2977709078": {"name": "The Prospector",    "category": "heavy",    "pveMult":1.00},
+        "3063320916": {"name": "Witherhoard",       "category": "special",  "pveMult":1.00},
+        "3913463509": {"name": "The Colony",        "category": "heavy",    "pveMult":1.00},
+        "4130495068": {"name": "Precision Frame",   "category": "heavy",    "pveMult":1.00},
+        "1174163613": {"name": "Parasite",          "category": "parasite", "pveMult":1.00},
+        "1759472859": {"name": "Double Fire",       "category": "special",  "pveMult":1.00},
+
+        "category": {
+            "special": {
+                "range":    null,
+                "reload":   {"a": 0.0000724199, "b": -0.0216432, "c": 3.24104606666667, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.5, "boss": 2.5, "miniboss": 2.63, "elite": 2.63, "minor": 3.13}
+            },
+            "lion": {
+                "range":    null,
+                "reload":   {"a": 0.0000724199, "b": -0.0216432, "c": 3.24104606666667, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.5, "boss": 2.5, "miniboss": 2.63, "elite": 2.63, "minor": 3.13}
+            },
+            "heavy": {
+                "range":    null,
+                "reload":   {"a": 0.0000755233, "b": -0.0248947, "c": 4.12880153333333, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.25, "boss": 2.25, "miniboss": 2.36, "elite": 2.36, "minor": 3.13}
+            },
+            "anarchy": {
+                "range":    null,
+                "reload":   {"a": 0.0000755233, "b": -0.0248947, "c": 4.12880153333333, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.13, "boss": 1.58, "miniboss": 2.36, "elite": 2.36, "minor": 3.13}
+            },
+            "parasite": {
+                "range":    null,
+                "reload":   {"a": 0.0000755233, "b": -0.0248947, "c": 4.12880153333333, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.27, "boss": 2.27, "miniboss": 2.38, "elite": 2.36, "minor": 3.13}
+            }
+        }
+    },
+    "Hand Cannon":{
+        "213689231":  {"name": "Hawkmoon",         "category": "default",  "archetype": "Adaptive",    "pveMult":1.00},
+        "507151084":  {"name": "Sturm",            "category": "120 RPM",  "archetype": "Aggressive",  "pveMult":1.00},
+        "647617635":  {"name": "Ace of spades",    "category": "default",  "archetype": "Adaptive",    "pveMult":1.00},
+        "1030990989": {"name": "Crimson",          "category": "Crimson",  "archetype": "Crimson",     "pveMult":1.00},
+        "1294026524": {"name": "Adaptive Frame",   "category": "default",  "archetype": "Adaptive",    "pveMult":1.00},
+        "1322370662": {"name": "Precision Frame",  "category": "default",  "archetype": "Precision",   "pveMult":1.00},
+        "1791592647": {"name": "Malfeasance",      "category": "default",  "archetype": "Precision",   "pveMult":1.00},
+        "1863355414": {"name": "Thorn",            "category": "default",  "archetype": "Adaptive",    "pveMult":1.00},
+        "2144092201": {"name": "Lumina",           "category": "default",  "archetype": "Adaptive",    "pveMult":1.00},
+        "2189829540": {"name": "Adaptive Frame",   "category": "default",  "archetype": "Adaptive",    "pveMult":1.00},
+        "2757685314": {"name": "Aggressive Frame", "category": "120 RPM",  "archetype": "Aggressive",  "pveMult":1.00},
+        "2770223582": {"name": "The Last Word",    "category": "LastWord", "archetype": "Rapid-Fire",  "pveMult":1.00},
+        "3174300811": {"name": "Eriana's vow",     "category": "Eriana",   "archetype": "Eriana",      "pveMult":1.00},
+        "3468089894": {"name": "Aggressive Frame", "category": "120 RPM",  "archetype": "Aggressive",  "pveMult":1.00},
+        "3923638944": {"name": "Double Fire",      "category": "default",  "archetype": "Aggressive",  "pveMult":1.00},
+        "4045839491": {"name": "Sunshot",          "category": "120 RPM",  "archetype": "Lightweight", "pveMult":1.00},
+
+        "category": {
+            "default": {
+                "range":    {"zrm": 1.375, "zrm_tier": 14, "vpp": 0.0864, "base_min": 16.96, "base_max": 29.6, "scale": true},
+                "reload":   {"a": 0.000129019, "b": -0.0363945, "c": 4.19575, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.2, "boss": 1.3, "miniboss": 1.4, "elite": 1.4, "minor": 2.13}
+            },
+            "120 RPM": {
+                "range":    {"zrm": 1.375, "zrm_tier": 14, "vpp": 0.09, "base_min": 20, "base_max": 34.1, "scale": true},
+                "reload":   {"a": 0.000129019, "b": -0.0363945, "c": 4.19575, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.2, "boss": 1.3, "miniboss": 1.4, "elite": 1.4, "minor": 2.13}
+            },
+            "Eriana": {
+                "range":    null,
+                "reload":   {"a": 0.000129019, "b": -0.0363945, "c": 4.19575, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.2, "boss": 1.3, "miniboss": 1.4, "elite": 1.4, "minor": 2.13}
+            },
+            "LastWord": {
+                "range":    {"zrm": 1, "zrm_tier": 11,         "vpp": 0,       "base_min": 19.3,           "base_max": 29.6, "scale": true},
+                "reload":   {"a": 0.000129019, "b": -0.0363945, "c": 4.19575, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.2, "boss": 1.3, "miniboss": 1.4, "elite": 1.4, "minor": 2.13}
+            },
+            "Crimson": {
+                "range":    {"zrm": 1.375, "zrm_tier": 14,         "vpp": 0,       "base_min": 24.3636,           "base_max": 29.6, "scale": true},
+                "reload":   {"a": 0.000129019, "b": -0.0363945, "c": 4.19575, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.2, "boss": 1.3, "miniboss": 1.4, "elite": 1.4, "minor": 2.13}
+            }
+        },
+
+        "archetype": {
+            "Precision":  {"damage":40, "critMult":1.5, "burstDelay":0.3333, "burstSize":1, "burstDuration":0},
+            "Aggressive": {"damage":50, "critMult":1.6, "burstDelay":0.5, "burstSize":1, "burstDuration":0},
+            "Adaptive":   {"damage":46.5, "critMult":1.5, "burstDelay":0.43321, "burstSize":1, "burstDuration":0},
+            "Lightweight":{"damage":42, "critMult":1.6, "burstDelay":0.4, "burstSize":1, "burstDuration":0},
+            "Rapid-Fire": {"damage":38, "critMult":1.4, "burstDelay":0.26667, "burstSize":1, "burstDuration":0},
+            "Crimson":    {"damage":19, "critMult":1.6, "burstDelay":0.14458, "burstSize":3, "burstDuration":0.2333},
+            "Eriana":     {"damage":78, "critMult":1.6, "burstDelay":0.66667, "burstSize":1, "burstDuration":0}
+        }
+    },
+    "Linear Fusion Rifle": {
+        "1531126198": {"name": "The Queenbreaker", "category": "default", "pveMult":1.10},
+        "2057203855": {"name": "Precision Frame",  "category": "default", "pveMult":1.10},
+        "2564164194": {"name": "Arbalest",         "category": "special", "pveMult":1.10},
+        "3884127242": {"name": "Sleeper Simulant", "category": "default", "pveMult":1.00},
+        "2881100038": {"name": "Lorentz Driver",   "category": "special", "pveMult":1.10},
+
+        "category": {
+            "default": {
+                "range":    null,
+                "reload":   {"a": 0.0000588462, "b": -0.0199884, "c": 2.87206463333, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.81, "boss": 1.81, "miniboss": 1.92, "elite": 1.92, "minor": 2.03}
+            },
+            "special": {
+                "range":    null,
+                "reload":   {"a": 0.0000588462, "b": -0.0199884, "c": 2.87206463333, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.81, "boss": 1.54, "miniboss": 1.64, "elite": 1.92, "minor": 2.03}
+            }
+        },
+
+        "archetype": {
+            "Precision":    {"damage": 166, "critMult": 3.0, "burstDelay": 0.533, "burstSize": 1, "burstDuration": 0.02},
+            "Aggressive":   {"damage": 78,  "critMult": 3.0, "burstDelay": 0.533, "burstSize": 3, "burstDuration": 0.5, "oneAmmoBurst": true},
+            "QueenBreaker": {"damage": 131, "critMult": 2.5, "burstDelay": 0.300, "burstSize": 1, "burstDuration": 0},
+            "SleeperSim":   {"damage": 726, "critMult": 1.2, "burstDelay": 1.033, "burstSize": 1, "burstDuration": 0}
+        }
+    },
+    "Machine Gun": {
+        "878286503":  {"name": "Rapid-Fire Frame",  "category": "default", "archetype": "Rapid-Fire", "pveMult":1.00},
+        "1019291327": {"name": "High-Impact Frame", "category": "default", "archetype": "High-Impact", "pveMult":1.00},
+        "1294026524": {"name": "Adaptive Frame",    "category": "default", "archetype": "Adaptive", "pveMult":1.00},
+        "2261491232": {"name": "Xenophage",         "category": "default", "archetype": "Xenophage", "pveMult":4.50},
+        "2608508147": {"name": "Heir Apparent",     "category": "default", "archetype": "HeirApparent", "pveMult":1.00},
+        "4148158229": {"name": "Thunderlord",       "category": "default", "archetype": "Adaptive", "pveMult":1.00},
+        "2940035732": {"name": "Grand Overture",    "category": "default", "archetype": "", "pveMult":1.00},
+
+        "category": {
+            "default": {
+                "range":    null,
+                "reload":   {"a": 0.0000905351, "b": -0.0305819, "c": 6.12199050000000, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.38, "boss": 2.16, "miniboss": 2.25, "elite": 3.36, "minor": 4.20}
+            },
+            "Xenophage": {
+                "range":    null,
+                "reload":   {"a": 0.0000905351, "b": -0.0305819, "c": 6.12199050000000, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.38, "boss": 1.80, "miniboss": 2.25, "elite": 3.36, "minor": 4.20}
+            },
+            "GrandOverture": {
+                "range":    null,
+                "reload":   {"a": 0.0000905351, "b": -0.0305819, "c": 6.12199050000000, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.38, "boss": 1.80, "miniboss": 2.25, "elite": 4.80, "minor": 4.20}
+            }
+        },
+
+        "archetype": {
+            "High-Impact": {"damage": 34, "critMult": 1.4, "burstDelay": 0.16667, "burstSize": 1, "burstDuration": 0},
+            "Adaptive":    {"damage": 30, "critMult": 1.4, "burstDelay": 0.13333, "burstSize": 1, "burstDuration": 0},
+            "Rapid-Fire":  {"damage": 18, "critMult": 1.3, "burstDelay": 0.06667, "burstSize": 1, "burstDuration": 0},
+            "Xenophage":   {"damage": 150, "critMult": 1.0, "burstDelay": 0.5000, "burstSize": 1, "burstDuration": 0},
+            "HeirApparent":{"damage": 30, "critMult": 1.4, "burstDelay": 0.13333, "burstSize": 1, "burstDuration": 0}
+        }
+    },
+    "Pulse Rifle":{
+        "878286503":  {"name": "Rapid-Fire Frame",       "category": "default",   "archetype": "Rapid-Fire",    "pveMult":1.00},
+        "1019291327": {"name": "High-Impact Frame",      "category": "default",   "archetype": "High-Impact",   "pveMult":1.00},
+        "1294026524": {"name": "Adaptive Frame",         "category": "default",   "archetype": "Adaptive",      "pveMult":1.00},
+        "1458010786": {"name": "Lightweight Frame",      "category": "default",   "archetype": "Lightweight",   "pveMult":1.00},
+        "2307143135": {"name": "Vigilance Wing",         "category": "default",   "archetype": "VigilanceWing", "pveMult":1.26},
+        "2874284214": {"name": "Aggressive Burst",       "category": "aggresive", "archetype": "Aggressive",    "pveMult":1.00},
+        "3837077246": {"name": "No Time to Explain",     "category": "aggresive", "archetype": "Aggressive",    "pveMult":1.00},
+        "3905543891": {"name": "Graviton Lance",         "category": "default",   "archetype": "GravitonLance", "pveMult":1.00},
+        "4004944400": {"name": "Bad Juju",               "category": "default",   "archetype": "Lightweight",   "pveMult":1.00},
+        "4208418110": {"name": "Outbreak Perfected",     "category": "default",   "archetype": "Lightweight",   "pveMult":1.00},
+        "4172222323": {"name": "Legacy PR-55 Frame",     "category": "default",   "archetype": "Lightweight",   "pveMult":1.00},
+        "3441203855": {"name": "Collective Obligation",  "category": "default",   "archetype": "Adaptive",      "pveMult":1.00},
+
+        "category": {
+            "default": {
+                "range":    {"zrm": 1.675, "zrm_tier": 17, "vpp": 0.072, "base_min": 17.3, "base_max": 40.4, "scale": false, "floorPercent": 0.5},
+                "reload":   {"a": 0.0000926208, "b": -0.0256877, "c": 2.92627266666667, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 0.90, "boss": 1.00, "miniboss": 1.05, "elite": 1.05, "minor": 1.48}
+            },
+            "aggresive": {
+                "range":    {"zrm": 1.675, "zrm_tier": 17, "vpp": 0.072, "base_min": 17.3, "base_max": 40.4, "scale": false, "floorPercent": 0.5},
+                "reload":   {"a": 0.0000926208, "b": -0.0256877, "c": 2.92627266666667, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 0.90, "boss": 0.90, "miniboss": 1.05, "elite": 1.05, "minor": 1.48}
+            }
+        },
+
+        "archetype": {
+            "Aggressive":    {"damage": 15.5, "critMult": 1.7, "burstDelay": 0.13333, "burstSize": 4, "burstDuration": 0.2333, "oneAmmoBurst": false},
+            "High-Impact":   {"damage": 22.0, "critMult": 1.65, "burstDelay": 0.17647, "burstSize": 3, "burstDuration": 0.1667, "oneAmmoBurst": false},
+            "Rapid-Fire":    {"damage": 14.0, "critMult": 1.7, "burstDelay": 0.11111, "burstSize": 3, "burstDuration": 0.1667, "oneAmmoBurst": false},
+            "Adaptive":      {"damage": 19.0, "critMult": 1.7, "burstDelay": 0.15385, "burstSize": 3, "burstDuration": 0.1667, "oneAmmoBurst": false},
+            "Lightweight":   {"damage": 16.0, "critMult": 1.65, "burstDelay": 0.11111, "burstSize": 3, "burstDuration": 0.1667, "oneAmmoBurst": false},
+            "VigilanceWing": {"damage": 15.7, "critMult": 1.46, "burstDelay": 0.11321, "burstSize": 5, "burstDuration": 0.3000, "oneAmmoBurst": false},
+            "GravitonLance": {"damage": 23.0, "critMult": 1.65, "burstDelay": 0.23346, "burstSize": 5, "burstDuration": 0.1000, "oneAmmoBurst": false}
+        }
+    },
+    "Rocket Launcher": {
+        "216781713":  {"name": "Häkke Precision Frame", "category": "default", "pveMult":1.00},
+        "411799453":  {"name": "Deathbringer",          "category": "default", "pveMult":1.00},
+        "1019291327": {"name": "High-Impact Frame",     "category": "default", "pveMult":1.00},
+        "1294026524": {"name": "Adaptive Frame",        "category": "default", "pveMult":1.00},
+        "2200569208": {"name": "Eyes of Tomorrow",      "category": "default", "pveMult":1.00},
+        "2473404935": {"name": "The Wardcliff Coil",    "category": "default", "pveMult":1.00},
+        "2491817779": {"name": "Disabled",              "category": null,      "pveMult":1.00},
+        "3419274965": {"name": "Precision Frame",       "category": "default", "pveMult":1.00},
+        "3468089894": {"name": "Aggressive Frame",      "category": "default", "pveMult":1.00},
+        "3649430342": {"name": "Two-Tailed Fox",        "category": "default", "pveMult":1.00},
+        "2962361451": {"name": "Gjallarhorn",           "category": "default", "pveMult":0.75},
+
+        "category": {
+            "default": {
+                "range":    null,
+                "reload":   {"a": 0.000103959, "b": -0.0252069, "c": 4.09182213333333, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                }
+            }
+        },
+
+        "archetype": {
+            "High-Impact": {"damage": 450, "critMult": 1.0, "burstDelay": 4.0, "burstSize": 1, "burstDuration": 0},
+            "Aggressive":  {"damage": 495, "critMult": 1.0, "burstDelay": 2.4, "burstSize": 1, "burstDuration": 0},
+            "Precision":   {"damage": 405, "critMult": 1.0, "burstDelay": 4.0, "burstSize": 1, "burstDuration": 0},
+            "Adaptive":    {"damage": 495, "critMult": 1.0, "burstDelay": 3.0, "burstSize": 1, "burstDuration": 0},
+            "Wardcliff":   {"damage": 300, "critMult": 1.0, "burstDelay": 1.0, "burstSize": 8, "burstDuration": 0.7, "oneAmmoBurst": true},
+            "TwoTailed":   {"damage": 193, "critMult": 1.0, "burstDelay": 1.0, "burstSize": 2, "burstDuration": 0.3, "oneAmmoBurst": true},
+            "Wolfpack":    {}
+        }
+    },
+    "Scout Rifle": {
+        "377257911":  {"name": "MIDA Multi-Tool",   "category": "default", "archetype": "Lightweight", "pveMult":1.00},
+        "1000724343": {"name": "Polaris Lance",     "category": "default", "archetype": "High-Impact", "pveMult":1.00},
+        "1019291327": {"name": "High-Impact Frame", "category": "default", "archetype": "High-Impact", "pveMult":1.00},
+        "1319823571": {"name": "Dead Man's Tale",   "category": "DMT"    , "archetype": "Aggressive",  "pveMult":1.00},
+        "1458010786": {"name": "Lightweight Frame", "category": "default", "archetype": "Lightweight", "pveMult":1.00},
+        "1636108362": {"name": "Precision Frame",   "category": "default", "archetype": "Precision",   "pveMult":1.00},
+        "2741975068": {"name": "Skyburner's Oath",  "category": "default", "archetype": "High-Impact", "pveMult":1.00},
+        "3364911712": {"name": "VEIST Rapid-Fire",  "category": "default", "archetype": "Rapid-Fire",  "pveMult":1.00},
+        "3668782036": {"name": "The Jade Rabbit",   "category": "default", "archetype": "High-Impact", "pveMult":1.00},
+        "3920852688": {"name": "Rapid-Fire Frame",  "category": "default", "archetype": "Rapid-Fire",  "pveMult":1.00},
+        "4185339856": {"name": "Symmetry",          "category": "default", "archetype": "Rapid-Fire",  "pveMult":1.00},
+        "3468089894": {"name": "Aggressive Frame",  "category": "DMT"    , "archetype": "Aggressive",  "pveMult":1.00},
+        "2724693746": {"name": "Touch Of Malice",   "category": "default", "archetype": "Rapid-Fire",  "pveMult":1.00},
+
+        "category": {
+            "default": {
+                "range":    {"zrm": 1.975, "zrm_tier": 20, "vpp": 0.1521, "base_min": 30.89, "base_max": 60.8, "scale": false, "floorPercent": 0.5},
+                "reload":   {"a": 0.000102915, "b": -0.0276889, "c": 3.11797356666666, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.30, "boss": 1.30, "miniboss": 1.30, "elite": 1.30, "minor": 1.90}
+            },
+            "DMT": {
+                "range":    {"zrm": 1.975, "zrm_tier": 20, "vpp": 0.169, "base_min": 29.2, "base_max": 60.8, "scale": false, "floorPercent": 0.5},
+                "reload":   null,
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.30, "boss": 1.30, "miniboss": 1.30, "elite": 1.30, "minor": 1.90}
+            }
+        },
+
+        "archetype": {
+            "High-Impact": {"damage":40.0, "critMult":1.8, "burstDelay":0.4, "burstSize":1, "burstDuration":0},
+            "Rapid-Fire":  {"damage":27.5, "critMult":1.7, "burstDelay":0.23346, "burstSize":1, "burstDuration":0},
+            "Lightweight": {"damage":31.0, "critMult":1.7, "burstDelay":0.3, "burstSize":1, "burstDuration":0},
+            "Precision":   {"damage":30.5, "critMult":1.7, "burstDelay":0.3333, "burstSize":1, "burstDuration":0},
+            "Aggressive":  {"damage":47.0, "critMult":1.7, "burstDelay":0.5, "burstSize":1, "burstDuration":0}
+        }
+    },
+    "Shotgun": {
+        "372430833":  {"name": "Legend of Acrius",    "category": "default",   "archetype": "",            "pveMult":1.00},
+        "481338655":  {"name": "Lord of Wolves",      "category": "LoW",       "archetype": "LoW",         "pveMult":1.00},
+        "895140517":  {"name": "Precision Frame",     "category": "default",   "archetype": "Precision",   "pveMult":1.10},
+        "536517534":  {"name": "Duality",             "category": "Duality",   "archetype": "Slug",        "pveMult":1.23},
+        "918679156":  {"name": "Precision Frame",     "category": "slug",      "archetype": "Slug",        "pveMult":1.23},
+        "996573084":  {"name": "Rapid-Fire Frame",    "category": "default",   "archetype": "Rapid-Fire",  "pveMult":0.83},
+        "1210807262": {"name": "Tractor Cannon",      "category": "Tractor",   "archetype": "",            "pveMult":1.00},
+        "1394384862": {"name": "The Chaperone",       "category": "Chaperone", "archetype": "Slug",        "pveMult":1.23},
+        "1458010786": {"name": "Lightweight Frame",   "category": "default",   "archetype": "Lightweight", "pveMult":1.10},
+        "1636108362": {"name": "Precision Frame",     "category": "default",   "archetype": "Precision",   "pveMult":1.10},
+        "2223914385": {"name": "The Fourth Horseman", "category": "default",   "archetype": "FourthHorse", "pveMult":1.00},
+        "3054949324": {"name": "Shot Package",        "category": "default",   "archetype": "Aggressive",  "pveMult":1.10},
+        "3468089894": {"name": "Aggressive Frame",    "category": "default",   "archetype": "Aggressive",  "pveMult":1.10},
+        "3751354116": {"name": "Disabled",            "category": null,        "archetype": null,          "pveMult":1.00},
+        "3983457027": {"name": "Aggressive Frame",    "category": "default",   "archetype": "Aggressive",  "pveMult":1.10},
+
+        "category": {
+            "default": {
+                "range":    {"zrm": 1, "zrm_tier": 12,   "vpp": 0.036,           "base_min": 3.4,        "base_max": 8, "scale": false},
+                "reload":   {"a": 0.0000640462, "b": -0.0141721,   "c": 1.25061, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.80, "boss": 2.30, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
+            },
+            "slug": {
+                "range":    {"zrm": 1, "zrm_tier": 12,   "vpp": 0.05,           "base_min": 4,        "base_max": 9, "scale": false},
+                "reload":   {"a": 0.0000640462, "b": -0.0141721,   "c": 1.25061, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.80, "boss": 2.30, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
+            },
+            "LoW": {
+                "range":    {"zrm": 1, "zrm_tier": 12,   "vpp": 0,           "base_min": 9,        "base_max": 9, "scale": false},
+                "reload":   {"a": 0.0000640462, "b": -0.0141721,   "c": 1.25061, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.80, "boss": 2.30, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
+            },
+            "Duality": {
+                "range":    null,
+                "reload":   {"a": 0.0000640462, "b": -0.0141721,   "c": 1.25061, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.80, "boss": 2.30, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
+            },
+            "Chaperone": {
+                "range":    null,
+                "reload":   {"a": 0.0000640462, "b": -0.0141721,   "c": 1.25061, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.80, "boss": 2.30, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
+            },
+            "Tractor": {
+                "range":    null,
+                "reload":   {"a": 0.0000640462, "b": -0.0141721,   "c": 1.25061, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 2.80, "boss": 2.30, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
+            }
+        },
+
+        "archetype": {
+            "Rapid-Fire":      {"damage":16.7, "critMult":1.1, "burstDelay":0.433213, "burstSize":12, "burstDuration":0, "oneAmmoBurst": true},
+            "Precision":       {"damage":19.1, "critMult":1.1, "burstDelay":0.933126, "burstSize":12, "burstDuration":0, "oneAmmoBurst": true},
+            "Aggressive":      {"damage":22.3, "critMult":1.1, "burstDelay":1.099908, "burstSize":12, "burstDuration":0, "oneAmmoBurst": true},
+            "Slug":            {"damage":151.0, "critMult":1.75, "burstDelay":0.933126, "burstSize":1, "burstDuration":0, "oneAmmoBurst": true},
+            "Disabled":        {"damage":0, "critMult":1.0, "burstDelay":0, "burstSize":0, "burstDuration":0, "oneAmmoBurst": true},
+            "LoW":             {"damage":35.0, "critMult":1.44, "burstDelay":0.1, "burstSize":5, "burstDuration":0.29},
+            "FourthHorse":     {"damage":16.7, "critMult":1.1, "burstDelay":0.166667, "burstSize":12, "burstDuration":0, "oneAmmoBurst": true}
+        }
+    },
+    "Sidearm": {
+        "31057037":   {"name": "Omolon Adaptive Frame", "category": "default"   , "archetype": "Adaptive_Burst"},
+        "334466122":  {"name": "Devil's Ruin",          "category": "default"   , "archetype": "Adaptive"},
+        "806997698":  {"name": "SUROS Rapid-Fire",      "category": "default"   , "archetype": "Rapid-Fire"},
+        "975429949":  {"name": "Traveler's Chosen",     "category": "default"   , "archetype": "Precision"},
+        "986191425":  {"name": "Cryosthesia 77K",       "category": "default"   , "archetype": "Precision"},
+        "1282254042": {"name": "Together Forever",      "category": "default"   , "archetype": "Precision"},
+        "1294026524": {"name": "Adaptive Frame",        "category": "default"   , "archetype": "Adaptive"},
+        "1458010786": {"name": "Lightweight Frame",     "category": "default"   , "archetype": "Lightweight"},
+        "1636108362": {"name": "Precision Frame",       "category": "default"   , "archetype": "Precision"},
+        "2121086290": {"name": "Rat King",              "category": "default"   , "archetype": "Adaptive"},
+        "3330548924": {"name": "Aggressive Burst",      "category": "default"   , "archetype": "Aggressive_Burst"},
+        "3449390870": {"name": "Adaptive Frame",        "category": "default"   , "archetype": "Adaptive"},
+        "2641107734": {"name": "Trespasser",            "category": "default"   , "archetype": "Adaptive_Burst"},
+        "2984682260": {"name": "Forerunner",            "category": "Forerunner", "archetype": "Forerunner"},
+
+        "category": {
+            "default": {
+                "range":    {"zrm": 1.175, "zrm_tier": 12, "vpp": 0.0306, "base_min": 11.94, "base_max": 22.5, "scale": true, "floorPercent": 0.5},
+                "reload":   {"a": 0.0000238311, "b": -0.0124553, "c": 2.14667245000000, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.4, "boss": 1.55, "miniboss": 1.55, "elite": 1.8, "minor": 1.8}
+            },
+            "Forerunner": {
+                "range":    {"zrm": 1.975, "zrm_tier": 20, "vpp": 0, "base_min": 28, "base_max": 28, "scale": false, "floorPercent": 0.5},
+                "reload":   {"a": 0.0000238311, "b": -0.0124553, "c": 2.64667245000000, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.4, "boss": 1.55, "miniboss": 1.55, "elite": 1.8, "minor": 1.8}
+            }
+        },
+
+        "archetype": {
+            "Rapid-Fire":       {"damage":25, "critMult":1.4, "burstDelay":0.133333, "burstSize":1, "burstDuration":0},
+            "Precision":        {"damage":40, "critMult":1.4, "burstDelay":0.233463, "burstSize":1, "burstDuration":0},
+            "Aggressive_Burst": {"damage":32, "critMult":1.4, "burstDelay":0.23331, "burstSize":2, "burstDuration":0.1333},
+            "Adaptive_Burst":   {"damage":20, "critMult":1.6, "burstDelay":0.20000, "burstSize":3, "burstDuration":0.1667},
+            "Adaptive":         {"damage":36, "critMult":1.4, "burstDelay":0.20000, "burstSize":1, "burstDuration":0},
+            "Lightweight":      {"damage":31, "critMult":1.4, "burstDelay":0.20000, "burstSize":1, "burstDuration":0},
+            "Forerunner":       {"damage":34, "critMult":2.0, "burstDelay":0.3, "burstSize":1, "burstDuration":0}
+        }
+    },
+    "Sniper Rifle": {
+        "281315705":  {"name": "Whisper of the Worm", "category": "default", "archetype": "Whisper",    "pveMult": 1.0},
+        "878286503":  {"name": "Rapid-Fire Frame",    "category": "default", "archetype": "Rapid-Fire", "pveMult": 1.0},
+        "938999636":  {"name": "D.A.R.C.I.",          "category": "default", "archetype": "Rapid-Fire", "pveMult": 1.0},
+        "1070100196": {"name": "Izanagi's Burden",    "category": "default", "archetype": "Adaptive",   "pveMult": 1.0},
+        "1294026524": {"name": "Adaptive Frame",      "category": "default", "archetype": "Adaptive",   "pveMult": 1.0},
+        "2909403175": {"name": "Cloudstrike",         "category": "default", "archetype": "Rapid-Fire", "pveMult": 1.0},
+        "3081173348": {"name": "Borealis",            "category": "default", "archetype": "Aggressive", "pveMult": 1.0},
+        "3468089894": {"name": "Aggressive Frame",    "category": "default", "archetype": "Aggressive", "pveMult": 1.0},
+
+        "category": {
+            "default": {
+                "range":    null,
+                "reload":   {"a": 0.0000674498, "b": -0.0231542, "c": 3.8384, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.1794474, "number": 29.97135},
+                    "stow": {"vpp": -0.1379754, "number": 26.00919}
+                },
+                "pveScale": {"vehicle": 1.12, "boss": 1.20, "miniboss": 1.30, "elite": 1.55, "minor": 2.55}
+            }
+        },
+
+        "archetype": {
+            "Rapid-Fire": {"damage":90, "critMult":3.25, "burstDelay":0.43321, "burstSize":1, "burstDuration":0},
+            "Adaptive":   {"damage":131, "critMult":2.9, "burstDelay":0.66667, "burstSize":1, "burstDuration":0},
+            "Aggressive": {"damage":158, "critMult":3.0, "burstDelay":0.83333, "burstSize":1, "burstDuration":0},
+            "Whisper":    {"damage":170, "critMult":4.5, "burstDelay":0.83333, "burstSize":1, "burstDuration":0}
+        }
+    },
+    "Submachine Gun": {
+        "630329983":  {"name": "The Huckleberry",   "category": "default", "archetype": "Aggressive", "pveMult": 1.0},
+        "1294026524": {"name": "Adaptive Frame",    "category": "default", "archetype": "Adaptive",   "pveMult": 1.0},
+        "1458010786": {"name": "Lightweight Frame", "category": "default", "archetype": "Lightweight","pveMult": 1.0},
+        "1525239159": {"name": "Aggressive Frame",  "category": "default", "archetype": "Aggressive", "pveMult": 1.0},
+        "1636108362": {"name": "Precision Frame",   "category": "default", "archetype": "Precision",  "pveMult": 1.0},
+        "2213377102": {"name": "MIDA Synergy",      "category": "default", "archetype": "Lightweight","pveMult": 1.0},
+        "2516532331": {"name": "Riskrunner",        "category": "default", "archetype": "Adaptive",   "pveMult": 1.0},
+        "2540536653": {"name": "Tarrabah",          "category": "default", "archetype": "Aggressive", "pveMult": 1.0},
+        "3468089894": {"name": "Aggressive Frame",  "category": "default", "archetype": "Aggressive", "pveMult": 1.0},
+        "2965975126": {"name": "Osteo Striga",      "category": "striga" , "archetype": "Osteo",      "pveMult": 1.0},
+        "228577175":  {"name": "The Manticore",     "category": "default", "archetype": "Lightweight","pveMult": 1.0},
+
+        "category": {
+            "default": {
+                "range":    {"zrm": 1.275, "zrm_tier": 13, "vpp": 0.0891, "base_min": 8.83, "base_max": 24.5, "scale": false, "floorPercent": 0.5},
+                "reload":   {"a": 0.0000608642, "b": -0.0191345, "c": 2.62769, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.40, "boss": 1.53, "miniboss": 1.53, "elite": 1.90, "minor": 1.90}
+            },
+            "striga": {
+                "range":    {"zrm": 1.275, "zrm_tier": 13, "vpp": 0.1247, "base_min": 9.0835, "base_max": 9.0835, "scale": false, "floorPercent": 0.5},
+                "reload":   {"a": 0.0000608642, "b": -0.0191345, "c": 2.62769, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.40, "boss": 1.53, "miniboss": 1.53, "elite": 1.90, "minor": 1.90}
+            }
+        },
+
+        "archetype": {
+            "Aggressive": {"damage":15.0, "critMult":1.44, "burstDelay":0.08333, "burstSize":1, "burstDuration":0},
+            "Lightweight":{"damage":10.9, "critMult":1.65, "burstDelay":0.06667, "burstSize":1, "burstDuration":0},
+            "Precision":  {"damage":17.0, "critMult":1.40, "burstDelay":0.10000, "burstSize":1, "burstDuration":0},
+            "Adaptive":   {"damage":11.2, "critMult":1.44, "burstDelay":0.06667, "burstSize":1, "burstDuration":0},
+            "Osteo"   :   {"damage":18.7, "critMult":1.40, "burstDelay":0.10000, "burstSize":1, "burstDuration":0}
+        }
+    },
+    "Sword":{
+        "183772609":  {"name": "Caster Frame",      "category": "default"},
+        "263649945":  {"name": "Vortex Frame",      "category": "default"},
+        "836583820":  {"name": "Aggressive Frame",  "category": "default"},
+        "1713206376": {"name": "Lightweight Frame", "category": "default"},
+        "2179914730": {"name": "The Lament",        "category": "default"},
+        "3642491337": {"name": "Worldline Zero",    "category": "default"},
+        "4072668471": {"name": "Black Talon",       "category": "default"},
+        "4172267910": {"name": "Adaptive Frame",    "category": "default"},
+        "1100877327": {"name": "Heartshadow",       "category": "default"},
+
+        "category": {
+            "default": {
+                "range":    null,
+                "reload":   null,
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.24, "boss": 1.24, "miniboss": 1.24, "elite": 1.45, "minor": 1.83}
+            }
+        }
+    },
+    "Glaive":{
+        "1900919151": {"name": "Edge Of Action",      "category": "default","archetype": "","pveMult":1.00},
+        "3551884421": {"name": "Edge Of Concurrence", "category": "default","archetype": "","pveMult":1.00},
+        "3024740338": {"name": "Edge Of Intent",      "category": "default","archetype": "","pveMult":1.00},
+        "131675355":  {"name": "Adaptive Glaive",     "category": "default","archetype": "","pveMult":1.00},
+        "1986105578": {"name": "Aggressive Glaive",   "category": "default","archetype": "","pveMult":1.00},
+
+        "category": {
+            "default": {
+                "range":    null,
+                "reload":   null,
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 3, "boss": 3, "miniboss": 3, "elite": 3, "minor": 4.5}
+            }
+        }
+    },
+    "Trace Rifle":{
+        "459441288":  {"name": "Wavesplitter",    "category": "default"},
+        "571267712":  {"name": "Prometheus Lens", "category": "default"},
+        "1036269296": {"name": "Coldheart",       "category": "default"},
+        "1657401727": {"name": "Ruinous Effigy",  "category": "default"},
+        "1797707170": {"name": "Divinity",        "category": "default"},
+        "1294026524": {"name": "Adaptive Frame",  "category": "default"},
+        "3164944314": {"name": "Ager's Scepter",  "category": "default"},
+
+        "category": {
+            "default": {
+                "range":    {"zrm": 1.575, "zrm_tier": 16, "vpp": 0.09,          "base_min": 16,       "base_max": 16, "scale": false},
+                "reload":   null,
+                "handling": {
+                    "ready":{"vpp": -0.199386, "number": 33.3015},
+                    "stow": {"vpp": -0.153306, "number": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.4, "boss": 1.5, "miniboss": 1.7, "elite": 1.7, "minor": 1.9}
+            }
+        }
+    }
+}

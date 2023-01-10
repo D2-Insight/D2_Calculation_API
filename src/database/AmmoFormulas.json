@@ -1,0 +1,255 @@
+{
+    "COMMENTS": {
+        "MossyMax": "for all the pve scaling numbers and some base damage values"
+    },
+    "INDEX": {
+        "6": "Auto Rifle",
+        "31": "Combat Bow",
+        "11": "Fusion Rifle",
+        "23": "Grenade Launcher",
+        "9": "Hand Cannon",
+        "22": "Linear Fusion Rifle",
+        "8": "Machine Gun",
+        "13": "Pulse Rifle",
+        "10": "Rocket Launcher",
+        "14": "Scout Rifle",
+        "7": "Shotgun",
+        "12": "Sniper Rifle",
+        "24": "Submachine Gun",
+        "18": "Sword",
+        "33": "Glaive",
+        "25": "Trace Rifle",
+        "17": "Sidearm"
+    },
+    "Auto Rifle": {
+        "878286503":  {"name": "Rapid-Fire Frame",   "category": "default"},
+        "944506345":  {"name": "SUROS Regime",       "category": "default"},
+        "961505134":  {"name": "Tommy's Matchbook",  "category": "default"},
+        "1019291327": {"name": "High-Impact Frame",  "category": "default"},
+        "1294026524": {"name": "Adaptive Frame",     "category": "default"},
+        "1458010786": {"name": "Lightweight",        "category": "default"},
+        "1484442054": {"name": "Monte Carlo",        "category": "default"},
+        "1636108362": {"name": "Precision Frame",    "category": "default"},
+        "3208839961": {"name": "Cerberus+1",        "category": "Cerberus"},
+        "3610814281": {"name": "Hard Light",         "category": "default"},
+        "3755070117": {"name": "Sweet Business",     "category": "default"},
+        "3602718766": {"name": "Quicksilver Storm",  "category": "default"},
+
+        "Rapid-Fire": {
+            "magazine": {
+                "interp": "linear",
+                "interval": 10,
+                "data": [40,43,46,50,53,56,59,62,66,69,72]
+            }
+        },
+        "Adaptive": {
+            "magazine": {
+                "interp": "linear",
+                "interval": 10,
+                "data": [33,36,39,41,44,47,49,52,55,67,60]
+            }
+        },
+        
+    }
+
+    },
+    "Combat Bow": {
+        "715195141":  {"name": "Precision Frame",    "category": "default"},
+        "1470121888": {"name": "Wish-Ender",         "category": "exotic" },
+        "1573888036": {"name": "Trinity Ghoul",      "category": "exotic" },
+        "1699724249": {"name": "Leviathan's Breath", "category": "exotic" },
+        "2108556049": {"name": "Lightweight Frame",  "category": "default"},
+        "2186532310": {"name": "Le Monarque",        "category": "exotic" },
+        "3239299468": {"name": "Ticuu's Divination", "category": "exotic" },
+        "2226793914": {"name": "Hierarchy Of Needs", "category": "exotic" }
+    },
+    "Fusion Rifle":{
+        "656200654":  {"name": "Merciless",         "category": "default"},
+        "878286503":  {"name": "Rapid-Fire Frame",  "category": "default"},
+        "1019291327": {"name": "High-Impact Frame", "category": "default"},
+        "1186480754": {"name": "Bastion",           "category": "default"},
+        "1294026524": {"name": "Adaptive Frame",    "category": "default"},
+        "1636108362": {"name": "Precision Frame",   "category": "default"},
+        "1656957541": {"name": "Jötunn",            "category": "Jotunn" },
+        "1657056865": {"name": "1K Voices",         "category": "1KV"    },
+        "1927916065": {"name": "Telesto",           "category": "Telesto"},
+        "2518716062": {"name": "Aggressive Frame",  "category": "default"},
+        "3610750208": {"name": "Vex Mythoclast",    "category": "Vex"    },
+        "2585427437": {"name": "Delicate Tomb",     "category": "default"}
+    },
+    "Grenade Launcher": {
+        "389268985":  {"name": "Anarchy",           "category": "anarchy" },
+        "425960662":  {"name": "Fighting Lion",     "category": "special" },
+        "474269988":  {"name": "Lightweight Frame", "category": "special" },
+        "1294026524": {"name": "Adaptive Frame",    "category": "heavy"   },
+        "1315870387": {"name": "Salvation's Grip",  "category": "heavy"   },
+        "1395789926": {"name": "Wave Frame",        "category": "lion"    },
+        "1458010786": {"name": "Lightweight Frame", "category": "special" },
+        "2353477480": {"name": "Rapid-Fire Frame",  "category": "heavy"   },
+        "2977709078": {"name": "The Prospector",    "category": "heavy"   },
+        "3063320916": {"name": "Witherhoard",       "category": "special" },
+        "3913463509": {"name": "The Colony",        "category": "heavy"   },
+        "4130495068": {"name": "Precision Frame",   "category": "heavy"   },
+        "1174163613": {"name": "Parasite",          "category": "parasite"},
+        "1759472859": {"name": "Double Fire",       "category": "special" }
+    },
+    "Hand Cannon":{
+        "213689231":  {"name": "Hawkmoon",         "category": "default" },
+        "507151084":  {"name": "Sturm",            "category": "120 RPM" },
+        "647617635":  {"name": "Ace of spades",    "category": "default" },
+        "1030990989": {"name": "Crimson",          "category": "Crimson" },
+        "1294026524": {"name": "Adaptive Frame",   "category": "default" },
+        "1322370662": {"name": "Precision Frame",  "category": "default" },
+        "1791592647": {"name": "Malfeasance",      "category": "default" },
+        "1863355414": {"name": "Thorn",            "category": "default" },
+        "2144092201": {"name": "Lumina",           "category": "default" },
+        "2189829540": {"name": "Adaptive Frame",   "category": "default" },
+        "2757685314": {"name": "Aggressive Frame", "category": "120 RPM" },
+        "2770223582": {"name": "The Last Word",    "category": "LastWord"},
+        "3174300811": {"name": "Eriana's vow",     "category": "Eriana"  },
+        "3468089894": {"name": "Aggressive Frame", "category": "120 RPM" },
+        "3923638944": {"name": "Double Fire",      "category": "default" },
+        "4045839491": {"name": "Sunshot",          "category": "120 RPM" }
+    },
+    "Linear Fusion Rifle": {
+        "1531126198": {"name": "The Queenbreaker", "category": "default"},
+        "2057203855": {"name": "Precision Frame",  "category": "default"},
+        "2564164194": {"name": "Arbalest",         "category": "special"},
+        "3884127242": {"name": "Sleeper Simulant", "category": "default"},
+        "2881100038": {"name": "Lorentz Driver",   "category": "special"}
+    },
+    "Machine Gun": {
+        "878286503":  {"name": "Rapid-Fire Frame",  "category": "default"},
+        "1019291327": {"name": "High-Impact Frame", "category": "default"},
+        "1294026524": {"name": "Adaptive Frame",    "category": "default"},
+        "2261491232": {"name": "Xenophage",         "category": "default"},
+        "2608508147": {"name": "Heir Apparent",     "category": "default"},
+        "4148158229": {"name": "Thunderlord",       "category": "default"},
+        "2940035732": {"name": "Grand Overture",    "category": "default"}
+    },
+    "Pulse Rifle":{
+        "878286503":  {"name": "Rapid-Fire Frame",       "category": "default"  },
+        "1019291327": {"name": "High-Impact Frame",      "category": "default"  },
+        "1294026524": {"name": "Adaptive Frame",         "category": "default"  },
+        "1458010786": {"name": "Lightweight Frame",      "category": "default"  },
+        "2307143135": {"name": "Vigilance Wing",         "category": "aggresive"},
+        "2874284214": {"name": "Aggressive Burst",       "category": "aggresive"},
+        "3837077246": {"name": "No Time to Explain",     "category": "aggresive"},
+        "3905543891": {"name": "Graviton Lance",         "category": "default"  },
+        "4004944400": {"name": "Bad Juju",               "category": "default"  },
+        "4208418110": {"name": "Outbreak Perfected",     "category": "default"  },
+        "4172222323": {"name": "Legacy PR-55 Frame",     "category": "default"  },
+        "3441203855": {"name": "Collective Obligation",  "category": "default"  }
+    },
+    "Rocket Launcher": {
+        "216781713":  {"name": "Häkke Precision Frame", "category": "default"},
+        "411799453":  {"name": "Deathbringer",          "category": "default"},
+        "1019291327": {"name": "High-Impact Frame",     "category": "default"},
+        "1294026524": {"name": "Adaptive Frame",        "category": "default"},
+        "2200569208": {"name": "Eyes of Tomorrow",      "category": "default"},
+        "2473404935": {"name": "The Wardcliff Coil",    "category": "default"},
+        "2491817779": {"name": "Disabled",              "category": null     },
+        "3419274965": {"name": "Precision Frame",       "category": "default"},
+        "3468089894": {"name": "Aggressive Frame",      "category": "default"},
+        "3649430342": {"name": "Two-Tailed Fox",        "category": "default"},
+        "2962361451": {"name": "Gjallarhorn",           "category": "default"}
+    },
+    "Scout Rifle": {
+        "377257911":  {"name": "MIDA Multi-Tool",   "category": "default"},
+        "1000724343": {"name": "Polaris Lance",     "category": "default"},
+        "1019291327": {"name": "High-Impact Frame", "category": "default"},
+        "1319823571": {"name": "Dead Man's Tale",   "category": "DMT"    },
+        "1458010786": {"name": "Lightweight Frame", "category": "default"},
+        "1636108362": {"name": "Precision Frame",   "category": "default"},
+        "2741975068": {"name": "Skyburner's Oath",  "category": "default"},
+        "3364911712": {"name": "VEIST Rapid-Fire",  "category": "default"},
+        "3668782036": {"name": "The Jade Rabbit",   "category": "default"},
+        "3920852688": {"name": "Rapid-Fire Frame",  "category": "default"},
+        "4185339856": {"name": "Symmetry",          "category": "default"},
+        "3468089894": {"name": "Aggressive Frame",  "category": "DMT"    },
+        "2724693746": {"name": "Touch Of Malice",   "category": "default"}
+    },
+    "Shotgun": {
+        "372430833":  {"name": "Legend of Acrius",    "category": "default"  },
+        "481338655":  {"name": "Lord of Wolves",      "category": "LoW"      },
+        "895140517":  {"name": "Precision Frame",     "category": "default"  },
+        "536517534":  {"name": "Duality",             "category": "Duality"  },
+        "918679156":  {"name": "Precision Frame",     "category": "slug"     },
+        "996573084":  {"name": "Rapid-Fire Frame",    "category": "default"  },
+        "1210807262": {"name": "Tractor Cannon",      "category": "Tractor"  },
+        "1394384862": {"name": "The Chaperone",       "category": "Chaperone"},
+        "1458010786": {"name": "Lightweight Frame",   "category": "default"  },
+        "1636108362": {"name": "Precision Frame",     "category": "default"  },
+        "2223914385": {"name": "The Fourth Horseman", "category": "default"  },
+        "3054949324": {"name": "Shot Package",        "category": "default"  },
+        "3468089894": {"name": "Aggressive Frame",    "category": "default"  },
+        "3751354116": {"name": "Disabled",            "category": null       },
+        "3983457027": {"name": "Aggressive Frame",    "category": "default"  }
+    },
+    "Sidearm": {
+        "31057037":   {"name": "Omolon Adaptive Frame", "category": "default"   },
+        "334466122":  {"name": "Devil's Ruin",          "category": "default"   },
+        "806997698":  {"name": "SUROS Rapid-Fire",      "category": "default"   },
+        "975429949":  {"name": "Traveler's Chosen",     "category": "default"   },
+        "986191425":  {"name": "Cryosthesia 77K",       "category": "default"   },
+        "1282254042": {"name": "Together Forever",      "category": "default"   },
+        "1294026524": {"name": "Adaptive Frame",        "category": "default"   },
+        "1458010786": {"name": "Lightweight Frame",     "category": "default"   },
+        "1636108362": {"name": "Precision Frame",       "category": "default"   },
+        "2121086290": {"name": "Rat King",              "category": "default"   },
+        "3330548924": {"name": "Aggressive Burst",      "category": "default"   },
+        "3449390870": {"name": "Adaptive Frame",        "category": "default"   },
+        "2641107734": {"name": "Trespasser",            "category": "default"   },
+        "2984682260": {"name": "Forerunner",            "category": "Forerunner"}
+    },
+    "Sniper Rifle": {
+        "281315705":  {"name": "Whisper of the Worm", "category": "default"},
+        "878286503":  {"name": "Rapid-Fire Frame",    "category": "default"},
+        "938999636":  {"name": "D.A.R.C.I.",          "category": "default"},
+        "1070100196": {"name": "Izanagi's Burden",    "category": "default"},
+        "1294026524": {"name": "Adaptive Frame",      "category": "default"},
+        "2909403175": {"name": "Cloudstrike",         "category": "default"},
+        "3081173348": {"name": "Borealis",            "category": "default"},
+        "3468089894": {"name": "Aggressive Frame",    "category": "default"}
+    },
+    "Submachine Gun": {
+        "630329983":  {"name": "The Huckleberry",   "category": "default"},
+        "1294026524": {"name": "Adaptive Frame",    "category": "default"},
+        "1458010786": {"name": "Lightweight Frame", "category": "default"},
+        "1525239159": {"name": "Aggressive Frame",  "category": "default"},
+        "1636108362": {"name": "Precision Frame",   "category": "default"},
+        "2213377102": {"name": "MIDA Synergy",      "category": "default"},
+        "2516532331": {"name": "Riskrunner",        "category": "default"},
+        "2540536653": {"name": "Tarrabah",          "category": "default"},
+        "3468089894": {"name": "Aggressive Frame",  "category": "default"},
+        "2965975126": {"name": "Osteo Striga",      "category": "striga" },
+        "228577175":  {"name": "The Manticore",     "category": "default"}
+    },
+    "Sword":{
+        "183772609":  {"name": "Caster Frame",      "category": "default"},
+        "263649945":  {"name": "Vortex Frame",      "category": "default"},
+        "836583820":  {"name": "Aggressive Frame",  "category": "default"},
+        "1713206376": {"name": "Lightweight Frame", "category": "default"},
+        "2179914730": {"name": "The Lament",        "category": "default"},
+        "3642491337": {"name": "Worldline Zero",    "category": "default"},
+        "4072668471": {"name": "Black Talon",       "category": "default"},
+        "4172267910": {"name": "Adaptive Frame",    "category": "default"},
+        "1100877327": {"name": "Heartshadow",       "category": "default"}
+    },
+    "Glaive":{
+        "1900919151": {"name": "Edge Of Action",      "category": "default"},
+        "3551884421": {"name": "Edge Of Concurrence", "category": "default"},
+        "3024740338": {"name": "Edge Of Intent",      "category": "default"},
+        "131675355":  {"name": "Adaptive Glaive",     "category": "default"},
+        "1986105578": {"name": "Aggressive Glaive",   "category": "default"}
+    },
+    "Trace Rifle":{
+        "459441288":  {"name": "Wavesplitter",    "category": "default"},
+        "571267712":  {"name": "Prometheus Lens", "category": "default"},
+        "1036269296": {"name": "Coldheart",       "category": "default"},
+        "1657401727": {"name": "Ruinous Effigy",  "category": "default"},
+        "1797707170": {"name": "Divinity",        "category": "default"},
+        "1294026524": {"name": "Adaptive Frame",  "category": "default"},
+        "3164944314": {"name": "Ager's Scepter",  "category": "default"}
+    }
+}
