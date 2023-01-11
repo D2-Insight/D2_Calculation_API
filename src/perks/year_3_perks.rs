@@ -1,21 +1,22 @@
 use std::collections::HashMap;
 
-use crate::{D2Enums::{StatHashes, AmmoType}, D2Enemy::EnemyType};
-
-use super::lib::{
-    CalculationInput, 
-    DamageModifierResponse,
-    ExtraDamageResponse,
-    FiringModifierResponse,
-    ReloadModifierResponse,
-    RangeModifierResponse,
-    HandlingModifierResponse,
-    RefundResponse,
-    MagazineModifierResponse
+use crate::{
+    D2Enemy::EnemyType,
+    D2Enums::{AmmoType, StatHashes},
 };
 
+use super::lib::{
+    CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
+    HandlingModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
+    ReloadModifierResponse,
+};
 
-pub fn mmr_clown_cartridge(_input: CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> MagazineModifierResponse {
+pub fn mmr_clown_cartridge(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> MagazineModifierResponse {
     MagazineModifierResponse {
         magazine_add: 0.0,
         magazine_scale: 1.5,
@@ -23,9 +24,14 @@ pub fn mmr_clown_cartridge(_input: CalculationInput, _value: i32, _is_enhanced: 
     }
 }
 
-pub fn sbr_elemental_capacitor(_input: CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> HashMap<u32, i32> {
+pub fn sbr_elemental_capacitor(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
-    if _value == 1{
+    if _value == 1 {
         stats.insert(StatHashes::STABILITY.to_u32(), 20);
     } else if _value == 2 {
         stats.insert(StatHashes::RELOAD.to_u32(), 50);
@@ -37,7 +43,12 @@ pub fn sbr_elemental_capacitor(_input: CalculationInput, _value: i32, _is_enhanc
     stats
 }
 
-pub(super) fn hmr_elemental_capacitor(_input: CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> HandlingModifierResponse {
+pub(super) fn hmr_elemental_capacitor(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> HandlingModifierResponse {
     let mut handling = 0;
     if _value == 3 {
         handling = 50;
@@ -49,7 +60,12 @@ pub(super) fn hmr_elemental_capacitor(_input: CalculationInput, _value: i32, _is
     }
 }
 
-pub(super) fn rsmr_elemental_capacitor(_input: CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> ReloadModifierResponse {
+pub(super) fn rsmr_elemental_capacitor(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> ReloadModifierResponse {
     let mut reload = 0;
     if _value == 2 {
         reload = 50;
@@ -60,7 +76,12 @@ pub(super) fn rsmr_elemental_capacitor(_input: CalculationInput, _value: i32, _i
     }
 }
 
-pub fn sbr_killng_wind(_input: CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> HashMap<u32, i32> {
+pub fn sbr_killing_wind(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     if _value > 0 {
         stats.insert(StatHashes::HANDLING.to_u32(), 40);
@@ -69,7 +90,12 @@ pub fn sbr_killng_wind(_input: CalculationInput, _value: i32, _is_enhanced: bool
     stats
 }
 
-pub fn rmr_killing_wind(_input: CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> RangeModifierResponse {
+pub fn rmr_killing_wind(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> RangeModifierResponse {
     if _value > 0 {
         RangeModifierResponse {
             range_stat_add: 20,
@@ -87,25 +113,36 @@ pub fn rmr_killing_wind(_input: CalculationInput, _value: i32, _is_enhanced: boo
     }
 }
 
-pub fn dmr_lasting_impressions(_input: CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> DamageModifierResponse {
+pub fn dmr_lasting_impressions(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> DamageModifierResponse {
     DamageModifierResponse {
         damage_scale: 1.2,
         crit_scale: 1.0,
     }
 }
 
-pub(super) fn dmr_vorpal(_input: CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> DamageModifierResponse {
+pub(super) fn dmr_vorpal(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> DamageModifierResponse {
     let mut buff = 1.0;
-    if _input.enemy_type == EnemyType::BOSS ||
-        _input.enemy_type == EnemyType::MINIBOSS ||
-        _input.enemy_type == EnemyType::CHAMPION ||
-        _input.enemy_type == EnemyType::VEHICLE {
+    if _input.enemy_type == EnemyType::BOSS
+        || _input.enemy_type == EnemyType::MINIBOSS
+        || _input.enemy_type == EnemyType::CHAMPION
+        || _input.enemy_type == EnemyType::VEHICLE
+    {
         if _input.ammo_type == AmmoType::PRIMARY {
-            buff == 1.2;
+            buff = 1.2;
         } else if _input.ammo_type == AmmoType::SPECIAL {
-            buff == 1.15;
+            buff = 1.15;
         } else if _input.ammo_type == AmmoType::HEAVY {
-            buff == 1.1;
+            buff = 1.1;
         }
     }
     DamageModifierResponse {
@@ -113,4 +150,3 @@ pub(super) fn dmr_vorpal(_input: CalculationInput, _value: i32, _is_enhanced: bo
         crit_scale: 1.0,
     }
 }
-

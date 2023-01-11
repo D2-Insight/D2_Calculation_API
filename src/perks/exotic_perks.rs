@@ -153,3 +153,14 @@ pub(super) fn rsmr_roadborn(_input: CalculationInput, _value: i32, _is_enhanced:
     }
 }
 
+// pub(super) fn fmr_rat_pack(_input: CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> FiringModifierResponse {
+//     let mut burst_size = 0.0;
+//     if _value > 0 {
+//         burst_size = 1.0;
+//     };
+//     FiringModifierResponse {
+//         burst_delay_scale: 1.0,
+//         burst_duration_scale: 1.0,
+//         burst_size_add: burst_size,
+//     }
+// }

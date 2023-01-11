@@ -43,7 +43,7 @@ pub(super) fn hmr_threat_detector(
     _pvp: bool,
 ) -> HandlingModifierResponse {
     let val = clamp(_value, 0, 2);
-    let time_scale = 0.75_f64.powi(_value);
+    let time_scale = 0.75_f64.powi(val);
     HandlingModifierResponse {
         handling_stat_add: 0,
         handling_swap_scale: time_scale,
@@ -362,7 +362,7 @@ pub(super) fn sbr_moving_target(
     _is_enhanced: bool,
     _pvp: bool,
 ) -> HashMap<u32, i32> {
-    let mut aim_assist = if _is_enhanced { 11 } else { 10 };
+    let aim_assist = if _is_enhanced { 11 } else { 10 };
     let mut out = HashMap::new();
     out.insert(StatHashes::AIM_ASSIST.to_u32(), aim_assist);
     out
@@ -374,8 +374,8 @@ pub(super) fn sbr_opening_shot(
     _is_enhanced: bool,
     _pvp: bool,
 ) -> HashMap<u32, i32> {
-    let mut aim_assist = if _is_enhanced { 25 } else { 20 };
-    let mut range = if _is_enhanced { 30 } else { 25 };
+    let aim_assist = if _is_enhanced { 25 } else { 20 };
+    let range = if _is_enhanced { 30 } else { 25 };
     let mut out = HashMap::new();
     if _value > 0 {
         out.insert(StatHashes::AIM_ASSIST.to_u32(), aim_assist);
@@ -390,7 +390,7 @@ pub(super) fn rmr_opening_shot(
     _is_enhanced: bool,
     _pvp: bool,
 ) -> RangeModifierResponse {
-    let mut range = if _is_enhanced { 30 } else { 25 };
+    let range = if _is_enhanced { 30 } else { 25 };
     RangeModifierResponse {
         range_stat_add: range,
         range_all_scale: 1.0,
@@ -426,14 +426,14 @@ pub(super) fn rmr_range_finder(
     }
 }
 
-pub(super) fn sbr_slideshot(
+pub(super) fn sbr_slide_shot(
     _input: CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
 ) -> HashMap<u32, i32> {
-    let mut stability = if _is_enhanced { 35 } else { 30 };
-    let mut range = if _is_enhanced { 25 } else { 20 };
+    let stability = if _is_enhanced { 35 } else { 30 };
+    let range = if _is_enhanced { 25 } else { 20 };
     let mut out = HashMap::new();
     if _value > 0 {
         out.insert(StatHashes::STABILITY.to_u32(), stability);
@@ -460,14 +460,14 @@ pub(super) fn rmr_slideshot(
     }
 }
 
-pub(super) fn sbr_slideways(
+pub(super) fn sbr_slide_ways(
     _input: CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
 ) -> HashMap<u32, i32> {
-    let mut stability = if _is_enhanced { 25 } else { 20 };
-    let mut handling = if _is_enhanced { 25 } else { 20 };
+    let stability = if _is_enhanced { 25 } else { 20 };
+    let handling = if _is_enhanced { 25 } else { 20 };
     let mut out = HashMap::new();
     if _value > 0 {
         out.insert(StatHashes::STABILITY.to_u32(), stability);

@@ -1,111 +1,87 @@
 use std::collections::HashMap;
 
-
-use crate::D2Enums::StatHashes;
-use crate::D2Structs::FrameData;
-use crate::D2Structs::WeaponData;
-use serde::{Serialize, Deserialize};
+use crate::D2Enums::AmmoType;
+use crate::D2Enums::DamageType;
+use crate::D2Enums::WeaponSlot;
+use crate::D2Enums::WeaponType;
+use crate::js_types::JsWeaponFormula;
 use crate::perks::Perk;
+use crate::D2Enums::StatHashes;
+use crate::D2Structs::BuffPackage;
+use crate::D2Structs::FiringConfig;
+use crate::perks::get_perk_stats;
+use crate::perks::lib::CalculationInput;
 
-#[derive(Debug,Clone,Serialize,Deserialize)]
+use serde::{Deserialize, Serialize};
+use tsify::Tsify;
+use wasm_bindgen::prelude::wasm_bindgen;
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[wasm_bindgen]
 pub struct JS_Stat {
     base_value: i32,
-    part_values: i32,
-    perk_values: i32,
+    part_value: i32,
+    perk_value: i32,
 }
 impl JS_Stat {
     pub fn from_stat(stat: &Stat) -> JS_Stat {
         JS_Stat {
             base_value: stat.base_value,
-            part_values: stat.part_values.iter().sum(),
-            perk_values: stat.perk_values.iter().sum(),
+            part_value: stat.part_value,
+            perk_value: stat.perk_value,
         }
     }
 }
 
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub struct Stat {
     pub base_value: i32,
-    pub part_values: Vec<i32>,
-    pub perk_values: Vec<i32>,
-    //this is just for organization, it's not used in the calculation
-    //can be called for use elsewhere
-    pub associated_scalars: Vec<f64>,
+    pub perk_value: i32,
+    pub part_value: i32,
 }
 impl Stat {
     pub fn new() -> Stat {
         Stat {
             base_value: 0,
-            part_values: vec![0],
-            perk_values: vec![0],
-            associated_scalars: vec![1.0],
+            part_value: 0,
+            perk_value: 0,
         }
-    }
-    pub fn add_mod(&mut self, mod_value: i32) {
-        self.part_values.push(mod_value);
-    }
-    pub fn remove_mod(&mut self, mod_value: i32) {
-        //remove 1 instance of mod_value from mod_values
-        let mut index = 0;
-        for i in 0..self.part_values.len() {
-            if self.part_values[i] == mod_value {
-                index = i;
-                break;
-            }
-        }
-        self.part_values.remove(index);
-    }
-    pub fn add_scalar(&mut self, associated_scalar: f64) {
-        self.associated_scalars.push(associated_scalar);
-    }
-    pub fn remove_scalar(&mut self, associated_scalar: f64) {
-        //remove 1 instance of associated_scalar from associated_scalars
-        let mut index = 0;
-        for i in 0..self.associated_scalars.len() {
-            if self.associated_scalars[i] == associated_scalar {
-                index = i;
-                break;
-            }
-        }
-        self.associated_scalars.remove(index);
-    }
-    pub fn val(&self) -> i32 {
-        let mut total_mod = 0;
-        for i in 0..self.part_values.len() {
-            total_mod += self.part_values[i];
-        }
-        self.base_value + total_mod
-    }
-    pub fn scalar(&self) -> f64 {
-        let mut total_scalar = 1.0;
-        for i in 0..self.associated_scalars.len() {
-            total_scalar *= self.associated_scalars[i];
-        }
-        total_scalar
     }
 }
 
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub struct Weapon {
     //ideally entirely interfaced with through funcs
-    pub name: String,
-
     pub perks: HashMap<u32, Perk>,
     pub stats: HashMap<u32, Stat>,
+    pub damage_mods: BuffPackage,
+    pub firing_data: FiringConfig,
     pub id: u32,
+    pub formulas: Option<JsWeaponFormula>,
 
+    pub weapon_type: WeaponType,
+    pub weapon_slot: WeaponSlot,
+    pub damage_type: DamageType,
+    pub ammo_type: AmmoType,
 }
 impl Weapon {
     pub fn add_perk(&mut self, _perk: Perk) {
-        self.perks.insert(_perk.id, _perk);
+        self.perks.insert(_perk.hash, _perk);
     }
     pub fn remove_perk(&mut self, _perk: Perk) {
-        self.perks.remove(&_perk.id);
+        self.perks.remove(&_perk.hash);
     }
-    pub fn list_perks(&self) -> Vec<u32> {
+    pub fn list_perk_ids(&self) -> Vec<u32> {
         let mut perk_list: Vec<u32> = Vec::new();
         for (key, _perk) in &self.perks {
             perk_list.push(*key);
+        }
+        perk_list
+    }
+    pub fn list_perk_values(&self) -> Vec<Perk> {
+        let mut perk_list: Vec<Perk> = Vec::new();
+        for (_key, perk) in &self.perks {
+            perk_list.push(perk.clone());
         }
         perk_list
     }
@@ -115,24 +91,51 @@ impl Weapon {
             perk_opt.unwrap().value = _val;
         }
     }
+    pub fn get_stats(&self) -> HashMap<u32, Stat> {
+        self.update_stats();
+        self.stats.clone()
+    }
+    pub fn reset(&mut self) {
+        //TODO: make this a trait
+        self.perks = HashMap::new();
+        self.stats = HashMap::new();
+        self.id = 0;
+        self.damage_mods = BuffPackage::new();
+        self.firing_data = FiringConfig::default();
+        self.formulas = None;
+    }
 }
 impl Default for Weapon {
     fn default() -> Weapon {
         Weapon {
-            name: String::from(""),
             perks: HashMap::new(),
             stats: HashMap::new(),
-            id: 0
+            id: 0,
+            damage_mods: BuffPackage::new(),
+            firing_data: FiringConfig::default(),
+            formulas: None,
+
+            weapon_type: WeaponType::UNKNOWN,
+            weapon_slot: WeaponSlot::UNKNOWN,
+            damage_type: DamageType::UNKNOWN,
+            ammo_type: AmmoType::UNKNOWN,
         }
     }
 }
-impl Weapon{
-    pub fn reset(&mut self){//TODO: make this a trait
-        self.name = String::from("");
-        self.perks = HashMap::new();
-        self.stats = HashMap::new();
-        self.id = 0;
+impl Weapon {
+    fn update_stats(&mut self) {
+        let input = CalculationInput::construct_static(self.firing_data, self.stats, self.weapon_type, self.ammo_type);
+        let dynamic_stats = get_perk_stats(self.list_perk_values(), input, true)[0];
+        let static_stats = get_perk_stats(self.list_perk_values(), input, false)[1];
+        for (key, stat) in &mut self.stats {
+            let a = static_stats.get(key);
+            let b = dynamic_stats.get(key);;
+            if a.is_some() {
+                stat.part_value = a.unwrap().clone();
+            }
+            if b.is_some() {
+                stat.perk_value = b.unwrap().clone();
+            }
+        }
     }
 }
-
-

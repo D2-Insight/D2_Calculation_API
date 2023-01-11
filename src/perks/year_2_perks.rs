@@ -2,27 +2,34 @@ use std::collections::HashMap;
 
 use crate::D2Enums::{StatHashes, WeaponType};
 
-use super::{lib::{
-    CalculationInput, 
-    DamageModifierResponse,
-    ExtraDamageResponse,
-    FiringModifierResponse,
-    ReloadModifierResponse,
-    RangeModifierResponse,
-    HandlingModifierResponse,
-    RefundResponse, MagazineModifierResponse, ReloadOverideResponse
-}, clamp};
+use super::{
+    clamp,
+    lib::{
+        CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
+        HandlingModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
+        ReloadModifierResponse, ReloadOverideResponse,
+    },
+};
 
-pub fn sbr_air_assault(_input:CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> HashMap<u32, i32> {
+pub fn sbr_air_assault(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
-    let duration = if _is_enhanced {6.0} else {4.5};
-    let ae_per_stack = if _is_enhanced {35} else {20};
-    let mut ae = ae_per_stack*_value;
+    let ae_per_stack = if _is_enhanced { 35 } else { 20 };
+    let ae = ae_per_stack * _value;
     stats.insert(StatHashes::AIRBORNE.to_u32(), ae);
     stats
 }
 
-pub fn fmr_archers_tempo(_input:CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> FiringModifierResponse {
+pub fn fmr_archers_tempo(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> FiringModifierResponse {
     FiringModifierResponse {
         burst_delay_scale: 0.75,
         burst_duration_scale: 1.0,
@@ -30,14 +37,19 @@ pub fn fmr_archers_tempo(_input:CalculationInput, _value: i32, _is_enhanced: boo
     }
 }
 
-pub fn dmr_explosive_head(_input:CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> DamageModifierResponse {
+pub fn dmr_explosive_head(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> DamageModifierResponse {
     if _pvp {
         DamageModifierResponse {
             damage_scale: 1.0,
             crit_scale: 1.0,
         }
     } else {
-        let damage_mult = ((1.0/_input.base_crit_mult)*0.15)+1.0;
+        let damage_mult = ((1.0 / _input.base_crit_mult) * 0.15) + 1.0;
         DamageModifierResponse {
             damage_scale: damage_mult,
             crit_scale: 1.0,
@@ -45,24 +57,29 @@ pub fn dmr_explosive_head(_input:CalculationInput, _value: i32, _is_enhanced: bo
     }
 }
 
-pub fn rsmr_feeding_frenzy(_input:CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> ReloadModifierResponse {
+pub fn rsmr_feeding_frenzy(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> ReloadModifierResponse {
     let val = clamp(_value, 0, 5);
     let duration = 3.5;
     let mut reload_mult = 1.0;
     let mut reload = 0;
-    if _value == 1 {
+    if val == 1 {
         reload = 10;
         reload_mult = 1.0;
-    } else if _value == 2 {
+    } else if val == 2 {
         reload = 45;
         reload_mult = 0.9;
-    } else if _value == 3 {
+    } else if val == 3 {
         reload = 55;
         reload_mult = 0.88;
-    } else if _value == 4 {
+    } else if val == 4 {
         reload = 70;
         reload_mult = 0.85;
-    } else if _value == 5 {
+    } else if val == 5 {
         reload = 100;
         reload_mult = 0.8;
     };
@@ -76,20 +93,25 @@ pub fn rsmr_feeding_frenzy(_input:CalculationInput, _value: i32, _is_enhanced: b
     }
 }
 
-pub fn sbr_feeding_frenzy(_input:CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> HashMap<u32, i32> {
+pub fn sbr_feeding_frenzy(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     let val = clamp(_value, 0, 5);
     let duration = 3.5;
     let mut reload = 0;
-    if _value == 1 {
+    if val == 1 {
         reload = 10;
-    } else if _value == 2 {
+    } else if val == 2 {
         reload = 45;
-    } else if _value == 3 {
+    } else if val == 3 {
         reload = 55;
-    } else if _value == 4 {
+    } else if val == 4 {
         reload = 70;
-    } else if _value == 5 {
+    } else if val == 5 {
         reload = 100;
     };
     if _input.time_total > duration {
@@ -99,7 +121,12 @@ pub fn sbr_feeding_frenzy(_input:CalculationInput, _value: i32, _is_enhanced: bo
     stats
 }
 
-pub fn dmr_firing_line(_input:CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> DamageModifierResponse {
+pub fn dmr_firing_line(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> DamageModifierResponse {
     let mut crit_mult = 1.0;
     if _value > 1 {
         crit_mult = 1.2;
@@ -110,7 +137,12 @@ pub fn dmr_firing_line(_input:CalculationInput, _value: i32, _is_enhanced: bool,
     }
 }
 
-pub fn rr_fourth_times(_input:CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> RefundResponse {
+pub fn rr_fourth_times(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> RefundResponse {
     RefundResponse {
         crit: true,
         requirement: 4,
@@ -119,8 +151,13 @@ pub fn rr_fourth_times(_input:CalculationInput, _value: i32, _is_enhanced: bool,
     }
 }
 
-pub fn dmr_killing_tally(_input:CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> DamageModifierResponse {
-    let mut damage_mult = 0.1*_value as f64;
+pub fn dmr_killing_tally(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> DamageModifierResponse {
+    let mut damage_mult = 0.1 * _value as f64;
     if _pvp {
         damage_mult *= 0.5;
     };
@@ -128,13 +165,18 @@ pub fn dmr_killing_tally(_input:CalculationInput, _value: i32, _is_enhanced: boo
         damage_mult = 0.0;
     };
     DamageModifierResponse {
-        damage_scale: 1.0+damage_mult,
+        damage_scale: 1.0 + damage_mult,
         crit_scale: 1.0,
     }
 }
 
-pub fn mmr_overflow(_input:CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> MagazineModifierResponse {
-    let mut mag_scale = if _value > 0 {2.0} else {1.0};
+pub fn mmr_overflow(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> MagazineModifierResponse {
+    let mag_scale = if _value > 0 { 2.0 } else { 1.0 };
     MagazineModifierResponse {
         magazine_stat_add: 0,
         magazine_scale: mag_scale,
@@ -142,10 +184,22 @@ pub fn mmr_overflow(_input:CalculationInput, _value: i32, _is_enhanced: bool, _p
     }
 }
 
-pub fn rsmr_rapid_hit(_input:CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> ReloadModifierResponse {
+pub fn rsmr_rapid_hit(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> ReloadModifierResponse {
     let mut reload_mult = 1.0;
     let mut reload = 0;
-    let values = vec![(0,1.0),(5,0.99),(30,0.97),(35,0.96),(45,0.94),(60,0.93)];
+    let values = vec![
+        (0, 1.0),
+        (5, 0.99),
+        (30, 0.97),
+        (35, 0.96),
+        (45, 0.94),
+        (60, 0.93),
+    ];
     if _input.shots_hit_this_mag > 5.0 {
         reload = values[5].0;
         reload_mult = values[5].1;
@@ -159,7 +213,12 @@ pub fn rsmr_rapid_hit(_input:CalculationInput, _value: i32, _is_enhanced: bool, 
     }
 }
 
-pub fn dmr_resevoir_burst(_input:CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> DamageModifierResponse {
+pub fn dmr_resevoir_burst(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> DamageModifierResponse {
     let mut damage_mult = 1.0;
     if _input.curr_mag >= _input.base_mag {
         damage_mult = 1.25;
@@ -170,10 +229,19 @@ pub fn dmr_resevoir_burst(_input:CalculationInput, _value: i32, _is_enhanced: bo
     }
 }
 
-pub(super) fn dmr_surrounded(_input:CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> DamageModifierResponse {
+pub(super) fn dmr_surrounded(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> DamageModifierResponse {
     let mut damage_mult = 1.0;
     if _value > 0 {
-        damage_mult = if _input.weapon_type == WeaponType::SWORD {1.35} else {1.4};
+        damage_mult = if _input.weapon_type == WeaponType::SWORD {
+            1.35
+        } else {
+            1.4
+        };
         if _is_enhanced {
             damage_mult *= 1.05;
         };
@@ -184,7 +252,12 @@ pub(super) fn dmr_surrounded(_input:CalculationInput, _value: i32, _is_enhanced:
     }
 }
 
-pub(super) fn ror_demolitionist(_input:CalculationInput, _value: i32, _is_enhanced: bool, _pvp: bool) -> ReloadOverideResponse {
+pub(super) fn ror_demolitionist(
+    _input: CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> ReloadOverideResponse {
     //todo implement system for cooldown
     let grenade_throw_time = 0.8;
     if _value == 1 {
@@ -194,7 +267,7 @@ pub(super) fn ror_demolitionist(_input:CalculationInput, _value: i32, _is_enhanc
             ammo_to_reload: _input.base_mag,
             priority: 0,
             increments_reload_count: false,
-            uses_ammo: true
+            uses_ammo: true,
         };
     }
     ReloadOverideResponse::invalid()
