@@ -11,8 +11,8 @@ use super::{
     },
 };
 
-pub(super) fn dmr_high_impact_resrves(
-    _input: CalculationInput,
+pub(super) fn dmr_high_impact_reserves(
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -37,7 +37,7 @@ pub(super) fn dmr_high_impact_resrves(
 }
 
 pub(super) fn hmr_threat_detector(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -52,7 +52,7 @@ pub(super) fn hmr_threat_detector(
 }
 
 pub(super) fn rsmr_threat_detector(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -70,7 +70,7 @@ pub(super) fn rsmr_threat_detector(
 }
 
 pub(super) fn sbr_threat_detector(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -91,7 +91,7 @@ pub(super) fn sbr_threat_detector(
 }
 
 pub(super) fn mmr_abitious_assasin(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -118,7 +118,7 @@ pub(super) fn mmr_abitious_assasin(
 }
 
 pub(super) fn dmr_assasins_blade(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -134,7 +134,7 @@ pub(super) fn dmr_assasins_blade(
     }
 }
 pub(super) fn dmr_box_breathing(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -158,7 +158,7 @@ pub(super) fn dmr_box_breathing(
 }
 
 pub(super) fn fmr_desperado(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -176,7 +176,7 @@ pub(super) fn fmr_desperado(
 }
 
 pub(super) fn dmr_explosive_payload(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -196,7 +196,7 @@ pub(super) fn dmr_explosive_payload(
 }
 
 pub(super) fn dmr_timed_payload(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -216,7 +216,7 @@ pub(super) fn dmr_timed_payload(
 }
 
 pub(super) fn sbr_field_prep(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -231,7 +231,7 @@ pub(super) fn sbr_field_prep(
 }
 
 pub(super) fn rsmr_field_prep(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -249,7 +249,7 @@ pub(super) fn rsmr_field_prep(
 }
 
 pub(super) fn sbr_firmly_planted(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -267,7 +267,7 @@ pub(super) fn sbr_firmly_planted(
 }
 
 pub(super) fn hmr_firmly_planted(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -284,7 +284,7 @@ pub(super) fn hmr_firmly_planted(
 }
 
 pub(super) fn frm_full_auto_trigger(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -301,7 +301,7 @@ pub(super) fn frm_full_auto_trigger(
 }
 
 pub(super) fn rr_triple_tap(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -315,7 +315,7 @@ pub(super) fn rr_triple_tap(
 }
 
 pub(super) fn sbr_hip_fire_grip(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -327,7 +327,7 @@ pub(super) fn sbr_hip_fire_grip(
 }
 
 pub(super) fn rmr_hip_fire_grip(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -345,7 +345,7 @@ pub(super) fn rmr_hip_fire_grip(
 }
 
 pub(super) fn dmr_impact_casing(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -357,7 +357,7 @@ pub(super) fn dmr_impact_casing(
 }
 
 pub(super) fn sbr_moving_target(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -369,7 +369,7 @@ pub(super) fn sbr_moving_target(
 }
 
 pub(super) fn sbr_opening_shot(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -385,7 +385,7 @@ pub(super) fn sbr_opening_shot(
 }
 
 pub(super) fn rmr_opening_shot(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -400,7 +400,7 @@ pub(super) fn rmr_opening_shot(
 }
 
 pub(super) fn sbr_outlaw(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -413,7 +413,7 @@ pub(super) fn sbr_outlaw(
 }
 
 pub(super) fn rmr_range_finder(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -427,7 +427,7 @@ pub(super) fn rmr_range_finder(
 }
 
 pub(super) fn sbr_slide_shot(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -443,7 +443,7 @@ pub(super) fn sbr_slide_shot(
 }
 
 pub(super) fn rmr_slideshot(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -461,7 +461,7 @@ pub(super) fn rmr_slideshot(
 }
 
 pub(super) fn sbr_slide_ways(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -477,7 +477,7 @@ pub(super) fn sbr_slide_ways(
 }
 
 pub(super) fn hmr_snapshot(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -494,7 +494,7 @@ pub(super) fn hmr_snapshot(
 }
 
 pub(super) fn sbr_tap_the_trigger(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,

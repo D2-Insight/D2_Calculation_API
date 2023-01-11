@@ -12,7 +12,7 @@ use super::lib::{
 };
 
 pub fn mmr_clown_cartridge(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -25,7 +25,7 @@ pub fn mmr_clown_cartridge(
 }
 
 pub fn sbr_elemental_capacitor(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -44,7 +44,7 @@ pub fn sbr_elemental_capacitor(
 }
 
 pub(super) fn hmr_elemental_capacitor(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -61,7 +61,7 @@ pub(super) fn hmr_elemental_capacitor(
 }
 
 pub(super) fn rsmr_elemental_capacitor(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -77,7 +77,7 @@ pub(super) fn rsmr_elemental_capacitor(
 }
 
 pub fn sbr_killing_wind(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -91,7 +91,7 @@ pub fn sbr_killing_wind(
 }
 
 pub fn rmr_killing_wind(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -114,7 +114,7 @@ pub fn rmr_killing_wind(
 }
 
 pub fn dmr_lasting_impressions(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -126,7 +126,7 @@ pub fn dmr_lasting_impressions(
 }
 
 pub(super) fn dmr_vorpal(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,

@@ -177,6 +177,17 @@ pub struct JsPerk {
     pub stat_buffs: HashMap<u32, i32>,
     pub enhanced: bool,
     pub value: i32, //used for toggle and stacks
-    pub name: String,
     pub id: u32,
+}
+#[wasm_bindgen]
+impl JsPerk {
+    #[wasm_bindgen(constructor)]
+    pub fn new() -> JsPerk {
+        JsPerk {
+            stat_buffs: HashMap::new(),
+            enhanced: false,
+            value: 0,
+            id: 0,
+        }
+    }
 }

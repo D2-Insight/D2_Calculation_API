@@ -149,20 +149,20 @@ fn pl_delta(_activity: Activity, _gpl: f64) -> f64 {
     rpl_mult(rpl) * wep_delta_mult * gear_delta_mult
 }
 
-fn calc_pve_dmg(
-    _activity: Activity,
-    _base_dmg: f64,
-    _gpl: i32,
-    _world_bonuses: f64,
-    _enemy_type: EnemyType,
-    _buffs: BuffPackage,
-) -> f64 {
-    let buff_mod = _buffs.get_pve_buff(&_enemy_type);
-    let pl_mult = pl_delta(_activity, _gpl as f64);
-    _base_dmg * pl_mult * _world_bonuses * buff_mod
-}
+// fn calc_pve_dmg(
+//     _activity: Activity,
+//     _base_dmg: f64,
+//     _gpl: i32,
+//     _world_bonuses: f64,
+//     _enemy_type: EnemyType,
+//     _buffs: BuffPackage,
+// ) -> f64 {
+//     let buff_mod = _buffs.get_pve_buff(&_enemy_type);
+//     let pl_mult = pl_delta(_activity, _gpl as f64);
+//     _base_dmg * pl_mult * _world_bonuses * buff_mod
+// }
 
-fn calc_dmg_pvp(_base_dmg: f64, _buffs: BuffPackage) -> f64 {
-    let buff_mod = _buffs.get_pvp_buff();
-    _base_dmg * buff_mod
-}
+// fn calc_dmg_pvp(_base_dmg: f64, _buffs: BuffPackage) -> f64 {
+//     let buff_mod = _buffs.get_pvp_buff();
+//     _base_dmg * buff_mod
+// }

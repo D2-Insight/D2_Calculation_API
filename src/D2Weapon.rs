@@ -91,7 +91,7 @@ impl Weapon {
             perk_opt.unwrap().value = _val;
         }
     }
-    pub fn get_stats(&self) -> HashMap<u32, Stat> {
+    pub fn get_stats(&mut self) -> HashMap<u32, Stat> {
         self.update_stats();
         self.stats.clone()
     }
@@ -124,12 +124,13 @@ impl Default for Weapon {
 }
 impl Weapon {
     fn update_stats(&mut self) {
-        let input = CalculationInput::construct_static(self.firing_data, self.stats, self.weapon_type, self.ammo_type);
-        let dynamic_stats = get_perk_stats(self.list_perk_values(), input, true)[0];
-        let static_stats = get_perk_stats(self.list_perk_values(), input, false)[1];
+        let input = CalculationInput::construct_static(self.firing_data.clone(), self.stats.clone(), self.weapon_type, self.ammo_type);
+        let inter_var = get_perk_stats(self.list_perk_values(), input, false);
+        let dynamic_stats = &inter_var[0];
+        let static_stats = &inter_var[1];
         for (key, stat) in &mut self.stats {
             let a = static_stats.get(key);
-            let b = dynamic_stats.get(key);;
+            let b = dynamic_stats.get(key);
             if a.is_some() {
                 stat.part_value = a.unwrap().clone();
             }

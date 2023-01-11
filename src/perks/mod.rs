@@ -11,11 +11,11 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-use crate::{perks::exotic_perks::sbr_roadborn, D2Enums::StatHashes, js_types::JsPerk};
+use crate::{D2Enums::StatHashes, js_types::JsPerk};
 
 use self::{
-    lib::CalculationInput, other_perks::*, year_1_perks::*, year_2_perks::*, year_3_perks::*,
-    year_4_perks::*, year_5_perks::*,
+    lib::{CalculationInput, DamageModifierResponse, ReloadModifierResponse}, other_perks::*, year_1_perks::*, year_2_perks::*, year_3_perks::*,
+    year_4_perks::*, year_5_perks::*,exotic_perks::*
 };
 
 pub fn clamp<T: PartialOrd>(n: T, min: T, max: T) -> T {
@@ -33,9 +33,7 @@ pub struct Perk {
     pub stat_buffs: HashMap<u32, i32>,
     pub enhanced: bool,
     pub value: i32, //used for toggle and stacks
-    pub name: String,
     pub hash: u32,
-    pub perk_enum: Perks,
 }
 impl Perk {
     pub fn from_js(js_perk: JsPerk) -> Perk {
@@ -50,9 +48,7 @@ impl Perk {
             stat_buffs,
             enhanced: js_perk.enhanced,
             value: js_perk.value,
-            name: js_perk.name,
             hash: js_perk.id,
-            perk_enum: Perks::from_u32(js_perk.id),
         }
     }
 }
@@ -81,7 +77,7 @@ pub enum Perks {
     Cascade,
     Outlaw,
     BackupPlan,     // will apply in dps no matter what
-    BoxedBreathing, // will apply in dps no matter what
+    BoxBreathing, // will apply in dps no matter what
     Pugilist,
     WellRounded,
     ExplosiveLight,
@@ -100,6 +96,8 @@ pub enum Perks {
     Tempering,
     HeatRises,
     Hedrons,
+    Frequency,
+    FlowState,
 
     ////SLIDER////
     FeedingFrenzy,
@@ -115,9 +113,11 @@ pub enum Perks {
     Rampage,
     ThreatDetector,
     AirAssault,
+    KillingTally,
     //class
     OnYourMark,
     //weird
+    Demolitionist,
     ElementalCapacitor,
 
     //armor
@@ -140,13 +140,28 @@ pub enum Perks {
     TripleTap,
     FourthTimesTheCharm,
     HipFireGrip,
+    RewindRounds,
+    ExplosivePayload,
+    TimedPayload,
+    ExplosiveHead,
+    SpikeGrenades,
+    AlloyMag,
+    RapidFireFrame,
+    SwapMag,
+    BossSpec,
+    MinorSpec,
+    MajorSpec,
+    QuickDraw,
+    ImpactCasing,
+    FullChoke,
+    AlloyMagazine,
+    ResevoirBurst,
+    OverUnder,
 
     //armor
     QuickCharge,
 
     ////MISC////
-    WeaponPart,
-    Masterwork,
     Ignore,
     ////////EXOTIC////////
     ////TOGGLE////
@@ -202,7 +217,7 @@ impl Perks {
             3751912585 => Perks::Cascade,
             1168162263 => Perks::Outlaw,
             1600092898 => Perks::BackupPlan,
-            2551157718 => Perks::BoxedBreathing,
+            2551157718 => Perks::BoxBreathing,
             691659142 => Perks::Pugilist,
             744594675 => Perks::WellRounded,
             3194351027 => Perks::ExplosiveLight,
@@ -261,27 +276,26 @@ impl Perks {
     }
 }
 
-//return HashMap<u32, i32> tuple
 pub fn get_perk_stats(_perks: Vec<Perk>, _input_data: CalculationInput, _pvp: bool) -> [HashMap<u32, i32>; 2]{
     let mut dynamic_stats: HashMap<u32, i32> = HashMap::new();
     let mut static_stats: HashMap<u32, i32> = HashMap::new();
     for perk in _perks {
-        let perk_stats = dyanmic_perk_stats(perk, _input_data, _pvp);
+        let perk_stats = dyanmic_perk_stats(&perk, &_input_data, _pvp);
         for (key, value) in perk_stats {
             let entry = dynamic_stats.entry(key).or_insert(0);
             *entry += value;
         }
         for (key, value) in perk.stat_buffs {
-            let entry = static_stats.entry(key).or_insert(0);
+            let entry = static_stats.entry(key.clone()).or_insert(0);
             *entry += value;
         }
     }
     [dynamic_stats, static_stats]
 }
 
-pub fn dyanmic_perk_stats(
-    _perk: Perk,
-    _input_data: CalculationInput,
+fn dyanmic_perk_stats(
+    _perk: &Perk,
+    _input_data: &CalculationInput,
     _pvp: bool,
 ) -> HashMap<u32, i32> {
     let perk_enum = Perks::from_u32(_perk.hash);
@@ -327,7 +341,75 @@ pub fn dyanmic_perk_stats(
 }
 
 
+pub fn get_dmg_modifier(_perks: Vec<Perk>, _input_data: CalculationInput, _pvp: bool) -> DamageModifierResponse {
+    let mut dmg_modifier = DamageModifierResponse{damage_scale: 1.0, crit_scale: 1.0};
+    for perk in _perks {
+        dmg_modifier = dmg_modifier * get_perk_dmr(perk, &_input_data, _pvp)
+    };
+    dmg_modifier
+}
 
+fn get_perk_dmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> DamageModifierResponse {
+    let perk_enum = Perks::from_u32(_perk.hash);
+    let val = _perk.value;
+    let enhanced = _perk.enhanced;
+    match perk_enum {
+        Perks::HighImpactReserves => dmr_high_impact_reserves(_input_data, val, enhanced, _pvp),
+        Perks::BoxBreathing => dmr_box_breathing(_input_data, val, enhanced, _pvp),
+        Perks::ExplosivePayload => dmr_explosive_payload(_input_data, val, enhanced, _pvp),
+        Perks::TimedPayload => dmr_timed_payload(_input_data, val, enhanced, _pvp),
+        Perks::ImpactCasing => dmr_impact_casing(_input_data, val, enhanced, _pvp),
+        Perks::ExplosiveHead => dmr_explosive_head(_input_data, val, enhanced, _pvp),
+        Perks::FiringLine => dmr_firing_line(_input_data, val, enhanced, _pvp),
+        Perks::KillingTally => dmr_killing_tally(_input_data, val, enhanced, _pvp),
+        Perks::ResevoirBurst => dmr_resevoir_burst(_input_data, val, enhanced, _pvp),
+        Perks::Surrounded => dmr_surrounded(_input_data, val, enhanced, _pvp),
+        Perks::LastingImpression => dmr_lasting_impressions(_input_data, val, enhanced, _pvp),
+        Perks::Vorpal => dmr_vorpal(_input_data, val, enhanced, _pvp),
+        Perks::Adagio => dmr_adagio(_input_data, val, enhanced, _pvp),
+        Perks::AdrenalineJunkie => dmr_adrenaline_junkie(_input_data, val, enhanced, _pvp),
+        Perks::Frenzy => dmr_frenzy(_input_data, val, enhanced, _pvp),
+        Perks::FocusedFury => dmr_focused_fury(_input_data, val, enhanced, _pvp),
+        Perks::GutShot => dmr_gutshot_straight(_input_data, val, enhanced, _pvp),
+        Perks::TargetLock => dmr_target_lock(_input_data, val, enhanced, _pvp),
+        Perks::OverUnder => dmr_over_under(_input_data, val, enhanced, _pvp),
+        _ => DamageModifierResponse{damage_scale: 1.0, crit_scale: 1.0},
+    }
+}
 
+pub fn get_reload_modifier(_perks: Vec<Perk>, _input_data: CalculationInput, _pvp: bool) -> ReloadModifierResponse {
+    let mut reload_modifier = ReloadModifierResponse{reload_stat_add: 0, reload_time_scale: 1.0};
+    for perk in _perks {
+        let tmp = get_perk_rsmr(perk, &_input_data, _pvp);
+        reload_modifier.reload_stat_add += tmp.reload_stat_add;
+        reload_modifier.reload_time_scale *= tmp.reload_time_scale;
+    };
+    reload_modifier
+}
 
-
+fn get_perk_rsmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> ReloadModifierResponse {
+    let perk_enum = Perks::from_u32(_perk.hash);
+    let val = _perk.value;
+    let enhanced = _perk.enhanced;
+    match perk_enum {
+        Perks::RapidFireFrame => rsmr_alloy_mag(_input_data, val, enhanced, _pvp),
+        Perks::AlloyMagazine => rsmr_alloy_mag(_input_data, val, enhanced, _pvp),
+        Perks::Roadborn => rsmr_roadborn(_input_data, val, enhanced, _pvp),
+        Perks::OphidianAspect => rsmr_ophidian_aspects(_input_data, val, enhanced, _pvp),
+        Perks::DragonShadow => rsmr_dragon_shadow(_input_data, val, enhanced, _pvp),
+        Perks::Frequency => rsmr_frequency(_input_data, val, enhanced, _pvp),
+        Perks::FlowState => rsmr_flow_state(_input_data, val, enhanced, _pvp),
+        Perks::OnYourMark => rsmr_on_your_mark(_input_data, val, enhanced, _pvp),
+        Perks::ThreatDetector => rsmr_threat_detector(_input_data, val, enhanced, _pvp),
+        Perks::FieldPrep => rsmr_field_prep(_input_data, val, enhanced, _pvp),
+        Perks::FeedingFrenzy => rsmr_feeding_frenzy(_input_data, val, enhanced, _pvp),
+        Perks::RapidHit => rsmr_rapid_hit(_input_data, val, enhanced, _pvp),
+        Perks::ElementalCapacitor => rsmr_elemental_capacitor(_input_data, val, enhanced, _pvp),
+        Perks::Ensemble => rsmr_ensemble(_input_data, val, enhanced, _pvp),
+        Perks::Frenzy => rsmr_frenzy(_input_data, val, enhanced, _pvp),
+        Perks::ImpulseAmplifier => rsmr_impulse_amplifier(_input_data, val, enhanced, _pvp),
+        Perks::PerpetualMotion => rsmr_perpetual_motion(_input_data, val, enhanced, _pvp),
+        Perks::StatsForAll => rsmr_stats_for_all(_input_data, val, enhanced, _pvp),
+        _ => ReloadModifierResponse{reload_stat_add: 0, reload_time_scale: 1.0},
+    }
+}

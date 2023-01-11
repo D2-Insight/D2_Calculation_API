@@ -12,7 +12,7 @@ use super::{
 };
 
 pub fn sbr_air_assault(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -25,7 +25,7 @@ pub fn sbr_air_assault(
 }
 
 pub fn fmr_archers_tempo(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -38,7 +38,7 @@ pub fn fmr_archers_tempo(
 }
 
 pub fn dmr_explosive_head(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -58,7 +58,7 @@ pub fn dmr_explosive_head(
 }
 
 pub fn rsmr_feeding_frenzy(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -94,7 +94,7 @@ pub fn rsmr_feeding_frenzy(
 }
 
 pub fn sbr_feeding_frenzy(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -122,7 +122,7 @@ pub fn sbr_feeding_frenzy(
 }
 
 pub fn dmr_firing_line(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -138,7 +138,7 @@ pub fn dmr_firing_line(
 }
 
 pub fn rr_fourth_times(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -152,7 +152,7 @@ pub fn rr_fourth_times(
 }
 
 pub fn dmr_killing_tally(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -171,7 +171,7 @@ pub fn dmr_killing_tally(
 }
 
 pub fn mmr_overflow(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -185,7 +185,7 @@ pub fn mmr_overflow(
 }
 
 pub fn rsmr_rapid_hit(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -214,7 +214,7 @@ pub fn rsmr_rapid_hit(
 }
 
 pub fn dmr_resevoir_burst(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -230,7 +230,7 @@ pub fn dmr_resevoir_burst(
 }
 
 pub(super) fn dmr_surrounded(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -253,7 +253,7 @@ pub(super) fn dmr_surrounded(
 }
 
 pub(super) fn ror_demolitionist(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,

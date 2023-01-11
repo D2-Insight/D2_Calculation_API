@@ -4,7 +4,7 @@ use crate::{
     D2Structs::{FiringConfig, HandlingOut},
     D2Weapon::Stat,
 };
-use std::collections::HashMap;
+use std::{collections::HashMap, ops::Mul};
 
 #[derive(Debug, Clone)]
 pub struct CalculationInput {
@@ -26,6 +26,7 @@ pub struct CalculationInput {
     pub num_reloads: f64,
     pub enemy_type: EnemyType,
     pub has_overshield: bool,
+    pub cached_data: Option<*mut HashMap<String, f64>>,
 }
 impl CalculationInput {
     pub fn construct_pve() {}
@@ -59,6 +60,7 @@ impl CalculationInput {
             num_reloads: 0.0,
             enemy_type: EnemyType::PLAYER,
             has_overshield: _has_overshield,
+            cached_data: None,
         }
     }
     pub fn construct_static(
@@ -86,6 +88,7 @@ impl CalculationInput {
             num_reloads: 0.0,
             enemy_type: EnemyType::ENCLAVE,
             has_overshield: false,
+            cached_data: None,
         }
     }
 }
@@ -94,6 +97,15 @@ impl CalculationInput {
 pub struct DamageModifierResponse {
     pub damage_scale: f64,
     pub crit_scale: f64,
+}
+impl Mul for DamageModifierResponse {
+    type Output = Self;
+    fn mul(self, rhs: Self) -> Self::Output {
+        Self {
+            damage_scale: self.damage_scale * rhs.damage_scale,
+            crit_scale: self.crit_scale * rhs.crit_scale,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]

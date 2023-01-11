@@ -11,7 +11,7 @@ use super::{
 };
 
 pub fn fmr_cascade_point(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -35,7 +35,7 @@ pub fn fmr_cascade_point(
 }
 
 pub fn sbr_encore(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -50,7 +50,7 @@ pub fn sbr_encore(
 }
 
 pub fn dmr_focused_fury(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -72,7 +72,7 @@ pub fn dmr_focused_fury(
 }
 
 pub fn rmr_fragile_focus(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -90,7 +90,7 @@ pub fn rmr_fragile_focus(
 }
 
 pub fn sbr_fragile_focus(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -105,7 +105,7 @@ pub fn sbr_fragile_focus(
 }
 
 pub fn dmr_gutshot_straight(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -131,7 +131,7 @@ pub fn dmr_gutshot_straight(
 }
 
 pub fn sbr_offhand_strike(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -146,7 +146,7 @@ pub fn sbr_offhand_strike(
 }
 
 pub fn rmr_offhand_strike(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -164,7 +164,7 @@ pub fn rmr_offhand_strike(
 }
 
 pub fn hmr_slickdraw(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -177,7 +177,7 @@ pub fn hmr_slickdraw(
 }
 
 pub(super) fn sbr_stats_for_all(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -201,7 +201,7 @@ pub(super) fn sbr_stats_for_all(
 }
 
 pub(super) fn hmr_stats_for_all(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -219,7 +219,7 @@ pub(super) fn hmr_stats_for_all(
 }
 
 pub(super) fn rmr_stats_for_all(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -239,7 +239,7 @@ pub(super) fn rmr_stats_for_all(
 }
 
 pub(super) fn rsmr_stats_for_all(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -258,7 +258,7 @@ pub(super) fn rsmr_stats_for_all(
 }
 
 pub(super) fn sbr_steady_hands(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -273,7 +273,7 @@ pub(super) fn sbr_steady_hands(
 }
 
 pub(super) fn hmr_steady_hands(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -293,7 +293,7 @@ pub(super) fn hmr_steady_hands(
 }
 
 pub(super) fn dmr_target_lock(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -332,7 +332,7 @@ pub(super) fn dmr_target_lock(
 }
 
 pub(super) fn dmr_over_under(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -351,7 +351,7 @@ pub(super) fn dmr_over_under(
 }
 
 pub(super) fn sbr_well_rounded(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -367,7 +367,7 @@ pub(super) fn sbr_well_rounded(
 }
 
 pub(super) fn hmr_well_rounded(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -385,7 +385,7 @@ pub(super) fn hmr_well_rounded(
 }
 
 pub(super) fn rmr_well_rounded(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::D2Enums::StatHashes;
+use crate::D2Enums::{StatHashes, WeaponType};
 
 use super::{
     clamp,
@@ -12,7 +12,7 @@ use super::{
 };
 
 pub(super) fn hmr_ophidian_aspects(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -25,7 +25,7 @@ pub(super) fn hmr_ophidian_aspects(
 }
 
 pub(super) fn rsmr_ophidian_aspects(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -37,7 +37,7 @@ pub(super) fn rsmr_ophidian_aspects(
 }
 
 pub(super) fn sbr_ophidian_aspects(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -50,7 +50,7 @@ pub(super) fn sbr_ophidian_aspects(
 }
 
 pub(super) fn sbr_dragon_shadow(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -62,7 +62,7 @@ pub(super) fn sbr_dragon_shadow(
 }
 
 pub(super) fn hmr_dragon_shadow(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -75,7 +75,7 @@ pub(super) fn hmr_dragon_shadow(
 }
 
 pub(super) fn rsmr_dragon_shadow(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -87,7 +87,7 @@ pub(super) fn rsmr_dragon_shadow(
 }
 
 pub(super) fn sbr_amplified(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -98,7 +98,7 @@ pub(super) fn sbr_amplified(
 }
 
 pub(super) fn hmr_amplified(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -111,7 +111,7 @@ pub(super) fn hmr_amplified(
 }
 
 pub(super) fn rsmr_frequency(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -124,7 +124,7 @@ pub(super) fn rsmr_frequency(
 }
 
 pub(super) fn rsmr_flow_state(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -137,7 +137,7 @@ pub(super) fn rsmr_flow_state(
 }
 
 pub(super) fn sbr_tempering(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -150,7 +150,7 @@ pub(super) fn sbr_tempering(
 }
 
 pub(super) fn sbr_on_your_mark(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -165,7 +165,7 @@ pub(super) fn sbr_on_your_mark(
 }
 
 pub(super) fn hmr_on_your_mark(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -179,7 +179,7 @@ pub(super) fn hmr_on_your_mark(
 }
 
 pub(super) fn rsmr_on_your_mark(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -192,7 +192,7 @@ pub(super) fn rsmr_on_your_mark(
 }
 
 pub(super) fn sbr_heat_rises(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -205,7 +205,7 @@ pub(super) fn sbr_heat_rises(
 }
 
 pub(super) fn sbr_hedrons(
-    _input: CalculationInput,
+    _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
@@ -215,6 +215,22 @@ pub(super) fn sbr_hedrons(
         stats.insert(StatHashes::AIRBORNE.to_u32(), 20);
         stats.insert(StatHashes::AIM_ASSIST.to_u32(), 15);
         stats.insert(StatHashes::STABILITY.to_u32(), 30);
+    };
+    stats
+}
+
+pub(super) fn sbr_quick_charge(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> HashMap<u32, i32> {
+    let mut stats = HashMap::new();
+    if _input.weapon_type == WeaponType::FUSIONRIFLE
+        || _input.weapon_type == WeaponType::SHOTGUN
+        || _input.weapon_type == WeaponType::SIDEARM
+    {
+        stats.insert(StatHashes::HANDLING.to_u32(), 25);
     };
     stats
 }
