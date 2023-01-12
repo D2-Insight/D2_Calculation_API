@@ -7,8 +7,8 @@ use super::{
     clamp,
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
-        HandlingModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
-        ReloadModifierResponse, ReloadOverideResponse, ReserveModifierResponse,
+        HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
+        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverideResponse,
     },
 };
 
@@ -217,3 +217,68 @@ pub(super) fn rsmr_roadborn(
 //         burst_size_add: burst_size,
 //     }
 // }
+
+pub(super) fn fmr_reign_havoc(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> FiringModifierResponse {
+    let mut delay_mult = 1.0;
+    if _input.shots_hit_this_mag >= 13.0 {
+        delay_mult = 0.75;
+    };
+    if _input.shots_hit_this_mag >= 26.0 {
+        delay_mult = 0.625;
+    };
+    FiringModifierResponse {
+        burst_delay_scale: delay_mult,
+        burst_duration_scale: 1.0,
+        burst_size_add: 0.0,
+    }
+}
+
+pub(super) fn dmr_worms_hunger(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> DamageModifierResponse {
+    let val = clamp(_value, 0, 20);
+    DamageModifierResponse {
+        damage_scale: 1.0 + (val as f64) * 0.1,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn dmr_lagragian_sight(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> DamageModifierResponse {
+    let mut damage_buff = 1.0;
+    if _value > 0 && _input.time_total < 30.0 {
+        damage_buff = 1.4;
+    };
+    DamageModifierResponse {
+        damage_scale: damage_buff,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn dmr_tom(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> DamageModifierResponse {
+    let mut damage_buff = 1.0;
+    if _input.curr_mag == 1.0 {
+        damage_buff = 2.0;
+    };
+    DamageModifierResponse {
+        damage_scale: damage_buff,
+        crit_scale: 1.0,
+    }
+}

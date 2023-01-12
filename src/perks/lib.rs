@@ -161,7 +161,7 @@ pub struct MagazineModifierResponse {
 }
 
 #[derive(Debug, Clone)]
-pub struct ReserveModifierResponse {
+pub struct InventoryModifierResponse {
     pub ammo_stat_add: i32,
     pub ammo_scale: f64,
     pub ammo_add: f64,

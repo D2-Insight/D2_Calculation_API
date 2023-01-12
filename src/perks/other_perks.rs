@@ -6,8 +6,8 @@ use super::{
     clamp,
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
-        HandlingModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
-        ReloadModifierResponse, ReloadOverideResponse, ReserveModifierResponse,
+        HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
+        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverideResponse,
     },
 };
 

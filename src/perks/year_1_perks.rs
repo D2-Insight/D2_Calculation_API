@@ -6,8 +6,8 @@ use super::{
     clamp,
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
-        HandlingModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
-        ReloadModifierResponse,
+        HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
+        RangeModifierResponse, RefundResponse, ReloadModifierResponse,
     },
 };
 
@@ -221,12 +221,13 @@ pub(super) fn sbr_field_prep(
     _is_enhanced: bool,
     _pvp: bool,
 ) -> HashMap<u32, i32> {
-    let mut reload = 0;
-    if _value == 1 {
-        reload = if _is_enhanced { 55 } else { 50 };
-    };
     let mut out = HashMap::new();
-    out.insert(StatHashes::RELOAD.to_u32(), reload);
+    if _value > 0 {
+        let reload = if _is_enhanced { 55 } else { 50 };
+        out.insert(StatHashes::RELOAD.to_u32(), reload);
+    };
+    let reserves = if _is_enhanced { 40 } else { 30 };
+    out.insert(StatHashes::INVENTORY_SIZE.to_u32(), reserves);
     out
 }
 
@@ -238,13 +239,26 @@ pub(super) fn rsmr_field_prep(
 ) -> ReloadModifierResponse {
     let mut reload = 0;
     let mut reload_mult = 1.0;
-    if _value == 1 {
+    if _value > 0 {
         reload = if _is_enhanced { 55 } else { 50 };
         reload_mult = if _is_enhanced { 0.77 } else { 0.8 };
     };
     ReloadModifierResponse {
         reload_stat_add: reload,
         reload_time_scale: reload_mult,
+    }
+}
+
+pub(super) fn imr_field_prep(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> InventoryModifierResponse {
+    InventoryModifierResponse {
+        ammo_stat_add: if _is_enhanced { 40 } else { 30 },
+        ammo_add: 0.,
+        ammo_scale: 1.0,
     }
 }
 
