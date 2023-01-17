@@ -118,9 +118,9 @@ pub struct FiringConfig {
 //         }
 //     }
 // }
-#[derive(Debug, Clone, Default)]
-pub struct HandlingOut {
-    pub ready: f64,
-    pub stow: f64,
-    pub ads: f64,
-}
+// #[derive(Debug, Clone, Default)]
+// pub struct HandlingOut {
+//     pub ready: f64,
+//     pub stow: f64,
+//     pub ads: f64,
+// }

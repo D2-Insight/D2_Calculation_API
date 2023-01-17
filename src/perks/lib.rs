@@ -1,17 +1,18 @@
 use crate::{
     D2Enemy::EnemyType,
     D2Enums::{AmmoType, StatHashes, WeaponSlot, WeaponType},
-    D2Structs::{FiringConfig, HandlingOut},
-    D2Weapon::Stat,
+    D2Structs::FiringConfig,
+    D2Weapon::Stat, js_types::JsHandlingResponse,
 };
 use std::{collections::HashMap, ops::Mul};
 
-#[derive(Debug, Clone)]
-pub struct CalculationInput {
+#[derive(Debug)]
+pub struct CalculationInput<'a> {
     pub curr_firing_data: FiringConfig,
     pub base_damage: f64,
     pub base_crit_mult: f64,
-    pub shots_hit_this_mag: f64,
+    pub shots_fired_this_mag: f64,
+    pub total_shots_fired: f64,
     pub total_shots_hit: f64,
     pub base_mag: f64,
     pub curr_mag: f64,
@@ -22,14 +23,47 @@ pub struct CalculationInput {
     pub weapon_type: WeaponType,
     pub weapon_slot: WeaponSlot,
     pub ammo_type: AmmoType,
-    pub handling_data: HandlingOut,
+    pub handling_data: JsHandlingResponse,
     pub num_reloads: f64,
     pub enemy_type: EnemyType,
     pub has_overshield: bool,
-    pub cached_data: Option<*mut HashMap<String, f64>>,
+    pub cached_data: Option<&'a mut HashMap<String, f64>>,
 }
-impl CalculationInput {
-    pub fn construct_pve() {}
+impl CalculationInput<'_> {
+    //stuff like mag size can use this, not reload, damage, etc.
+    pub fn construct_pve_sparse(
+        _firing_data: FiringConfig,
+        _stats: HashMap<u32, Stat>,
+        _weapon_type: WeaponType,
+        _ammo_type: AmmoType,
+        _base_damage: f64,
+        _base_crit_mult: f64,
+        _base_mag_size: i32,
+        _total_shots_hit: i32,
+    ) -> Self{
+        Self {
+            curr_firing_data: _firing_data,
+            base_damage: _base_damage,
+            base_crit_mult: _base_crit_mult,
+            shots_fired_this_mag: 0.0,
+            total_shots_fired: _total_shots_hit as f64,
+            total_shots_hit: 0.0,
+            base_mag: _base_mag_size as f64,
+            curr_mag: _base_mag_size as f64,
+            reserves_left: 100.0,
+            time_total: 0.0,
+            time_this_mag: 0.0,
+            stats: _stats,
+            weapon_type: _weapon_type,
+            weapon_slot: WeaponSlot::KINETIC,
+            ammo_type: _ammo_type,
+            handling_data: JsHandlingResponse::default(),
+            num_reloads: 0.0,
+            enemy_type: EnemyType::BOSS,
+            has_overshield: false,
+            cached_data: None,
+        }
+    }
     pub fn construct_pvp(
         _firing_data: FiringConfig,
         _stats: HashMap<u32, Stat>,
@@ -39,13 +73,14 @@ impl CalculationInput {
         _base_crit_mult: f64,
         _mag_size: f64,
         _has_overshield: bool,
-        _handling_data: HandlingOut,
+        _handling_data: JsHandlingResponse,
     ) -> Self {
         Self {
             curr_firing_data: _firing_data,
             base_damage: _base_damage,
             base_crit_mult: _base_crit_mult,
-            shots_hit_this_mag: 0.0,
+            shots_fired_this_mag: 0.0,
+            total_shots_fired: 0.0,
             total_shots_hit: 0.0,
             base_mag: _mag_size,
             curr_mag: _mag_size,
@@ -73,7 +108,8 @@ impl CalculationInput {
             curr_firing_data: _firing_data,
             base_damage: 0.0,
             base_crit_mult: 0.0,
-            shots_hit_this_mag: 0.0,
+            shots_fired_this_mag: 0.0,
+            total_shots_fired: 0.0,
             total_shots_hit: 0.0,
             base_mag: 10.0,
             curr_mag: 10.0,
@@ -84,7 +120,7 @@ impl CalculationInput {
             weapon_type: _weapon_type,
             weapon_slot: WeaponSlot::KINETIC,
             ammo_type: _ammo_type,
-            handling_data: HandlingOut::default(),
+            handling_data: JsHandlingResponse::default(),
             num_reloads: 0.0,
             enemy_type: EnemyType::ENCLAVE,
             has_overshield: false,

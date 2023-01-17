@@ -1,5 +1,5 @@
 [package]
-name = "D2WEBAPPRUST"
+name = "D2_Calculation_API"
 edition = "2021"
 version = "0.1.0"
 rust-version = "1.65"

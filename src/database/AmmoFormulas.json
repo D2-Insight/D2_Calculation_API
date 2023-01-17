@@ -22,60 +22,80 @@
         "17": "Sidearm"
     },
     "Auto Rifle": {
-        "878286503":  {"name": "Rapid-Fire Frame",   "category": "default"},
-        "944506345":  {"name": "SUROS Regime",       "category": "default"},
-        "961505134":  {"name": "Tommy's Matchbook",  "category": "default"},
-        "1019291327": {"name": "High-Impact Frame",  "category": "default"},
-        "1294026524": {"name": "Adaptive Frame",     "category": "default"},
-        "1458010786": {"name": "Lightweight",        "category": "default"},
-        "1484442054": {"name": "Monte Carlo",        "category": "default"},
-        "1636108362": {"name": "Precision Frame",    "category": "default"},
-        "3208839961": {"name": "Cerberus+1",        "category": "Cerberus"},
-        "3610814281": {"name": "Hard Light",         "category": "default"},
-        "3755070117": {"name": "Sweet Business",     "category": "default"},
-        "3602718766": {"name": "Quicksilver Storm",  "category": "default"},
+        "3208839961": {"name": "Cerberus+1",         "category": "small", "override": -1},
+        "878286503":  {"name": "Rapid-Fire Frame",   "category": "large",  "override": -1},
+        "944506345":  {"name": "SUROS Regime",       "category": "medium",  "override": -1},
+        "961505134":  {"name": "Tommy's Matchbook",  "category": "large",  "override": -1},
+        "1019291327": {"name": "High-Impact Frame",  "category": "small",  "override": -1},
+        "1294026524": {"name": "Adaptive Frame",     "category": "medium",  "override": -1},
+        "1458010786": {"name": "Lightweight",        "category": "large",  "override": -1},
+        "1484442054": {"name": "Monte Carlo",        "category": "medium",  "override": -1},
+        "1636108362": {"name": "Precision Frame",    "category": "small",  "override": -1},
+        "3610814281": {"name": "Hard Light",         "category": "medium",  "override": -1},
+        "3755070117": {"name": "Sweet Business",     "category": "large",  "override": 150},
+        "3602718766": {"name": "Quicksilver Storm",  "category": "large",  "override": -1},
 
-        "Rapid-Fire": {
-            "magazine": {
-                "interp": "linear",
-                "interval": 10,
-                "data": [40,43,46,50,53,56,59,62,66,69,72]
+        "large": {
+            "magazine": {"evpp": 0.0 ,"vpp": 0.322, "offset": 39.9},
+            "reserve": {
+                "is_primary": true
             }
         },
-        "Adaptive": {
-            "magazine": {
-                "interp": "linear",
-                "interval": 10,
-                "data": [33,36,39,41,44,47,49,52,55,67,60]
+        "medium": {
+            "magazine": {"evpp": 0.0 ,"vpp": 0.262, "offset": 33.1},
+            "reserve": {
+                "is_primary": true
             }
         },
-        
-    }
-
+        "small": {
+            "magazine": {"evpp": 0.0 ,"vpp": 0.2, "offset": 25.0},
+            "reserve": {
+                "is_primary": true
+            }
+        }
     },
+
     "Combat Bow": {
-        "715195141":  {"name": "Precision Frame",    "category": "default"},
-        "1470121888": {"name": "Wish-Ender",         "category": "exotic" },
-        "1573888036": {"name": "Trinity Ghoul",      "category": "exotic" },
-        "1699724249": {"name": "Leviathan's Breath", "category": "exotic" },
-        "2108556049": {"name": "Lightweight Frame",  "category": "default"},
-        "2186532310": {"name": "Le Monarque",        "category": "exotic" },
-        "3239299468": {"name": "Ticuu's Divination", "category": "exotic" },
-        "2226793914": {"name": "Hierarchy Of Needs", "category": "exotic" }
+        "715195141":  {"name": "Precision Frame",    "category": "default", "override": 1},
+        "1470121888": {"name": "Wish-Ender",         "category": "exotic",  "override": 1},
+        "1573888036": {"name": "Trinity Ghoul",      "category": "exotic",  "override": 1},
+        "1699724249": {"name": "Leviathan's Breath", "category": "exotic",  "override": 1},
+        "2108556049": {"name": "Lightweight Frame",  "category": "default", "override": 1},
+        "2186532310": {"name": "Le Monarque",        "category": "exotic",  "override": 1},
+        "3239299468": {"name": "Ticuu's Divination", "category": "exotic",  "override": 1},
+        "2226793914": {"name": "Hierarchy Of Needs", "category": "exotic",  "override": 1},
+
+        "primary": {
+            "magazine": {"evpp": 0.0 ,"vpp": 0.0, "offset": 1},
+            "reserve": {
+                "is_primary": true
+            }
+        },
+        "heavy": {
+            "magazine": {"evpp": 0.0 ,"vpp": 0.0, "offset": 1},
+            "reserve": {
+                "is_primary": false
+            }
+        }
     },
+
     "Fusion Rifle":{
-        "656200654":  {"name": "Merciless",         "category": "default"},
-        "878286503":  {"name": "Rapid-Fire Frame",  "category": "default"},
-        "1019291327": {"name": "High-Impact Frame", "category": "default"},
-        "1186480754": {"name": "Bastion",           "category": "default"},
-        "1294026524": {"name": "Adaptive Frame",    "category": "default"},
-        "1636108362": {"name": "Precision Frame",   "category": "default"},
-        "1656957541": {"name": "Jötunn",            "category": "Jotunn" },
-        "1657056865": {"name": "1K Voices",         "category": "1KV"    },
-        "1927916065": {"name": "Telesto",           "category": "Telesto"},
-        "2518716062": {"name": "Aggressive Frame",  "category": "default"},
-        "3610750208": {"name": "Vex Mythoclast",    "category": "Vex"    },
-        "2585427437": {"name": "Delicate Tomb",     "category": "default"}
+        "656200654":  {"name": "Merciless",         "category": "default", "override":  8},
+        "878286503":  {"name": "Rapid-Fire Frame",  "category": "default", "override": -1},
+        "1019291327": {"name": "High-Impact Frame", "category": "default", "override": -1},
+        "1186480754": {"name": "Bastion",           "category": "default", "override": -1},
+        "1294026524": {"name": "Adaptive Frame",    "category": "default", "override": -1},
+        "1636108362": {"name": "Precision Frame",   "category": "default", "override": -1},
+        "1656957541": {"name": "Jötunn",            "category": "default", "override": -1},
+        "1657056865": {"name": "1K Voices",         "category": "default", "override": -1},
+        "1927916065": {"name": "Telesto",           "category": "default", "override": -1},
+        "2518716062": {"name": "Aggressive Frame",  "category": "default", "override": -1},
+        "3610750208": {"name": "Vex Mythoclast",    "category": "Vex",     "override": 33},
+        "2585427437": {"name": "Delicate Tomb",     "category": "default", "override": -1},
+
+        "default": {
+            "magazine": {"evpp": 0.0 ,"vpp": 0.05, "offset": 2.51}
+        }
     },
     "Grenade Launcher": {
         "389268985":  {"name": "Anarchy",           "category": "anarchy" },
@@ -91,55 +111,96 @@
         "3913463509": {"name": "The Colony",        "category": "heavy"   },
         "4130495068": {"name": "Precision Frame",   "category": "heavy"   },
         "1174163613": {"name": "Parasite",          "category": "parasite"},
-        "1759472859": {"name": "Double Fire",       "category": "special" }
+        "1759472859": {"name": "Double Fire",       "category": "special" },
+        "heavy": {
+            "magazine": {"evpp": -0.000233 ,"vpp": 0.09785, "offset": -0.031468}
+        }
     },
     "Hand Cannon":{
-        "213689231":  {"name": "Hawkmoon",         "category": "default" },
-        "507151084":  {"name": "Sturm",            "category": "120 RPM" },
-        "647617635":  {"name": "Ace of spades",    "category": "default" },
-        "1030990989": {"name": "Crimson",          "category": "Crimson" },
-        "1294026524": {"name": "Adaptive Frame",   "category": "default" },
-        "1322370662": {"name": "Precision Frame",  "category": "default" },
-        "1791592647": {"name": "Malfeasance",      "category": "default" },
-        "1863355414": {"name": "Thorn",            "category": "default" },
-        "2144092201": {"name": "Lumina",           "category": "default" },
-        "2189829540": {"name": "Adaptive Frame",   "category": "default" },
-        "2757685314": {"name": "Aggressive Frame", "category": "120 RPM" },
-        "2770223582": {"name": "The Last Word",    "category": "LastWord"},
-        "3174300811": {"name": "Eriana's vow",     "category": "Eriana"  },
-        "3468089894": {"name": "Aggressive Frame", "category": "120 RPM" },
-        "3923638944": {"name": "Double Fire",      "category": "default" },
-        "4045839491": {"name": "Sunshot",          "category": "120 RPM" }
+        "213689231":  {"name": "Hawkmoon",         "category": "small", "override": -1},
+        "507151084":  {"name": "Sturm",            "category": "small", "override": -1},
+        "647617635":  {"name": "Ace of spades",    "category": "small", "override": -1},
+        "1030990989": {"name": "Crimson",          "category": "large", "override": 24},
+        "1294026524": {"name": "Adaptive Frame",   "category": "small", "override": -1},
+        "1322370662": {"name": "Precision Frame",  "category": "large", "override": -1},
+        "1791592647": {"name": "Malfeasance",      "category": "large", "override": -1},
+        "1863355414": {"name": "Thorn",            "category": "small", "override": -1},
+        "2144092201": {"name": "Lumina",           "category": "small", "override": -1},
+        "2189829540": {"name": "Adaptive Frame",   "category": "small", "override": -1},
+        "2757685314": {"name": "Aggressive Frame", "category": "small", "override": -1},
+        "2770223582": {"name": "The Last Word",    "category": "small", "override": -1},
+        "3174300811": {"name": "Eriana's vow",     "category": "small", "override": -1},
+        "3468089894": {"name": "Aggressive Frame", "category": "small", "override": -1},
+        "3923638944": {"name": "Double Fire",      "category": "small", "override": -1},
+        "4045839491": {"name": "Sunshot",          "category": "small", "override": -1},
+
+        "small": {
+            "magazine": {"evpp": 0.0, "vpp": 0.1, "offset": 3.5},
+            "reserve": {
+                "is_primary": true
+            }
+        },
+        "large": {
+            "magazine": {"evpp": 0.0, "vpp": 0.14166, "offset": 4.25},
+            "reserve": {
+                "is_primary": true
+            }
+        }
     },
     "Linear Fusion Rifle": {
         "1531126198": {"name": "The Queenbreaker", "category": "default"},
         "2057203855": {"name": "Precision Frame",  "category": "default"},
-        "2564164194": {"name": "Arbalest",         "category": "special"},
+        "2564164194": {"name": "Arbalest",         "category": "default"},
         "3884127242": {"name": "Sleeper Simulant", "category": "default"},
-        "2881100038": {"name": "Lorentz Driver",   "category": "special"}
+        "2881100038": {"name": "Lorentz Driver",   "category": "default"},
+        "default": {
+            "magazine": {"evpp": 0.0, "vpp": 0.0293, "offset": 3.2},
+            "reserve": {
+                "is_primary": false
+            }
+        }
+
     },
     "Machine Gun": {
-        "878286503":  {"name": "Rapid-Fire Frame",  "category": "default"},
-        "1019291327": {"name": "High-Impact Frame", "category": "default"},
-        "1294026524": {"name": "Adaptive Frame",    "category": "default"},
+        "878286503":  {"name": "Rapid-Fire Frame",  "category": "large"},
+        "1019291327": {"name": "High-Impact Frame", "category": "small"},
+        "1294026524": {"name": "Adaptive Frame",    "category": "small"},
         "2261491232": {"name": "Xenophage",         "category": "default"},
-        "2608508147": {"name": "Heir Apparent",     "category": "default"},
-        "4148158229": {"name": "Thunderlord",       "category": "default"},
-        "2940035732": {"name": "Grand Overture",    "category": "default"}
+        "2608508147": {"name": "Heir Apparent",     "category": "large"},
+        "4148158229": {"name": "Thunderlord",       "category": "small"},
+        "2940035732": {"name": "Grand Overture",    "category": "default"},
+        "large": {
+            "magazine": {"evpp": 0.0, "vpp": 0.7, "offset": 45.0},
+            "reserve": {
+                "is_primary": false
+            }
+        },
+        "small": {
+            "magazine": {"evpp": 0.0, "vpp": 0.45, "offset": 29.5},
+            "reserve": {
+                "is_primary": false
+            }
+        }
     },
     "Pulse Rifle":{
-        "878286503":  {"name": "Rapid-Fire Frame",       "category": "default"  },
-        "1019291327": {"name": "High-Impact Frame",      "category": "default"  },
-        "1294026524": {"name": "Adaptive Frame",         "category": "default"  },
-        "1458010786": {"name": "Lightweight Frame",      "category": "default"  },
-        "2307143135": {"name": "Vigilance Wing",         "category": "aggresive"},
-        "2874284214": {"name": "Aggressive Burst",       "category": "aggresive"},
-        "3837077246": {"name": "No Time to Explain",     "category": "aggresive"},
-        "3905543891": {"name": "Graviton Lance",         "category": "default"  },
-        "4004944400": {"name": "Bad Juju",               "category": "default"  },
-        "4208418110": {"name": "Outbreak Perfected",     "category": "default"  },
-        "4172222323": {"name": "Legacy PR-55 Frame",     "category": "default"  },
-        "3441203855": {"name": "Collective Obligation",  "category": "default"  }
+        "878286503":  {"name": "Rapid-Fire Frame",       "category": "default"},
+        "1019291327": {"name": "High-Impact Frame",      "category": "default"},
+        "1294026524": {"name": "Adaptive Frame",         "category": "default"},
+        "1458010786": {"name": "Lightweight Frame",      "category": "default"},
+        "2307143135": {"name": "Vigilance Wing",         "category": "default"},
+        "2874284214": {"name": "Aggressive Burst",       "category": "default"},
+        "3837077246": {"name": "No Time to Explain",     "category": "default"},
+        "3905543891": {"name": "Graviton Lance",         "category": "default"},
+        "4004944400": {"name": "Bad Juju",               "category": "default"},
+        "4208418110": {"name": "Outbreak Perfected",     "category": "default"},
+        "4172222323": {"name": "Legacy PR-55 Frame",     "category": "default"},
+        "3441203855": {"name": "Collective Obligation",  "category": "default"},
+        "default": {
+            "magazine": {"evpp": 0.0, "vpp": 0.3, "offset": 17.5},
+            "reserve": {
+                "is_primary": true
+            }
+        }
     },
     "Rocket Launcher": {
         "216781713":  {"name": "Häkke Precision Frame", "category": "default"},
@@ -152,7 +213,13 @@
         "3419274965": {"name": "Precision Frame",       "category": "default"},
         "3468089894": {"name": "Aggressive Frame",      "category": "default"},
         "3649430342": {"name": "Two-Tailed Fox",        "category": "default"},
-        "2962361451": {"name": "Gjallarhorn",           "category": "default"}
+        "2962361451": {"name": "Gjallarhorn",           "category": "default"},
+        "default": {
+            "magazine": {"evpp": 0.0 ,"vpp": 0.0, "offset": 1},
+            "reserve": {
+                "is_primary": false
+            }
+        }
     },
     "Scout Rifle": {
         "377257911":  {"name": "MIDA Multi-Tool",   "category": "default"},
@@ -167,24 +234,36 @@
         "3920852688": {"name": "Rapid-Fire Frame",  "category": "default"},
         "4185339856": {"name": "Symmetry",          "category": "default"},
         "3468089894": {"name": "Aggressive Frame",  "category": "DMT"    },
-        "2724693746": {"name": "Touch Of Malice",   "category": "default"}
+        "2724693746": {"name": "Touch Of Malice",   "category": "default"},
+        "default": {
+            "magazine": {"evpp": 0.0, "vpp": 0.1, "offset": 10.0},
+            "reserve": {
+                "is_primary": true
+            }
+        }
     },
     "Shotgun": {
-        "372430833":  {"name": "Legend of Acrius",    "category": "default"  },
-        "481338655":  {"name": "Lord of Wolves",      "category": "LoW"      },
-        "895140517":  {"name": "Precision Frame",     "category": "default"  },
-        "536517534":  {"name": "Duality",             "category": "Duality"  },
-        "918679156":  {"name": "Precision Frame",     "category": "slug"     },
-        "996573084":  {"name": "Rapid-Fire Frame",    "category": "default"  },
-        "1210807262": {"name": "Tractor Cannon",      "category": "Tractor"  },
-        "1394384862": {"name": "The Chaperone",       "category": "Chaperone"},
-        "1458010786": {"name": "Lightweight Frame",   "category": "default"  },
-        "1636108362": {"name": "Precision Frame",     "category": "default"  },
-        "2223914385": {"name": "The Fourth Horseman", "category": "default"  },
-        "3054949324": {"name": "Shot Package",        "category": "default"  },
-        "3468089894": {"name": "Aggressive Frame",    "category": "default"  },
-        "3751354116": {"name": "Disabled",            "category": null       },
-        "3983457027": {"name": "Aggressive Frame",    "category": "default"  }
+        "372430833":  {"name": "Legend of Acrius",    "category": "default"},
+        "481338655":  {"name": "Lord of Wolves",      "category": "default"},
+        "895140517":  {"name": "Precision Frame",     "category": "default"},
+        "536517534":  {"name": "Duality",             "category": "Duality"},
+        "918679156":  {"name": "Precision Frame",     "category": "default"},
+        "996573084":  {"name": "Rapid-Fire Frame",    "category": "default"},
+        "1210807262": {"name": "Tractor Cannon",      "category": "default"},
+        "1394384862": {"name": "The Chaperone",       "category": "default"},
+        "1458010786": {"name": "Lightweight Frame",   "category": "default"},
+        "1636108362": {"name": "Precision Frame",     "category": "default"},
+        "2223914385": {"name": "The Fourth Horseman", "category": "default"},
+        "3054949324": {"name": "Shot Package",        "category": "default"},
+        "3468089894": {"name": "Aggressive Frame",    "category": "default"},
+        "3751354116": {"name": "Disabled",            "category": null     },
+        "3983457027": {"name": "Aggressive Frame",    "category": "default"},
+        "default": {
+            "magazine": {"evpp": 0.0, "vpp": 0.0375, "offset": 3.625},
+            "reserve": {
+                "is_primary": false
+            }
+        }
     },
     "Sidearm": {
         "31057037":   {"name": "Omolon Adaptive Frame", "category": "default"   },
@@ -200,7 +279,13 @@
         "3330548924": {"name": "Aggressive Burst",      "category": "default"   },
         "3449390870": {"name": "Adaptive Frame",        "category": "default"   },
         "2641107734": {"name": "Trespasser",            "category": "default"   },
-        "2984682260": {"name": "Forerunner",            "category": "Forerunner"}
+        "2984682260": {"name": "Forerunner",            "category": "Forerunner"},
+        "default": {
+            "magazine": {"evpp": 0.0, "vpp": 0.0375, "offset": 3.625},
+            "reserve": {
+                "is_primary": true
+            }
+        }
     },
     "Sniper Rifle": {
         "281315705":  {"name": "Whisper of the Worm", "category": "default"},
@@ -210,7 +295,10 @@
         "1294026524": {"name": "Adaptive Frame",      "category": "default"},
         "2909403175": {"name": "Cloudstrike",         "category": "default"},
         "3081173348": {"name": "Borealis",            "category": "default"},
-        "3468089894": {"name": "Aggressive Frame",    "category": "default"}
+        "3468089894": {"name": "Aggressive Frame",    "category": "default"},
+        "default": {
+            "magazine": {"vpp": 0.024, "offset": 2.99}
+        }
     },
     "Submachine Gun": {
         "630329983":  {"name": "The Huckleberry",   "category": "default"},
@@ -223,7 +311,19 @@
         "2540536653": {"name": "Tarrabah",          "category": "default"},
         "3468089894": {"name": "Aggressive Frame",  "category": "default"},
         "2965975126": {"name": "Osteo Striga",      "category": "striga" },
-        "228577175":  {"name": "The Manticore",     "category": "default"}
+        "228577175":  {"name": "The Manticore",     "category": "default"},
+        "small": {
+            "magazine": {"evpp": 0.0, "vpp": 0.1, "offset": 23.9},
+            "reserve": {
+                "is_primary": true
+            }
+        },
+        "large": {
+            "magazine": {"evpp": 0.0, "vpp": 0.1, "offset": 28.9},
+            "reserve": {
+                "is_primary": true
+            }
+        }
     },
     "Sword":{
         "183772609":  {"name": "Caster Frame",      "category": "default"},

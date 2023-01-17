@@ -176,7 +176,10 @@ pub fn mmr_overflow(
     _is_enhanced: bool,
     _pvp: bool,
 ) -> MagazineModifierResponse {
-    let mag_scale = if _value > 0 { 2.0 } else { 1.0 };
+    let mut mag_scale = if _value > 0 { 2.0 } else { 1.0 };
+    if _input.total_shots_fired == 0.0 {
+        mag_scale = 1.0;
+    };
     MagazineModifierResponse {
         magazine_stat_add: 0,
         magazine_scale: mag_scale,
@@ -190,8 +193,8 @@ pub fn rsmr_rapid_hit(
     _is_enhanced: bool,
     _pvp: bool,
 ) -> ReloadModifierResponse {
-    let mut reload_mult = 1.0;
-    let mut reload = 0;
+    let reload_mult;
+    let reload;
     let values = vec![
         (0, 1.0),
         (5, 0.99),
@@ -200,12 +203,12 @@ pub fn rsmr_rapid_hit(
         (45, 0.94),
         (60, 0.93),
     ];
-    if _input.shots_hit_this_mag > 5.0 {
+    if _input.shots_fired_this_mag > 5.0 {
         reload = values[5].0;
         reload_mult = values[5].1;
     } else {
-        reload = values[_input.shots_hit_this_mag as usize].0;
-        reload_mult = values[_input.shots_hit_this_mag as usize].1;
+        reload = values[_input.shots_fired_this_mag as usize].0;
+        reload_mult = values[_input.shots_fired_this_mag as usize].1;
     };
     ReloadModifierResponse {
         reload_stat_add: reload,
@@ -263,7 +266,7 @@ pub(super) fn ror_demolitionist(
     if _value == 1 {
         return ReloadOverideResponse {
             valid: true,
-            reload_time: _input.handling_data.ready + grenade_throw_time,
+            reload_time: _input.handling_data.ready_time + grenade_throw_time,
             ammo_to_reload: _input.base_mag,
             priority: 0,
             increments_reload_count: false,

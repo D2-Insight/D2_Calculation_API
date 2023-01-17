@@ -3,7 +3,7 @@
 version = 3
 
 [[package]]
-name = "D2WEBAPPRUST"
+name = "D2_Calculation_API"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",

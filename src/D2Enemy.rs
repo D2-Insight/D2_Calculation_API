@@ -19,10 +19,10 @@ impl Default for EnemyType {
 
 #[derive(Debug, Clone, Default)]
 pub struct Enemy {
-    health: f64,
-    damage: f64,
-    type_: EnemyType,
-    tier: u8,
+    pub health: f64,
+    pub damage: f64,
+    pub type_: EnemyType,
+    pub tier: u8,
 }
 impl Enemy {
     pub fn set_health(&mut self, health: f64) {

@@ -32,7 +32,7 @@ pub struct TtkResponse {
     pub bodyshot_ttk: f64,
 }
 
-pub fn calc_ttk(
+pub fn simple_calc_ttk(
     _firing_config: FiringConfig,
     _resilience: i32,
     _damage: f64,

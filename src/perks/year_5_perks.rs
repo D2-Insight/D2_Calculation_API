@@ -56,13 +56,13 @@ pub fn dmr_focused_fury(
     _pvp: bool,
 ) -> DamageModifierResponse {
     let mut dmg_boost = 1.0;
-    let mut shots_needed = 0.0;
+    let shots_needed;
     if _input.curr_firing_data.one_ammo_burst == false || _input.curr_firing_data.burst_size == 1 {
         shots_needed = _input.base_mag / 2.0;
     } else {
         shots_needed = (_input.base_mag * (_input.curr_firing_data.burst_size as f64)) / 2.0;
     }
-    if _input.total_shots_hit >= shots_needed {
+    if _input.total_shots_fired >= shots_needed {
         dmg_boost = 1.2;
     }
     DamageModifierResponse {
@@ -77,10 +77,7 @@ pub fn rmr_fragile_focus(
     _is_enhanced: bool,
     _pvp: bool,
 ) -> RangeModifierResponse {
-    let mut range_bonus = 0;
-    if _value > 0 {
-        range_bonus = 20;
-    };
+    let range_bonus = if _value > 0 { 20 } else { 0 };
     RangeModifierResponse {
         range_stat_add: range_bonus,
         range_all_scale: 1.0,
@@ -110,23 +107,21 @@ pub fn dmr_gutshot_straight(
     _is_enhanced: bool,
     _pvp: bool,
 ) -> DamageModifierResponse {
-    let mut dmg_boost = 1.0;
-    let mut crit_mult = 1.0;
     let high_weapons = [
         WeaponType::AUTORIFLE,
         WeaponType::HANDCANNON,
         WeaponType::BOW,
     ];
     if high_weapons.contains(&_input.weapon_type) {
-        dmg_boost = 1.2;
-        crit_mult = _input.base_crit_mult * (1.0 / 1.2);
+        return DamageModifierResponse {
+            damage_scale: 1.2,
+            crit_scale: _input.base_crit_mult * (1.0 / 1.2),
+        };
     } else {
-        dmg_boost = 1.1;
-        crit_mult = _input.base_crit_mult * (1.0 / 1.1);
-    }
-    DamageModifierResponse {
-        damage_scale: dmg_boost,
-        crit_scale: crit_mult,
+        return DamageModifierResponse {
+            damage_scale: 1.1,
+            crit_scale: _input.base_crit_mult * (1.0 / 1.1),
+        };
     }
 }
 
@@ -151,7 +146,7 @@ pub fn rmr_offhand_strike(
     _is_enhanced: bool,
     _pvp: bool,
 ) -> RangeModifierResponse {
-    let mut range_hip_mult = 0.0;
+    let mut range_hip_mult = 1.0;
     if _value > 0 {
         range_hip_mult = 1.45;
     };
@@ -305,7 +300,7 @@ pub(super) fn dmr_target_lock(
         (0.75, 0.34),
         (1.05, 0.4),
     ];
-    let percent_through_mag = _input.shots_hit_this_mag as f64 / _input.base_mag as f64;
+    let percent_through_mag = _input.shots_fired_this_mag as f64 / _input.base_mag as f64;
     let mut buff = 0.0_f64;
     if percent_through_mag > 1.05 {
         buff = 0.4;
@@ -337,15 +332,15 @@ pub(super) fn dmr_over_under(
     _is_enhanced: bool,
     _pvp: bool,
 ) -> DamageModifierResponse {
-    let mut buff = 0.0_f64;
+    let mut buff = 1.0_f64;
     if _input.has_overshield {
-        buff = 0.2;
+        buff += 0.2;
     }
     if _is_enhanced {
         buff *= 1.05;
     }
     DamageModifierResponse {
-        damage_scale: buff + 1.0,
+        damage_scale: buff,
         crit_scale: 1.0,
     }
 }

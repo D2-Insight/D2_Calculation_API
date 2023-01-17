@@ -51,7 +51,7 @@ pub(super) fn dmr_paracausal_shot(
     let bufflist = vec![1.0, 2.92, 3.0, 3.4, 4.25, 6.67, 10.71, 17.36];
     let mut damage_buff = 1.0;
     if _input.curr_mag == 1.0 {
-        let num_of_crits = clamp(_input.shots_hit_this_mag as i32, 0, 7);
+        let num_of_crits = clamp(_input.shots_fired_this_mag as i32, 0, 7);
         damage_buff = bufflist[num_of_crits as usize];
     };
     DamageModifierResponse {
@@ -67,7 +67,7 @@ pub(super) fn dmr_momento_mori(
     _pvp: bool,
 ) -> DamageModifierResponse {
     let mut damage_buff = 1.0;
-    if _value > 0 && _input.total_shots_hit < 7.0 {
+    if _value > 0 && _input.total_shots_fired < 7.0 {
         damage_buff = if _pvp { 1.5 } else { 1.285 };
     };
     DamageModifierResponse {
@@ -99,7 +99,7 @@ pub(super) fn mmr_agers_call(
     _pvp: bool,
 ) -> MagazineModifierResponse {
     let mut mag_buff = 1.0;
-    if _value > 0 && _input.num_reloads == 0.0 {
+    if _value > 0 && _input.total_shots_fired == 0.0 {
         mag_buff = 2.0;
     };
     MagazineModifierResponse {
@@ -225,10 +225,10 @@ pub(super) fn fmr_reign_havoc(
     _pvp: bool,
 ) -> FiringModifierResponse {
     let mut delay_mult = 1.0;
-    if _input.shots_hit_this_mag >= 13.0 {
+    if _input.shots_fired_this_mag >= 13.0 {
         delay_mult = 0.75;
     };
-    if _input.shots_hit_this_mag >= 26.0 {
+    if _input.shots_fired_this_mag >= 26.0 {
         delay_mult = 0.625;
     };
     FiringModifierResponse {

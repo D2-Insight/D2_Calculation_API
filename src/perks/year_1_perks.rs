@@ -90,14 +90,14 @@ pub(super) fn sbr_threat_detector(
     out
 }
 
-pub(super) fn mmr_abitious_assasin(
+pub(super) fn mmr_abitious_assassin(
     _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
 ) -> MagazineModifierResponse {
     let val = _value as f64;
-    if _input.total_shots_hit == 0.0 {
+    if _input.total_shots_fired == 0.0 {
         let mut mag_mult = 1.0;
         if _input.ammo_type == AmmoType::PRIMARY {
             mag_mult += 0.2 * val;
@@ -139,7 +139,7 @@ pub(super) fn dmr_box_breathing(
     _is_enhanced: bool,
     _pvp: bool,
 ) -> DamageModifierResponse {
-    if _input.total_shots_hit == 0.0 {
+    if _input.total_shots_fired == 0.0 {
         let crit_mult = (_input.base_crit_mult + 1.0) / _input.base_crit_mult;
         let dmg_mult = if _input.weapon_type == WeaponType::SCOUTRIFLE {
             0.95
@@ -226,7 +226,10 @@ pub(super) fn sbr_field_prep(
         let reload = if _is_enhanced { 55 } else { 50 };
         out.insert(StatHashes::RELOAD.to_u32(), reload);
     };
-    let reserves = if _is_enhanced { 40 } else { 30 };
+    let mut reserves = if _is_enhanced { 40 } else { 30 };
+    if _input.weapon_type == WeaponType::GRENADELAUNCHER {
+        reserves -= 10;
+    };
     out.insert(StatHashes::INVENTORY_SIZE.to_u32(), reserves);
     out
 }
@@ -404,7 +407,10 @@ pub(super) fn rmr_opening_shot(
     _is_enhanced: bool,
     _pvp: bool,
 ) -> RangeModifierResponse {
-    let range = if _is_enhanced { 30 } else { 25 };
+    let mut range = if _is_enhanced { 30 } else { 25 };
+    if _input.total_shots_fired != 0.0 {
+        range = 0;
+    };
     RangeModifierResponse {
         range_stat_add: range,
         range_all_scale: 1.0,

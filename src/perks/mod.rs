@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 use crate::{D2Enums::StatHashes, js_types::JsPerk};
 
 use self::{
-    lib::{CalculationInput, DamageModifierResponse, ReloadModifierResponse, FiringModifierResponse, HandlingModifierResponse}, other_perks::*, year_1_perks::*, year_2_perks::*, year_3_perks::*,
+    lib::{CalculationInput, DamageModifierResponse, ReloadModifierResponse, FiringModifierResponse, HandlingModifierResponse, MagazineModifierResponse, InventoryModifierResponse}, other_perks::*, year_1_perks::*, year_2_perks::*, year_3_perks::*,
     year_4_perks::*, year_5_perks::*,exotic_perks::*
 };
 
@@ -83,7 +83,7 @@ pub enum Perks {
     ExplosiveLight,
     Adagio,
     Ambush,
-    FieldPrep,//new
+    FieldPrep,
     OpeningShot,
     FirmlyPlanted,
     SlideShot,
@@ -92,6 +92,8 @@ pub enum Perks {
     PerfectFloat,
     OffhandStrike,
     TakenSpec,
+    OverFlow,// new
+    Reconstruction,
     //class
     Amplified,
     Tempering,
@@ -115,6 +117,7 @@ pub enum Perks {
     ThreatDetector,
     AirAssault,
     KillingTally,
+    AmbitiousAssassin,
     //class
     OnYourMark,
     //weird
@@ -138,7 +141,7 @@ pub enum Perks {
     FocusedFury,
     ChillClip,
     LastingImpression,
-    TripleTap,// new?
+    TripleTap,
     FourthTimesTheCharm,
     HipFireGrip,
     RewindRounds,
@@ -163,6 +166,7 @@ pub enum Perks {
     ArchersTempo,
     Snapshot,
     Slickdraw,
+    ClownCartridge,// new
 
     //armor
     QuickCharge,
@@ -175,7 +179,7 @@ pub enum Perks {
     ////////EXOTIC////////
     ////TOGGLE////
     CranialSpikeCat,
-    AgersCatalyst,
+    AgersCall,
     LagragianSight,
     OphidianAspect,
     DragonShadow,
@@ -260,7 +264,7 @@ impl Perks {
             3927722942 => Perks::LastingImpression,
             1484685884 => Perks::QuickCharge,
             1301843770 => Perks::CranialSpikeCat,
-            970163821 =>  Perks::AgersCatalyst,
+            970163821 =>  Perks::AgersCall,
             2881100038 => Perks::LagragianSight,
             2121086290 => Perks::RatPack,
             4004944400 => Perks::StringofCurses,
@@ -396,7 +400,6 @@ pub fn get_dmg_modifier(_perks: Vec<Perk>, _input_data: CalculationInput, _pvp: 
     };
     dmg_modifier
 }
-
 fn get_perk_dmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> DamageModifierResponse {
     let perk_enum = Perks::from_u32(_perk.hash);
     let val = _perk.value;
@@ -427,6 +430,7 @@ fn get_perk_dmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> Dama
     }
 }
 
+
 pub fn get_reload_modifier(_perks: Vec<Perk>, _input_data: CalculationInput, _pvp: bool) -> ReloadModifierResponse {
     let mut reload_modifier = ReloadModifierResponse{reload_stat_add: 0, reload_time_scale: 1.0};
     for perk in _perks {
@@ -436,7 +440,6 @@ pub fn get_reload_modifier(_perks: Vec<Perk>, _input_data: CalculationInput, _pv
     };
     reload_modifier
 }
-
 fn get_perk_rsmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> ReloadModifierResponse {
     let perk_enum = Perks::from_u32(_perk.hash);
     let val = _perk.value;
@@ -464,6 +467,7 @@ fn get_perk_rsmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> Rel
     }
 }
 
+
 pub fn get_firing_modifier(_perks: Vec<Perk>, _input_data: CalculationInput, _pvp: bool) -> FiringModifierResponse {
     let mut firing_modifier = FiringModifierResponse{burst_delay_scale: 1.0, burst_duration_scale: 1.0, burst_size_add: 0.0};
     for perk in _perks {
@@ -474,7 +478,6 @@ pub fn get_firing_modifier(_perks: Vec<Perk>, _input_data: CalculationInput, _pv
     };
     firing_modifier
 }
-
 fn get_perk_fmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> FiringModifierResponse {
     let perk_enum = Perks::from_u32(_perk.hash);
     let val = _perk.value;
@@ -493,6 +496,7 @@ fn get_perk_fmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> Firi
     }
 }
 
+
 pub fn get_handling_modifier(_perks: Vec<Perk>, _input_data: CalculationInput, _pvp: bool) -> HandlingModifierResponse {
     let mut handling_modifier = HandlingModifierResponse{handling_stat_add: 0, handling_swap_scale: 1.0, handling_ads_scale: 1.0};
     for perk in _perks {
@@ -503,7 +507,6 @@ pub fn get_handling_modifier(_perks: Vec<Perk>, _input_data: CalculationInput, _
     };
     handling_modifier
 }
-
 fn get_perk_hmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> HandlingModifierResponse {
     let perk_enum = Perks::from_u32(_perk.hash);
     let val = _perk.value;
@@ -527,5 +530,51 @@ fn get_perk_hmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> Hand
         Perks::SteadyHands => hmr_steady_hands(_input_data, val, enhanced, _pvp),
         Perks::WellRounded => hmr_well_rounded(_input_data, val, enhanced, _pvp),
         _ => HandlingModifierResponse{handling_stat_add: 0, handling_swap_scale: 1.0, handling_ads_scale: 1.0},
+    }
+}
+
+
+pub fn get_magazine_modifier(_perks: Vec<Perk>, _input_data: CalculationInput, _pvp: bool) -> MagazineModifierResponse {
+    let mut magazine_modifier = MagazineModifierResponse{magazine_stat_add: 0, magazine_add: 0.0, magazine_scale: 1.0};
+    for perk in _perks {
+        let tmp = get_perk_mmr(perk, &_input_data, _pvp);
+        magazine_modifier.magazine_stat_add += tmp.magazine_stat_add;
+        magazine_modifier.magazine_add += tmp.magazine_add;
+        magazine_modifier.magazine_scale *= tmp.magazine_scale;
+    };
+    magazine_modifier
+}
+fn get_perk_mmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> MagazineModifierResponse {
+    let perk_enum = Perks::from_u32(_perk.hash);
+    let val = _perk.value;
+    let enhanced = _perk.enhanced;
+    match perk_enum {
+        Perks::AgersCall => mmr_agers_call(_input_data, val, enhanced, _pvp),
+        Perks::AmbitiousAssassin => mmr_abitious_assassin(_input_data, val, enhanced, _pvp),
+        Perks::OverFlow => mmr_overflow(_input_data, val, enhanced, _pvp),
+        Perks::ClownCartridge => mmr_clown_cartridge(_input_data, val, enhanced, _pvp),
+        Perks::Reconstruction => mmr_reconstruction(_input_data, val, enhanced, _pvp),
+        _ => MagazineModifierResponse{magazine_stat_add: 0, magazine_add: 0.0, magazine_scale: 1.0},
+    }
+}
+
+
+pub fn get_reserve_modifier(_perks: Vec<Perk>, _input_data: CalculationInput, _pvp: bool) -> InventoryModifierResponse {
+    let mut reserve_modifier = InventoryModifierResponse{ammo_stat_add: 0, ammo_add: 0.0, ammo_scale: 1.0};
+    for perk in _perks {
+        let tmp = get_perk_imr(perk, &_input_data, _pvp);
+        reserve_modifier.ammo_stat_add += tmp.ammo_stat_add;
+        reserve_modifier.ammo_add += tmp.ammo_add;
+        reserve_modifier.ammo_scale *= tmp.ammo_scale;
+    };
+    reserve_modifier
+}
+fn get_perk_imr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> InventoryModifierResponse {
+    let perk_enum = Perks::from_u32(_perk.hash);
+    let val = _perk.value;
+    let enhanced = _perk.enhanced;
+    match perk_enum {
+        Perks::FieldPrep => imr_field_prep(_input_data, val, enhanced, _pvp),
+        _ => InventoryModifierResponse{ammo_stat_add: 0, ammo_add: 0.0, ammo_scale: 1.0},
     }
 }

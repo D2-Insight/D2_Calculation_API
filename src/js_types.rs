@@ -23,7 +23,7 @@ pub struct JsWeapon {
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
 #[tsify(into_wasm_abi, from_wasm_abi)]
 pub struct JsDamageModifiers {
-    pub global: f64,
+    pub global: f64, // not reccomended to use but gives users a way to update sstuff themselves
     pub vehicle: f64,
     pub boss: f64,
     pub miniboss: f64,
@@ -52,7 +52,7 @@ impl JsDamageModifiers {
 pub struct JsRangeFormula {
     pub zrm: f64,
     pub zrm_tier: i32,
-    pub zrm_slope: f64,
+    pub vpp: f64,
     pub base_min: f64,
     pub base_max: f64,
     pub scale: bool,
@@ -65,7 +65,7 @@ impl JsRangeFormula {
         JsRangeFormula {
             zrm: 0.0,
             zrm_tier: 0,
-            zrm_slope: 0.0,
+            vpp: 0.0,
             base_min: 0.0,
             base_max: 0.0,
             scale: false,
@@ -190,4 +190,56 @@ impl JsPerk {
             id: 0,
         }
     }
+}
+
+
+//
+////Serialize Only
+//
+
+#[derive(Debug, Clone, Serialize, Tsify, Default)]
+#[tsify(into_wasm_abi)]
+pub struct JsHandlingResponse {
+    pub ready_time: f64,
+    pub stow_time: f64,
+    pub ads_time: f64,
+}
+
+#[derive(Debug, Clone, Serialize, Tsify)]
+#[tsify(into_wasm_abi)]
+pub struct JsRangeResponse {
+    pub hip_falloff_start: f64,
+    pub hip_falloff_end: f64,
+    pub ads_falloff_start: f64,
+    pub ads_falloff_end: f64,
+}
+
+#[derive(Debug, Clone, Serialize, Tsify)]
+#[tsify(into_wasm_abi)]
+pub struct JsReloadResponse {
+    pub reaload_time: f64,
+    pub ammo_time: f64,
+}
+
+#[derive(Debug, Clone, Serialize, Tsify)]
+#[tsify(into_wasm_abi)]
+pub struct JsTtkResponse {
+    pub ammo_needed: i32,
+    pub hits_needed: i32,
+    pub optimal_ttk: f64,
+    pub crit_percent: f64,
+    pub bodyshot_ttk: f64,
+}
+
+#[derive(Debug, Clone, Serialize, Tsify)]
+#[tsify(into_wasm_abi)]
+pub struct JsDpsResponse {
+    dps_per_mag: Vec<f64>,
+
+    // damage_vec: Vec<f64>,
+    // time_vec: Vec<f64>,
+    damage_time_data: Vec<(f64, f64)>,
+
+    total_damage: f64,
+    total_shots: f64,
 }

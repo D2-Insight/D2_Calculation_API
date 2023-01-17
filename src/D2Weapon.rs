@@ -9,7 +9,9 @@ use crate::perks::Perk;
 use crate::D2Enums::StatHashes;
 use crate::D2Structs::BuffPackage;
 use crate::D2Structs::FiringConfig;
+use crate::perks::get_magazine_modifier;
 use crate::perks::get_perk_stats;
+use crate::perks::get_reserve_modifier;
 use crate::perks::lib::CalculationInput;
 
 use serde::{Deserialize, Serialize};
@@ -57,7 +59,7 @@ pub struct Weapon {
     pub damage_mods: BuffPackage,
     pub firing_data: FiringConfig,
     pub id: u32,
-    pub formulas: Option<JsWeaponFormula>,
+    pub formulas: JsWeaponFormula,
 
     pub weapon_type: WeaponType,
     pub weapon_slot: WeaponSlot,
@@ -78,7 +80,7 @@ impl Weapon {
         }
         perk_list
     }
-    pub fn list_perk_values(&self) -> Vec<Perk> {
+    pub fn list_perks(&self) -> Vec<Perk> {
         let mut perk_list: Vec<Perk> = Vec::new();
         for (_key, perk) in &self.perks {
             perk_list.push(perk.clone());
@@ -102,7 +104,53 @@ impl Weapon {
         self.id = 0;
         self.damage_mods = BuffPackage::new();
         self.firing_data = FiringConfig::default();
-        self.formulas = None;
+        self.formulas = JsWeaponFormula::new();
+    }
+
+    pub fn static_calc_input(&self) -> CalculationInput {
+        CalculationInput::construct_static(
+            self.firing_data.clone(), 
+            self.stats.clone(), 
+            self.weapon_type, 
+            self.ammo_type
+        )
+    }
+
+    pub fn sparse_calc_input(&self, _total_shots_fired: i32) -> CalculationInput {
+        CalculationInput::construct_pve_sparse(
+            self.firing_data.clone(), 
+            self.stats.clone(), 
+            self.weapon_type.clone(), 
+            self.ammo_type.clone(),
+            self.formulas.firing_data.damage.clone(),
+            self.formulas.firing_data.crit_mult.clone(),
+            self.magsize(false, _total_shots_fired),
+            _total_shots_fired,
+        )
+    }
+
+    //we need the total shots fired for dps calcs, easiest way around it.
+    pub fn magsize(&self, use_perks: bool, _total_shots_fired: i32) -> i32 {
+        //TODO
+        let mut input = self.static_calc_input();
+        input.total_shots_fired = _total_shots_fired as f64;
+        let res_mod_details = get_magazine_modifier(self.list_perks(), self.static_calc_input(), false);
+        let mut val = 7.0;
+        val *= res_mod_details.magazine_scale;
+        val += res_mod_details.magazine_add;
+        val.ceil() as i32
+    }
+
+    pub fn reserves(&self, use_perks: bool) -> i32 {
+        //TODO
+        let res_mod_details = get_reserve_modifier(self.list_perks(), self.static_calc_input(), false);
+        let mut val = 23.0;
+        val *= res_mod_details.ammo_scale;
+        val += res_mod_details.ammo_add;
+        if val < 0.0 {
+            val = 0.5;
+        }
+        val.ceil() as i32
     }
 }
 impl Default for Weapon {
@@ -113,7 +161,7 @@ impl Default for Weapon {
             id: 0,
             damage_mods: BuffPackage::new(),
             firing_data: FiringConfig::default(),
-            formulas: None,
+            formulas: JsWeaponFormula::new(),
 
             weapon_type: WeaponType::UNKNOWN,
             weapon_slot: WeaponSlot::UNKNOWN,
@@ -125,7 +173,7 @@ impl Default for Weapon {
 impl Weapon {
     fn update_stats(&mut self) {
         let input = CalculationInput::construct_static(self.firing_data.clone(), self.stats.clone(), self.weapon_type, self.ammo_type);
-        let inter_var = get_perk_stats(self.list_perk_values(), input, false);
+        let inter_var = get_perk_stats(self.list_perks(), input, false);
         let dynamic_stats = &inter_var[0];
         let static_stats = &inter_var[1];
         for (key, stat) in &mut self.stats {
