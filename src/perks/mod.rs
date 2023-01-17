@@ -11,7 +11,10 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-use crate::{d2_enums::StatHashes, js_types::JsPerk};
+use crate::d2_enums::StatHashes;
+
+#[cfg(target_arch = "wasm32")]
+use crate::types::js_types::JsPerk;
 
 use self::{
     lib::{CalculationInput, DamageModifierResponse, ReloadModifierResponse, FiringModifierResponse, HandlingModifierResponse, MagazineModifierResponse, InventoryModifierResponse}, other_perks::*, year_1_perks::*, year_2_perks::*, year_3_perks::*,
@@ -36,6 +39,7 @@ pub struct Perk {
     pub hash: u32,
 }
 impl Perk {
+    #[cfg(target_arch = "wasm32")]
     pub fn from_js(js_perk: JsPerk) -> Perk {
         let mut stat_buffs = HashMap::new();
         for (key, value) in js_perk.stat_buffs {

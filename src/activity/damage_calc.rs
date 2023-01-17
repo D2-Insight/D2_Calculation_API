@@ -1,7 +1,6 @@
-
 #![allow(dead_code)]
-use crate::{weapons::BuffPackage, enemies::EnemyType};
-use serde::{Serialize, Deserialize};
+use crate::{enemies::EnemyType, types::rs_types::DamageMods};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Copy)]
 struct TableKey {
@@ -77,7 +76,7 @@ const RAID_TIMES: [f64; 11] = [
 
 const WWEAPON_DELTA_EXPONENT: f64 = 1.006736;
 
-#[derive(Debug,Clone,Serialize,Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum DifficultyOptions {
     NORMAL = 1,
     RAID = 2,
@@ -110,7 +109,7 @@ impl DifficultyOptions {
     }
 }
 
-#[derive(Debug,Clone,Serialize,Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Activity {
     name: String,
     difficulty: DifficultyOptions,

@@ -1,9 +1,19 @@
+#![cfg(target_arch = "wasm32")]
+
 use std::collections::HashMap;
 
+use crate::{types::rs_types::QuadraticFormula, weapons::FiringConfig};
 use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 use wasm_bindgen::prelude::wasm_bindgen;
 
+use super::{
+    rs_types::{
+        AmmoFormula, AmmoResponse, DamageMods, DpsResponse, HandlingFormula, HandlingResponse,
+        RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, TtkResponse,
+    },
+    ToRs,
+};
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
 #[tsify(into_wasm_abi, from_wasm_abi)]
@@ -18,7 +28,6 @@ pub struct JsWeapon {
     pub damage_modifiers: JsDamageModifiers,
     pub formulas: JsWeaponFormula,
 }
-
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
 #[tsify(into_wasm_abi, from_wasm_abi)]
@@ -57,46 +66,72 @@ impl JsDamageModifiers {
             && self.minor == 0.0
     }
 }
-
+impl Into<DamageMods> for JsDamageModifiers {
+    fn into(self) -> DamageMods {
+        DamageMods {
+            pve: self.global,
+            minor: self.minor,
+            elite: self.elite,
+            miniboss: self.miniboss,
+            champion: self.champion,
+            boss: self.boss,
+            vehicle: self.vehicle,
+        }
+    }
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
 #[tsify(into_wasm_abi, from_wasm_abi)]
 pub struct JsRangeFormula {
-    pub zrm: f64,
-    pub zrm_tier: i32,
-    pub vpp: f64,
-    pub base_min: f64,
-    pub base_max: f64,
-    pub scale: bool,
+    pub vpp_start: f64,
+    pub offset_start: f64,
+    pub vpp_end: f64,
+    pub offset_end: f64,
     pub floor_percent: f64,
+    pub is_fusion: bool,
 }
 #[wasm_bindgen]
 impl JsRangeFormula {
     #[wasm_bindgen(constructor)]
     pub fn new() -> JsRangeFormula {
         JsRangeFormula {
-            zrm: 0.0,
-            zrm_tier: 0,
-            vpp: 0.0,
-            base_min: 0.0,
-            base_max: 0.0,
-            scale: false,
+            vpp_start: 0.0,
+            offset_start: 0.0,
+            vpp_end: 0.0,
+            offset_end: 0.0,
             floor_percent: 0.0,
+            is_fusion: false,
         }
     }
 }
 impl JsRangeFormula {
     pub fn is_null(&self) -> bool {
-        self.zrm == 0.0
-            && self.zrm_tier == 0
-            && self.vpp == 0.0
-            && self.base_min == 0.0
-            && self.base_max == 0.0
-            && self.scale == false
+        self.vpp_start == 0.0
+            && self.offset_start == 0.0
+            && self.vpp_end == 0.0
+            && self.offset_end == 0.0
             && self.floor_percent == 0.0
+            && self.is_fusion == false
     }
 }
-
+impl Into<RangeFormula> for JsRangeFormula {
+    fn into(self) -> RangeFormula {
+        RangeFormula {
+            start: QuadraticFormula {
+                evpp: 0.0,
+                vpp: self.vpp_start,
+                offset: self.offset_start,
+            },
+            end: QuadraticFormula {
+                evpp: 0.0,
+                vpp: self.vpp_end,
+                offset: self.offset_end,
+            },
+            floor_percent: self.floor_percent,
+            is_fusion: self.is_fusion,
+        }
+    }
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
 #[tsify(into_wasm_abi, from_wasm_abi)]
@@ -104,6 +139,7 @@ pub struct JsReloadFormula {
     pub evpp: f64,
     pub vpp: f64,
     pub offset: f64,
+    pub ammo_percent: f64,
 }
 #[wasm_bindgen]
 impl JsReloadFormula {
@@ -113,6 +149,7 @@ impl JsReloadFormula {
             evpp: 0.0,
             vpp: 0.0,
             offset: 0.0,
+            ammo_percent: 1.0,
         }
     }
 }
@@ -121,7 +158,18 @@ impl JsReloadFormula {
         self.evpp == 0.0 && self.vpp == 0.0 && self.offset == 0.0
     }
 }
-
+impl Into<ReloadFormula> for JsReloadFormula {
+    fn into(self) -> ReloadFormula {
+        ReloadFormula {
+            reload_data: QuadraticFormula {
+                evpp: self.evpp,
+                vpp: self.vpp,
+                offset: self.offset,
+            },
+            ammo_percent: self.ammo_percent,
+        }
+    }
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
 #[tsify(into_wasm_abi, from_wasm_abi)]
@@ -157,7 +205,27 @@ impl JsHandlingFormula {
             && self.ads_offset == 0.0
     }
 }
-
+impl Into<HandlingFormula> for JsHandlingFormula {
+    fn into(self) -> HandlingFormula {
+        HandlingFormula {
+            ready: QuadraticFormula {
+                evpp: 0.0,
+                vpp: self.ready_vpp,
+                offset: self.ready_offset,
+            },
+            stow: QuadraticFormula {
+                evpp: 0.0,
+                vpp: self.stow_vpp,
+                offset: self.stow_offset,
+            },
+            ads: QuadraticFormula {
+                evpp: 0.0,
+                vpp: self.ads_vpp,
+                offset: self.ads_offset,
+            },
+        }
+    }
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
 #[tsify(into_wasm_abi, from_wasm_abi)]
@@ -199,7 +267,18 @@ impl JsFiringData {
             && self.is_explosive == false
     }
 }
-
+impl Into<FiringConfig> for JsFiringData {
+    fn into(self) -> FiringConfig {
+        FiringConfig {
+            burst_delay: self.burst_delay,
+            burst_duration: self.burst_duration,
+            burst_size: self.burst_size,
+            one_ammo_burst: self.one_ammo_burst,
+            is_charge: self.is_charge,
+            is_explosive: self.is_explosive,
+        }
+    }
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
 #[tsify(into_wasm_abi, from_wasm_abi)]
@@ -207,7 +286,7 @@ pub struct JsAmmoData {
     pub mag_evpp: f64,
     pub mag_vpp: f64,
     pub mag_offset: f64,
-    pub reserve_formulas: HashMap<i32, (f64, f64)>
+    pub reserve_formulas: HashMap<i32, (f64, f64)>,
 }
 #[wasm_bindgen]
 impl JsAmmoData {
@@ -229,7 +308,31 @@ impl JsAmmoData {
             && self.reserve_formulas.is_empty()
     }
 }
-
+impl Into<AmmoFormula> for JsAmmoData {
+    fn into(self) -> AmmoFormula {
+        AmmoFormula {
+            mag: QuadraticFormula {
+                evpp: self.mag_evpp,
+                vpp: self.mag_vpp,
+                offset: self.mag_offset,
+            },
+            reserves: self
+                .reserve_formulas
+                .into_iter()
+                .map(|(k, v)| {
+                    (
+                        k,
+                        QuadraticFormula {
+                            evpp: 0.0,
+                            vpp: v.0,
+                            offset: v.1,
+                        },
+                    )
+                })
+                .collect(),
+        }
+    }
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
 #[tsify(into_wasm_abi, from_wasm_abi)]
@@ -286,6 +389,15 @@ pub struct JsHandlingResponse {
     pub stow_time: f64,
     pub ads_time: f64,
 }
+impl From<HandlingResponse> for JsHandlingResponse {
+    fn from(handling: HandlingResponse) -> Self {
+        JsHandlingResponse {
+            ready_time: handling.ready_time,
+            stow_time: handling.stow_time,
+            ads_time: handling.ads_time,
+        }
+    }
+}
 
 #[derive(Debug, Clone, Serialize, Tsify)]
 #[tsify(into_wasm_abi)]
@@ -295,12 +407,30 @@ pub struct JsRangeResponse {
     pub ads_falloff_start: f64,
     pub ads_falloff_end: f64,
 }
+impl From<RangeResponse> for JsRangeResponse {
+    fn from(range: RangeResponse) -> Self {
+        JsRangeResponse {
+            hip_falloff_start: range.hip_falloff_start,
+            hip_falloff_end: range.hip_falloff_end,
+            ads_falloff_start: range.ads_falloff_start,
+            ads_falloff_end: range.ads_falloff_end,
+        }
+    }
+}
 
 #[derive(Debug, Clone, Serialize, Tsify)]
 #[tsify(into_wasm_abi)]
 pub struct JsReloadResponse {
-    pub reaload_time: f64,
+    pub reload_time: f64,
     pub ammo_time: f64,
+}
+impl From<ReloadResponse> for JsReloadResponse {
+    fn from(reload: ReloadResponse) -> Self {
+        JsReloadResponse {
+            reload_time: reload.reload_time,
+            ammo_time: reload.ammo_time,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Tsify)]
@@ -312,18 +442,37 @@ pub struct JsTtkResponse {
     pub crit_percent: f64,
     pub bodyshot_ttk: f64,
 }
+impl From<TtkResponse> for JsTtkResponse {
+    fn from(ttk: TtkResponse) -> Self {
+        JsTtkResponse {
+            ammo_needed: ttk.ammo_needed,
+            hits_needed: ttk.hits_needed,
+            optimal_ttk: ttk.optimal_ttk,
+            crit_percent: ttk.crit_percent,
+            bodyshot_ttk: ttk.bodyshot_ttk,
+        }
+    }
+}
 
 #[derive(Debug, Clone, Serialize, Tsify)]
 #[tsify(into_wasm_abi)]
 pub struct JsDpsResponse {
-    dps_per_mag: Vec<f64>,
+    pub dps_per_mag: Vec<f64>,
 
-    // damage_vec: Vec<f64>,
-    // time_vec: Vec<f64>,
-    damage_time_data: Vec<(f64, f64)>,
+    pub damage_time_data: Vec<(f64, f64)>,
 
-    total_damage: f64,
-    total_shots: f64,
+    pub total_damage: f64,
+    pub total_shots: f64,
+}
+impl From<DpsResponse> for JsDpsResponse {
+    fn from(dps: DpsResponse) -> Self {
+        JsDpsResponse {
+            dps_per_mag: dps.dps_per_mag,
+            damage_time_data: dps.damage_time_data,
+            total_damage: dps.total_damage,
+            total_shots: dps.total_shots,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Tsify, Default)]
@@ -332,6 +481,15 @@ pub struct JsAmmoResponse {
     pub mag_size: i32,
     pub mag_size_perk: i32,
     pub reserve_size: i32,
+}
+impl From<AmmoResponse> for JsAmmoResponse {
+    fn from(ammo: AmmoResponse) -> Self {
+        JsAmmoResponse {
+            mag_size: ammo.mag,
+            mag_size_perk: ammo.mag_perk,
+            reserve_size: ammo.reserves,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Tsify, Default)]

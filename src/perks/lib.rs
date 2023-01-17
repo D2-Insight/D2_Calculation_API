@@ -1,7 +1,7 @@
 use crate::{
     enemies::EnemyType,
     d2_enums::{AmmoType, StatHashes, WeaponSlot, WeaponType},
-    weapons::{Stat, FiringConfig}, js_types::JsHandlingResponse,
+    weapons::{Stat, FiringConfig},types::rs_types::HandlingResponse
 };
 use std::{collections::HashMap, ops::Mul};
 
@@ -22,7 +22,7 @@ pub struct CalculationInput<'a> {
     pub weapon_type: WeaponType,
     pub weapon_slot: WeaponSlot,
     pub ammo_type: AmmoType,
-    pub handling_data: JsHandlingResponse,
+    pub handling_data: HandlingResponse,
     pub num_reloads: f64,
     pub enemy_type: EnemyType,
     pub has_overshield: bool,
@@ -39,6 +39,7 @@ impl CalculationInput<'_> {
         _base_crit_mult: f64,
         _base_mag_size: i32,
         _total_shots_hit: i32,
+        _total_time: f64,
     ) -> Self{
         Self {
             curr_firing_data: _firing_data,
@@ -46,17 +47,17 @@ impl CalculationInput<'_> {
             base_crit_mult: _base_crit_mult,
             shots_fired_this_mag: 0.0,
             total_shots_fired: _total_shots_hit as f64,
-            total_shots_hit: 0.0,
+            total_shots_hit: _total_shots_hit as f64,
             base_mag: _base_mag_size as f64,
             curr_mag: _base_mag_size as f64,
             reserves_left: 100.0,
-            time_total: 0.0,
+            time_total: _total_time,
             time_this_mag: 0.0,
             stats: _stats,
             weapon_type: _weapon_type,
             weapon_slot: WeaponSlot::KINETIC,
             ammo_type: _ammo_type,
-            handling_data: JsHandlingResponse::default(),
+            handling_data: HandlingResponse::default(),
             num_reloads: 0.0,
             enemy_type: EnemyType::BOSS,
             has_overshield: false,
@@ -72,7 +73,7 @@ impl CalculationInput<'_> {
         _base_crit_mult: f64,
         _mag_size: f64,
         _has_overshield: bool,
-        _handling_data: JsHandlingResponse,
+        _handling_data: HandlingResponse,
     ) -> Self {
         Self {
             curr_firing_data: _firing_data,
@@ -119,7 +120,7 @@ impl CalculationInput<'_> {
             weapon_type: _weapon_type,
             weapon_slot: WeaponSlot::KINETIC,
             ammo_type: _ammo_type,
-            handling_data: JsHandlingResponse::default(),
+            handling_data: HandlingResponse::default(),
             num_reloads: 0.0,
             enemy_type: EnemyType::ENCLAVE,
             has_overshield: false,

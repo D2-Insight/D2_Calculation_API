@@ -1,11 +1,11 @@
+
 use std::cell::RefCell;
 use std::collections::HashMap;
 
-use crate::D2Enemy::Enemy;
+use crate::enemies::Enemy;
 use crate::perks::lib::CalculationInput;
 use crate::perks::*;
-use crate::D2Structs::FiringConfig;
-use crate::D2Weapon::Weapon;
+use super::{FiringConfig, Weapon};
 
 #[allow(dead_code)]
 // fn time_to_empty(_mag: i32, _burst_delay: f64, _burst_duration: f64) -> f64 {
@@ -100,10 +100,10 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy) -> DpsReturn {
     let stats = weapon.borrow().stats.clone();
     let weapon_type = weapon.borrow().weapon_type.clone();
     let ammo_type = weapon.borrow().ammo_type.clone();
-    let base_dmg = weapon.borrow().formulas.firing_data.damage;
-    let base_crit_mult = weapon.borrow().formulas.firing_data.crit_mult;
+    let base_dmg = weapon.borrow().base_damage;
+    let base_crit_mult = weapon.borrow().base_crit_mult;
 
-    let base_mag = weapon.borrow().magsize(false, 0);
+    let base_mag = weapon.borrow().dps_magsize(false, 0);
 
     let firing_settings = _weapon.firing_data.clone();
     let perks = weapon.borrow().list_perks();
@@ -137,7 +137,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy) -> DpsReturn {
         //HANDLING/////////////////////
         //This is for stuff like weapon swapping, demo or trench barrel
         let sparse_calc_input = weapon.borrow().sparse_calc_input(shots_fired);
-        let handling_mod_details = get_handling_modifier(perks.clone(), sparse_calc_input, false);
+        
 
         ///////////////////////////////
         let start_time = time_taken.clone();

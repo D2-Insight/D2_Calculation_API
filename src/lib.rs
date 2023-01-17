@@ -4,34 +4,41 @@ pub mod abilities;
 pub mod enemies;
 pub mod d2_enums;
 pub mod weapons;
-pub mod js_types;
 pub mod perks;
 pub mod activity;
+pub mod types;
 
 use crate::perks::{Perk, Perks};
 use crate::weapons::Weapon;
-use js_types::{JsPerk, JsStat};
 use activity::damage_calc::Activity;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::panic;
-use wasm_bindgen::prelude::*;
 use abilities::Ability;
 use enemies::Enemy;
 use d2_enums::StatHashes;
 
+#[cfg(target_arch = "wasm32")]
+use wasm_bindgen::prelude::*;
+
+//JavaScript
+#[cfg(target_arch = "wasm32")]
+use crate::types::js_types::{JsPerk, JsStat};
+
+#[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
 extern "C" {
     //foreign function interface
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
 }
+#[cfg(target_arch = "wasm32")]
 macro_rules! console_log {
     // Note that this is using the `log` function imported above during
     // `bare_bones`
     ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
 }
-
+#[cfg(target_arch = "wasm32")]
 #[wasm_bindgen(start)]
 pub fn start() {
     panic::set_hook(Box::new(console_error_panic_hook::hook));
@@ -50,18 +57,20 @@ thread_local! {
 }
 
 //---------------WEAPONS---------------//
-
-#[wasm_bindgen]
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen(js_name = "isWeaponInitialized")]
 pub fn is_weapon_init() -> bool {
     PERS_DATA.with(|weapon| weapon.borrow().weapon.id != 0)
 }
 
-#[wasm_bindgen]
-pub fn weapon_id() -> u32 {
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen(js_name = "getWeaponId")]
+pub fn get_weapon_id() -> u32 {
     PERS_DATA.with(|perm_data| perm_data.borrow().weapon.id)
 }
 
-#[wasm_bindgen]
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen(js_name = "getStat")]
 pub fn get_stat(_stat: u32) -> JsStat {
     let stats = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.stats.clone());
     let stat = stats.get(&_stat);
@@ -77,13 +86,15 @@ pub fn get_stat(_stat: u32) -> JsStat {
     }
 }
 
-#[wasm_bindgen]
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen(js_name = "isPerkImplemented")]
 pub fn is_perk_implemented(perk_hash: u32) -> bool {
-    // let rust_hash = perk_hash.as_f64().unwrap() as u32;
+    
     Perks::from_u32(perk_hash) != Perks::Ignore
 }
 
-#[wasm_bindgen]
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen(js_name = "addPerk")]
 pub fn add_perk(perk_data: JsPerk, add: bool) {
     let perk = Perk::from_js(perk_data);
     if is_weapon_init() {
@@ -97,14 +108,16 @@ pub fn add_perk(perk_data: JsPerk, add: bool) {
     };
 }
 
-#[wasm_bindgen]
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen(js_name = "queryPerks")]
 pub fn query_perks() -> Vec<u32> {
     //let perk_list =
     PERS_DATA.with(|perm_data| perm_data.borrow_mut().weapon.list_perk_ids())
     // return Ok(serde_wasm_bindgen::to_value(&perk_list)?);
 }
 
-#[wasm_bindgen]
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen(js_name = "changePerkValue")]
 pub fn change_perk_value(perk_hash: u32, new_value: i32) {
     PERS_DATA.with(|perm_data| {
         perm_data
@@ -115,7 +128,8 @@ pub fn change_perk_value(perk_hash: u32, new_value: i32) {
 }
 
 //---------------ACTIVITY---------------//
-#[wasm_bindgen]
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen(js_name = "setActivity")]
 pub fn set_activity(activity_data: JsValue) {
     let r_activity_data: Activity = serde_wasm_bindgen::from_value(activity_data).unwrap();
     PERS_DATA.with(|perm_data| {
@@ -123,7 +137,8 @@ pub fn set_activity(activity_data: JsValue) {
     });
 }
 
-#[wasm_bindgen]
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen(js_name = "getActivity")]
 pub fn get_activity() -> JsValue {
     let activity = PERS_DATA.with(|perm_data| perm_data.borrow().activity.clone());
     serde_wasm_bindgen::to_value(&activity).unwrap()

@@ -43,13 +43,13 @@
 
         "category": {
             "default": {
-                "range":    {"zrm": 1.575, "zrm_tier": 16, "vpp": 0.0963, "base_min": 11.87, "base_max": 40.8, "scale": false, "floorPercent": 0.5},
+                "range":    {"vpp": 0.0963, "base_min": 11.87, "base_max": 40.8, "scale": false, "floorPercent": 0.5},
                 "reload":   {"evpp": 0.0000855689, "vpp": -0.0242021, "offset": 2.80673006666667},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 1.15, "boss": 1.15, "miniboss": 1.2, "elite": 1.3, "minor": 1.3}
+                "pveScale": {"vehicle": 1.15, "boss": 1.15, "champion": 1.2, "miniboss": 1.2, "elite": 1.3, "minor": 1.3}
             },
             "Cerberus":{
                 "range":    null,
@@ -58,16 +58,16 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 1.15, "boss": 1.15, "miniboss": 1.2, "elite": 1.3, "minor": 1.3}
+                "pveScale": {"vehicle": 1.15, "boss": 1.15, "champion": 1.2, "miniboss": 1.2, "elite": 1.3, "minor": 1.3}
             },
             "hard_light": {
-                "range":    {"zrm": 1.575, "zrm_tier": 16, "vpp": 0.0963, "base_min": 11.87, "base_max": 40.8, "scale": false, "floorPercent": 0.7},
+                "range":    {"vpp": 0.0963, "base_min": 11.87, "base_max": 40.8, "scale": false, "floorPercent": 0.7},
                 "reload":   {"evpp": 0.0000855689, "vpp": -0.0242021, "offset": 2.80673006666667},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 1.15, "boss": 1.15, "miniboss": 1.2, "elite": 1.3, "minor": 1.3}
+                "pveScale": {"vehicle": 1.15, "boss": 1.15, "champion": 1.2, "miniboss": 1.2, "elite": 1.3, "minor": 1.3}
             }
         },
 
@@ -98,7 +98,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 1.5, "boss": 1.5, "miniboss": 1.5, "elite": 1.9, "minor": 2.3}
+                "pveScale": {"vehicle": 1.5, "boss": 1.5, "champion": 1.5, "miniboss": 1.5, "elite": 1.9, "minor": 2.3}
             },
             "exotic": {
                 "range":    null,
@@ -107,7 +107,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 1.5, "boss": 1.5, "miniboss": 1.5, "elite": 1.9, "minor": 2.5}
+                "pveScale": {"vehicle": 1.5, "boss": 1.5, "champion": 1.5, "miniboss": 1.5, "elite": 1.9, "minor": 2.5}
             }
         }
     },
@@ -133,7 +133,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 2.18, "boss": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
+                "pveScale": {"vehicle": 2.18, "boss": 2.55, "champion": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
             },
             "1KV": {
                 "range":    null,
@@ -142,7 +142,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 2.63, "boss": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
+                "pveScale": {"vehicle": 2.63, "boss": 2.55, "champion": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
             },
             "Telesto": {
                 "range":    null,
@@ -151,7 +151,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 2.18, "boss": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
+                "pveScale": {"vehicle": 2.18, "boss": 2.55, "champion": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
             },
             "Jotunn": {
                 "range":    null,
@@ -160,16 +160,16 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 2.18, "boss": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
+                "pveScale": {"vehicle": 2.18, "boss": 2.55, "champion": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
             },
             "Vex": {
-                "range":    {"zrm": 1.475, "zrm_tier": 15, "vpp": 0.0963, "base_min": 11.87, "base_max": 40.8, "scale": true, "floorPercent": 0.5},
+                "range":    {"vpp": 0.0963, "base_min": 11.87, "base_max": 40.8, "scale": false, "floorPercent": 0.5},
                 "reload":   {"evpp": 0.0000855689, "vpp": -0.0242021, "offset": 2.80673006666667, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 2.0, "boss": 2.0, "miniboss": 2.0, "elite": 2.0, "minor": 2.0}
+                "pveScale": {"vehicle": 2.0, "boss": 2.0, "champion": 2.0, "miniboss": 2.0, "elite": 2.0, "minor": 2.0}
             }
         },
 
@@ -208,7 +208,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 2.5, "boss": 2.5, "miniboss": 2.63, "elite": 2.63, "minor": 3.13}
+                "pveScale": {"vehicle": 2.5, "boss": 2.5, "champion": 2.63, "miniboss": 2.63, "elite": 2.63, "minor": 3.13}
             },
             "lion": {
                 "range":    null,
@@ -217,7 +217,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 2.5, "boss": 2.5, "miniboss": 2.63, "elite": 2.63, "minor": 3.13}
+                "pveScale": {"vehicle": 2.5, "boss": 2.5, "champion": 2.63, "miniboss": 2.63, "elite": 2.63, "minor": 3.13}
             },
             "heavy": {
                 "range":    null,
@@ -226,7 +226,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 2.25, "boss": 2.25, "miniboss": 2.36, "elite": 2.36, "minor": 3.13}
+                "pveScale": {"vehicle": 2.25, "boss": 2.25, "champion": 2.36, "miniboss": 2.36, "elite": 2.36, "minor": 3.13}
             },
             "anarchy": {
                 "range":    null,
@@ -235,7 +235,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 1.13, "boss": 1.58, "miniboss": 2.36, "elite": 2.36, "minor": 3.13}
+                "pveScale": {"vehicle": 1.13, "boss": 1.58, "champion": 2.36, "miniboss": 2.36, "elite": 2.36, "minor": 3.13}
             },
             "parasite": {
                 "range":    null,
@@ -244,7 +244,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 2.27, "boss": 2.27, "miniboss": 2.38, "elite": 2.36, "minor": 3.13}
+                "pveScale": {"vehicle": 2.27, "boss": 2.27, "champion": 2.38, "miniboss": 2.38, "elite": 2.36, "minor": 3.13}
             }
         }
     },
@@ -268,24 +268,24 @@
 
         "category": {
             "default": {
-                "range":    {"zrm": 1.375, "zrm_tier": 14, "vpp": 0.0864, "base_min": 16.96, "base_max": 29.6, "scale": true},
+                "range":    {"vpp": 0.0864, "base_min": 16.96, "base_max": 29.6, "scale": true},
                 "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.002942857143, "offset": 0.4782571429},
                     "stow": {"vpp": -0.002952380952, "offset": 0.5133809524},
                     "ads":  {"vpp": -0.001666666667, "offset": 0.3316666667}
                 },
-                "pveScale": {"vehicle": 1.2, "boss": 1.3, "miniboss": 1.4, "elite": 1.4, "minor": 2.13}
+                "pveScale": {"vehicle": 1.2, "boss": 1.3, "champion": 1.4, "miniboss": 1.4, "elite": 1.4, "minor": 2.13}
             },
             "120 RPM": {
-                "range":    {"zrm": 1.375, "zrm_tier": 14, "vpp": 0.09, "base_min": 20, "base_max": 34.1, "scale": true},
+                "range":    {"vpp": 0.09, "base_min": 20, "base_max": 34.1, "scale": true},
                 "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.002942857143, "offset": 0.4782571429},
                     "stow": {"vpp": -0.002952380952, "offset": 0.5133809524},
                     "ads":  {"vpp": -0.001666666667, "offset": 0.3316666667}
                 },
-                "pveScale": {"vehicle": 1.2, "boss": 1.3, "miniboss": 1.4, "elite": 1.4, "minor": 2.13}
+                "pveScale": {"vehicle": 1.2, "boss": 1.3, "champion": 1.4, "miniboss": 1.4, "elite": 1.4, "minor": 2.13}
             },
             "Eriana": {
                 "range":    null,
@@ -295,27 +295,27 @@
                     "stow": {"vpp": -0.002952380952, "offset": 0.5133809524},
                     "ads":  {"vpp": -0.001666666667, "offset": 0.3316666667}
                 },
-                "pveScale": {"vehicle": 1.2, "boss": 1.3, "miniboss": 1.4, "elite": 1.4, "minor": 2.13}
+                "pveScale": {"vehicle": 1.2, "boss": 1.3, "champion": 1.4, "miniboss": 1.4, "elite": 1.4, "minor": 2.13}
             },
             "LastWord": {
-                "range":    {"zrm": 1, "zrm_tier": 11, "vpp": 0, "base_min": 19.3, "base_max": 29.6, "scale": true},
+                "range":    {"vpp": 0, "base_min": 19.3, "base_max": 29.6, "scale": false},
                 "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.002942857143, "offset": 0.4782571429},
                     "stow": {"vpp": -0.002952380952, "offset": 0.5133809524},
                     "ads":  {"vpp": -0.001666666667, "offset": 0.3316666667}
                 },
-                "pveScale": {"vehicle": 1.2, "boss": 1.3, "miniboss": 1.4, "elite": 1.4, "minor": 2.13}
+                "pveScale": {"vehicle": 1.2, "boss": 1.3, "champion": 1.4, "miniboss": 1.4, "elite": 1.4, "minor": 2.13}
             },
             "Crimson": {
-                "range":    {"zrm": 1.375, "zrm_tier": 14, "vpp": 0, "base_min": 24.3636, "base_max": 29.6, "scale": true},
+                "range":    {"vpp": 0, "base_min": 24.3636, "base_max": 29.6, "scale": false},
                 "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.002942857143, "offset": 0.4782571429},
                     "stow": {"vpp": -0.002952380952, "offset": 0.5133809524},
                     "ads":  {"vpp": -0.001666666667, "offset": 0.3316666667}
                 },
-                "pveScale": {"vehicle": 1.2, "boss": 1.3, "miniboss": 1.4, "elite": 1.4, "minor": 2.13}
+                "pveScale": {"vehicle": 1.2, "boss": 1.3, "champion": 1.4, "miniboss": 1.4, "elite": 1.4, "minor": 2.13}
             }
         },
 
@@ -332,7 +332,7 @@
     "Linear Fusion Rifle": {
         "1531126198": {"name": "The Queenbreaker", "category": "default", "pveMult":1.10},
         "2057203855": {"name": "Precision Frame",  "category": "default", "pveMult":1.10},
-        "2564164194": {"name": "Arbalest",         "category": "special", "pveMult":1.10},
+        "2564164194": {"name": "Arbalest",         "category": "arbalest", "pveMult":1.10},
         "3884127242": {"name": "Sleeper Simulant", "category": "default", "pveMult":1.00},
         "2881100038": {"name": "Lorentz Driver",   "category": "special", "pveMult":1.10},
 
@@ -344,7 +344,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 1.81, "boss": 1.81, "miniboss": 1.92, "elite": 1.92, "minor": 2.03}
+                "pveScale": {"vehicle": 1.81, "boss": 1.81, "champion": 1.92, "miniboss": 1.92, "elite": 1.92, "minor": 2.03}
             },
             "special": {
                 "range":    null,
@@ -353,7 +353,16 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 1.81, "boss": 1.54, "miniboss": 1.64, "elite": 1.92, "minor": 2.03}
+                "pveScale": {"vehicle": 1.81, "boss": 1.54, "champion": 1.64, "miniboss": 1.64, "elite": 1.92, "minor": 2.03}
+            },
+            "arbalest": {
+                "range":    null,
+                "reload":   {"evpp": 0.0000588462, "vpp": -0.0199884, "offset": 2.87206463333, "mag_multiplier": false},
+                "handling": {
+                    "ready":{"vpp": -0.199386, "offset": 33.3015},
+                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                },
+                "pveScale": {"vehicle": 1.81, "boss": 1.54, "champion": 1.23, "miniboss": 1.64, "elite": 1.92, "minor": 2.03}
             }
         },
 
@@ -381,7 +390,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 2.38, "boss": 2.16, "miniboss": 2.25, "elite": 3.36, "minor": 4.20}
+                "pveScale": {"vehicle": 2.38, "boss": 2.16, "champion": 2.25, "miniboss": 2.25, "elite": 3.36, "minor": 4.20}
             },
             "Xenophage": {
                 "range":    null,
@@ -390,7 +399,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 2.38, "boss": 1.80, "miniboss": 2.25, "elite": 3.36, "minor": 4.20}
+                "pveScale": {"vehicle": 2.38, "boss": 1.80, "champion": 2.25, "miniboss": 2.25, "elite": 3.36, "minor": 4.20}
             },
             "GrandOverture": {
                 "range":    null,
@@ -399,7 +408,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 2.38, "boss": 1.80, "miniboss": 2.25, "elite": 4.80, "minor": 4.20}
+                "pveScale": {"vehicle": 2.38, "boss": 1.80, "champion": 2.25, "miniboss": 2.25, "elite": 4.80, "minor": 4.20}
             }
         },
 
@@ -427,22 +436,22 @@
 
         "category": {
             "default": {
-                "range":    {"zrm": 1.675, "zrm_tier": 17, "vpp": 0.072, "base_min": 17.3, "base_max": 40.4, "scale": false, "floorPercent": 0.5},
+                "range":    {"vpp": 0.072, "base_min": 17.3, "base_max": 40.4, "scale": false, "floorPercent": 0.5},
                 "reload":   {"evpp": 0.0000926208, "vpp": -0.0256877, "offset": 2.92627266666667, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 0.90, "boss": 1.00, "miniboss": 1.05, "elite": 1.05, "minor": 1.48}
+                "pveScale": {"vehicle": 0.90, "boss": 1.00, "champion": 1.05, "miniboss": 1.05, "elite": 1.05, "minor": 1.48}
             },
             "aggresive": {
-                "range":    {"zrm": 1.675, "zrm_tier": 17, "vpp": 0.072, "base_min": 17.3, "base_max": 40.4, "scale": false, "floorPercent": 0.5},
+                "range":    {"vpp": 0.072, "base_min": 17.3, "base_max": 40.4, "scale": false, "floorPercent": 0.5},
                 "reload":   {"evpp": 0.0000926208, "vpp": -0.0256877, "offset": 2.92627266666667, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 0.90, "boss": 0.90, "miniboss": 1.05, "elite": 1.05, "minor": 1.48}
+                "pveScale": {"vehicle": 0.90, "boss": 0.90, "champion": 1.05, "miniboss": 1.05, "elite": 1.05, "minor": 1.48}
             }
         },
 
@@ -495,7 +504,7 @@
         "377257911":  {"name": "MIDA Multi-Tool",   "category": "default", "archetype": "Lightweight", "pveMult":1.00},
         "1000724343": {"name": "Polaris Lance",     "category": "default", "archetype": "High-Impact", "pveMult":1.00},
         "1019291327": {"name": "High-Impact Frame", "category": "default", "archetype": "High-Impact", "pveMult":1.00},
-        "1319823571": {"name": "Dead Man's Tale",   "category": "DMT"    , "archetype": "Aggressive",  "pveMult":1.00},
+        "1319823571": {"name": "Dead Man's Tale",   "category": "DMT"    , "archetype": "Aggressive",  "pveMult":1.20},
         "1458010786": {"name": "Lightweight Frame", "category": "default", "archetype": "Lightweight", "pveMult":1.00},
         "1636108362": {"name": "Precision Frame",   "category": "default", "archetype": "Precision",   "pveMult":1.00},
         "2741975068": {"name": "Skyburner's Oath",  "category": "default", "archetype": "High-Impact", "pveMult":1.00},
@@ -508,24 +517,24 @@
 
         "category": {
             "default": {
-                "range":    {"zrm": 1.975, "zrm_tier": 20, "vpp": 0.1521, "base_min": 30.89, "base_max": 60.8, "scale": false, "floorPercent": 0.5},
+                "range":    {"vpp": 0.1521, "base_min": 30.89, "base_max": 60.8, "scale": false, "floorPercent": 0.5},
                 "reload":   {"evpp": 0.000102915, "vpp": -0.0276889, "offset": 3.11797356666666, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.002853368560, "offset": 0.540561867},
                     "stow": {"vpp": -0.002941215324, "offset": 0.527217745},
                     "ads":  {"vpp": -0.001693527081, "offset": 0.4114236019}
                 },
-                "pveScale": {"vehicle": 1.30, "boss": 1.30, "miniboss": 1.30, "elite": 1.30, "minor": 1.90}
+                "pveScale": {"vehicle": 1.30, "boss": 1.30, "champion": 1.30, "miniboss": 1.30, "elite": 1.30, "minor": 1.90}
             },
             "DMT": {
-                "range":    {"zrm": 1.975, "zrm_tier": 20, "vpp": 0.169, "base_min": 29.2, "base_max": 60.8, "scale": false, "floorPercent": 0.5},
+                "range":    {"vpp": 0.169, "base_min": 29.2, "base_max": 60.8, "scale": false, "floorPercent": 0.5},
                 "reload":   null,
                 "handling": {
                     "ready":{"vpp": -0.002853368560, "offset": 0.540561867},
                     "stow": {"vpp": -0.002941215324, "offset": 0.527217745},
                     "ads":  {"vpp": -0.001693527081, "offset": 0.4114236019}
                 },
-                "pveScale": {"vehicle": 1.30, "boss": 1.30, "miniboss": 1.30, "elite": 1.30, "minor": 1.90}
+                "pveScale": {"vehicle": 1.30, "boss": 1.30, "champion": 1.30, "miniboss": 1.30, "elite": 1.30, "minor": 1.90}
             }
         },
 
@@ -544,8 +553,8 @@
         "536517534":  {"name": "Duality",             "category": "Duality",   "archetype": "Slug",        "pveMult":1.23},
         "918679156":  {"name": "Precision Frame",     "category": "slug",      "archetype": "Slug",        "pveMult":1.23},
         "996573084":  {"name": "Rapid-Fire Frame",    "category": "default",   "archetype": "Rapid-Fire",  "pveMult":0.83},
-        "1210807262": {"name": "Tractor Cannon",      "category": "Tractor",   "archetype": "Lightweight", "pveMult":1.00},
-        "1394384862": {"name": "The Chaperone",       "category": "slug", "archetype": "Slug",        "pveMult":1.23},
+        "1210807262": {"name": "Tractor Cannon",      "category": "Tractor",   "archetype": "Lightweight", "pveMult":1.10},
+        "1394384862": {"name": "The Chaperone",       "category": "slug",      "archetype": "Slug",        "pveMult":1.23},
         "1458010786": {"name": "Lightweight Frame",   "category": "default",   "archetype": "Lightweight", "pveMult":1.10},
         "1636108362": {"name": "Precision Frame",     "category": "default",   "archetype": "Precision",   "pveMult":1.10},
         "2223914385": {"name": "The Fourth Horseman", "category": "default",   "archetype": "FourthHorse", "pveMult":1.00},
@@ -556,34 +565,34 @@
 
         "category": {
             "default": {
-                "range":    {"zrm": 1, "zrm_tier": 12,   "vpp": 0.036,           "base_min": 3.4,        "base_max": 8, "scale": false},
+                "range":    {  "vpp": 0.036,           "base_min": 3.4,        "base_max": 8, "scale": false},
                 "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.003271255061, "offset": 0.5388744939},
                     "stow": {"vpp": -0.003388663968, "offset": 0.5711336032},
                     "ads":  {"vpp": -0.002338056680, "offset":0.451194332}
                 },
-                "pveScale": {"vehicle": 2.80, "boss": 2.30, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
+                "pveScale": {"vehicle": 2.80, "boss": 2.30, "champion": 2.5, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
             },
             "slug": {
-                "range":    {"zrm": 1, "zrm_tier": 12,   "vpp": 0.05,           "base_min": 4,        "base_max": 9, "scale": false},
+                "range":    {  "vpp": 0.05,           "base_min": 4,        "base_max": 9, "scale": false},
                 "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.003271255061, "offset": 0.5388744939},
                     "stow": {"vpp": -0.003388663968, "offset": 0.5711336032},
                     "ads":  {"vpp": -0.002338056680, "offset":0.451194332}
                 },
-                "pveScale": {"vehicle": 2.80, "boss": 2.30, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
+                "pveScale": {"vehicle": 2.80, "boss": 2.30, "champion": 2.5, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
             },
             "LoW": {
-                "range":    {"zrm": 1, "zrm_tier": 12,   "vpp": 0,           "base_min": 9,        "base_max": 9, "scale": false},
+                "range":    {  "vpp": 0,           "base_min": 9,        "base_max": 9, "scale": false},
                 "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.003271255061, "offset": 0.5388744939},
                     "stow": {"vpp": -0.003388663968, "offset": 0.5711336032},
                     "ads":  {"vpp": -0.002338056680, "offset":0.451194332}
                 },
-                "pveScale": {"vehicle": 2.80, "boss": 2.30, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
+                "pveScale": {"vehicle": 2.80, "boss": 2.30, "champion": 2.5, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
             },
             "Duality": {
                 "range":    null,
@@ -593,7 +602,7 @@
                     "stow": {"vpp": -0.003388663968, "offset": 0.5711336032},
                     "ads":  {"vpp": -0.002338056680, "offset":0.451194332}
                 },
-                "pveScale": {"vehicle": 2.80, "boss": 2.30, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
+                "pveScale": {"vehicle": 2.80, "boss": 2.30, "champion": 2.5, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
             },
             "Tractor": {
                 "range":    null,
@@ -603,7 +612,7 @@
                     "stow": {"vpp": -0.003388663968, "offset": 0.5711336032},
                     "ads":  {"vpp": -0.002338056680, "offset":0.451194332}
                 },
-                "pveScale": {"vehicle": 2.80, "boss": 2.30, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
+                "pveScale": {"vehicle": 2.80, "boss": 2.30, "champion": 2.5, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
             }
         },
 
@@ -635,22 +644,22 @@
 
         "category": {
             "default": {
-                "range":    {"zrm": 1.175, "zrm_tier": 12, "vpp": 0.0306, "base_min": 11.94, "base_max": 22.5, "scale": true, "floorPercent": 0.5},
+                "range":    {"vpp": 0.0306, "base_min": 11.94, "base_max": 22.5, "scale": true, "floorPercent": 0.5},
                 "reload":   {"evpp": 0.0000238311, "vpp": -0.0124553, "offset": 2.14667245000000, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 1.4, "boss": 1.55, "miniboss": 1.55, "elite": 1.8, "minor": 1.8}
+                "pveScale": {"vehicle": 1.4, "boss": 1.55, "champion": 1.55, "miniboss": 1.55, "elite": 1.8, "minor": 1.8}
             },
             "Forerunner": {
-                "range":    {"zrm": 1.975, "zrm_tier": 20, "vpp": 0, "base_min": 28, "base_max": 28, "scale": false, "floorPercent": 0.5},
+                "range":    {"vpp": 0, "base_min": 28, "base_max": 28, "scale": false, "floorPercent": 0.5},
                 "reload":   {"evpp": 0.0000238311, "vpp": -0.0124553, "offset": 2.64667245000000, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 1.4, "boss": 1.55, "miniboss": 1.55, "elite": 1.8, "minor": 1.8}
+                "pveScale": {"vehicle": 1.4, "boss": 1.55, "champion": 1.55, "miniboss": 1.55, "elite": 1.8, "minor": 1.8}
             }
         },
 
@@ -683,7 +692,7 @@
                     "stow": {"vpp": -0.002083932479, "offset": 0.4392525789},
                     "ads":  {"vpp": -0.00194998437, "offset": 0.5021325414}
                 },
-                "pveScale": {"vehicle": 1.12, "boss": 1.20, "miniboss": 1.30, "elite": 1.55, "minor": 2.55}
+                "pveScale": {"vehicle": 1.12, "boss": 1.20, "champion": 1.3, "miniboss": 1.30, "elite": 1.55, "minor": 2.55}
             }
         },
 
@@ -709,22 +718,22 @@
 
         "category": {
             "default": {
-                "range":    {"zrm": 1.275, "zrm_tier": 13, "vpp": 0.0891, "base_min": 8.83, "base_max": 24.5, "scale": false, "floorPercent": 0.5},
+                "range":    {"vpp": 0.0891, "base_min": 8.83, "base_max": 24.5, "scale": false, "floorPercent": 0.5},
                 "reload":   {"evpp": 0.0000608642, "vpp": -0.0191345, "offset": 2.62769, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 1.40, "boss": 1.53, "miniboss": 1.53, "elite": 1.90, "minor": 1.90}
+                "pveScale": {"vehicle": 1.40, "boss": 1.53, "champion": 1.53, "miniboss": 1.53, "elite": 1.90, "minor": 1.90}
             },
             "striga": {
-                "range":    {"zrm": 1.275, "zrm_tier": 13, "vpp": 0.1247, "base_min": 9.0835, "base_max": 9.0835, "scale": false, "floorPercent": 0.5},
+                "range":    {"vpp": 0.1247, "base_min": 9.0835, "base_max": 9.0835, "scale": false, "floorPercent": 0.5},
                 "reload":   {"evpp": 0.0000608642, "vpp": -0.0191345, "offset": 2.62769, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 1.40, "boss": 1.53, "miniboss": 1.53, "elite": 1.90, "minor": 1.90}
+                "pveScale": {"vehicle": 1.40, "boss": 1.53, "champion": 1.53, "miniboss": 1.53, "elite": 1.90, "minor": 1.90}
             }
         },
 
@@ -755,7 +764,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 1.24, "boss": 1.24, "miniboss": 1.24, "elite": 1.45, "minor": 1.83}
+                "pveScale": {"vehicle": 1.24, "boss": 1.24, "champion": 1.24, "miniboss": 1.24, "elite": 1.45, "minor": 1.83}
             }
         }
     },
@@ -774,7 +783,7 @@
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 3, "boss": 3, "miniboss": 3, "elite": 3, "minor": 4.5}
+                "pveScale": {"vehicle": 3.0, "boss": 3.0, "champion": 3.0, "miniboss": 3.0, "elite": 3.0, "minor": 4.5}
             }
         }
     },
@@ -789,13 +798,13 @@
 
         "category": {
             "default": {
-                "range":    {"zrm": 1.575, "zrm_tier": 16, "vpp": 0.09,          "base_min": 16,       "base_max": 16, "scale": false},
+                "range":    {"vpp": 0.09,          "base_min": 16,       "base_max": 16, "scale": false},
                 "reload":   null,
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
                 },
-                "pveScale": {"vehicle": 1.4, "boss": 1.5, "miniboss": 1.7, "elite": 1.7, "minor": 1.9}
+                "pveScale": {"vehicle": 1.4, "boss": 1.5, "champion": 1.7, "miniboss": 1.7, "elite": 1.7, "minor": 1.9}
             }
         }
     }

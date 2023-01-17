@@ -1,6 +1,10 @@
-use crate::D2Structs::FiringConfig;
 
-use super::ceil;
+use super::FiringConfig;
+
+//just to make code cleaner for now
+fn ceil(x: f64) -> f64 {
+    x.ceil()
+}
 
 static RESILIENCE_VALUES: [f64; 11] = [
     185.01, 186.01, 187.01, 188.01, 189.01, 190.01, 192.01, 194.01, 196.01, 198.01, 200.01,

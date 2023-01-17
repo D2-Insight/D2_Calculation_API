@@ -1,46 +1,25 @@
 pub mod stat_calc;
+pub mod dps_calc;
+mod ttk_calc;
 
 use std::collections::HashMap;
 
-use crate::js_types::{JsWeaponFormula, JsStat, JsDamageModifiers};
-use crate::perks::{Perk, get_magazine_modifier, get_perk_stats, get_reserve_modifier, lib::CalculationInput};
-use crate::d2_enums::{WeaponType, AmmoType, DamageType, StatHashes, WeaponSlot};
-
-use wasm_bindgen::prelude::wasm_bindgen;
-
+use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponSlot, WeaponType};
+use crate::perks::{
+    get_magazine_modifier, get_perk_stats, get_reserve_modifier, lib::CalculationInput, Perk,
+};
+use crate::types::rs_types::{DamageMods, RangeFormula, AmmoFormula, HandlingFormula, ReloadFormula};
 use self::stat_calc::calc_ammo;
 
-#[derive(Debug, Clone)]
-pub struct BuffPackage {
-    pub pve: f64,
-    pub minor: f64,
-    pub elite: f64,
-    pub miniboss: f64,
-    pub boss: f64,
-    pub vehicle: f64,
-}
-impl BuffPackage {
-    pub fn new() -> BuffPackage {
-        BuffPackage {
-            pve: 1.0,
-            minor: 1.0,
-            elite: 1.0,
-            miniboss: 1.0,
-            boss: 1.0,
-            vehicle: 1.0,
-        }
-    }
-    pub fn from_js(_js_equiv: &JsDamageModifiers) -> BuffPackage {
-        BuffPackage {
-            pve: _js_equiv.global,
-            minor: _js_equiv.minor,
-            elite: _js_equiv.elite,
-            miniboss: _js_equiv.miniboss,
-            boss: _js_equiv.boss,
-            vehicle: _js_equiv.vehicle,
-        }
-    }
-}
+//JavaScript
+#[cfg(target_arch = "wasm32")]
+use crate::types::js_types::{JsDamageModifiers, JsStat, JsWeaponFormula};
+#[cfg(target_arch = "wasm32")]
+use wasm_bindgen::prelude::wasm_bindgen;
+//Python
+
+
+
 
 #[derive(Debug, Clone)]
 pub struct Stat {
@@ -62,6 +41,7 @@ impl Stat {
     pub fn perk_val(&self) -> i32 {
         self.base_value + self.part_value + self.perk_value
     }
+    #[cfg(target_arch = "wasm32")]
     pub fn to_js(&self, _hash: u32) -> JsStat {
         JsStat {
             stat_hash: _hash,
@@ -87,10 +67,14 @@ pub struct Weapon {
     //ideally entirely interfaced with through funcs
     pub perks: HashMap<u32, Perk>,
     pub stats: HashMap<u32, Stat>,
-    pub damage_mods: BuffPackage,
+    pub damage_mods: DamageMods,
     pub firing_data: FiringConfig,
     pub id: u32,
-    pub formulas: JsWeaponFormula,
+
+    pub range_formula: RangeFormula,
+    pub ammo_formula: AmmoFormula,
+    pub handling_formula: HandlingFormula,
+    pub reload_formula: ReloadFormula,
 
     pub base_damage: f64,
     pub base_crit_mult: f64,
@@ -132,13 +116,17 @@ impl Weapon {
         self.stats.clone()
     }
     pub fn reset(&mut self) {
-        //TODO: make this a trait
         self.perks = HashMap::new();
         self.stats = HashMap::new();
         self.id = 0;
-        self.damage_mods = BuffPackage::new();
+        self.damage_mods = DamageMods::default();
         self.firing_data = FiringConfig::default();
-        self.formulas = JsWeaponFormula::new();
+        self.base_damage = 0.0;
+        self.base_crit_mult = 0.0;
+        self.range_formula = RangeFormula::default();
+        self.ammo_formula = AmmoFormula::default();
+        self.handling_formula = HandlingFormula::default();
+        self.reload_formula = ReloadFormula::default();
     }
 
     pub fn static_calc_input(&self) -> CalculationInput {
@@ -150,48 +138,46 @@ impl Weapon {
         )
     }
 
-    pub fn sparse_calc_input(&self, _total_shots_fired: i32) -> CalculationInput {
+    pub fn sparse_calc_input(&self, _total_shots_fired: i32, _total_time: f64) -> CalculationInput {
         CalculationInput::construct_pve_sparse(
             self.firing_data.clone(),
             self.stats.clone(),
             self.weapon_type.clone(),
             self.ammo_type.clone(),
-            self.formulas.firing_data.damage.clone(),
-            self.formulas.firing_data.crit_mult.clone(),
-            self.magsize(false, _total_shots_fired),
+            self.base_damage.clone(),
+            self.base_crit_mult.clone(),
+            self.dps_magsize(false, _total_shots_fired),
             _total_shots_fired,
+            _total_time,
         )
     }
 
     //we need the total shots fired for dps calcs, easiest way around it.
-    pub fn magsize(&self, use_perks: bool, _total_shots_fired: i32) -> i32 {
+    pub fn dps_magsize(&self, use_perks: bool, _total_shots_fired: i32) -> i32 {
         let magazine_stat = self.stats.get(&StatHashes::MAGAZINE.to_u32());
         if magazine_stat.is_none() {
             return 0;
         }
         if use_perks {
-            let input = self.sparse_calc_input(_total_shots_fired);
-            let res_mod_details =
-                get_magazine_modifier(self.list_perks(), input, false);
+            let input = self.sparse_calc_input(_total_shots_fired, 0.0);
+            let res_mod_details = get_magazine_modifier(self.list_perks(), input, false);
             let final_mag_size = magazine_stat.unwrap().val() + res_mod_details.magazine_stat_add;
-            let mut val = calc_ammo(
-                final_mag_size,
-                50,
-                self.formulas.ammo_data.clone()
-            ).mag_size as f64;
+            let mut val =
+                calc_ammo(final_mag_size, 50, self.ammo_formula.clone()).mag as f64;
             val *= res_mod_details.magazine_scale;
             val += res_mod_details.magazine_add;
             return val.ceil() as i32;
         } else {
             return calc_ammo(
-                magazine_stat.unwrap().val(), 
-                50, 
-                self.formulas.ammo_data.clone()
-            ).mag_size;
+                magazine_stat.unwrap().val(),
+                50,
+                self.ammo_formula.clone(),
+            )
+            .mag;
         }
     }
 
-    pub fn reserves(&self, use_perks: bool) -> i32 {
+    pub fn dps_reserves(&self, use_perks: bool) -> i32 {
         //TODO
         let res_mod_details =
             get_reserve_modifier(self.list_perks(), self.static_calc_input(), false);
@@ -210,12 +196,16 @@ impl Default for Weapon {
             perks: HashMap::new(),
             stats: HashMap::new(),
             id: 0,
-            damage_mods: BuffPackage::new(),
+            damage_mods: DamageMods::default(),
             firing_data: FiringConfig::default(),
-            formulas: JsWeaponFormula::new(),
 
             base_damage: 0.0,
             base_crit_mult: 0.0,
+
+            range_formula: RangeFormula::default(),
+            ammo_formula: AmmoFormula::default(),
+            handling_formula: HandlingFormula::default(),
+            reload_formula: ReloadFormula::default(),
 
             weapon_type: WeaponType::UNKNOWN,
             weapon_slot: WeaponSlot::UNKNOWN,
