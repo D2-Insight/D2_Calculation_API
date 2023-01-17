@@ -11,7 +11,7 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-use crate::{D2Enums::StatHashes, js_types::JsPerk};
+use crate::{d2_enums::StatHashes, js_types::JsPerk};
 
 use self::{
     lib::{CalculationInput, DamageModifierResponse, ReloadModifierResponse, FiringModifierResponse, HandlingModifierResponse, MagazineModifierResponse, InventoryModifierResponse}, other_perks::*, year_1_perks::*, year_2_perks::*, year_3_perks::*,

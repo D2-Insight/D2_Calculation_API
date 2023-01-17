@@ -1,5 +1,5 @@
 [package]
-name = "D2_Calculation_API"
+name = "d2_calculation_api"
 edition = "2021"
 version = "0.1.0"
 rust-version = "1.65"
@@ -8,7 +8,7 @@ rust-version = "1.65"
 [dependencies]
 serde = { version = "^1.0", features = ["derive"] }
 serde-wasm-bindgen = "^0.4"
-console_error_panic_hook = "0.1.6"
+console_error_panic_hook = "0.1.7"
 wasm-bindgen-futures = "^0.4"
 wasm-bindgen = "^0.2"
 js-sys = "^0.3"

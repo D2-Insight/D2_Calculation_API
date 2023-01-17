@@ -1,26 +1,24 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
-pub mod D2Ability;
-pub mod D2Enemy;
-pub mod D2Enums;
-pub mod D2Structs;
-pub mod D2Weapon;
+pub mod abilities;
+pub mod enemies;
+pub mod d2_enums;
+pub mod weapons;
 pub mod js_types;
-pub mod mathUtil;
 pub mod perks;
+pub mod activity;
 
 use crate::perks::{Perk, Perks};
-use crate::D2Weapon::Weapon;
-use js_sys;
-use js_types::JsPerk;
-use mathUtil::damage_calc::Activity;
+use crate::weapons::Weapon;
+use js_types::{JsPerk, JsStat};
+use activity::damage_calc::Activity;
 use std::cell::RefCell;
 use std::collections::HashMap;
+use std::panic;
 use wasm_bindgen::prelude::*;
-use D2Ability::Ability;
-use D2Enemy::Enemy;
-use D2Enums::StatHashes;
-use D2Weapon::JS_Stat;
+use abilities::Ability;
+use enemies::Enemy;
+use d2_enums::StatHashes;
 
 #[wasm_bindgen]
 extern "C" {
@@ -32,6 +30,12 @@ macro_rules! console_log {
     // Note that this is using the `log` function imported above during
     // `bare_bones`
     ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
+}
+
+#[wasm_bindgen(start)]
+pub fn start() {
+    panic::set_hook(Box::new(console_error_panic_hook::hook));
+    console_log!("D2 Calculator Loaded");
 }
 
 #[derive(Debug, Clone, Default)]
@@ -58,15 +62,19 @@ pub fn weapon_id() -> u32 {
 }
 
 #[wasm_bindgen]
-pub fn get_stats() -> js_sys::Map {
+pub fn get_stat(_stat: u32) -> JsStat {
     let stats = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.stats.clone());
-    let mut js_hashmap = HashMap::new();
-    for (stat_hash, stat_value) in stats {
-        let js_stat = JS_Stat::from_stat(&stat_value);
-        js_hashmap.insert(stat_hash, js_stat);
+    let stat = stats.get(&_stat);
+    if stat.is_some() {
+        stat.unwrap().to_js(_stat)
+    } else {
+        JsStat {
+            stat_hash: _stat,
+            base_value: 0,
+            perk_value: 0,
+            part_value: 0,
+        }
     }
-    let js_stats = serde_wasm_bindgen::to_value(&js_hashmap).unwrap();
-    return js_sys::Map::from(js_stats);
 }
 
 #[wasm_bindgen]

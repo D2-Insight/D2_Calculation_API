@@ -1,7 +1,7 @@
 //This also includes intrinsic perks, not just exotic
 use std::collections::HashMap;
 
-use crate::{D2Enemy::EnemyType, D2Enums::StatHashes};
+use crate::{enemies::EnemyType, d2_enums::StatHashes};
 
 use super::{
     clamp,
@@ -225,10 +225,10 @@ pub(super) fn fmr_reign_havoc(
     _pvp: bool,
 ) -> FiringModifierResponse {
     let mut delay_mult = 1.0;
-    if _input.shots_fired_this_mag >= 13.0 {
+    if _input.shots_fired_this_mag >= _input.base_mag*0.2 {
         delay_mult = 0.75;
     };
-    if _input.shots_fired_this_mag >= 26.0 {
+    if _input.shots_fired_this_mag >= _input.base_mag*0.4 {
         delay_mult = 0.625;
     };
     FiringModifierResponse {

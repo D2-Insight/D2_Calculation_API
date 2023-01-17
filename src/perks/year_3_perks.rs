@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
 use crate::{
-    D2Enemy::EnemyType,
-    D2Enums::{AmmoType, StatHashes},
+    enemies::EnemyType,
+    d2_enums::{AmmoType, StatHashes},
 };
 
 use super::lib::{

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::D2Enums::{AmmoType, StatHashes, WeaponType};
+use crate::d2_enums::{AmmoType, StatHashes, WeaponType};
 
 use super::{
     clamp,

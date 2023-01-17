@@ -1,4 +1,12 @@
-use crate::js_types::*;
+use crate::js_types::{JsRangeFormula,
+    JsReloadResponse,
+    JsReloadFormula,
+    JsHandlingFormula,
+    JsHandlingResponse,
+    JsRangeResponse,
+    JsAmmoData,
+    JsAmmoResponse
+};
 
 // #[derive(Debug, Clone, Copy)]
 // pub struct ReloadData {
@@ -91,7 +99,9 @@ pub fn calc_reload(
     _formula_data: JsReloadFormula,
 ) -> f64 {
     let reload_stat = _reload_stat as f64;
-    (_formula_data.a * (reload_stat.powi(2))) + (_formula_data.b * reload_stat) + _formula_data.c
+    (_formula_data.evpp * (reload_stat.powi(2)))
+        + (_formula_data.vpp * reload_stat)
+        + _formula_data.offset
 }
 
 pub fn calc_range(
@@ -121,5 +131,67 @@ pub fn calc_range(
         hip_falloff_end,
         ads_falloff_start,
         ads_falloff_end,
+    }
+}
+
+pub fn calc_handling(
+    _handling_stat: i32,
+    _ads_duraction_scalar: f64,
+    _draw_duraction_scalar: f64,
+    _formula_data: JsHandlingFormula,
+) -> JsHandlingResponse {
+    let handling_stat = _handling_stat as f64;
+
+    let ready_time = (handling_stat * _formula_data.ready_vpp + _formula_data.ready_offset)
+        * _draw_duraction_scalar;
+    let mut stow_time = (handling_stat * _formula_data.stow_vpp + _formula_data.stow_offset)
+        * _draw_duraction_scalar;
+    let ads_time = (handling_stat * _formula_data.ads_vpp + _formula_data.ads_offset)
+        * _ads_duraction_scalar;
+
+    let hundred_stow_time = 100.0 * _formula_data.ads_vpp + _formula_data.ads_offset;
+    if stow_time > hundred_stow_time {
+        stow_time = hundred_stow_time;
+    }
+
+    JsHandlingResponse {
+        ready_time,
+        stow_time,
+        ads_time,
+    }
+}
+
+pub fn calc_ammo(
+    _mag_stat: i32,
+    _reserve_stat: i32,
+    _formula_data: JsAmmoData,
+) -> JsAmmoResponse {
+    let mag_stat = _mag_stat as f64;
+    let reserve_stat = _reserve_stat as f64;
+
+    let mut mag_size = ((_formula_data.mag_evpp * (mag_stat.powi(2)))
+    + (_formula_data.mag_vpp * mag_stat)
+    + _formula_data.mag_offset).ceil() as i32;
+    if mag_size < 1 {
+        mag_size = 1;
+    }
+
+    let reserve_known_values = _formula_data.reserve_formulas.keys().collect::<Vec<&i32>>();
+    //find value in reserve_known_values that is closest to reserve_stat
+    let closest_reserve_value = *reserve_known_values
+        .iter()
+        .min_by(|a, b| {
+            let a_diff = (***a - _reserve_stat).abs();
+            let b_diff = (***b - _reserve_stat).abs();
+            a_diff.cmp(&b_diff)
+        })
+        .unwrap().clone();
+    let reserve_formula_data = *_formula_data.reserve_formulas.get(&closest_reserve_value).unwrap();
+    let reserve_size = (reserve_formula_data.0 * reserve_stat + reserve_formula_data.1).ceil() as i32;
+
+    JsAmmoResponse {
+        mag_size,
+        mag_size_perk: 0,
+        reserve_size,
     }
 }

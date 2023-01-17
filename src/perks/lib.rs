@@ -1,8 +1,7 @@
 use crate::{
-    D2Enemy::EnemyType,
-    D2Enums::{AmmoType, StatHashes, WeaponSlot, WeaponType},
-    D2Structs::FiringConfig,
-    D2Weapon::Stat, js_types::JsHandlingResponse,
+    enemies::EnemyType,
+    d2_enums::{AmmoType, StatHashes, WeaponSlot, WeaponType},
+    weapons::{Stat, FiringConfig}, js_types::JsHandlingResponse,
 };
 use std::{collections::HashMap, ops::Mul};
 
