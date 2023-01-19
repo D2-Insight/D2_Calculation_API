@@ -1,10 +1,5 @@
 use std::collections::HashMap;
 
-#[cfg(target_arch = "wasm32")]
-use super::js_types::{
-    JsAmmoResponse, JsDamageModifiers, JsDpsResponse, JsHandlingResponse, JsReloadResponse,
-};
-
 #[derive(Debug, Clone)]
 pub struct DamageMods {
     pub pve: f64,
@@ -66,6 +61,7 @@ pub struct HandlingFormula {
 #[derive(Debug, Clone, Default)]
 pub struct AmmoFormula {
     pub mag: QuadraticFormula,
+    pub round_to_nearest: i32,
     pub reserves: HashMap<i32, QuadraticFormula>,
 }
 
@@ -85,10 +81,13 @@ pub struct HandlingResponse {
 }
 
 #[derive(Debug, Clone, Default)]
-pub struct AmmoResponse {
-    pub mag: i32,
-    pub mag_perk: i32,
-    pub reserves: i32,
+pub struct MagazineResponse {
+    pub mag_size: i32,
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct ReserveResponse {
+    pub reserve_size: i32,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -100,9 +99,10 @@ pub struct ReloadResponse {
 #[derive(Debug, Clone, Default)]
 pub struct DpsResponse {
     pub dps_per_mag: Vec<f64>,
-    pub damage_time_data: Vec<(f64, f64)>,
+    pub time_damage_data: Vec<(f64, f64)>,
     pub total_damage: f64,
-    pub total_shots: f64,
+    pub total_time: f64,
+    pub total_shots: i32,
 }
 
 #[derive(Debug, Clone, Default)]

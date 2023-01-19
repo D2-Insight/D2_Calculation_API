@@ -134,12 +134,11 @@ pub struct DamageModifierResponse {
     pub damage_scale: f64,
     pub crit_scale: f64,
 }
-impl Mul for DamageModifierResponse {
-    type Output = Self;
-    fn mul(self, rhs: Self) -> Self::Output {
+impl Default for DamageModifierResponse {
+    fn default() -> Self {
         Self {
-            damage_scale: self.damage_scale * rhs.damage_scale,
-            crit_scale: self.crit_scale * rhs.crit_scale,
+            damage_scale: 1.0,
+            crit_scale: 1.0,
         }
     }
 }
@@ -152,11 +151,30 @@ pub struct ExtraDamageResponse {
     pub weapon_scale: bool,
     pub crit_scale: bool,
 }
+impl Default for ExtraDamageResponse {
+    fn default() -> Self {
+        Self {
+            additive_damage: 0.0,
+            time_for_additive_damage: 0.0,
+            additive_damage_hits: 0.0,
+            weapon_scale: false,
+            crit_scale: false,
+        }
+    }
+}
 
 #[derive(Debug, Clone)]
 pub struct ReloadModifierResponse {
     pub reload_stat_add: i32,
     pub reload_time_scale: f64,
+}
+impl Default for ReloadModifierResponse {
+    fn default() -> Self {
+        Self {
+            reload_stat_add: 0,
+            reload_time_scale: 1.0,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -165,12 +183,30 @@ pub struct FiringModifierResponse {
     pub burst_size_add: f64,
     pub burst_duration_scale: f64,
 }
+impl Default for FiringModifierResponse {
+    fn default() -> Self {
+        Self {
+            burst_delay_scale: 1.0,
+            burst_size_add: 0.0,
+            burst_duration_scale: 1.0,
+        }
+    }
+}
 
 #[derive(Debug, Clone)]
 pub struct HandlingModifierResponse {
     pub handling_stat_add: i32,
     pub handling_swap_scale: f64,
     pub handling_ads_scale: f64,
+}
+impl Default for HandlingModifierResponse {
+    fn default() -> Self {
+        Self {
+            handling_stat_add: 0,
+            handling_swap_scale: 1.0,
+            handling_ads_scale: 1.0,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -180,13 +216,33 @@ pub struct RangeModifierResponse {
     pub range_hip_scale: f64,
     pub range_zoom_scale: f64,
 }
+impl Default for RangeModifierResponse {
+    fn default() -> Self {
+        Self {
+            range_stat_add: 0,
+            range_all_scale: 1.0,
+            range_hip_scale: 1.0,
+            range_zoom_scale: 1.0,
+        }
+    }
+}
 
 #[derive(Debug, Clone)]
 pub struct RefundResponse {
     pub crit: bool,
     pub requirement: i32,
-    pub refund: i32,
-    pub generate_ammo: bool,
+    pub refund_mag: i32,
+    pub refund_reserves: i32,
+}
+impl Default for RefundResponse {
+    fn default() -> Self {
+        Self {
+            crit: false,
+            requirement: 0,
+            refund_mag: 0,
+            refund_reserves: 0,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -195,12 +251,30 @@ pub struct MagazineModifierResponse {
     pub magazine_scale: f64,
     pub magazine_add: f64,
 }
+impl Default for MagazineModifierResponse {
+    fn default() -> Self {
+        Self {
+            magazine_stat_add: 0,
+            magazine_scale: 1.0,
+            magazine_add: 0.0,
+        }
+    }
+}
 
 #[derive(Debug, Clone)]
 pub struct InventoryModifierResponse {
     pub ammo_stat_add: i32,
     pub ammo_scale: f64,
     pub ammo_add: f64,
+}
+impl Default for InventoryModifierResponse {
+    fn default() -> Self {
+        Self {
+            ammo_stat_add: 0,
+            ammo_scale: 1.0,
+            ammo_add: 0.0,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]

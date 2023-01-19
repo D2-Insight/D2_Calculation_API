@@ -9,7 +9,7 @@ use crate::perks::{
     get_magazine_modifier, get_perk_stats, get_reserve_modifier, lib::CalculationInput, Perk,
 };
 use crate::types::rs_types::{DamageMods, RangeFormula, AmmoFormula, HandlingFormula, ReloadFormula};
-use self::stat_calc::calc_ammo;
+
 
 //JavaScript
 #[cfg(target_arch = "wasm32")]
@@ -64,7 +64,9 @@ pub struct FiringConfig {
 
 #[derive(Debug, Clone)]
 pub struct Weapon {
-    //ideally entirely interfaced with through funcs
+    //ideally entirely interfaced with through funcs when acting mutably
+    pub is_pvp: bool,
+
     pub perks: HashMap<u32, Perk>,
     pub stats: HashMap<u32, Stat>,
     pub damage_mods: DamageMods,
@@ -133,12 +135,12 @@ impl Weapon {
         CalculationInput::construct_static(
             self.firing_data.clone(),
             self.stats.clone(),
-            self.weapon_type,
-            self.ammo_type,
+            self.weapon_type.clone(),
+            self.ammo_type.clone(),
         )
     }
 
-    pub fn sparse_calc_input(&self, _total_shots_fired: i32, _total_time: f64) -> CalculationInput {
+    pub fn sparse_calc_input(&self, _total_shots_fired: &i32, _total_time: &f64) -> CalculationInput {
         CalculationInput::construct_pve_sparse(
             self.firing_data.clone(),
             self.stats.clone(),
@@ -146,53 +148,17 @@ impl Weapon {
             self.ammo_type.clone(),
             self.base_damage.clone(),
             self.base_crit_mult.clone(),
-            self.dps_magsize(false, _total_shots_fired),
-            _total_shots_fired,
-            _total_time,
+            self.calc_mag_size(None).mag_size,
+            _total_shots_fired.clone(),
+            _total_time.clone()
         )
-    }
-
-    //we need the total shots fired for dps calcs, easiest way around it.
-    pub fn dps_magsize(&self, use_perks: bool, _total_shots_fired: i32) -> i32 {
-        let magazine_stat = self.stats.get(&StatHashes::MAGAZINE.to_u32());
-        if magazine_stat.is_none() {
-            return 0;
-        }
-        if use_perks {
-            let input = self.sparse_calc_input(_total_shots_fired, 0.0);
-            let res_mod_details = get_magazine_modifier(self.list_perks(), input, false);
-            let final_mag_size = magazine_stat.unwrap().val() + res_mod_details.magazine_stat_add;
-            let mut val =
-                calc_ammo(final_mag_size, 50, self.ammo_formula.clone()).mag as f64;
-            val *= res_mod_details.magazine_scale;
-            val += res_mod_details.magazine_add;
-            return val.ceil() as i32;
-        } else {
-            return calc_ammo(
-                magazine_stat.unwrap().val(),
-                50,
-                self.ammo_formula.clone(),
-            )
-            .mag;
-        }
-    }
-
-    pub fn dps_reserves(&self, use_perks: bool) -> i32 {
-        //TODO
-        let res_mod_details =
-            get_reserve_modifier(self.list_perks(), self.static_calc_input(), false);
-        let mut val = 23.0;
-        val *= res_mod_details.ammo_scale;
-        val += res_mod_details.ammo_add;
-        if val < 0.0 {
-            val = 0.5;
-        }
-        val.ceil() as i32
     }
 }
 impl Default for Weapon {
     fn default() -> Weapon {
         Weapon {
+            is_pvp: false,
+
             perks: HashMap::new(),
             stats: HashMap::new(),
             id: 0,

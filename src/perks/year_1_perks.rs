@@ -326,8 +326,8 @@ pub(super) fn rr_triple_tap(
     RefundResponse {
         crit: true,
         requirement: 3,
-        refund: 1,
-        generate_ammo: true,
+        refund_mag: 1,
+        refund_reserves: 0,
     }
 }
 
@@ -462,7 +462,7 @@ pub(super) fn sbr_slide_shot(
     out
 }
 
-pub(super) fn rmr_slideshot(
+pub(super) fn rmr_slide_shot(
     _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,

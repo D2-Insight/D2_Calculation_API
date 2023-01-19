@@ -146,8 +146,8 @@ pub fn rr_fourth_times(
     RefundResponse {
         crit: true,
         requirement: 4,
-        refund: 2,
-        generate_ammo: true,
+        refund_mag: 2,
+        refund_reserves: 0,
     }
 }
 

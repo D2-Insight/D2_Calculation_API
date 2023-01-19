@@ -9,8 +9,8 @@ use wasm_bindgen::prelude::wasm_bindgen;
 
 use super::{
     rs_types::{
-        AmmoFormula, AmmoResponse, DamageMods, DpsResponse, HandlingFormula, HandlingResponse,
-        RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, TtkResponse,
+        AmmoFormula, DamageMods, DpsResponse, HandlingFormula, HandlingResponse, MagazineResponse,
+        RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, ReserveResponse, TtkResponse,
     },
     ToRs,
 };
@@ -286,6 +286,7 @@ pub struct JsAmmoData {
     pub mag_evpp: f64,
     pub mag_vpp: f64,
     pub mag_offset: f64,
+    pub mag_round_to_nearest: i32,
     pub reserve_formulas: HashMap<i32, (f64, f64)>,
 }
 #[wasm_bindgen]
@@ -296,6 +297,7 @@ impl JsAmmoData {
             mag_evpp: 0.0,
             mag_vpp: 0.0,
             mag_offset: 0.0,
+            mag_round_to_nearest: 1,
             reserve_formulas: HashMap::new(),
         }
     }
@@ -305,6 +307,7 @@ impl JsAmmoData {
         self.mag_evpp == 0.0
             && self.mag_vpp == 0.0
             && self.mag_offset == 0.0
+            && self.mag_round_to_nearest < 2
             && self.reserve_formulas.is_empty()
     }
 }
@@ -316,6 +319,7 @@ impl Into<AmmoFormula> for JsAmmoData {
                 vpp: self.mag_vpp,
                 offset: self.mag_offset,
             },
+            round_to_nearest: self.mag_round_to_nearest,
             reserves: self
                 .reserve_formulas
                 .into_iter()
@@ -458,18 +462,18 @@ impl From<TtkResponse> for JsTtkResponse {
 #[tsify(into_wasm_abi)]
 pub struct JsDpsResponse {
     pub dps_per_mag: Vec<f64>,
-
-    pub damage_time_data: Vec<(f64, f64)>,
-
+    pub time_damage_data: Vec<(f64, f64)>,
     pub total_damage: f64,
-    pub total_shots: f64,
+    pub total_time: f64,
+    pub total_shots: i32,
 }
 impl From<DpsResponse> for JsDpsResponse {
     fn from(dps: DpsResponse) -> Self {
         JsDpsResponse {
             dps_per_mag: dps.dps_per_mag,
-            damage_time_data: dps.damage_time_data,
+            time_damage_data: dps.time_damage_data,
             total_damage: dps.total_damage,
+            total_time: dps.total_time,
             total_shots: dps.total_shots,
         }
     }
@@ -477,17 +481,26 @@ impl From<DpsResponse> for JsDpsResponse {
 
 #[derive(Debug, Clone, Serialize, Tsify, Default)]
 #[tsify(into_wasm_abi)]
-pub struct JsAmmoResponse {
+pub struct JsMagazineResponse {
     pub mag_size: i32,
-    pub mag_size_perk: i32,
+}
+impl From<MagazineResponse> for JsMagazineResponse {
+    fn from(ammo: MagazineResponse) -> Self {
+        JsMagazineResponse {
+            mag_size: ammo.mag_size,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Tsify, Default)]
+#[tsify(into_wasm_abi)]
+pub struct JsReserveResponse {
     pub reserve_size: i32,
 }
-impl From<AmmoResponse> for JsAmmoResponse {
-    fn from(ammo: AmmoResponse) -> Self {
-        JsAmmoResponse {
-            mag_size: ammo.mag,
-            mag_size_perk: ammo.mag_perk,
-            reserve_size: ammo.reserves,
+impl From<ReserveResponse> for JsReserveResponse {
+    fn from(ammo: ReserveResponse) -> Self {
+        JsReserveResponse {
+            reserve_size: ammo.reserve_size,
         }
     }
 }
