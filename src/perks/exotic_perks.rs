@@ -1,7 +1,7 @@
 //This also includes intrinsic perks, not just exotic
 use std::collections::HashMap;
 
-use crate::{enemies::EnemyType, d2_enums::StatHashes};
+use crate::{d2_enums::StatHashes, enemies::EnemyType};
 
 use super::{
     clamp,
@@ -12,8 +12,6 @@ use super::{
     },
 };
 
-// def emptyMagBuff(_input: FunctionInputData, _perkValue: int) -> ReloadModifierResponse:
-//     return ReloadModifierResponse(0, 0.85)
 
 pub(super) fn rsmr_alloy_mag(
     _input: &CalculationInput,
@@ -225,16 +223,33 @@ pub(super) fn fmr_reign_havoc(
     _pvp: bool,
 ) -> FiringModifierResponse {
     let mut delay_mult = 1.0;
-    if _input.shots_fired_this_mag >= _input.base_mag*0.2 {
+    if _input.shots_fired_this_mag >= _input.base_mag * 0.2 {
         delay_mult = 0.75;
     };
-    if _input.shots_fired_this_mag >= _input.base_mag*0.4 {
+    if _input.shots_fired_this_mag >= _input.base_mag * 0.4 {
         delay_mult = 0.625;
     };
     FiringModifierResponse {
         burst_delay_scale: delay_mult,
         burst_duration_scale: 1.0,
         burst_size_add: 0.0,
+    }
+}
+
+pub(super) fn edr_reign_havoc(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+) -> ExtraDamageResponse {
+    let dmg = if _pvp { 65.0 } else { 65.0 * 1.3 };
+    ExtraDamageResponse {
+        additive_damage: dmg,
+        times_to_hit: 1,
+        time_for_additive_damage: 0.0,
+        weapon_scale: false,
+        crit_scale: false,
+        combatant_scale: false,
     }
 }
 

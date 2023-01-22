@@ -8,12 +8,20 @@ pub enum AmmoType {
     UNKNOWN = 0,
 }
 impl AmmoType {
-    fn from_u32(_value: u32) -> AmmoType {
+    pub fn from_u32(_value: u32) -> AmmoType {
         match _value {
             1 => AmmoType::PRIMARY,
             2 => AmmoType::SPECIAL,
             3 => AmmoType::HEAVY,
             _ => AmmoType::UNKNOWN,
+        }
+    }
+    pub fn to_string(&self) -> String {
+        match self {
+            AmmoType::PRIMARY => "Primary".to_string(),
+            AmmoType::SPECIAL => "Special".to_string(),
+            AmmoType::HEAVY => "Heavy".to_string(),
+            _ => "Unknown".to_string(),
         }
     }
 }
@@ -40,7 +48,7 @@ pub enum WeaponType {
     UNKNOWN = 0,
 }
 impl WeaponType {
-    fn from_u32(_value: u32) -> WeaponType {
+    pub fn from_u32(_value: u32) -> WeaponType {
         match _value {
             6 => WeaponType::AUTORIFLE,
             31 => WeaponType::BOW,
@@ -62,6 +70,28 @@ impl WeaponType {
             _ => WeaponType::UNKNOWN,
         }
     }
+    pub fn to_string(&self) -> String {
+        match self {
+            WeaponType::AUTORIFLE => "Auto Rifle".to_string(),
+            WeaponType::BOW => "Bow".to_string(),
+            WeaponType::FUSIONRIFLE => "Fusion Rifle".to_string(),
+            WeaponType::GLAIVE => "Glaive".to_string(),
+            WeaponType::GRENADELAUNCHER => "Grenade Launcher".to_string(),
+            WeaponType::HANDCANNON => "Hand Cannon".to_string(),
+            WeaponType::LINEARFUSIONRIFLE => "Linear Fusion Rifle".to_string(),
+            WeaponType::MACHINEGUN => "Machine Gun".to_string(),
+            WeaponType::PULSERIFLE => "Pulse Rifle".to_string(),
+            WeaponType::ROCKET => "Rocket Launcher".to_string(),
+            WeaponType::SCOUTRIFLE => "Scout Rifle".to_string(),
+            WeaponType::SHOTGUN => "Shotgun".to_string(),
+            WeaponType::SIDEARM => "Sidearm".to_string(),
+            WeaponType::SNIPER => "Sniper Rifle".to_string(),
+            WeaponType::SUBMACHINEGUN => "Submachine Gun".to_string(),
+            WeaponType::SWORD => "Sword".to_string(),
+            WeaponType::TRACERIFLE => "Trace Rifle".to_string(),
+            _ => "Unknown".to_string(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -72,12 +102,20 @@ pub enum WeaponSlot {
     UNKNOWN,
 }
 impl WeaponSlot {
-    fn from_u32(_value: u32) -> WeaponSlot {
+    pub fn from_u32(_value: u32) -> WeaponSlot {
         match _value {
             1498876634 => WeaponSlot::KINETIC,
             2465295065 => WeaponSlot::ENERGY,
             953998645 => WeaponSlot::POWER,
             _ => WeaponSlot::UNKNOWN,
+        }
+    }
+    pub fn to_string(&self) -> String {
+        match self {
+            WeaponSlot::KINETIC => "Kinetic".to_string(),
+            WeaponSlot::ENERGY => "Energy".to_string(),
+            WeaponSlot::POWER => "Power".to_string(),
+            _ => "Unknown".to_string(),
         }
     }
 }

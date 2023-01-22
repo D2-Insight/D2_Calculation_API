@@ -23,7 +23,7 @@ pub fn calc_refund(_shots_hit_this_mag: i32, _refunds: Vec<RefundResponse>) -> (
 
 
 
-pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy) -> DpsResponse {
+pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> DpsResponse {
     let weapon = Rc::new(_weapon.clone());
     let stats = weapon.stats.clone();
     let weapon_type = weapon.weapon_type.clone();
@@ -100,7 +100,8 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy) -> DpsResponse {
             //FIRING MODIFIERS/////////////
             let firing_mods = get_firing_modifier(perks.clone(), &before_shot_input_data, false);
             ///////////////////////////////
-            let dmg = (base_dmg*dmg_mods.damage_scale)*(base_crit_mult*dmg_mods.crit_scale);
+            let dmg = (base_dmg*dmg_mods.damage_scale) * (base_crit_mult*dmg_mods.crit_scale)*
+                            _pl_dmg_mult * weapon.damage_mods.get_mod(&_enemy.type_);
             let inner_burst_delay = burst_delay*firing_mods.burst_duration_scale / 
                                             (burst_size + firing_mods.burst_size_add - 1.0);
             if firing_settings.one_ammo_burst && burst_size > 1.0 {
@@ -132,6 +133,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy) -> DpsResponse {
             }
             mag -= 1;
 
+
             //REFUNDS//////////////////////
             let mut refund_calc_input = weapon.sparse_calc_input(&total_shots_fired, &total_time);
             refund_calc_input.shots_fired_this_mag = shots_this_mag as f64;
@@ -145,7 +147,8 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy) -> DpsResponse {
             //EXTRA DMG////////////////////
             
             ///////////////////////////////
-            
+
+
             //RELOAD OVERRIDE//////////////
             if mag == 0 {
 

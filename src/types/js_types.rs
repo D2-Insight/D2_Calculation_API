@@ -16,6 +16,7 @@ use super::{
 };
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
+#[serde(rename = "Weapon")]
 #[tsify(into_wasm_abi, from_wasm_abi)]
 pub struct JsWeapon {
     pub hash: u32,
@@ -30,6 +31,7 @@ pub struct JsWeapon {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
+#[serde(rename = "DamageModifiers")]
 #[tsify(into_wasm_abi, from_wasm_abi)]
 pub struct JsDamageModifiers {
     pub global: f64, // not reccomended to use but gives users a way to update sstuff themselves
@@ -81,6 +83,7 @@ impl Into<DamageMods> for JsDamageModifiers {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
+#[serde(rename = "RangeFormula")]
 #[tsify(into_wasm_abi, from_wasm_abi)]
 pub struct JsRangeFormula {
     pub vpp_start: f64,
@@ -134,6 +137,7 @@ impl Into<RangeFormula> for JsRangeFormula {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
+#[serde(rename = "ReloadFormula")]
 #[tsify(into_wasm_abi, from_wasm_abi)]
 pub struct JsReloadFormula {
     pub evpp: f64,
@@ -172,6 +176,7 @@ impl Into<ReloadFormula> for JsReloadFormula {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
+#[serde(rename = "HandlingFormula")]
 #[tsify(into_wasm_abi, from_wasm_abi)]
 pub struct JsHandlingFormula {
     pub ready_vpp: f64,
@@ -228,6 +233,7 @@ impl Into<HandlingFormula> for JsHandlingFormula {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
+#[serde(rename = "FiringData")]
 #[tsify(into_wasm_abi, from_wasm_abi)]
 pub struct JsFiringData {
     pub damage: f64,
@@ -281,6 +287,7 @@ impl Into<FiringConfig> for JsFiringData {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
+#[serde(rename = "AmmoData")]
 #[tsify(into_wasm_abi, from_wasm_abi)]
 pub struct JsAmmoData {
     pub mag_evpp: f64,
@@ -339,6 +346,7 @@ impl Into<AmmoFormula> for JsAmmoData {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
+#[serde(rename = "WeaponFormula")]
 #[tsify(into_wasm_abi, from_wasm_abi)]
 pub struct JsWeaponFormula {
     pub range_data: JsRangeFormula,
@@ -362,6 +370,7 @@ impl JsWeaponFormula {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
+#[serde(rename = "Perk")]
 #[tsify(into_wasm_abi, from_wasm_abi)]
 pub struct JsPerk {
     pub stat_buffs: HashMap<u32, i32>,
@@ -387,6 +396,7 @@ impl JsPerk {
 //
 
 #[derive(Debug, Clone, Serialize, Tsify, Default)]
+#[serde(rename = "HandlingResponse")]
 #[tsify(into_wasm_abi)]
 pub struct JsHandlingResponse {
     pub ready_time: f64,
@@ -404,6 +414,7 @@ impl From<HandlingResponse> for JsHandlingResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Tsify)]
+#[serde(rename = "RangeResponse")]
 #[tsify(into_wasm_abi)]
 pub struct JsRangeResponse {
     pub hip_falloff_start: f64,
@@ -423,6 +434,7 @@ impl From<RangeResponse> for JsRangeResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Tsify)]
+#[serde(rename = "ReloadResponse")]
 #[tsify(into_wasm_abi)]
 pub struct JsReloadResponse {
     pub reload_time: f64,
@@ -438,6 +450,7 @@ impl From<ReloadResponse> for JsReloadResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Tsify)]
+#[serde(rename = "TtkResponse")]
 #[tsify(into_wasm_abi)]
 pub struct JsTtkResponse {
     pub ammo_needed: i32,
@@ -459,6 +472,7 @@ impl From<TtkResponse> for JsTtkResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Tsify)]
+#[serde(rename = "DpsResponse")]
 #[tsify(into_wasm_abi)]
 pub struct JsDpsResponse {
     pub dps_per_mag: Vec<f64>,
@@ -480,6 +494,7 @@ impl From<DpsResponse> for JsDpsResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Tsify, Default)]
+#[serde(rename = "MagazineResponse")]
 #[tsify(into_wasm_abi)]
 pub struct JsMagazineResponse {
     pub mag_size: i32,
@@ -493,6 +508,7 @@ impl From<MagazineResponse> for JsMagazineResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Tsify, Default)]
+#[serde(rename = "ReserveResponse")]
 #[tsify(into_wasm_abi)]
 pub struct JsReserveResponse {
     pub reserve_size: i32,
@@ -505,11 +521,35 @@ impl From<ReserveResponse> for JsReserveResponse {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Tsify, Default)]
-#[tsify(into_wasm_abi)]
+#[derive(Debug, Clone, Serialize, Deserialize, Tsify, Default)]
+#[serde(rename = "Stat")]
+#[tsify(into_wasm_abi, from_wasm_abi)]
 pub struct JsStat {
     pub stat_hash: u32,
     pub base_value: i32,
     pub part_value: i32,
     pub perk_value: i32,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Tsify, Default)]
+#[serde(rename = "WeaponOut")]
+#[tsify(into_wasm_abi, from_wasm_abi)]
+pub struct JsWeaponOut {
+    pub is_pvp: bool,
+
+    pub perks: HashMap<u32, JsPerk>,
+    pub stats: HashMap<u32, JsStat>,
+    pub id: u32,
+
+    pub weapon_type: String,
+    pub weapon_slot: String,
+    pub damage_type: String,
+    pub ammo_type: String,
+}
+#[wasm_bindgen]
+impl JsWeaponOut {
+    #[wasm_bindgen(js_name = toString)]
+    pub fn to_string(self) -> String {
+        format!("{:?}", self)
+    }
 }

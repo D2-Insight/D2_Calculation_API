@@ -10,7 +10,7 @@ pub mod types;
 
 use crate::perks::{Perk, Perks};
 use crate::weapons::Weapon;
-use activity::damage_calc::Activity;
+use activity::Activity;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::panic;
@@ -18,12 +18,17 @@ use abilities::Ability;
 use enemies::Enemy;
 use d2_enums::StatHashes;
 
-#[cfg(target_arch = "wasm32")]
-use wasm_bindgen::prelude::*;
 
 //JavaScript
 #[cfg(target_arch = "wasm32")]
+use wasm_bindgen::prelude::*;
+#[cfg(target_arch = "wasm32")]
 use crate::types::js_types::{JsPerk, JsStat};
+
+//python
+#[cfg(not(target_arch = "wasm32"))]
+use pyo3::prelude::*;
+
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
@@ -89,13 +94,13 @@ pub fn get_stat(_stat: u32) -> JsStat {
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen(js_name = "isPerkImplemented")]
 pub fn is_perk_implemented(perk_hash: u32) -> bool {
-    
+    //really meant for debugging
     Perks::from_u32(perk_hash) != Perks::Ignore
 }
 
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen(js_name = "addPerk")]
-pub fn add_perk(perk_data: JsPerk, add: bool) {
+pub fn modify_perks(perk_data: JsPerk, add: bool) {
     let perk = Perk::from_js(perk_data);
     if is_weapon_init() {
         if add {
@@ -111,9 +116,7 @@ pub fn add_perk(perk_data: JsPerk, add: bool) {
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen(js_name = "queryPerks")]
 pub fn query_perks() -> Vec<u32> {
-    //let perk_list =
     PERS_DATA.with(|perm_data| perm_data.borrow_mut().weapon.list_perk_ids())
-    // return Ok(serde_wasm_bindgen::to_value(&perk_list)?);
 }
 
 #[cfg(target_arch = "wasm32")]
@@ -128,18 +131,4 @@ pub fn change_perk_value(perk_hash: u32, new_value: i32) {
 }
 
 //---------------ACTIVITY---------------//
-#[cfg(target_arch = "wasm32")]
-#[wasm_bindgen(js_name = "setActivity")]
-pub fn set_activity(activity_data: JsValue) {
-    let r_activity_data: Activity = serde_wasm_bindgen::from_value(activity_data).unwrap();
-    PERS_DATA.with(|perm_data| {
-        perm_data.borrow_mut().activity = r_activity_data;
-    });
-}
 
-#[cfg(target_arch = "wasm32")]
-#[wasm_bindgen(js_name = "getActivity")]
-pub fn get_activity() -> JsValue {
-    let activity = PERS_DATA.with(|perm_data| perm_data.borrow().activity.clone());
-    serde_wasm_bindgen::to_value(&activity).unwrap()
-}

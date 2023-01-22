@@ -1,3 +1,5 @@
+use crate::activity::Activity;
+
 
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -21,32 +23,12 @@ impl Default for EnemyType {
 pub struct Enemy {
     pub health: f64,
     pub damage: f64,
+    pub damage_resistance: f64,
     pub type_: EnemyType,
     pub tier: u8,
 }
 impl Enemy {
-    pub fn set_health(&mut self, health: f64) {
-        self.health = health;
-    }
-    pub fn set_damage(&mut self, damage: f64) {
-        self.damage = damage;
-    }
-    pub fn set_type(&mut self, type_: EnemyType) {
-        self.type_ = type_;
-    }
-    pub fn set_tier(&mut self, tier: u8) {
-        self.tier = tier;
-    }
-    pub fn get_health(&self) -> f64 {
-        self.health
-    }
-    pub fn get_damage(&self) -> f64 {
-        self.damage
-    }
-    pub fn get_type(&self) -> EnemyType {
-        self.type_
-    }
-    pub fn get_tier(&self) -> u8 {
-        self.tier
+    pub fn get_adjusted_health(&self, _activity: Activity) -> f64 {
+        self.health * (1.0 - self.damage_resistance)
     }
 }

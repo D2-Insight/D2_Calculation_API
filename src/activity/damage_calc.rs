@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 use crate::{enemies::EnemyType, types::rs_types::DamageMods};
 use serde::{Deserialize, Serialize};
+use super::Activity;
 
 #[derive(Debug, Clone, Copy)]
 struct TableKey {
@@ -88,7 +89,7 @@ impl Default for DifficultyOptions {
     }
 }
 impl DifficultyOptions {
-    fn get_difficulty_data(&self) -> DifficultyData {
+    pub fn get_difficulty_data(&self) -> DifficultyData {
         match self {
             DifficultyOptions::NORMAL => DifficultyData {
                 name: "Normal".to_string(),
@@ -109,29 +110,11 @@ impl DifficultyOptions {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Activity {
-    name: String,
-    difficulty: DifficultyOptions,
-    rpl: f64,
-    cap: f64,
-}
-impl Default for Activity {
-    fn default() -> Self {
-        Activity {
-            name: "Default".to_string(),
-            difficulty: DifficultyOptions::default(),
-            rpl: 1350.0,
-            cap: 100.0,
-        }
-    }
-}
-
-fn rpl_mult(_rpl: f64) -> f64 {
+pub(super) fn rpl_mult(_rpl: f64) -> f64 {
     return (1.0 + ((1.0 / 30.0) * _rpl)) / (1.0 + 1.0 / 3.0);
 }
 
-fn pl_delta(_activity: Activity, _gpl: f64) -> f64 {
+pub(super) fn pl_delta(_activity: Activity, _gpl: f64) -> f64 {
     let difficulty_data = _activity.difficulty.get_difficulty_data();
     let curve = difficulty_data.table;
     let rpl = _activity.rpl;
@@ -141,8 +124,6 @@ fn pl_delta(_activity: Activity, _gpl: f64) -> f64 {
         return 0.0;
     } else if delta > activity_cap {
         delta = activity_cap;
-    } else {
-        delta = delta; //no pass in rust?
     };
     let wep_delta_mult = WWEAPON_DELTA_EXPONENT.powf(rpl);
     let gear_delta_mult = curve.evaluate(delta);

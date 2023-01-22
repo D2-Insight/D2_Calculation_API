@@ -21,7 +21,7 @@ use self::{
     lib::{
         CalculationInput, DamageModifierResponse, FiringModifierResponse, HandlingModifierResponse,
         InventoryModifierResponse, MagazineModifierResponse, RangeModifierResponse,
-        ReloadModifierResponse, RefundResponse,
+        ReloadModifierResponse, RefundResponse, ExtraDamageResponse,
     },
     other_perks::*,
     year_1_perks::*,
@@ -341,6 +341,7 @@ impl Perks {
     }
 }
 
+
 pub fn get_perk_stats(
     _perks: Vec<Perk>,
     _input_data: CalculationInput,
@@ -361,7 +362,6 @@ pub fn get_perk_stats(
     }
     [dynamic_stats, static_stats]
 }
-
 fn dyanmic_perk_stats(
     _perk: &Perk,
     _input_data: &CalculationInput,
@@ -409,6 +409,7 @@ fn dyanmic_perk_stats(
     }
 }
 
+
 pub fn get_dmg_modifier(
     _perks: Vec<Perk>,
     _input_data: &CalculationInput,
@@ -451,6 +452,7 @@ fn get_perk_dmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> Dama
         _ => DamageModifierResponse::default(),
     }
 }
+
 
 pub fn get_reload_modifier(
     _perks: Vec<Perk>,
@@ -496,6 +498,7 @@ fn get_perk_rsmr(
     }
 }
 
+
 pub fn get_firing_modifier(
     _perks: Vec<Perk>,
     _input_data: &CalculationInput,
@@ -527,6 +530,7 @@ fn get_perk_fmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> Firi
         _ => FiringModifierResponse::default(),
     }
 }
+
 
 pub fn get_handling_modifier(
     _perks: Vec<Perk>,
@@ -571,6 +575,7 @@ fn get_perk_hmr(
         _ => HandlingModifierResponse::default(),
     }
 }
+
 
 pub fn get_magazine_modifier(
     _perks: Vec<Perk>,
@@ -631,6 +636,7 @@ fn get_perk_imr(
         _ => InventoryModifierResponse::default(),
     }
 }
+
 
 pub fn get_range_modifier(
     _perks: Vec<Perk>,
@@ -696,5 +702,34 @@ fn get_perk_refund(
         Perks::TripleTap => rr_triple_tap(_input_data, val, enhanced, _pvp),
         Perks::FourthTimesTheCharm => rr_fourth_times(_input_data, val, enhanced, _pvp),
         _ => RefundResponse::default(),
+    }
+}
+
+
+pub fn get_extra_damage(
+    _perks: Vec<Perk>,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+) -> Vec<ExtraDamageResponse> {
+    let mut extra_damage = vec![];
+    for perk in _perks {
+        let tmp = get_perk_edr(perk, _input_data, _pvp);
+        if tmp.additive_damage > 0.0 {
+            extra_damage.push(tmp);
+        }
+    }
+    extra_damage
+}
+fn get_perk_edr(
+    _perk: Perk,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+) -> ExtraDamageResponse {
+    let perk_enum = Perks::from_u32(_perk.hash);
+    let val = _perk.value;
+    let enhanced = _perk.enhanced;
+    match perk_enum {
+        Perks::ReignHavoc => edr_reign_havoc(_input_data, val, enhanced, _pvp),
+        _ => ExtraDamageResponse::default(),
     }
 }

@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+use crate::enemies::EnemyType;
+
 #[derive(Debug, Clone)]
 pub struct DamageMods {
     pub pve: f64,
@@ -21,6 +23,20 @@ impl Default for DamageMods {
             boss: 1.0,
             vehicle: 1.0,
         }
+    }
+}
+impl DamageMods {
+    pub fn get_mod(&self, _type: &EnemyType) -> f64 {
+        let combatant_scale = match _type {
+            &EnemyType::MINOR => self.minor,
+            &EnemyType::ELITE => self.elite,
+            &EnemyType::MINIBOSS => self.miniboss,
+            &EnemyType::CHAMPION => self.champion,
+            &EnemyType::BOSS => self.boss,
+            &EnemyType::VEHICLE => self.vehicle,
+            _ => 1.0,
+        };
+        self.pve * combatant_scale
     }
 }
 

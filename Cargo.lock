@@ -41,7 +41,6 @@ name = "d2_calculation_api"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
- "js-sys",
  "pyo3",
  "serde",
  "serde-wasm-bindgen",

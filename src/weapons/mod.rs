@@ -13,7 +13,7 @@ use crate::types::rs_types::{DamageMods, RangeFormula, AmmoFormula, HandlingForm
 
 //JavaScript
 #[cfg(target_arch = "wasm32")]
-use crate::types::js_types::{JsDamageModifiers, JsStat, JsWeaponFormula};
+use crate::types::js_types::{JsDamageModifiers, JsStat, JsWeaponFormula,JsPerk};
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::wasm_bindgen;
 //Python
@@ -203,3 +203,4 @@ impl Weapon {
         }
     }
 }
+

@@ -1,7 +1,8 @@
 use crate::{
-    enemies::EnemyType,
     d2_enums::{AmmoType, StatHashes, WeaponSlot, WeaponType},
-    weapons::{Stat, FiringConfig},types::rs_types::HandlingResponse
+    enemies::EnemyType,
+    types::rs_types::HandlingResponse,
+    weapons::{FiringConfig, Stat},
 };
 use std::{collections::HashMap, ops::Mul};
 
@@ -40,7 +41,7 @@ impl CalculationInput<'_> {
         _base_mag_size: i32,
         _total_shots_hit: i32,
         _total_time: f64,
-    ) -> Self{
+    ) -> Self {
         Self {
             curr_firing_data: _firing_data,
             base_damage: _base_damage,
@@ -147,18 +148,20 @@ impl Default for DamageModifierResponse {
 pub struct ExtraDamageResponse {
     pub additive_damage: f64,
     pub time_for_additive_damage: f64,
-    pub additive_damage_hits: f64,
+    pub times_to_hit: i32,
     pub weapon_scale: bool,
     pub crit_scale: bool,
+    pub combatant_scale: bool,
 }
 impl Default for ExtraDamageResponse {
     fn default() -> Self {
         Self {
             additive_damage: 0.0,
             time_for_additive_damage: 0.0,
-            additive_damage_hits: 0.0,
+            times_to_hit: 0,
             weapon_scale: false,
             crit_scale: false,
+            combatant_scale: false,
         }
     }
 }
