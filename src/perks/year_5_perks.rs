@@ -15,12 +15,13 @@ pub fn fmr_cascade_point(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> FiringModifierResponse {
     let duration = if _is_enhanced { 3.0 } else { 2.5 };
     let mut delay_mult = 1.0;
     if _input.time_total < duration {
-        if _input.weapon_type == WeaponType::MACHINEGUN
-            || _input.weapon_type == WeaponType::SUBMACHINEGUN
+        if *_input.weapon_type == WeaponType::MACHINEGUN
+            || *_input.weapon_type == WeaponType::SUBMACHINEGUN
         {
             delay_mult = 0.7;
         } else {
@@ -29,6 +30,7 @@ pub fn fmr_cascade_point(
     }
     FiringModifierResponse {
         burst_delay_scale: delay_mult,
+        burst_delay_add: 0.0,
         burst_duration_scale: 1.0,
         burst_size_add: 0.0,
     }
@@ -39,6 +41,7 @@ pub fn sbr_encore(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
     let val = clamp(_value, 0, 4);
@@ -54,6 +57,7 @@ pub fn dmr_focused_fury(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut dmg_boost = 1.0;
     let shots_needed;
@@ -76,6 +80,7 @@ pub fn rmr_fragile_focus(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> RangeModifierResponse {
     let range_bonus = if _value > 0 { 20 } else { 0 };
     RangeModifierResponse {
@@ -91,6 +96,7 @@ pub fn sbr_fragile_focus(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
     let mut range_bonus = 0;
@@ -106,6 +112,7 @@ pub fn dmr_gutshot_straight(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let high_weapons = [
         WeaponType::AUTORIFLE,
@@ -130,6 +137,7 @@ pub fn sbr_offhand_strike(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
     let mut stability_boost = 0;
@@ -145,6 +153,7 @@ pub fn rmr_offhand_strike(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> RangeModifierResponse {
     let mut range_hip_mult = 1.0;
     if _value > 0 {
@@ -163,6 +172,7 @@ pub fn hmr_slickdraw(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     HandlingModifierResponse {
         handling_stat_add: 100,
@@ -176,6 +186,7 @@ pub(super) fn sbr_stats_for_all(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     let mut stability_boost = 0;
@@ -200,6 +211,7 @@ pub(super) fn hmr_stats_for_all(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let mut handling_boost = 0;
     let duration = if _is_enhanced { 11.0 } else { 10.0 };
@@ -218,6 +230,7 @@ pub(super) fn rmr_stats_for_all(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> RangeModifierResponse {
     let mut range = 0;
     let mut range_mult = 1.0;
@@ -238,6 +251,7 @@ pub(super) fn rsmr_stats_for_all(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let mut reload = 0;
     let mut reload_mult = 1.0;
@@ -257,6 +271,7 @@ pub(super) fn sbr_steady_hands(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
     let mut handling = 0;
@@ -272,6 +287,7 @@ pub(super) fn hmr_steady_hands(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let mut handling_mult = 1.0;
     let mut handling = 0;
@@ -292,6 +308,7 @@ pub(super) fn dmr_target_lock(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let lerp_table = vec![
         (0.15, 0.166),
@@ -331,6 +348,7 @@ pub(super) fn dmr_over_under(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut buff = 1.0_f64;
     if _input.has_overshield {
@@ -350,6 +368,7 @@ pub(super) fn sbr_well_rounded(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let val = clamp(_value, 0, 2);
     let mut map = HashMap::new();
@@ -366,6 +385,7 @@ pub(super) fn hmr_well_rounded(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let val = clamp(_value, 0, 2);
     //due to ease of activation and upkeep will assume its always active
@@ -384,6 +404,7 @@ pub(super) fn rmr_well_rounded(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> RangeModifierResponse {
     let val = clamp(_value, 0, 2);
     let stat_base = if _is_enhanced { 12 } else { 10 };

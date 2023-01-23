@@ -16,6 +16,7 @@ pub fn sbr_air_assault(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     let ae_per_stack = if _is_enhanced { 35 } else { 20 };
@@ -29,9 +30,11 @@ pub fn fmr_archers_tempo(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> FiringModifierResponse {
     FiringModifierResponse {
         burst_delay_scale: 0.75,
+        burst_delay_add: 0.0,
         burst_duration_scale: 1.0,
         burst_size_add: 0.0,
     }
@@ -42,6 +45,7 @@ pub fn dmr_explosive_head(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     if _pvp {
         DamageModifierResponse {
@@ -62,6 +66,7 @@ pub fn rsmr_feeding_frenzy(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let val = clamp(_value, 0, 5);
     let duration = 3.5;
@@ -98,6 +103,7 @@ pub fn sbr_feeding_frenzy(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     let val = clamp(_value, 0, 5);
@@ -126,6 +132,7 @@ pub fn dmr_firing_line(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut crit_mult = 1.0;
     if _value > 1 {
@@ -142,6 +149,7 @@ pub fn rr_fourth_times(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> RefundResponse {
     RefundResponse {
         crit: true,
@@ -156,6 +164,7 @@ pub fn dmr_killing_tally(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut damage_mult = 0.1 * _value as f64;
     if _pvp {
@@ -175,6 +184,7 @@ pub fn mmr_overflow(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     let mut mag_scale = if _value > 0 { 2.0 } else { 1.0 };
     if _input.total_shots_fired == 0.0 {
@@ -192,6 +202,7 @@ pub fn rsmr_rapid_hit(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let reload_mult;
     let reload;
@@ -221,6 +232,7 @@ pub fn dmr_resevoir_burst(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut damage_mult = 1.0;
     if _input.curr_mag >= _input.base_mag {
@@ -237,10 +249,11 @@ pub(super) fn dmr_surrounded(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut damage_mult = 1.0;
     if _value > 0 {
-        damage_mult = if _input.weapon_type == WeaponType::SWORD {
+        damage_mult = if *_input.weapon_type == WeaponType::SWORD {
             1.35
         } else {
             1.4
@@ -260,6 +273,7 @@ pub(super) fn ror_demolitionist(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadOverideResponse {
     //todo implement system for cooldown
     let grenade_throw_time = 0.8;

@@ -1,5 +1,5 @@
-pub mod stat_calc;
 pub mod dps_calc;
+pub mod stat_calc;
 mod ttk_calc;
 
 use std::collections::HashMap;
@@ -8,18 +8,16 @@ use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponSlot, WeaponType};
 use crate::perks::{
     get_magazine_modifier, get_perk_stats, get_reserve_modifier, lib::CalculationInput, Perk,
 };
-use crate::types::rs_types::{DamageMods, RangeFormula, AmmoFormula, HandlingFormula, ReloadFormula};
-
+use crate::types::rs_types::{
+    AmmoFormula, DamageMods, HandlingFormula, RangeFormula, ReloadFormula,
+};
 
 //JavaScript
-#[cfg(target_arch = "wasm32")]
-use crate::types::js_types::{JsDamageModifiers, JsStat, JsWeaponFormula,JsPerk};
-#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "wasm")]
+use crate::types::js_types::{JsDamageModifiers, JsPerk, JsStat, JsWeaponFormula};
+#[cfg(feature = "wasm")]
 use wasm_bindgen::prelude::wasm_bindgen;
 //Python
-
-
-
 
 #[derive(Debug, Clone)]
 pub struct Stat {
@@ -41,7 +39,7 @@ impl Stat {
     pub fn perk_val(&self) -> i32 {
         self.base_value + self.part_value + self.perk_value
     }
-    #[cfg(target_arch = "wasm32")]
+    #[cfg(feature = "wasm")]
     pub fn to_js(&self, _hash: u32) -> JsStat {
         JsStat {
             stat_hash: _hash,
@@ -52,7 +50,7 @@ impl Stat {
     }
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Copy)]
 pub struct FiringConfig {
     pub burst_delay: f64,
     pub burst_duration: f64,
@@ -133,25 +131,30 @@ impl Weapon {
 
     pub fn static_calc_input(&self) -> CalculationInput {
         CalculationInput::construct_static(
-            self.firing_data.clone(),
-            self.stats.clone(),
-            self.weapon_type.clone(),
-            self.ammo_type.clone(),
+            &self.firing_data,
+            &self.stats,
+            &self.weapon_type,
+            &self.ammo_type,
         )
     }
 
-    pub fn sparse_calc_input(&self, _total_shots_fired: &i32, _total_time: &f64) -> CalculationInput {
-        CalculationInput::construct_pve_sparse(
-            self.firing_data.clone(),
-            self.stats.clone(),
-            self.weapon_type.clone(),
-            self.ammo_type.clone(),
-            self.base_damage.clone(),
-            self.base_crit_mult.clone(),
+    pub fn sparse_calc_input(
+        &self,
+        _total_shots_fired: i32,
+        _total_time: f64,
+    ) -> CalculationInput {
+        let tmp = CalculationInput::construct_pve_sparse(
+            &self.firing_data,
+            &self.stats,
+            &self.weapon_type,
+            &self.ammo_type,
+            self.base_damage,
+            self.base_crit_mult,
             self.calc_mag_size(None).mag_size,
-            _total_shots_fired.clone(),
-            _total_time.clone()
-        )
+            _total_shots_fired,
+            _total_time,
+        ).clone();
+        tmp
     }
 }
 impl Default for Weapon {
@@ -183,10 +186,10 @@ impl Default for Weapon {
 impl Weapon {
     fn update_stats(&mut self) {
         let input = CalculationInput::construct_static(
-            self.firing_data.clone(),
-            self.stats.clone(),
-            self.weapon_type,
-            self.ammo_type,
+            &self.firing_data,
+            &self.stats,
+            &self.weapon_type,
+            &self.ammo_type,
         );
         let inter_var = get_perk_stats(self.list_perks(), input, false);
         let dynamic_stats = &inter_var[0];
@@ -203,4 +206,3 @@ impl Weapon {
         }
     }
 }
-

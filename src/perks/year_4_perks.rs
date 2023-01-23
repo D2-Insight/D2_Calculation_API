@@ -16,13 +16,14 @@ pub fn dmr_adagio(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut duration = 0.0;
     if _value > 1 {
         duration = if _is_enhanced { 8.0 } else { 7.0 };
     }
     let mut dmg_boost = 0.3;
-    if _input.weapon_type == WeaponType::BOW || _input.weapon_type == WeaponType::SHOTGUN {
+    if *_input.weapon_type == WeaponType::BOW || *_input.weapon_type == WeaponType::SHOTGUN {
         dmg_boost = 0.2;
     };
     if _input.time_total >= duration && _pvp == false {
@@ -39,6 +40,7 @@ pub fn fmr_adagio(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> FiringModifierResponse {
     let duration = if _is_enhanced { 8.0 } else { 7.0 };
     let mut firing_slow = 1.2;
@@ -47,6 +49,7 @@ pub fn fmr_adagio(
     };
     FiringModifierResponse {
         burst_delay_scale: firing_slow,
+        burst_delay_add: 0.0,
         burst_duration_scale: 1.0,
         burst_size_add: 0.0,
     }
@@ -57,6 +60,7 @@ pub fn dmr_adrenaline_junkie(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let val = clamp(_value, 0, 5);
     let duration = if _is_enhanced { 6.0 } else { 4.5 };
@@ -75,6 +79,7 @@ pub fn sbr_adrenaline_junkie(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let duration = if _is_enhanced { 6.0 } else { 4.5 };
     let mut handling = 0;
@@ -91,6 +96,7 @@ pub fn hmr_adrenaline_junkie(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let handling = if _value > 0 { 20 } else { 0 };
     HandlingModifierResponse {
@@ -105,6 +111,7 @@ pub fn fmr_cornered(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> FiringModifierResponse {
     let mut delay_mult = 1.0;
     if _value > 0 {
@@ -112,6 +119,7 @@ pub fn fmr_cornered(
     };
     FiringModifierResponse {
         burst_delay_scale: delay_mult,
+        burst_delay_add: 0.0,
         burst_duration_scale: 1.0,
         burst_size_add: 0.0,
     }
@@ -122,6 +130,7 @@ pub fn sbr_ensemble(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let handling = if _is_enhanced { 30 } else { 35 };
     let reload = if _is_enhanced { 40 } else { 45 };
@@ -140,6 +149,7 @@ pub fn hmr_ensemble(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let handling = if _is_enhanced { 30 } else { 35 };
     if _value > 0 {
@@ -162,6 +172,7 @@ pub fn rsmr_ensemble(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let reload = if _is_enhanced { 40 } else { 45 };
     if _value > 0 {
@@ -182,6 +193,7 @@ pub fn rsmr_frenzy(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let mut reload = 0;
     if _value > 0 {
@@ -201,6 +213,7 @@ pub fn hmr_frenzy(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let mut handling = 0;
     if _value > 0 {
@@ -221,6 +234,7 @@ pub fn dmr_frenzy(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut dmg = 0.0;
     if _value > 0 {
@@ -240,6 +254,7 @@ pub fn sbr_frenzy(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut handling = 0;
     let mut reload = 0;
@@ -262,6 +277,7 @@ pub fn rsmr_impulse_amplifier(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let reload = if _is_enhanced { 15 } else { 10 };
     let reload_mult = if _is_enhanced { 0.77 } else { 0.8 };
@@ -276,6 +292,7 @@ pub fn sbr_perpetual_motion(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let val = clamp(_value, 0, 2);
     let mut stat_bump = 0;
@@ -296,6 +313,7 @@ pub fn hmr_perpetual_motion(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let val = clamp(_value, 0, 2);
     let mut stat_bump = 0;
@@ -316,6 +334,7 @@ pub fn rsmr_perpetual_motion(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let val = clamp(_value, 0, 2);
     let mut stat_bump = 0;
@@ -335,6 +354,7 @@ pub fn sbr_perfect_float(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value > 0 {
@@ -348,6 +368,7 @@ pub fn sbr_pugilist(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value > 0 {
@@ -361,6 +382,7 @@ pub fn hrm_pugilist(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let mut handling = 0;
     if _value > 0 {
@@ -378,6 +400,7 @@ pub fn mmr_reconstruction(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     let mag_scale = if _value > 0 { 2.0 } else { 1.0 };
     MagazineModifierResponse {

@@ -89,7 +89,7 @@ pub struct RangeResponse {
     pub ads_falloff_end: f64,
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Copy)]
 pub struct HandlingResponse {
     pub ready_time: f64,
     pub stow_time: f64,

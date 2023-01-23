@@ -4,11 +4,11 @@ use crate::{
     types::rs_types::HandlingResponse,
     weapons::{FiringConfig, Stat},
 };
-use std::{collections::HashMap, ops::Mul};
+use std::{collections::HashMap, ops::Mul, cell::RefCell};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CalculationInput<'a> {
-    pub curr_firing_data: FiringConfig,
+    pub curr_firing_data: &'a FiringConfig,
     pub base_damage: f64,
     pub base_crit_mult: f64,
     pub shots_fired_this_mag: f64,
@@ -19,23 +19,22 @@ pub struct CalculationInput<'a> {
     pub reserves_left: f64,
     pub time_total: f64,
     pub time_this_mag: f64,
-    pub stats: HashMap<u32, Stat>,
-    pub weapon_type: WeaponType,
-    pub weapon_slot: WeaponSlot,
-    pub ammo_type: AmmoType,
+    pub stats: &'a HashMap<u32, Stat>,
+    pub weapon_type: &'a WeaponType,
+    pub weapon_slot: &'a WeaponSlot,
+    pub ammo_type: &'a AmmoType,
     pub handling_data: HandlingResponse,
     pub num_reloads: f64,
-    pub enemy_type: EnemyType,
+    pub enemy_type: &'a EnemyType,
     pub has_overshield: bool,
-    pub cached_data: Option<&'a mut HashMap<String, f64>>,
 }
-impl CalculationInput<'_> {
+impl<'a> CalculationInput<'a> {
     //stuff like mag size can use this, not reload, damage, etc.
     pub fn construct_pve_sparse(
-        _firing_data: FiringConfig,
-        _stats: HashMap<u32, Stat>,
-        _weapon_type: WeaponType,
-        _ammo_type: AmmoType,
+        _firing_data: &'a FiringConfig,
+        _stats: &'a HashMap<u32, Stat>,
+        _weapon_type: &'a WeaponType,
+        _ammo_type: &'a AmmoType,
         _base_damage: f64,
         _base_crit_mult: f64,
         _base_mag_size: i32,
@@ -43,7 +42,7 @@ impl CalculationInput<'_> {
         _total_time: f64,
     ) -> Self {
         Self {
-            curr_firing_data: _firing_data,
+            curr_firing_data: &_firing_data,
             base_damage: _base_damage,
             base_crit_mult: _base_crit_mult,
             shots_fired_this_mag: 0.0,
@@ -54,22 +53,21 @@ impl CalculationInput<'_> {
             reserves_left: 100.0,
             time_total: _total_time,
             time_this_mag: 0.0,
-            stats: _stats,
-            weapon_type: _weapon_type,
-            weapon_slot: WeaponSlot::KINETIC,
-            ammo_type: _ammo_type,
+            stats: &_stats,
+            weapon_type: &_weapon_type,
+            weapon_slot: &WeaponSlot::KINETIC,
+            ammo_type: &_ammo_type,
             handling_data: HandlingResponse::default(),
             num_reloads: 0.0,
-            enemy_type: EnemyType::BOSS,
+            enemy_type: &EnemyType::BOSS,
             has_overshield: false,
-            cached_data: None,
         }
     }
     pub fn construct_pvp(
-        _firing_data: FiringConfig,
-        _stats: HashMap<u32, Stat>,
-        _weapon_type: WeaponType,
-        _ammo_type: AmmoType,
+        _firing_data: &'a FiringConfig,
+        _stats: &'a HashMap<u32, Stat>,
+        _weapon_type: &'a WeaponType,
+        _ammo_type: &'a AmmoType,
         _base_damage: f64,
         _base_crit_mult: f64,
         _mag_size: f64,
@@ -90,20 +88,19 @@ impl CalculationInput<'_> {
             time_this_mag: 0.0,
             stats: _stats,
             weapon_type: _weapon_type,
-            weapon_slot: WeaponSlot::KINETIC,
+            weapon_slot: &WeaponSlot::KINETIC,
             ammo_type: _ammo_type,
             handling_data: _handling_data,
             num_reloads: 0.0,
-            enemy_type: EnemyType::PLAYER,
+            enemy_type: &EnemyType::PLAYER,
             has_overshield: _has_overshield,
-            cached_data: None,
         }
     }
     pub fn construct_static(
-        _firing_data: FiringConfig,
-        _stats: HashMap<u32, Stat>,
-        _weapon_type: WeaponType,
-        _ammo_type: AmmoType,
+        _firing_data: &'a FiringConfig,
+        _stats: &'a HashMap<u32, Stat>,
+        _weapon_type: &'a WeaponType,
+        _ammo_type: &'a AmmoType,
     ) -> Self {
         Self {
             curr_firing_data: _firing_data,
@@ -119,13 +116,12 @@ impl CalculationInput<'_> {
             time_this_mag: 0.0,
             stats: _stats,
             weapon_type: _weapon_type,
-            weapon_slot: WeaponSlot::KINETIC,
+            weapon_slot: &WeaponSlot::KINETIC,
             ammo_type: _ammo_type,
             handling_data: HandlingResponse::default(),
             num_reloads: 0.0,
-            enemy_type: EnemyType::ENCLAVE,
+            enemy_type: &EnemyType::ENCLAVE,
             has_overshield: false,
-            cached_data: None,
         }
     }
 }
@@ -148,7 +144,10 @@ impl Default for DamageModifierResponse {
 pub struct ExtraDamageResponse {
     pub additive_damage: f64,
     pub time_for_additive_damage: f64,
+    pub increment_total_time: bool,
     pub times_to_hit: i32,
+    pub hit_at_same_time: bool,
+    pub is_dot: bool,
     pub weapon_scale: bool,
     pub crit_scale: bool,
     pub combatant_scale: bool,
@@ -158,7 +157,10 @@ impl Default for ExtraDamageResponse {
         Self {
             additive_damage: 0.0,
             time_for_additive_damage: 0.0,
+            increment_total_time: false,
             times_to_hit: 0,
+            hit_at_same_time: true,
+            is_dot: false,
             weapon_scale: false,
             crit_scale: false,
             combatant_scale: false,
@@ -183,15 +185,17 @@ impl Default for ReloadModifierResponse {
 #[derive(Debug, Clone)]
 pub struct FiringModifierResponse {
     pub burst_delay_scale: f64,
-    pub burst_size_add: f64,
+    pub burst_delay_add: f64,
     pub burst_duration_scale: f64,
+    pub burst_size_add: f64,
 }
 impl Default for FiringModifierResponse {
     fn default() -> Self {
         Self {
             burst_delay_scale: 1.0,
-            burst_size_add: 0.0,
+            burst_delay_add: 0.0,
             burst_duration_scale: 1.0,
+            burst_size_add: 0.0,
         }
     }
 }
@@ -266,16 +270,16 @@ impl Default for MagazineModifierResponse {
 
 #[derive(Debug, Clone)]
 pub struct InventoryModifierResponse {
-    pub ammo_stat_add: i32,
-    pub ammo_scale: f64,
-    pub ammo_add: f64,
+    pub inv_stat_add: i32,
+    pub inv_scale: f64,
+    pub inv_add: f64,
 }
 impl Default for InventoryModifierResponse {
     fn default() -> Self {
         Self {
-            ammo_stat_add: 0,
-            ammo_scale: 1.0,
-            ammo_add: 0.0,
+            inv_stat_add: 0,
+            inv_scale: 1.0,
+            inv_add: 0.0,
         }
     }
 }

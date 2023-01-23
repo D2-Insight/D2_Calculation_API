@@ -12,12 +12,12 @@ use super::{
     },
 };
 
-
 pub(super) fn rsmr_alloy_mag(
     _input: &CalculationInput,
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     //also works for rapid fire frames
     ReloadModifierResponse {
@@ -31,6 +31,7 @@ pub(super) fn hmr_swap_mag(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     //also works for quick access sling
     HandlingModifierResponse {
@@ -45,6 +46,7 @@ pub(super) fn dmr_paracausal_shot(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let bufflist = vec![1.0, 2.92, 3.0, 3.4, 4.25, 6.67, 10.71, 17.36];
     let mut damage_buff = 1.0;
@@ -63,6 +65,7 @@ pub(super) fn dmr_momento_mori(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut damage_buff = 1.0;
     if _value > 0 && _input.total_shots_fired < 7.0 {
@@ -79,6 +82,7 @@ pub(super) fn dmr_agers_call(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut damage_buff = 1.0;
     if _value > 0 && _input.num_reloads == 0.0 {
@@ -95,6 +99,7 @@ pub(super) fn mmr_agers_call(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     let mut mag_buff = 1.0;
     if _value > 0 && _input.total_shots_fired == 0.0 {
@@ -112,9 +117,10 @@ pub(super) fn dmr_arbys(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut damage_buff = 1.0;
-    if _input.enemy_type == EnemyType::CHAMPION {
+    if *_input.enemy_type == EnemyType::CHAMPION {
         damage_buff = 0.75;
     };
     DamageModifierResponse {
@@ -128,6 +134,7 @@ pub(super) fn sbr_roadborn(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value > 0 {
@@ -142,6 +149,7 @@ pub(super) fn dmr_roadborn(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut crit_mult = 1.0;
     if _value > 0 {
@@ -158,6 +166,7 @@ pub(super) fn fmr_roadborn(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> FiringModifierResponse {
     let mut delay_mult = 1.0;
     if _value > 0 {
@@ -165,6 +174,7 @@ pub(super) fn fmr_roadborn(
     };
     FiringModifierResponse {
         burst_delay_scale: delay_mult,
+        burst_delay_add: 0.0,
         burst_duration_scale: 1.0,
         burst_size_add: 0.0,
     }
@@ -175,6 +185,7 @@ pub(super) fn rmr_roadborn(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> RangeModifierResponse {
     let mut range_scale = 1.05;
     if _value > 0 {
@@ -193,6 +204,7 @@ pub(super) fn rsmr_roadborn(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let mut reload = 0;
     if _value > 0 {
@@ -221,6 +233,7 @@ pub(super) fn fmr_reign_havoc(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> FiringModifierResponse {
     let mut delay_mult = 1.0;
     if _input.shots_fired_this_mag >= _input.base_mag * 0.2 {
@@ -231,6 +244,7 @@ pub(super) fn fmr_reign_havoc(
     };
     FiringModifierResponse {
         burst_delay_scale: delay_mult,
+        burst_delay_add: 0.0,
         burst_duration_scale: 1.0,
         burst_size_add: 0.0,
     }
@@ -241,15 +255,19 @@ pub(super) fn edr_reign_havoc(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ExtraDamageResponse {
     let dmg = if _pvp { 65.0 } else { 65.0 * 1.3 };
     ExtraDamageResponse {
         additive_damage: dmg,
+        increment_total_time: false,
         times_to_hit: 1,
         time_for_additive_damage: 0.0,
-        weapon_scale: false,
+        hit_at_same_time: true,
+        is_dot: false,
+        weapon_scale: true,
         crit_scale: false,
-        combatant_scale: false,
+        combatant_scale: true,
     }
 }
 
@@ -258,6 +276,7 @@ pub(super) fn dmr_worms_hunger(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let val = clamp(_value, 0, 20);
     DamageModifierResponse {
@@ -271,6 +290,7 @@ pub(super) fn dmr_lagragian_sight(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut damage_buff = 1.0;
     if _value > 0 && _input.time_total < 30.0 {
@@ -287,6 +307,7 @@ pub(super) fn dmr_tom(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut damage_buff = 1.0;
     if _input.curr_mag == 1.0 {
@@ -296,4 +317,95 @@ pub(super) fn dmr_tom(
         damage_scale: damage_buff,
         crit_scale: 1.0,
     }
+}
+
+pub(super) fn refund_tom(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> RefundResponse {
+    RefundResponse {
+        refund_mag: if _input.curr_mag == 0.0 { 1 } else { 0 },
+        refund_reserves: 0,
+        crit: false,
+        requirement: 1,
+    }
+}
+
+pub(super) fn edr_rocket_tracers(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> ExtraDamageResponse {
+    let mut dmg = if _pvp {
+        _input.base_damage * 1.8
+    } else {
+        _input.base_damage * 8.0
+    } - _input.base_damage * _input.base_crit_mult;
+    if dmg < 0.0 {
+        dmg = 0.0
+    }
+    ExtraDamageResponse {
+        additive_damage: dmg,
+        times_to_hit: 1,
+        increment_total_time: false,
+        time_for_additive_damage: 0.0,
+        hit_at_same_time: true,
+        is_dot: false,
+        weapon_scale: true,
+        crit_scale: false,
+        combatant_scale: true,
+    }
+}
+
+pub(super) fn edr_guidance_ring(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> ExtraDamageResponse {
+    ExtraDamageResponse {
+        additive_damage: if _value > 0 {
+            _input.base_damage * _input.base_crit_mult
+        } else {
+            0.0
+        },
+        times_to_hit: 2,
+        increment_total_time: false,
+        time_for_additive_damage: 0.1,
+        hit_at_same_time: true,
+        is_dot: false,
+        weapon_scale: true,
+        crit_scale: false,
+        combatant_scale: true,
+    }
+}
+
+pub(super) fn edr_poison_arrows(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> ExtraDamageResponse {
+    return ExtraDamageResponse {
+        additive_damage: if _value > 0 {
+            _input.base_damage * _input.base_crit_mult
+        } else {
+            0.0
+        },
+        times_to_hit: 6,
+        increment_total_time: false,
+        time_for_additive_damage: 0.5,
+        hit_at_same_time: false,
+        is_dot: true,
+        weapon_scale: true,
+        crit_scale: false,
+        combatant_scale: true,
+    };
 }

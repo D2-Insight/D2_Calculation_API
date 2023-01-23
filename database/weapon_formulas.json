@@ -486,8 +486,7 @@
             "Precision":   {"damage": 405, "critMult": 1.0, "burstDelay": 4.0, "burstSize": 1, "burstDuration": 0},
             "Adaptive":    {"damage": 495, "critMult": 1.0, "burstDelay": 3.0, "burstSize": 1, "burstDuration": 0},
             "Wardcliff":   {"damage": 300, "critMult": 1.0, "burstDelay": 1.0, "burstSize": 8, "burstDuration": 0.7, "oneAmmoBurst": true},
-            "TwoTailed":   {"damage": 193, "critMult": 1.0, "burstDelay": 1.0, "burstSize": 2, "burstDuration": 0.3, "oneAmmoBurst": true},
-            "Wolfpack":    {}
+            "TwoTailed":   {"damage": 193, "critMult": 1.0, "burstDelay": 1.0, "burstSize": 2, "burstDuration": 0.3, "oneAmmoBurst": true}
         }
     },
     "Scout Rifle": {

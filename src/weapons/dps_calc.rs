@@ -57,7 +57,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
     while reserve > 0 {
         let mut shots_this_mag = 0;
         //MAGAZINE/////////////////////
-        let mag_calc_input = weapon.sparse_calc_input(&total_shots_fired, &total_time);
+        let mag_calc_input = weapon.sparse_calc_input(total_shots_fired, total_time);
         let mut mag = weapon.calc_mag_size(Some(mag_calc_input)).mag_size;
         if mag > reserve {
             mag = reserve
@@ -66,32 +66,31 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
 
         //HANDLING/////////////////////
         //This is for stuff like weapon swapping, demo or trench barrel
-        let handling_calc_input = weapon.sparse_calc_input(&total_shots_fired, &total_time);
+        let handling_calc_input = weapon.sparse_calc_input(total_shots_fired, total_time);
         let handling_data = weapon.calc_handling_times(Some(handling_calc_input));
         ///////////////////////////////
         let start_time = total_time.clone();
         while mag > 0 {
             //DMG MODIFIERS////////////////
             let before_shot_input_data = CalculationInput{
-                curr_firing_data: firing_settings.clone(),
-                base_damage: base_dmg.clone(),
-                base_crit_mult: base_crit_mult.clone(),
-                base_mag: base_mag.clone() as f64,
-                curr_mag: mag.clone() as f64,
-                ammo_type: ammo_type.clone(),
-                weapon_type: weapon_type.clone(),
-                stats: stats.clone(),
-                enemy_type: _enemy.type_.clone(),
-                shots_fired_this_mag: shots_this_mag.clone() as f64,
-                total_shots_fired: total_shots_fired.clone() as f64,
-                total_shots_hit: total_shots_hit.clone() as f64,
-                cached_data: Some(&mut persistent_calc_data),
-                reserves_left: reserve.clone() as f64,
-                time_total: total_time.clone(),
-                time_this_mag: (total_time-start_time).clone(),
-                weapon_slot: weapon.weapon_slot.clone(),
-                handling_data: handling_data.clone(),
-                num_reloads: num_reloads.clone() as f64,
+                curr_firing_data: &firing_settings,
+                base_damage: base_dmg,
+                base_crit_mult: base_crit_mult,
+                base_mag: base_mag as f64,
+                curr_mag: mag as f64,
+                ammo_type: &ammo_type,
+                weapon_type: &weapon_type,
+                stats: &stats,
+                enemy_type: &_enemy.type_,
+                shots_fired_this_mag: shots_this_mag as f64,
+                total_shots_fired: total_shots_fired as f64,
+                total_shots_hit: total_shots_hit as f64,
+                reserves_left: reserve as f64,
+                time_total: total_time,
+                time_this_mag: (total_time-start_time),
+                weapon_slot: &weapon.weapon_slot,
+                handling_data: handling_data,
+                num_reloads: num_reloads as f64,
                 has_overshield: false,
             };
             let dmg_mods = get_dmg_modifier(perks.clone(), &before_shot_input_data, false);
@@ -135,7 +134,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
 
 
             //REFUNDS//////////////////////
-            let mut refund_calc_input = weapon.sparse_calc_input(&total_shots_fired, &total_time);
+            let mut refund_calc_input = weapon.sparse_calc_input(total_shots_fired, total_time);
             refund_calc_input.shots_fired_this_mag = shots_this_mag as f64;
             let refunds = get_refund_modifier(perks.clone(), &refund_calc_input, false);
             let ammo_to_refund = calc_refund(shots_this_mag, refunds);

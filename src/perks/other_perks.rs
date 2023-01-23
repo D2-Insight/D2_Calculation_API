@@ -16,6 +16,7 @@ pub(super) fn hmr_ophidian_aspects(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     HandlingModifierResponse {
         handling_stat_add: 35,
@@ -29,6 +30,7 @@ pub(super) fn rsmr_ophidian_aspects(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     ReloadModifierResponse {
         reload_stat_add: 35,
@@ -41,6 +43,7 @@ pub(super) fn sbr_ophidian_aspects(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     stats.insert(StatHashes::HANDLING.to_u32(), 35);
@@ -54,6 +57,7 @@ pub(super) fn sbr_dragon_shadow(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     stats.insert(StatHashes::HANDLING.to_u32(), 100);
@@ -66,6 +70,7 @@ pub(super) fn hmr_dragon_shadow(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     HandlingModifierResponse {
         handling_stat_add: 100,
@@ -79,6 +84,7 @@ pub(super) fn rsmr_dragon_shadow(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     ReloadModifierResponse {
         reload_stat_add: 100,
@@ -91,6 +97,7 @@ pub(super) fn sbr_amplified(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     stats.insert(StatHashes::HANDLING.to_u32(), 40);
@@ -102,6 +109,7 @@ pub(super) fn hmr_amplified(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     HandlingModifierResponse {
         handling_stat_add: 40,
@@ -115,6 +123,7 @@ pub(super) fn rsmr_frequency(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     //far far too lazy to do this properly
     ReloadModifierResponse {
@@ -128,6 +137,7 @@ pub(super) fn rsmr_flow_state(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     //far far too lazy to do this properly
     ReloadModifierResponse {
@@ -141,6 +151,7 @@ pub(super) fn sbr_tempering(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     if _value > 0 {
@@ -154,6 +165,7 @@ pub(super) fn sbr_on_your_mark(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     let val = clamp(_value, 0, 3);
@@ -169,6 +181,7 @@ pub(super) fn hmr_on_your_mark(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let val = clamp(_value, 0, 3);
     HandlingModifierResponse {
@@ -183,6 +196,7 @@ pub(super) fn rsmr_on_your_mark(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let val = clamp(_value, 0, 3);
     ReloadModifierResponse {
@@ -196,6 +210,7 @@ pub(super) fn sbr_heat_rises(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     if _value > 0 {
@@ -209,6 +224,7 @@ pub(super) fn sbr_hedrons(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     if _value > 0 {
@@ -224,13 +240,102 @@ pub(super) fn sbr_quick_charge(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
-    if _input.weapon_type == WeaponType::FUSIONRIFLE
-        || _input.weapon_type == WeaponType::SHOTGUN
-        || _input.weapon_type == WeaponType::SIDEARM
+    if *_input.weapon_type == WeaponType::FUSIONRIFLE
+        || *_input.weapon_type == WeaponType::SHOTGUN
+        || *_input.weapon_type == WeaponType::SIDEARM
     {
         stats.insert(StatHashes::HANDLING.to_u32(), 25);
     };
+    stats
+}
+
+pub(super) fn hmr_dexterity_mods(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    HandlingModifierResponse {
+        handling_stat_add: 0,
+        handling_ads_scale: if _value > 0 { 0.8 } else { 1.0 },
+        handling_swap_scale: 1.0,
+    }
+}
+
+pub(super) fn hmr_targeting_mods(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    HandlingModifierResponse {
+        handling_stat_add: 0,
+        handling_ads_scale: if _value > 0 { 0.75 } else { 1.0 },
+        handling_swap_scale: 1.0,
+    }
+}
+
+pub(super) fn sbr_targeting_mods(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut stats = HashMap::new();
+    if _value == 1 {
+        stats.insert(StatHashes::AIM_ASSIST.to_u32(), 10);
+    } else if _value > 1 {
+        stats.insert(StatHashes::AIM_ASSIST.to_u32(), 15);
+    };
+    stats
+}
+
+pub(super) fn imr_reserve_mods(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> InventoryModifierResponse {
+    let mut inv_buff = 20;
+    if *_input.weapon_type == WeaponType::MACHINEGUN {
+        inv_buff = 10;
+    } else if *_input.weapon_type == WeaponType::GLAIVE {
+        inv_buff = 5;
+    };
+    if _value < 1 {
+        inv_buff = 0;
+    };
+    InventoryModifierResponse {
+        inv_stat_add: inv_buff,
+        inv_scale: 1.0,
+        inv_add: 0.0,
+    }
+}
+
+pub(super) fn sbr_reserve_mods(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut inv_buff = 20;
+    if *_input.weapon_type == WeaponType::MACHINEGUN {
+        inv_buff = 10;
+    } else if *_input.weapon_type == WeaponType::GLAIVE {
+        inv_buff = 5;
+    };
+    if _value < 1 {
+        inv_buff = 0;
+    };
+    let mut stats = HashMap::new();
+    stats.insert(StatHashes::INVENTORY_SIZE.to_u32(), inv_buff);
     stats
 }

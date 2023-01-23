@@ -1,8 +1,6 @@
-
-
-#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "wasm")]
 pub mod js_types;
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(feature = "python")]
 pub mod py_types;
 
 pub mod rs_types;

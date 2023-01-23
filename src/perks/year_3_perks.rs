@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
 use crate::{
-    enemies::EnemyType,
     d2_enums::{AmmoType, StatHashes},
+    enemies::EnemyType,
 };
 
 use super::lib::{
@@ -16,6 +16,7 @@ pub fn mmr_clown_cartridge(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     MagazineModifierResponse {
         magazine_add: 0.0,
@@ -29,6 +30,7 @@ pub fn sbr_elemental_capacitor(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     if _value == 1 {
@@ -48,6 +50,7 @@ pub(super) fn hmr_elemental_capacitor(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let mut handling = 0;
     if _value == 3 {
@@ -65,6 +68,7 @@ pub(super) fn rsmr_elemental_capacitor(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let mut reload = 0;
     if _value == 2 {
@@ -81,6 +85,7 @@ pub fn sbr_killing_wind(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     if _value > 0 {
@@ -95,6 +100,7 @@ pub fn rmr_killing_wind(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> RangeModifierResponse {
     if _value > 0 {
         RangeModifierResponse {
@@ -118,6 +124,7 @@ pub fn dmr_lasting_impressions(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     DamageModifierResponse {
         damage_scale: 1.2,
@@ -130,18 +137,19 @@ pub(super) fn dmr_vorpal(
     _value: i32,
     _is_enhanced: bool,
     _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut buff = 1.0;
-    if _input.enemy_type == EnemyType::BOSS
-        || _input.enemy_type == EnemyType::MINIBOSS
-        || _input.enemy_type == EnemyType::CHAMPION
-        || _input.enemy_type == EnemyType::VEHICLE
+    if *_input.enemy_type == EnemyType::BOSS
+        || *_input.enemy_type == EnemyType::MINIBOSS
+        || *_input.enemy_type == EnemyType::CHAMPION
+        || *_input.enemy_type == EnemyType::VEHICLE
     {
-        if _input.ammo_type == AmmoType::PRIMARY {
+        if *_input.ammo_type == AmmoType::PRIMARY {
             buff = 1.2;
-        } else if _input.ammo_type == AmmoType::SPECIAL {
+        } else if *_input.ammo_type == AmmoType::SPECIAL {
             buff = 1.15;
-        } else if _input.ammo_type == AmmoType::HEAVY {
+        } else if *_input.ammo_type == AmmoType::HEAVY {
             buff = 1.1;
         }
     }
