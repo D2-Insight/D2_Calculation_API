@@ -679,8 +679,8 @@
 
         "category": {
             "default": {
-                "range":    null,
-                "reload":   {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floorPercent": 0.999},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floorPercent": 0.999},
+                "reload":   {"evpp": 0.0000674498, "vpp": -0.0231542, "offset": 3.8384, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.002623944983, "offset": 0.5079465458},
                     "stow": {"vpp": -0.002083932479, "offset": 0.4392525789},
