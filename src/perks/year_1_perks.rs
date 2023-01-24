@@ -32,7 +32,7 @@ pub(super) fn dmr_high_impact_reserves(
         }
     };
     DamageModifierResponse {
-        damage_scale: out_dmg_scale,
+        dmg_scale: out_dmg_scale,
         crit_scale: 1.0,
     }
 }
@@ -135,7 +135,7 @@ pub(super) fn dmr_assasins_blade(
         out_dmg_scale = 1.15;
     };
     DamageModifierResponse {
-        damage_scale: out_dmg_scale,
+        dmg_scale: out_dmg_scale,
         crit_scale: 1.0,
     }
 }
@@ -154,12 +154,12 @@ pub(super) fn dmr_box_breathing(
             1.0
         };
         return DamageModifierResponse {
-            damage_scale: dmg_mult,
+            dmg_scale: dmg_mult,
             crit_scale: crit_mult,
         };
     };
     DamageModifierResponse {
-        damage_scale: 1.0,
+        dmg_scale: 1.0,
         crit_scale: 1.0,
     }
 }
@@ -193,13 +193,13 @@ pub(super) fn dmr_explosive_payload(
 ) -> DamageModifierResponse {
     if _pvp {
         DamageModifierResponse {
-            damage_scale: 1.0,
+            dmg_scale: 1.0,
             crit_scale: 1.0,
         }
     } else {
         let damage_mult = ((1.0 / _input.base_crit_mult) * 0.15) + 1.0;
         DamageModifierResponse {
-            damage_scale: damage_mult,
+            dmg_scale: damage_mult,
             crit_scale: 1.0,
         }
     }
@@ -214,13 +214,13 @@ pub(super) fn dmr_timed_payload(
 ) -> DamageModifierResponse {
     if _pvp {
         DamageModifierResponse {
-            damage_scale: 1.0,
+            dmg_scale: 1.0,
             crit_scale: 1.0,
         }
     } else {
         let damage_mult = ((1.0 / _input.base_crit_mult) * 0.15) + 1.0;
         DamageModifierResponse {
-            damage_scale: damage_mult,
+            dmg_scale: damage_mult,
             crit_scale: 1.0,
         }
     }
@@ -391,7 +391,7 @@ pub(super) fn dmr_impact_casing(
     _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     DamageModifierResponse {
-        damage_scale: 0.025,
+        dmg_scale: 0.025,
         crit_scale: 1.0,
     }
 }

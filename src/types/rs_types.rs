@@ -36,7 +36,7 @@ impl DamageMods {
             &EnemyType::VEHICLE => self.vehicle,
             _ => 1.0,
         };
-        self.pve * combatant_scale
+        combatant_scale
     }
 }
 
@@ -119,6 +119,17 @@ pub struct DpsResponse {
     pub total_damage: f64,
     pub total_time: f64,
     pub total_shots: i32,
+}
+impl DpsResponse {
+    pub fn apply_rpl(&mut self, rpl: f64) {
+        for mag in self.dps_per_mag.iter_mut() {
+            *mag *= rpl;
+        }
+        for (time, damage) in self.time_damage_data.iter_mut() {
+            *damage *= rpl;
+        }
+        self.total_damage *= rpl;
+    }
 }
 
 #[derive(Debug, Clone, Default)]

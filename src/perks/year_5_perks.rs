@@ -70,7 +70,7 @@ pub fn dmr_focused_fury(
         dmg_boost = 1.2;
     }
     DamageModifierResponse {
-        damage_scale: dmg_boost,
+        dmg_scale: dmg_boost,
         crit_scale: 1.0,
     }
 }
@@ -121,12 +121,12 @@ pub fn dmr_gutshot_straight(
     ];
     if high_weapons.contains(&_input.weapon_type) {
         return DamageModifierResponse {
-            damage_scale: 1.2,
+            dmg_scale: 1.2,
             crit_scale: _input.base_crit_mult * (1.0 / 1.2),
         };
     } else {
         return DamageModifierResponse {
-            damage_scale: 1.1,
+            dmg_scale: 1.1,
             crit_scale: _input.base_crit_mult * (1.0 / 1.1),
         };
     }
@@ -338,7 +338,7 @@ pub(super) fn dmr_target_lock(
         buff *= 1.125;
     }
     DamageModifierResponse {
-        damage_scale: buff + 1.0,
+        dmg_scale: buff + 1.0,
         crit_scale: 1.0,
     }
 }
@@ -358,7 +358,7 @@ pub(super) fn dmr_over_under(
         buff *= 1.05;
     }
     DamageModifierResponse {
-        damage_scale: buff,
+        dmg_scale: buff,
         crit_scale: 1.0,
     }
 }

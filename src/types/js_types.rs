@@ -57,17 +57,6 @@ impl JsDamageModifiers {
         }
     }
 }
-impl JsDamageModifiers {
-    pub fn is_null(&self) -> bool {
-        self.global == 0.0
-            && self.vehicle == 0.0
-            && self.boss == 0.0
-            && self.miniboss == 0.0
-            && self.champion == 0.0
-            && self.elite == 0.0
-            && self.minor == 0.0
-    }
-}
 impl Into<DamageMods> for JsDamageModifiers {
     fn into(self) -> DamageMods {
         DamageMods {

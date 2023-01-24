@@ -55,7 +55,7 @@ pub(super) fn dmr_paracausal_shot(
         damage_buff = bufflist[num_of_crits as usize];
     };
     DamageModifierResponse {
-        damage_scale: damage_buff,
+        dmg_scale: damage_buff,
         crit_scale: 1.0,
     }
 }
@@ -72,7 +72,7 @@ pub(super) fn dmr_momento_mori(
         damage_buff = if _pvp { 1.5 } else { 1.285 };
     };
     DamageModifierResponse {
-        damage_scale: damage_buff,
+        dmg_scale: damage_buff,
         crit_scale: 1.0,
     }
 }
@@ -89,7 +89,7 @@ pub(super) fn dmr_agers_call(
         damage_buff = 1.8;
     };
     DamageModifierResponse {
-        damage_scale: damage_buff,
+        dmg_scale: damage_buff,
         crit_scale: 1.0,
     }
 }
@@ -124,7 +124,7 @@ pub(super) fn dmr_arbys(
         damage_buff = 0.75;
     };
     DamageModifierResponse {
-        damage_scale: damage_buff,
+        dmg_scale: damage_buff,
         crit_scale: 1.0,
     }
 }
@@ -156,7 +156,7 @@ pub(super) fn dmr_roadborn(
         crit_mult = 1.17;
     };
     DamageModifierResponse {
-        damage_scale: 1.0,
+        dmg_scale: 1.0,
         crit_scale: crit_mult,
     }
 }
@@ -280,7 +280,7 @@ pub(super) fn dmr_worms_hunger(
 ) -> DamageModifierResponse {
     let val = clamp(_value, 0, 20);
     DamageModifierResponse {
-        damage_scale: 1.0 + (val as f64) * 0.1,
+        dmg_scale: 1.0 + (val as f64) * 0.1,
         crit_scale: 1.0,
     }
 }
@@ -297,7 +297,7 @@ pub(super) fn dmr_lagragian_sight(
         damage_buff = 1.4;
     };
     DamageModifierResponse {
-        damage_scale: damage_buff,
+        dmg_scale: damage_buff,
         crit_scale: 1.0,
     }
 }
@@ -314,7 +314,7 @@ pub(super) fn dmr_tom(
         damage_buff = 2.0;
     };
     DamageModifierResponse {
-        damage_scale: damage_buff,
+        dmg_scale: damage_buff,
         crit_scale: 1.0,
     }
 }
@@ -393,13 +393,15 @@ pub(super) fn edr_poison_arrows(
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
 ) -> ExtraDamageResponse {
+    let last_proc = _cached_data.get("poison_arrows").unwrap_or(&0.0);
+    let time_diff = _input.time_total - last_proc;
     return ExtraDamageResponse {
         additive_damage: if _value > 0 {
             _input.base_damage * _input.base_crit_mult
         } else {
             0.0
         },
-        times_to_hit: 6,
+        times_to_hit: (time_diff/0.5).ceil() as i32,
         increment_total_time: false,
         time_for_additive_damage: 0.5,
         hit_at_same_time: false,

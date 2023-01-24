@@ -49,13 +49,13 @@ pub fn dmr_explosive_head(
 ) -> DamageModifierResponse {
     if _pvp {
         DamageModifierResponse {
-            damage_scale: 1.0,
+            dmg_scale: 1.0,
             crit_scale: 1.0,
         }
     } else {
         let damage_mult = ((1.0 / _input.base_crit_mult) * 0.15) + 1.0;
         DamageModifierResponse {
-            damage_scale: damage_mult,
+            dmg_scale: damage_mult,
             crit_scale: 1.0,
         }
     }
@@ -139,7 +139,7 @@ pub fn dmr_firing_line(
         crit_mult = 1.2;
     }
     DamageModifierResponse {
-        damage_scale: 1.0,
+        dmg_scale: 1.0,
         crit_scale: crit_mult,
     }
 }
@@ -174,7 +174,7 @@ pub fn dmr_killing_tally(
         damage_mult = 0.0;
     };
     DamageModifierResponse {
-        damage_scale: 1.0 + damage_mult,
+        dmg_scale: 1.0 + damage_mult,
         crit_scale: 1.0,
     }
 }
@@ -239,7 +239,7 @@ pub fn dmr_resevoir_burst(
         damage_mult = 1.25;
     };
     DamageModifierResponse {
-        damage_scale: damage_mult,
+        dmg_scale: damage_mult,
         crit_scale: 1.0,
     }
 }
@@ -263,7 +263,7 @@ pub(super) fn dmr_surrounded(
         };
     };
     DamageModifierResponse {
-        damage_scale: damage_mult,
+        dmg_scale: damage_mult,
         crit_scale: 1.0,
     }
 }

@@ -4,7 +4,7 @@ use crate::{
     types::rs_types::HandlingResponse,
     weapons::{FiringConfig, Stat},
 };
-use std::{collections::HashMap, ops::Mul, cell::RefCell};
+use std::{cell::RefCell, collections::HashMap, ops::Mul};
 
 #[derive(Debug, Clone)]
 pub struct CalculationInput<'a> {
@@ -128,13 +128,13 @@ impl<'a> CalculationInput<'a> {
 
 #[derive(Debug, Clone)]
 pub struct DamageModifierResponse {
-    pub damage_scale: f64,
+    pub dmg_scale: f64,
     pub crit_scale: f64,
 }
 impl Default for DamageModifierResponse {
     fn default() -> Self {
         Self {
-            damage_scale: 1.0,
+            dmg_scale: 1.0,
             crit_scale: 1.0,
         }
     }
@@ -144,10 +144,17 @@ impl Default for DamageModifierResponse {
 pub struct ExtraDamageResponse {
     pub additive_damage: f64,
     pub time_for_additive_damage: f64,
+    //basically is this happening concurrently with the main damage?
     pub increment_total_time: bool,
+    // will increment shots hit but not shots fired, shots fired is what *most* 
+    // perks use for calculation EDR shouldn't mess with other perks in unwanted ways
     pub times_to_hit: i32,
+    //is_dot takes priority; makes it put dmg*count at in-time+time_for_additive_damage
+    //instead of adding time_for_additive_damage between each count
     pub hit_at_same_time: bool,
+    //if its a dot the dps calculator will count backwards and apply the dmg
     pub is_dot: bool,
+    //pl scalling will apply no matter what
     pub weapon_scale: bool,
     pub crit_scale: bool,
     pub combatant_scale: bool,
@@ -296,10 +303,12 @@ pub struct ReloadOverideResponse {
 impl ReloadOverideResponse {
     pub fn invalid() -> Self {
         Self {
+            //an easy way for dps calculator to throw out
             valid: false,
             reload_time: 0.0,
             ammo_to_reload: 0.0,
             priority: 0,
+            //this will also reset mag stats
             increments_reload_count: false,
             uses_ammo: false,
         }

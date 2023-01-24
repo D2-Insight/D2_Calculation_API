@@ -30,7 +30,7 @@ pub fn dmr_adagio(
         dmg_boost = 0.0;
     };
     DamageModifierResponse {
-        damage_scale: 1.0 + dmg_boost,
+        dmg_scale: 1.0 + dmg_boost,
         crit_scale: 1.0,
     }
 }
@@ -69,7 +69,7 @@ pub fn dmr_adrenaline_junkie(
         dmg_boost = 0.0;
     };
     DamageModifierResponse {
-        damage_scale: 1.0 + dmg_boost,
+        dmg_scale: 1.0 + dmg_boost,
         crit_scale: 1.0,
     }
 }
@@ -244,7 +244,7 @@ pub fn dmr_frenzy(
         dmg = 0.15;
     };
     DamageModifierResponse {
-        damage_scale: 1.0 + dmg,
+        dmg_scale: 1.0 + dmg,
         crit_scale: 1.0,
     }
 }

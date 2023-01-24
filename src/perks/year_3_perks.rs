@@ -127,7 +127,7 @@ pub fn dmr_lasting_impressions(
     _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     DamageModifierResponse {
-        damage_scale: 1.2,
+        dmg_scale: 1.2,
         crit_scale: 1.0,
     }
 }
@@ -154,7 +154,7 @@ pub(super) fn dmr_vorpal(
         }
     }
     DamageModifierResponse {
-        damage_scale: buff,
+        dmg_scale: buff,
         crit_scale: 1.0,
     }
 }

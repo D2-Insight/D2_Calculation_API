@@ -11,6 +11,26 @@ use super::{
     },
 };
 
+pub(super) fn dmr_built_in(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut crit_scale = 1.0;
+    #[allow(unused_mut)]
+    let mut dmg_scale = 1.0;
+    if *_input.weapon_type == WeaponType::LINEARFUSIONRIFLE {
+        crit_scale *= 1.141;
+    };
+    DamageModifierResponse{
+        crit_scale,
+        dmg_scale,
+    }
+}
+
+
 pub(super) fn hmr_ophidian_aspects(
     _input: &CalculationInput,
     _value: i32,
@@ -337,5 +357,44 @@ pub(super) fn sbr_reserve_mods(
     };
     let mut stats = HashMap::new();
     stats.insert(StatHashes::INVENTORY_SIZE.to_u32(), inv_buff);
+    stats
+}
+
+pub(super) fn rsmr_laoder_mods(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> ReloadModifierResponse {
+    if _value > 0 {
+        let mut reload_stat_buff = 10;
+        if _value > 1 {
+            reload_stat_buff += 5;
+        };
+        return  ReloadModifierResponse {
+            reload_stat_add: reload_stat_buff,
+            reload_time_scale: 0.85,
+        };
+    } else {
+        return ReloadModifierResponse::default();
+    };
+}
+
+pub(super) fn sbr_loader_mods(
+    _input: &CalculationInput,
+    _value: i32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut stats = HashMap::new();
+    if _value > 0 {
+        let mut reload_stat_buff = 10;
+        if _value > 1 {
+            reload_stat_buff += 5;
+        };
+        stats.insert(StatHashes::RELOAD.to_u32(), reload_stat_buff);
+    };
     stats
 }

@@ -109,6 +109,11 @@
                 },
                 "pveScale": {"vehicle": 1.5, "boss": 1.5, "champion": 1.5, "miniboss": 1.5, "elite": 1.9, "minor": 2.5}
             }
+        },
+        "archetype": {
+            "Precision":   {"damage": 100.736, "critMult": 1.6, "burstDelay": 0.684, "burstSize": 1, "burstDuration": 0},
+            "Lightweight": {"damage": 85.6129, "critMult": 1.5, "burstDelay": 0.580, "burstSize": 1, "burstDuration": 0},
+            "Trinity":     {"damage": 34.3,    "critMult": 1.5, "burstDelay": 0.648, "burstSize": 3, "burstDuration": 0}
         }
     },
     "Fusion Rifle":{
@@ -269,7 +274,7 @@
         "category": {
             "default": {
                 "range":    {"vpp_start": 0.0877,"offset_start": 16.83,"vpp_end": 0.0352,"offset_end": 29.67, "floorPercent": 0.33},
-                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "mag_multiplier": false},
+                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "ammo_percent": 0.71, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.002942857143, "offset": 0.4782571429},
                     "stow": {"vpp": -0.002952380952, "offset": 0.5133809524},
@@ -279,7 +284,7 @@
             },
             "120 RPM": {
                 "range":    {"vpp_start": 0.102,"offset_start": 18.65,"vpp_end": 0.0205,"offset_end": 32.8, "floorPercent": 0.33},
-                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "mag_multiplier": false},
+                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "ammo_percent": 0.71, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.002942857143, "offset": 0.4782571429},
                     "stow": {"vpp": -0.002952380952, "offset": 0.5133809524},
@@ -289,7 +294,7 @@
             },
             "Eriana": {
                 "range":    {"vpp_start": 0.0,"offset_start": 38.0,"vpp_end": 0.0,"offset_end": 70.0, "floorPercent": 0.33},
-                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "mag_multiplier": false},
+                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "ammo_percent": 0.71, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.002942857143, "offset": 0.4782571429},
                     "stow": {"vpp": -0.002952380952, "offset": 0.5133809524},
@@ -299,7 +304,7 @@
             },
             "LastWord": {
                 "range":    {"vpp_start": 0.0,"offset_start": 19.3,"vpp_end": 0.0,"offset_end": 29.67, "floorPercent": 0.33},
-                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "mag_multiplier": false},
+                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "ammo_percent": 0.71, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.002942857143, "offset": 0.4782571429},
                     "stow": {"vpp": -0.002952380952, "offset": 0.5133809524},
@@ -357,10 +362,10 @@
         },
 
         "archetype": {
-            "Precision":    {"damage": 166, "critMult": 3.0, "burstDelay": 0.533, "burstSize": 1, "burstDuration": 0.02},
-            "Aggressive":   {"damage": 78,  "critMult": 3.0, "burstDelay": 0.533, "burstSize": 3, "burstDuration": 0.5, "oneAmmoBurst": true},
-            "QueenBreaker": {"damage": 131, "critMult": 2.5, "burstDelay": 0.300, "burstSize": 1, "burstDuration": 0},
-            "SleeperSim":   {"damage": 726, "critMult": 1.2, "burstDelay": 1.033, "burstSize": 1, "burstDuration": 0}
+            "Precision":    {"damage": 165.03, "critMult": 3.009, "burstDelay": 0.533, "burstSize": 1, "burstDuration": 0.0},
+            "Aggressive":   {"damage": 78.283, "critMult": 3.009, "burstDelay": 0.533, "burstSize": 3, "burstDuration": 0.38, "oneAmmoBurst": true},
+            "QueenBreaker": {"damage": 131,    "critMult": 2.5,   "burstDelay": 0.300, "burstSize": 1, "burstDuration": 0.0},
+            "SleeperSim":   {"damage": 726,    "critMult": 1.2,   "burstDelay": 1.033, "burstSize": 1, "burstDuration": 0.0}
         }
     },
     "Machine Gun": {
@@ -403,11 +408,11 @@
         },
 
         "archetype": {
-            "High-Impact": {"damage": 34, "critMult": 1.4, "burstDelay": 0.16667, "burstSize": 1, "burstDuration": 0},
-            "Adaptive":    {"damage": 30, "critMult": 1.4, "burstDelay": 0.13333, "burstSize": 1, "burstDuration": 0},
-            "Rapid-Fire":  {"damage": 18, "critMult": 1.3, "burstDelay": 0.06667, "burstSize": 1, "burstDuration": 0},
-            "Xenophage":   {"damage": 150, "critMult": 1.0, "burstDelay": 0.5000, "burstSize": 1, "burstDuration": 0},
-            "HeirApparent":{"damage": 30, "critMult": 1.4, "burstDelay": 0.13333, "burstSize": 1, "burstDuration": 0}
+            "High-Impact": {"damage": 34, "critMult": 1.4, "burstDelay": 0.16667, "burstSize": 1, "burstDuration": 0.0},
+            "Adaptive":    {"damage": 30, "critMult": 1.4, "burstDelay": 0.13333, "burstSize": 1, "burstDuration": 0.0},
+            "Rapid-Fire":  {"damage": 18, "critMult": 1.3, "burstDelay": 0.06667, "burstSize": 1, "burstDuration": 0.0},
+            "Xenophage":   {"damage": 150, "critMult": 1.0, "burstDelay": 0.5000, "burstSize": 1, "burstDuration": 0.0},
+            "HeirApparent":{"damage": 30, "critMult": 1.4, "burstDelay": 0.13333, "burstSize": 1, "burstDuration": 0.0}
         }
     },
     "Pulse Rifle":{
@@ -707,11 +712,12 @@
 
         "category": {
             "default": {
-                "range":    {"vpp_start": 0.93,"offset_start": 7.8,"vpp_end": 0.0,"offset_end": 23.71, "floorPercent": 0.5},
+                "range":    {"vpp_start": 0.093,"offset_start": 7.8,"vpp_end": 0.0,"offset_end": 23.71, "floorPercent": 0.5},
                 "reload":   {"evpp": 0.0000608642, "vpp": -0.0191345, "offset": 2.62769, "mag_multiplier": false},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.002376970528, "offset": 0.4710178204},
+                    "stow": {"vpp": -0.002547978067, "offset": 0.4481295408},
+                    "ads":  {"vpp": -0.001873200822, "offset": 0.3581576422}
                 },
                 "pveScale": {"vehicle": 1.40, "boss": 1.53, "champion": 1.53, "miniboss": 1.53, "elite": 1.90, "minor": 1.90}
             },
@@ -766,7 +772,7 @@
 
         "category": {
             "default": {
-                "range":    null,
+                "range":    {"vpp_start": 0.0546,"offset_start": 15.0,"vpp_end": 0.198,"offset_end": 30.33, "floorPercent": 0.33},
                 "reload":   null,
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},

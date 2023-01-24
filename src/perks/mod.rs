@@ -187,6 +187,7 @@ pub enum Perks {
     ////MISC////
     Ignore,
     MasterWork,
+    BuiltIn,
     EmpowermentBuffs,
     WeakenDebuffs,
     ////////EXOTIC////////
@@ -226,6 +227,7 @@ pub enum Perks {
 impl Perks {
     pub fn from_u32(_value: u32) -> Perks {
         match _value {
+            0 => Perks::BuiltIn,
             3988215619 => Perks::VeistStinger,
             3708227201 => Perks::Surrounded,
             438098033 => Perks::Harmony,
@@ -371,36 +373,54 @@ fn dyanmic_perk_stats(
     let enhanced = _perk.enhanced;
     match perk_enum {
         Perks::Roadborn => sbr_roadborn(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::OphidianAspect => sbr_ophidian_aspects(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::OphidianAspect => {
+            sbr_ophidian_aspects(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::DragonShadow => sbr_dragon_shadow(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::Amplified => sbr_amplified(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::Tempering => sbr_tempering(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::OnYourMark => sbr_on_your_mark(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::HeatRises => sbr_heat_rises(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::Hedrons => sbr_hedrons(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::ThreatDetector => sbr_threat_detector(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::ThreatDetector => {
+            sbr_threat_detector(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::FieldPrep => sbr_field_prep(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::FirmlyPlanted => sbr_firmly_planted(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::FirmlyPlanted => {
+            sbr_firmly_planted(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::HipFireGrip => sbr_hip_fire_grip(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::MovingTarget => sbr_moving_target(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::OpeningShot => sbr_opening_shot(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::Outlaw => sbr_outlaw(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::SlideShot => sbr_slide_shot(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::SlideWays => sbr_slide_ways(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::TapTheTrigger => sbr_tap_the_trigger(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::TapTheTrigger => {
+            sbr_tap_the_trigger(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::AirAssault => sbr_air_assault(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::FeedingFrenzy => sbr_feeding_frenzy(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::ElementalCapacitor => sbr_elemental_capacitor(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::FeedingFrenzy => {
+            sbr_feeding_frenzy(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
+        Perks::ElementalCapacitor => {
+            sbr_elemental_capacitor(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::KillingWind => sbr_killing_wind(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::AdrenalineJunkie => sbr_adrenaline_junkie(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::AdrenalineJunkie => {
+            sbr_adrenaline_junkie(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::Ensemble => sbr_ensemble(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::Frenzy => sbr_frenzy(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::PerpetualMotion => sbr_perpetual_motion(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::PerpetualMotion => {
+            sbr_perpetual_motion(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::PerfectFloat => sbr_perfect_float(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::Pugilist => sbr_pugilist(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::Encore => sbr_encore(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::FragileFocus => sbr_fragile_focus(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::OffhandStrike => sbr_offhand_strike(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::OffhandStrike => {
+            sbr_offhand_strike(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::StatsForAll => sbr_stats_for_all(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::SteadyHands => sbr_steady_hands(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::WellRounded => sbr_well_rounded(_input_data, val, enhanced, _pvp, &HashMap::new()),
@@ -416,7 +436,7 @@ pub fn get_dmg_modifier(
     let mut dmg_modifier = DamageModifierResponse::default();
     for perk in _perks {
         let tmp = get_perk_dmr(perk, _input_data, _pvp);
-        dmg_modifier.damage_scale *= tmp.damage_scale;
+        dmg_modifier.dmg_scale *= tmp.dmg_scale;
         dmg_modifier.crit_scale *= tmp.crit_scale;
     }
     dmg_modifier
@@ -426,27 +446,41 @@ fn get_perk_dmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> Dama
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
-        Perks::HighImpactReserves => dmr_high_impact_reserves(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::HighImpactReserves => {
+            dmr_high_impact_reserves(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::BoxBreathing => dmr_box_breathing(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::ExplosivePayload => dmr_explosive_payload(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::ExplosivePayload => {
+            dmr_explosive_payload(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::TimedPayload => dmr_timed_payload(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::ImpactCasing => dmr_impact_casing(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::ExplosiveHead => dmr_explosive_head(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::ExplosiveHead => {
+            dmr_explosive_head(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::FiringLine => dmr_firing_line(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::KillingTally => dmr_killing_tally(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::ResevoirBurst => dmr_resevoir_burst(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::ResevoirBurst => {
+            dmr_resevoir_burst(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::Surrounded => dmr_surrounded(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::LastingImpression => dmr_lasting_impressions(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::LastingImpression => {
+            dmr_lasting_impressions(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::Vorpal => dmr_vorpal(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::Adagio => dmr_adagio(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::AdrenalineJunkie => dmr_adrenaline_junkie(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::AdrenalineJunkie => {
+            dmr_adrenaline_junkie(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::Frenzy => dmr_frenzy(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::FocusedFury => dmr_focused_fury(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::GutShot => dmr_gutshot_straight(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::TargetLock => dmr_target_lock(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::OverUnder => dmr_over_under(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::WormsHunger => dmr_worms_hunger(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::LagragianSight => dmr_lagragian_sight(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::LagragianSight => {
+            dmr_lagragian_sight(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         _ => DamageModifierResponse::default(),
     }
 }
@@ -476,20 +510,34 @@ fn get_perk_rsmr(
         Perks::RapidFireFrame => rsmr_alloy_mag(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::AlloyMagazine => rsmr_alloy_mag(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::Roadborn => rsmr_roadborn(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::OphidianAspect => rsmr_ophidian_aspects(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::DragonShadow => rsmr_dragon_shadow(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::OphidianAspect => {
+            rsmr_ophidian_aspects(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
+        Perks::DragonShadow => {
+            rsmr_dragon_shadow(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::Frequency => rsmr_frequency(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::FlowState => rsmr_flow_state(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::OnYourMark => rsmr_on_your_mark(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::ThreatDetector => rsmr_threat_detector(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::ThreatDetector => {
+            rsmr_threat_detector(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::FieldPrep => rsmr_field_prep(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::FeedingFrenzy => rsmr_feeding_frenzy(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::FeedingFrenzy => {
+            rsmr_feeding_frenzy(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::RapidHit => rsmr_rapid_hit(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::ElementalCapacitor => rsmr_elemental_capacitor(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::ElementalCapacitor => {
+            rsmr_elemental_capacitor(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::Ensemble => rsmr_ensemble(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::Frenzy => rsmr_frenzy(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::ImpulseAmplifier => rsmr_impulse_amplifier(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::PerpetualMotion => rsmr_perpetual_motion(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::ImpulseAmplifier => {
+            rsmr_impulse_amplifier(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
+        Perks::PerpetualMotion => {
+            rsmr_perpetual_motion(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::StatsForAll => rsmr_stats_for_all(_input_data, val, enhanced, _pvp, &HashMap::new()),
         _ => ReloadModifierResponse::default(),
     }
@@ -551,18 +599,30 @@ fn get_perk_hmr(
     let enhanced = _perk.enhanced;
     match perk_enum {
         Perks::SwapMag => hmr_swap_mag(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::OphidianAspect => hmr_ophidian_aspects(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::OphidianAspect => {
+            hmr_ophidian_aspects(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::DragonShadow => hmr_dragon_shadow(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::Amplified => hmr_amplified(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::OnYourMark => hmr_on_your_mark(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::ThreatDetector => hmr_threat_detector(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::FirmlyPlanted => hmr_firmly_planted(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::ThreatDetector => {
+            hmr_threat_detector(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
+        Perks::FirmlyPlanted => {
+            hmr_firmly_planted(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::Snapshot => hmr_snapshot(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::ElementalCapacitor => hmr_elemental_capacitor(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::AdrenalineJunkie => hmr_adrenaline_junkie(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::ElementalCapacitor => {
+            hmr_elemental_capacitor(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
+        Perks::AdrenalineJunkie => {
+            hmr_adrenaline_junkie(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::Ensemble => hmr_ensemble(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::Frenzy => hmr_frenzy(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::PerpetualMotion => hmr_perpetual_motion(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::PerpetualMotion => {
+            hmr_perpetual_motion(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::Slickdraw => hmr_slickdraw(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::StatsForAll => hmr_stats_for_all(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::SteadyHands => hmr_steady_hands(_input_data, val, enhanced, _pvp, &HashMap::new()),
@@ -595,10 +655,16 @@ fn get_perk_mmr(
     let enhanced = _perk.enhanced;
     match perk_enum {
         Perks::AgersCall => mmr_agers_call(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::AmbitiousAssassin => mmr_abitious_assassin(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::AmbitiousAssassin => {
+            mmr_abitious_assassin(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::OverFlow => mmr_overflow(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::ClownCartridge => mmr_clown_cartridge(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::Reconstruction => mmr_reconstruction(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::ClownCartridge => {
+            mmr_clown_cartridge(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
+        Perks::Reconstruction => {
+            mmr_reconstruction(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         _ => MagazineModifierResponse::default(),
     }
 }
@@ -657,7 +723,9 @@ fn get_perk_rmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> Rang
         Perks::SlideShot => rmr_slide_shot(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::KillingWind => rmr_killing_wind(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::FragileFocus => rmr_fragile_focus(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::OffhandStrike => rmr_offhand_strike(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::OffhandStrike => {
+            rmr_offhand_strike(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         Perks::StatsForAll => rmr_stats_for_all(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::WellRounded => rmr_well_rounded(_input_data, val, enhanced, _pvp, &HashMap::new()),
         _ => RangeModifierResponse::default(),
@@ -684,7 +752,9 @@ fn get_perk_refund(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> R
     let enhanced = _perk.enhanced;
     match perk_enum {
         Perks::TripleTap => rr_triple_tap(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::FourthTimesTheCharm => rr_fourth_times(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::FourthTimesTheCharm => {
+            rr_fourth_times(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         _ => RefundResponse::default(),
     }
 }
@@ -693,7 +763,7 @@ pub fn get_extra_damage(
     _perks: Vec<Perk>,
     _input_data: &CalculationInput,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>
+    _cached_data: &HashMap<String, f64>,
 ) -> Vec<ExtraDamageResponse> {
     let mut extra_damage = vec![];
     for perk in _perks {
@@ -704,7 +774,12 @@ pub fn get_extra_damage(
     }
     extra_damage
 }
-fn get_perk_edr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool, _cached_data: &HashMap<String, f64>) -> ExtraDamageResponse {
+fn get_perk_edr(
+    _perk: Perk,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> ExtraDamageResponse {
     let perk_enum = Perks::from_u32(_perk.hash);
     let val = _perk.value;
     let enhanced = _perk.enhanced;
