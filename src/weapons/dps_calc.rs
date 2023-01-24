@@ -112,6 +112,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
         .calc_reserve_size(Some(weapon.static_calc_input()))
         .reserve_size;
 
+    #[allow(unused_mut)]
     let mut persistent_calc_data: HashMap<String, f64> = HashMap::new();
     while reserve > 0 {
         let mut shots_this_mag = 0;
@@ -168,7 +169,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
             let shot_burst_delay = (burst_delay + firing_mods.burst_delay_add) * firing_mods.burst_delay_scale;
             let shot_burst_duration = burst_duration*firing_mods.burst_duration_scale;
             let shot_burst_size = burst_size + firing_mods.burst_size_add;
-            let shot_inner_burst_delay = shot_burst_delay / (shot_burst_size - 1.0);
+            let shot_inner_burst_delay = shot_burst_duration / (shot_burst_size - 1.0);
 
             if firing_settings.one_ammo_burst && burst_size > 1.0 {
                 total_shots_fired += 1;

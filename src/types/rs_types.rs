@@ -125,7 +125,7 @@ impl DpsResponse {
         for mag in self.dps_per_mag.iter_mut() {
             *mag *= rpl;
         }
-        for (time, damage) in self.time_damage_data.iter_mut() {
+        for (_, damage) in self.time_damage_data.iter_mut() {
             *damage *= rpl;
         }
         self.total_damage *= rpl;
