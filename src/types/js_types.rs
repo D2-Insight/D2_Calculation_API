@@ -11,8 +11,7 @@ use super::{
     rs_types::{
         AmmoFormula, DamageMods, DpsResponse, HandlingFormula, HandlingResponse, MagazineResponse,
         RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, ReserveResponse, TtkResponse,
-    },
-    ToRs,
+    }
 };
 
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
@@ -20,7 +19,6 @@ use super::{
 #[tsify(into_wasm_abi, from_wasm_abi)]
 pub struct JsWeapon {
     pub hash: u32,
-    pub intrinsic: u32,
     pub weapon_type: u32,
     pub damage_type: u32,
     pub weapon_slot: u32,
@@ -278,7 +276,7 @@ impl Into<FiringConfig> for JsFiringData {
 #[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
 // #[serde(rename = "AmmoData")]
 #[tsify(into_wasm_abi, from_wasm_abi)]
-pub struct JsAmmoData {
+pub struct JsAmmoFormula {
     pub mag_evpp: f64,
     pub mag_vpp: f64,
     pub mag_offset: f64,
@@ -286,10 +284,10 @@ pub struct JsAmmoData {
     pub reserve_formulas: HashMap<i32, (f64, f64)>,
 }
 #[wasm_bindgen]
-impl JsAmmoData {
+impl JsAmmoFormula {
     #[wasm_bindgen(constructor)]
-    pub fn new() -> JsAmmoData {
-        JsAmmoData {
+    pub fn new() -> JsAmmoFormula {
+        JsAmmoFormula {
             mag_evpp: 0.0,
             mag_vpp: 0.0,
             mag_offset: 0.0,
@@ -298,7 +296,7 @@ impl JsAmmoData {
         }
     }
 }
-impl JsAmmoData {
+impl JsAmmoFormula {
     pub fn is_null(&self) -> bool {
         self.mag_evpp == 0.0
             && self.mag_vpp == 0.0
@@ -307,7 +305,7 @@ impl JsAmmoData {
             && self.reserve_formulas.is_empty()
     }
 }
-impl Into<AmmoFormula> for JsAmmoData {
+impl Into<AmmoFormula> for JsAmmoFormula {
     fn into(self) -> AmmoFormula {
         AmmoFormula {
             mag: QuadraticFormula {
@@ -342,7 +340,7 @@ pub struct JsWeaponFormula {
     pub reload_data: JsReloadFormula,
     pub handling_data: JsHandlingFormula,
     pub firing_data: JsFiringData,
-    pub ammo_data: JsAmmoData,
+    pub ammo_data: JsAmmoFormula,
 }
 #[wasm_bindgen]
 impl JsWeaponFormula {
@@ -353,7 +351,7 @@ impl JsWeaponFormula {
             reload_data: JsReloadFormula::new(),
             handling_data: JsHandlingFormula::new(),
             firing_data: JsFiringData::new(),
-            ammo_data: JsAmmoData::new(),
+            ammo_data: JsAmmoFormula::new(),
         }
     }
 }

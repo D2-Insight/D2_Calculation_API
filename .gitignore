@@ -1,1 +1,6 @@
 /target
+*.pyd
+*.py
+*.dll
+*.pyc
+data.json

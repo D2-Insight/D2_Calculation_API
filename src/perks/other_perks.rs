@@ -13,7 +13,7 @@ use super::{
 
 pub(super) fn dmr_built_in(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -24,16 +24,15 @@ pub(super) fn dmr_built_in(
     if *_input.weapon_type == WeaponType::LINEARFUSIONRIFLE {
         crit_scale *= 1.141;
     };
-    DamageModifierResponse{
+    DamageModifierResponse {
         crit_scale,
         dmg_scale,
     }
 }
 
-
 pub(super) fn hmr_ophidian_aspects(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -47,7 +46,7 @@ pub(super) fn hmr_ophidian_aspects(
 
 pub(super) fn rsmr_ophidian_aspects(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -60,7 +59,7 @@ pub(super) fn rsmr_ophidian_aspects(
 
 pub(super) fn sbr_ophidian_aspects(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -74,7 +73,7 @@ pub(super) fn sbr_ophidian_aspects(
 
 pub(super) fn sbr_dragon_shadow(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -87,7 +86,7 @@ pub(super) fn sbr_dragon_shadow(
 
 pub(super) fn hmr_dragon_shadow(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -101,7 +100,7 @@ pub(super) fn hmr_dragon_shadow(
 
 pub(super) fn rsmr_dragon_shadow(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -114,7 +113,7 @@ pub(super) fn rsmr_dragon_shadow(
 
 pub(super) fn sbr_amplified(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -126,7 +125,7 @@ pub(super) fn sbr_amplified(
 
 pub(super) fn hmr_amplified(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -140,7 +139,7 @@ pub(super) fn hmr_amplified(
 
 pub(super) fn rsmr_frequency(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -154,7 +153,7 @@ pub(super) fn rsmr_frequency(
 
 pub(super) fn rsmr_flow_state(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -168,7 +167,7 @@ pub(super) fn rsmr_flow_state(
 
 pub(super) fn sbr_tempering(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -182,13 +181,13 @@ pub(super) fn sbr_tempering(
 
 pub(super) fn sbr_on_your_mark(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
-    let val = clamp(_value, 0, 3);
+    let val = clamp(_value, 0, 3) as i32;
     if _value > 0 {
         stats.insert(StatHashes::HANDLING.to_u32(), 20 * val);
         stats.insert(StatHashes::RELOAD.to_u32(), 20 * val);
@@ -198,12 +197,12 @@ pub(super) fn sbr_on_your_mark(
 
 pub(super) fn hmr_on_your_mark(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
-    let val = clamp(_value, 0, 3);
+    let val = clamp(_value, 0, 3) as i32;
     HandlingModifierResponse {
         handling_stat_add: 20 * val,
         handling_ads_scale: 1.0,
@@ -213,12 +212,12 @@ pub(super) fn hmr_on_your_mark(
 
 pub(super) fn rsmr_on_your_mark(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
 ) -> ReloadModifierResponse {
-    let val = clamp(_value, 0, 3);
+    let val = clamp(_value, 0, 3) as i32;
     ReloadModifierResponse {
         reload_stat_add: 20 * val,
         reload_time_scale: 0.93,
@@ -227,7 +226,7 @@ pub(super) fn rsmr_on_your_mark(
 
 pub(super) fn sbr_heat_rises(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -241,7 +240,7 @@ pub(super) fn sbr_heat_rises(
 
 pub(super) fn sbr_hedrons(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -257,7 +256,7 @@ pub(super) fn sbr_hedrons(
 
 pub(super) fn sbr_quick_charge(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -274,7 +273,7 @@ pub(super) fn sbr_quick_charge(
 
 pub(super) fn hmr_dexterity_mods(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -288,7 +287,7 @@ pub(super) fn hmr_dexterity_mods(
 
 pub(super) fn hmr_targeting_mods(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -302,7 +301,7 @@ pub(super) fn hmr_targeting_mods(
 
 pub(super) fn sbr_targeting_mods(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -318,7 +317,7 @@ pub(super) fn sbr_targeting_mods(
 
 pub(super) fn imr_reserve_mods(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -341,7 +340,7 @@ pub(super) fn imr_reserve_mods(
 
 pub(super) fn sbr_reserve_mods(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -362,7 +361,7 @@ pub(super) fn sbr_reserve_mods(
 
 pub(super) fn rsmr_laoder_mods(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -372,7 +371,7 @@ pub(super) fn rsmr_laoder_mods(
         if _value > 1 {
             reload_stat_buff += 5;
         };
-        return  ReloadModifierResponse {
+        return ReloadModifierResponse {
             reload_stat_add: reload_stat_buff,
             reload_time_scale: 0.85,
         };
@@ -383,7 +382,7 @@ pub(super) fn rsmr_laoder_mods(
 
 pub(super) fn sbr_loader_mods(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,

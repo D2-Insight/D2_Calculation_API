@@ -13,7 +13,7 @@ use super::lib::{
 
 pub fn mmr_clown_cartridge(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -27,7 +27,7 @@ pub fn mmr_clown_cartridge(
 
 pub fn sbr_elemental_capacitor(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -47,7 +47,7 @@ pub fn sbr_elemental_capacitor(
 
 pub(super) fn hmr_elemental_capacitor(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -65,7 +65,7 @@ pub(super) fn hmr_elemental_capacitor(
 
 pub(super) fn rsmr_elemental_capacitor(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -82,7 +82,7 @@ pub(super) fn rsmr_elemental_capacitor(
 
 pub fn sbr_killing_wind(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -97,7 +97,7 @@ pub fn sbr_killing_wind(
 
 pub fn rmr_killing_wind(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -121,7 +121,7 @@ pub fn rmr_killing_wind(
 
 pub fn dmr_lasting_impressions(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -134,7 +134,7 @@ pub fn dmr_lasting_impressions(
 
 pub(super) fn dmr_vorpal(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,

@@ -13,7 +13,7 @@ use super::{
 
 pub fn dmr_adagio(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -37,7 +37,7 @@ pub fn dmr_adagio(
 
 pub fn fmr_adagio(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -57,7 +57,7 @@ pub fn fmr_adagio(
 
 pub fn dmr_adrenaline_junkie(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -76,7 +76,7 @@ pub fn dmr_adrenaline_junkie(
 
 pub fn sbr_adrenaline_junkie(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -93,7 +93,7 @@ pub fn sbr_adrenaline_junkie(
 
 pub fn hmr_adrenaline_junkie(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -108,7 +108,7 @@ pub fn hmr_adrenaline_junkie(
 
 pub fn fmr_cornered(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -127,7 +127,7 @@ pub fn fmr_cornered(
 
 pub fn sbr_ensemble(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -146,7 +146,7 @@ pub fn sbr_ensemble(
 
 pub fn hmr_ensemble(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -169,7 +169,7 @@ pub fn hmr_ensemble(
 
 pub fn rsmr_ensemble(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -190,7 +190,7 @@ pub fn rsmr_ensemble(
 
 pub fn rsmr_frenzy(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -210,7 +210,7 @@ pub fn rsmr_frenzy(
 
 pub fn hmr_frenzy(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -231,7 +231,7 @@ pub fn hmr_frenzy(
 
 pub fn dmr_frenzy(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -251,7 +251,7 @@ pub fn dmr_frenzy(
 
 pub fn sbr_frenzy(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -274,7 +274,7 @@ pub fn sbr_frenzy(
 
 pub fn rsmr_impulse_amplifier(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -289,7 +289,7 @@ pub fn rsmr_impulse_amplifier(
 
 pub fn sbr_perpetual_motion(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -310,7 +310,7 @@ pub fn sbr_perpetual_motion(
 
 pub fn hmr_perpetual_motion(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -331,7 +331,7 @@ pub fn hmr_perpetual_motion(
 
 pub fn rsmr_perpetual_motion(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -351,7 +351,7 @@ pub fn rsmr_perpetual_motion(
 
 pub fn sbr_perfect_float(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -365,7 +365,7 @@ pub fn sbr_perfect_float(
 
 pub fn sbr_pugilist(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -379,7 +379,7 @@ pub fn sbr_pugilist(
 
 pub fn hrm_pugilist(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -397,7 +397,7 @@ pub fn hrm_pugilist(
 
 pub fn mmr_reconstruction(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,

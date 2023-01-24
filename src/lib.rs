@@ -26,6 +26,11 @@ use wasm_bindgen::prelude::*;
 
 //python
 #[cfg(feature = "python")]
+use crate::types::py_types::{
+    PyAmmoFormula, PyDamageModifiers, PyFiringData, PyHandlingFormula, PyPerk, PyRangeFormula,
+    PyReloadFormula, PyWeapon, PyWeaponFormula,
+};
+#[cfg(feature = "python")]
 use pyo3::prelude::*;
 
 #[cfg(feature = "wasm")]
@@ -129,3 +134,37 @@ pub fn change_perk_value(perk_hash: u32, new_value: i32) {
 }
 
 //---------------ACTIVITY---------------//
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#[cfg(feature = "python")]
+#[pyfunction(name = "isWeaponAssigned")]
+fn is_weapon_assigned() -> PyResult<bool> {
+    let val = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.hash);
+    Ok(val != 0)
+}
+
+#[cfg(feature = "python")]
+#[pyfunction(name = "isWeaponAssigned")]
+fn set_weapon(weapon: PyWeapon) -> PyResult<()> {
+    PERS_DATA.with(|perm_data| {
+        perm_data.borrow_mut().weapon = weapon.into();
+    });
+    Ok(())
+}
+
+#[cfg(feature = "python")]
+#[pymodule]
+fn d2_calculation_api(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+    m.add_wrapped(wrap_pyfunction!(is_weapon_assigned))?;
+    m.add_class::<PyWeapon>()?;
+    m.add_class::<PyPerk>()?;
+    m.add_class::<PyWeaponFormula>()?;
+    m.add_class::<PyDamageModifiers>()?;
+    m.add_class::<PyFiringData>()?;
+    m.add_class::<PyAmmoFormula>()?;
+    m.add_class::<PyHandlingFormula>()?;
+    m.add_class::<PyRangeFormula>()?;
+    m.add_class::<PyReloadFormula>()?;
+    Ok(())
+}

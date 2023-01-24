@@ -14,7 +14,7 @@ use super::{
 
 pub(super) fn rsmr_alloy_mag(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -28,7 +28,7 @@ pub(super) fn rsmr_alloy_mag(
 
 pub(super) fn hmr_swap_mag(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -43,7 +43,7 @@ pub(super) fn hmr_swap_mag(
 
 pub(super) fn dmr_paracausal_shot(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -62,7 +62,7 @@ pub(super) fn dmr_paracausal_shot(
 
 pub(super) fn dmr_momento_mori(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -79,7 +79,7 @@ pub(super) fn dmr_momento_mori(
 
 pub(super) fn dmr_agers_call(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -96,7 +96,7 @@ pub(super) fn dmr_agers_call(
 
 pub(super) fn mmr_agers_call(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -114,7 +114,7 @@ pub(super) fn mmr_agers_call(
 
 pub(super) fn dmr_arbys(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -131,7 +131,7 @@ pub(super) fn dmr_arbys(
 
 pub(super) fn sbr_roadborn(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -146,7 +146,7 @@ pub(super) fn sbr_roadborn(
 
 pub(super) fn dmr_roadborn(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -163,7 +163,7 @@ pub(super) fn dmr_roadborn(
 
 pub(super) fn fmr_roadborn(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -182,7 +182,7 @@ pub(super) fn fmr_roadborn(
 
 pub(super) fn rmr_roadborn(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -201,7 +201,7 @@ pub(super) fn rmr_roadborn(
 
 pub(super) fn rsmr_roadborn(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -230,7 +230,7 @@ pub(super) fn rsmr_roadborn(
 
 pub(super) fn fmr_reign_havoc(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -252,7 +252,7 @@ pub(super) fn fmr_reign_havoc(
 
 pub(super) fn edr_reign_havoc(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -273,7 +273,7 @@ pub(super) fn edr_reign_havoc(
 
 pub(super) fn dmr_worms_hunger(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -287,7 +287,7 @@ pub(super) fn dmr_worms_hunger(
 
 pub(super) fn dmr_lagragian_sight(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -304,7 +304,7 @@ pub(super) fn dmr_lagragian_sight(
 
 pub(super) fn dmr_tom(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -321,7 +321,7 @@ pub(super) fn dmr_tom(
 
 pub(super) fn refund_tom(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -336,7 +336,7 @@ pub(super) fn refund_tom(
 
 pub(super) fn edr_rocket_tracers(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -364,7 +364,7 @@ pub(super) fn edr_rocket_tracers(
 
 pub(super) fn edr_guidance_ring(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -388,7 +388,7 @@ pub(super) fn edr_guidance_ring(
 
 pub(super) fn edr_poison_arrows(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -401,7 +401,7 @@ pub(super) fn edr_poison_arrows(
         } else {
             0.0
         },
-        times_to_hit: (time_diff/0.5).ceil() as i32,
+        times_to_hit: (time_diff / 0.5).ceil() as i32,
         increment_total_time: false,
         time_for_additive_damage: 0.5,
         hit_at_same_time: false,

@@ -8,6 +8,7 @@ use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponSlot, WeaponType};
 use crate::perks::{
     get_magazine_modifier, get_perk_stats, get_reserve_modifier, lib::CalculationInput, Perk,
 };
+use crate::types::py_types::PyWeapon;
 use crate::types::rs_types::{
     AmmoFormula, DamageMods, HandlingFormula, RangeFormula, ReloadFormula,
 };
@@ -49,6 +50,15 @@ impl Stat {
         }
     }
 }
+impl From<i32> for Stat {
+    fn from(_val: i32) -> Self {
+        Stat {
+            base_value: _val,
+            part_value: 0,
+            perk_value: 0,
+        }
+    }
+}
 
 #[derive(Debug, Clone, Default, Copy)]
 pub struct FiringConfig {
@@ -69,7 +79,7 @@ pub struct Weapon {
     pub stats: HashMap<u32, Stat>,
     pub damage_mods: DamageMods,
     pub firing_data: FiringConfig,
-    pub id: u32,
+    pub hash: u32,
 
     pub range_formula: RangeFormula,
     pub ammo_formula: AmmoFormula,
@@ -105,7 +115,7 @@ impl Weapon {
         }
         perk_list
     }
-    pub fn change_perk_val(&mut self, _perk_hash: u32, _val: i32) {
+    pub fn change_perk_val(&mut self, _perk_hash: u32, _val: u32) {
         let perk_opt = self.perks.get_mut(&_perk_hash);
         if perk_opt.is_some() {
             perk_opt.unwrap().value = _val;
@@ -118,7 +128,7 @@ impl Weapon {
     pub fn reset(&mut self) {
         self.perks = HashMap::new();
         self.stats = HashMap::new();
-        self.id = 0;
+        self.hash = 0;
         self.damage_mods = DamageMods::default();
         self.firing_data = FiringConfig::default();
         self.base_damage = 0.0;
@@ -138,11 +148,7 @@ impl Weapon {
         )
     }
 
-    pub fn sparse_calc_input(
-        &self,
-        _total_shots_fired: i32,
-        _total_time: f64,
-    ) -> CalculationInput {
+    pub fn sparse_calc_input(&self, _total_shots_fired: i32, _total_time: f64) -> CalculationInput {
         let tmp = CalculationInput::construct_pve_sparse(
             &self.firing_data,
             &self.stats,
@@ -153,37 +159,10 @@ impl Weapon {
             self.calc_mag_size(None).mag_size,
             _total_shots_fired,
             _total_time,
-        ).clone();
+        )
+        .clone();
         tmp
     }
-}
-impl Default for Weapon {
-    fn default() -> Weapon {
-        Weapon {
-            is_pvp: false,
-
-            perks: HashMap::new(),
-            stats: HashMap::new(),
-            id: 0,
-            damage_mods: DamageMods::default(),
-            firing_data: FiringConfig::default(),
-
-            base_damage: 0.0,
-            base_crit_mult: 0.0,
-
-            range_formula: RangeFormula::default(),
-            ammo_formula: AmmoFormula::default(),
-            handling_formula: HandlingFormula::default(),
-            reload_formula: ReloadFormula::default(),
-
-            weapon_type: WeaponType::UNKNOWN,
-            weapon_slot: WeaponSlot::UNKNOWN,
-            damage_type: DamageType::UNKNOWN,
-            ammo_type: AmmoType::UNKNOWN,
-        }
-    }
-}
-impl Weapon {
     fn update_stats(&mut self) {
         let input = CalculationInput::construct_static(
             &self.firing_data,
@@ -204,5 +183,56 @@ impl Weapon {
                 stat.perk_value = b.unwrap().clone();
             }
         }
+    }
+}
+impl Default for Weapon {
+    fn default() -> Weapon {
+        Weapon {
+            is_pvp: false,
+
+            perks: HashMap::new(),
+            stats: HashMap::new(),
+            hash: 0,
+            damage_mods: DamageMods::default(),
+            firing_data: FiringConfig::default(),
+
+            base_damage: 0.0,
+            base_crit_mult: 0.0,
+
+            range_formula: RangeFormula::default(),
+            ammo_formula: AmmoFormula::default(),
+            handling_formula: HandlingFormula::default(),
+            reload_formula: ReloadFormula::default(),
+
+            weapon_type: WeaponType::UNKNOWN,
+            weapon_slot: WeaponSlot::UNKNOWN,
+            damage_type: DamageType::UNKNOWN,
+            ammo_type: AmmoType::UNKNOWN,
+        }
+    }
+}
+impl From<PyWeapon> for Weapon {
+    fn from(_py_weapon: PyWeapon) -> Weapon {
+        let mut weapon = Weapon::default();
+        weapon.hash = _py_weapon.hash;
+        weapon.damage_mods = _py_weapon.damage_mods.into();
+        weapon.base_damage = _py_weapon.formulas.firing_data.damage;
+        weapon.base_crit_mult = _py_weapon.formulas.firing_data.crit_mult;
+        weapon.firing_data = _py_weapon.formulas.firing_data.into();
+        weapon.range_formula = _py_weapon.formulas.range_data.into();
+        weapon.ammo_formula = _py_weapon.formulas.ammo_data.into();
+        weapon.handling_formula = _py_weapon.formulas.handling_data.into();
+        weapon.reload_formula = _py_weapon.formulas.reload_data.into();
+        weapon.weapon_type = WeaponType::from_u32(_py_weapon.weapon_type);
+        weapon.weapon_slot = WeaponSlot::from_u32(_py_weapon.weapon_slot);
+        weapon.damage_type = DamageType::from_u32(_py_weapon.damage_type);
+        weapon.ammo_type = AmmoType::from_u32(_py_weapon.ammo_type);
+        for stat in _py_weapon.stats {
+            weapon.stats.insert(stat.0, Stat::from(stat.1));
+        };
+        for perk in _py_weapon.perks {
+            weapon.perks.insert(perk.0, perk.1.into());
+        };
+        weapon
     }
 }

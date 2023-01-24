@@ -45,26 +45,8 @@ pub fn clamp<T: PartialOrd>(n: T, min: T, max: T) -> T {
 pub struct Perk {
     pub stat_buffs: HashMap<u32, i32>,
     pub enhanced: bool,
-    pub value: i32, //used for toggle and stacks
+    pub value: u32, //used for toggle and stacks
     pub hash: u32,
-}
-impl Perk {
-    #[cfg(feature = "wasm")]
-    pub fn from_js(js_perk: JsPerk) -> Perk {
-        let mut stat_buffs = HashMap::new();
-        for (key, value) in js_perk.stat_buffs {
-            let hash_enum = StatHashes::from_u32(key);
-            if hash_enum.is_weapon_stat() {
-                stat_buffs.insert(key, value);
-            }
-        }
-        Perk {
-            stat_buffs,
-            enhanced: js_perk.enhanced,
-            value: js_perk.value,
-            hash: js_perk.id,
-        }
-    }
 }
 
 // all armor pekrs are for the future but wanted to started to compile them now

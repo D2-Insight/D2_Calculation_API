@@ -273,7 +273,7 @@ pub enum DamageType {
     UNKNOWN,
 }
 impl DamageType {
-    fn from_u32(_value: u32) -> DamageType {
+    pub fn from_u32(_value: u32) -> DamageType {
         match _value {
             2303181850 => DamageType::ARC,
             3454344768 => DamageType::VOID,

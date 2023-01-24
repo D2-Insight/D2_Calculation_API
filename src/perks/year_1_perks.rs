@@ -13,7 +13,7 @@ use super::{
 
 pub(super) fn dmr_high_impact_reserves(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -39,12 +39,12 @@ pub(super) fn dmr_high_impact_reserves(
 
 pub(super) fn hmr_threat_detector(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
 ) -> HandlingModifierResponse {
-    let val = clamp(_value, 0, 2);
+    let val = clamp(_value, 0, 2) as i32;
     let time_scale = 0.75_f64.powi(val);
     HandlingModifierResponse {
         handling_stat_add: 0,
@@ -55,7 +55,7 @@ pub(super) fn hmr_threat_detector(
 
 pub(super) fn rsmr_threat_detector(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -74,7 +74,7 @@ pub(super) fn rsmr_threat_detector(
 
 pub(super) fn sbr_threat_detector(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -96,7 +96,7 @@ pub(super) fn sbr_threat_detector(
 
 pub(super) fn mmr_abitious_assassin(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -124,7 +124,7 @@ pub(super) fn mmr_abitious_assassin(
 
 pub(super) fn dmr_assasins_blade(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -141,7 +141,7 @@ pub(super) fn dmr_assasins_blade(
 }
 pub(super) fn dmr_box_breathing(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -166,7 +166,7 @@ pub(super) fn dmr_box_breathing(
 
 pub(super) fn fmr_desperado(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -186,7 +186,7 @@ pub(super) fn fmr_desperado(
 
 pub(super) fn dmr_explosive_payload(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -207,7 +207,7 @@ pub(super) fn dmr_explosive_payload(
 
 pub(super) fn dmr_timed_payload(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -228,7 +228,7 @@ pub(super) fn dmr_timed_payload(
 
 pub(super) fn sbr_field_prep(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -248,7 +248,7 @@ pub(super) fn sbr_field_prep(
 
 pub(super) fn rsmr_field_prep(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -267,7 +267,7 @@ pub(super) fn rsmr_field_prep(
 
 pub(super) fn imr_field_prep(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -281,7 +281,7 @@ pub(super) fn imr_field_prep(
 
 pub(super) fn sbr_firmly_planted(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -300,7 +300,7 @@ pub(super) fn sbr_firmly_planted(
 
 pub(super) fn hmr_firmly_planted(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -318,7 +318,7 @@ pub(super) fn hmr_firmly_planted(
 
 pub(super) fn frm_full_auto_trigger(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -337,7 +337,7 @@ pub(super) fn frm_full_auto_trigger(
 
 pub(super) fn rr_triple_tap(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -352,7 +352,7 @@ pub(super) fn rr_triple_tap(
 
 pub(super) fn sbr_hip_fire_grip(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -365,7 +365,7 @@ pub(super) fn sbr_hip_fire_grip(
 
 pub(super) fn rmr_hip_fire_grip(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -385,7 +385,7 @@ pub(super) fn rmr_hip_fire_grip(
 
 pub(super) fn dmr_impact_casing(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -398,7 +398,7 @@ pub(super) fn dmr_impact_casing(
 
 pub(super) fn sbr_moving_target(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -411,7 +411,7 @@ pub(super) fn sbr_moving_target(
 
 pub(super) fn sbr_opening_shot(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -428,7 +428,7 @@ pub(super) fn sbr_opening_shot(
 
 pub(super) fn rmr_opening_shot(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -447,7 +447,7 @@ pub(super) fn rmr_opening_shot(
 
 pub(super) fn sbr_outlaw(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -461,7 +461,7 @@ pub(super) fn sbr_outlaw(
 
 pub(super) fn rmr_range_finder(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -476,7 +476,7 @@ pub(super) fn rmr_range_finder(
 
 pub(super) fn sbr_slide_shot(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -493,7 +493,7 @@ pub(super) fn sbr_slide_shot(
 
 pub(super) fn rmr_slide_shot(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -512,7 +512,7 @@ pub(super) fn rmr_slide_shot(
 
 pub(super) fn sbr_slide_ways(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -529,7 +529,7 @@ pub(super) fn sbr_slide_ways(
 
 pub(super) fn hmr_snapshot(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -547,7 +547,7 @@ pub(super) fn hmr_snapshot(
 
 pub(super) fn sbr_tap_the_trigger(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,

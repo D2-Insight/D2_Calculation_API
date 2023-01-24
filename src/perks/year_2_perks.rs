@@ -13,21 +13,21 @@ use super::{
 
 pub fn sbr_air_assault(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     let ae_per_stack = if _is_enhanced { 35 } else { 20 };
-    let ae = ae_per_stack * _value;
+    let ae = ae_per_stack * _value as i32;
     stats.insert(StatHashes::AIRBORNE.to_u32(), ae);
     stats
 }
 
 pub fn fmr_archers_tempo(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -42,7 +42,7 @@ pub fn fmr_archers_tempo(
 
 pub fn dmr_explosive_head(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -63,7 +63,7 @@ pub fn dmr_explosive_head(
 
 pub fn rsmr_feeding_frenzy(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -100,7 +100,7 @@ pub fn rsmr_feeding_frenzy(
 
 pub fn sbr_feeding_frenzy(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -129,7 +129,7 @@ pub fn sbr_feeding_frenzy(
 
 pub fn dmr_firing_line(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -146,7 +146,7 @@ pub fn dmr_firing_line(
 
 pub fn rr_fourth_times(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -161,7 +161,7 @@ pub fn rr_fourth_times(
 
 pub fn dmr_killing_tally(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -181,7 +181,7 @@ pub fn dmr_killing_tally(
 
 pub fn mmr_overflow(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -199,7 +199,7 @@ pub fn mmr_overflow(
 
 pub fn rsmr_rapid_hit(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -229,7 +229,7 @@ pub fn rsmr_rapid_hit(
 
 pub fn dmr_resevoir_burst(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -246,7 +246,7 @@ pub fn dmr_resevoir_burst(
 
 pub(super) fn dmr_surrounded(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
@@ -270,7 +270,7 @@ pub(super) fn dmr_surrounded(
 
 pub(super) fn ror_demolitionist(
     _input: &CalculationInput,
-    _value: i32,
+    _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
