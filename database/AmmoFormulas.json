@@ -165,10 +165,10 @@
         "878286503":  {"name": "Rapid-Fire Frame",  "category": "large"},
         "1019291327": {"name": "High-Impact Frame", "category": "small"},
         "1294026524": {"name": "Adaptive Frame",    "category": "small"},
-        "2261491232": {"name": "Xenophage",         "category": "default"},
+        "2261491232": {"name": "Xenophage",         "category": "large"},
         "2608508147": {"name": "Heir Apparent",     "category": "large"},
         "4148158229": {"name": "Thunderlord",       "category": "small"},
-        "2940035732": {"name": "Grand Overture",    "category": "default"},
+        "2940035732": {"name": "Grand Overture",    "category": "large"},
         "large": {
             "magazine": {"evpp": 0.0, "vpp": 0.7, "offset": 45.0},
             "reserve": {

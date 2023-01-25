@@ -172,6 +172,7 @@ pub struct PyReloadFormula {
     pub vpp: f64,
     pub offset: f64,
     pub ammo_percent: f64,
+    pub mag_multiplier: bool,
 }
 #[pymethods]
 impl PyReloadFormula {
@@ -182,6 +183,7 @@ impl PyReloadFormula {
             vpp: 0.0,
             offset: 0.0,
             ammo_percent: 1.0,
+            mag_multiplier: false,
         }
     }
     #[staticmethod]
@@ -189,12 +191,13 @@ impl PyReloadFormula {
         let mut reload_formula = PyReloadFormula::new();
         for (key, value) in _dct.iter() {
             let key = key.extract::<String>()?;
-            let value = value.extract::<f64>()?;
+            let f_value = value.extract::<f64>()?;
             match key.as_str() {
-                "evpp" => reload_formula.evpp = value,
-                "vpp" => reload_formula.vpp = value,
-                "offset" => reload_formula.offset = value,
-                "ammo_percent" => reload_formula.ammo_percent = value,
+                "evpp" => reload_formula.evpp = f_value,
+                "vpp" => reload_formula.vpp = f_value,
+                "offset" => reload_formula.offset = f_value,
+                "ammo_percent" => reload_formula.ammo_percent = f_value,
+                "mag_multiplier" => reload_formula.mag_multiplier = value.extract::<bool>()?,
                 _ => return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>("Invalid key")),
             }
         }
@@ -362,6 +365,7 @@ pub struct PyAmmoFormula {
     pub mag_vpp: f64,
     pub mag_offset: f64,
     pub mag_round_to_nearest: i32,
+    pub is_primary: bool,
     pub reserve_formulas: HashMap<i32, (f64, f64)>,
 }
 #[pymethods]
@@ -373,6 +377,7 @@ impl PyAmmoFormula {
             mag_vpp: 0.0,
             mag_offset: 0.0,
             mag_round_to_nearest: 0,
+            is_primary: false,
             reserve_formulas: HashMap::new(),
         }
     }
@@ -383,14 +388,13 @@ impl PyAmmoFormula {
         for (key, value) in _dct.iter() {
             let key = key.extract::<String>()?;
             let f_value = value.extract::<f64>()?;
-            let i_value = value.extract::<i32>()?;
-            let h_value = value.extract::<HashMap<i32, (f64, f64)>>()?;
             match key.as_str() {
                 "mag_evpp" => ammo_formula.mag_evpp = f_value,
                 "mag_vpp" => ammo_formula.mag_vpp = f_value,
                 "mag_offset" => ammo_formula.mag_offset = f_value,
-                "mag_round_to_nearest" => ammo_formula.mag_round_to_nearest = i_value,
-                "reserve_formulas" => ammo_formula.reserve_formulas = h_value,
+                "mag_round_to_nearest" => ammo_formula.mag_round_to_nearest = value.extract::<i32>()?,
+                "is_primary" => ammo_formula.is_primary = value.extract::<bool>()?,
+                "reserve_formulas" => ammo_formula.reserve_formulas = value.extract::<HashMap<i32, (f64, f64)>>()?,
                 _ => return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>("Invalid key")),
             }
         }
@@ -412,6 +416,7 @@ impl Into<AmmoFormula> for PyAmmoFormula {
                 offset: self.mag_offset,
             },
             round_to_nearest: self.mag_round_to_nearest,
+            is_primary: self.is_primary,
             reserves: self
                 .reserve_formulas
                 .into_iter()

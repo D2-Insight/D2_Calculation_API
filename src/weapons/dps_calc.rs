@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::{cell::RefCell, rc::Rc};
 
 use super::{FiringConfig, Weapon};
+use crate::d2_enums::AmmoType;
 use crate::enemies::Enemy;
 use crate::perks::lib::{CalculationInput, RefundResponse, ExtraDamageResponse};
 use crate::perks::*;
@@ -82,6 +83,7 @@ pub fn calc_extra_dmg(_total_time: f64, _extra_dmg_entries: Vec<ExtraDamageRespo
 }
 
 pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> DpsResponse {
+
     let weapon = Rc::new(_weapon.clone());
     let stats = weapon.stats.clone();
     let weapon_type = weapon.weapon_type.clone();
@@ -90,6 +92,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
     let base_crit_mult = weapon.base_crit_mult;
 
     let base_mag = weapon.calc_mag_size(None).mag_size;
+    let maximum_shots = if base_mag*5 < 15 {15} else {base_mag*5};
 
     let firing_settings = _weapon.firing_data.clone();
     let perks = weapon.list_perks();
@@ -253,6 +256,12 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
         }
 
         reserve -= mag;
+        dps_per_mag.push(total_damage / total_time);
+        if weapon.ammo_type == AmmoType::PRIMARY {
+            if total_shots_fired > maximum_shots {
+                break;
+            }
+        }
 
         //RELOAD///////////////////////
         let reload_input_data = CalculationInput {
@@ -280,7 +289,6 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
         total_time += reload_responses.reload_time;
         ///////////////////////////////
         num_reloads += 1;
-        dps_per_mag.push(total_damage / total_time);
     }
     //sort time_damage_data by time
     time_damage_data.sort_by(|a, b| a.0.partial_cmp(&b.0).unwrap());

@@ -78,6 +78,7 @@ pub struct HandlingFormula {
 pub struct AmmoFormula {
     pub mag: QuadraticFormula,
     pub round_to_nearest: i32,
+    pub is_primary: bool,
     pub reserves: HashMap<i32, QuadraticFormula>,
 }
 

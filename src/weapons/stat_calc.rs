@@ -69,7 +69,7 @@ impl RangeFormula {
         let zoom_mult = if self.is_fusion {
             1.0 + 0.02 * zoom_stat
         } else {
-            0.1 * zoom_stat
+            0.1 * zoom_stat - 0.025
         };
 
         let hip_falloff_start = self.start.solve_at(range_stat)
@@ -183,6 +183,12 @@ impl AmmoFormula {
         _reserve_stat: i32,
         _modifiers: InventoryModifierResponse,
     ) -> ReserveResponse {
+        if self.is_primary {
+            //primary weapons have infinite reserves
+            return ReserveResponse {
+                reserve_size: 9999,
+            };
+        }
         let reserve_stat = if (_reserve_stat + _modifiers.inv_stat_add) > 100 {
             100
         } else {

@@ -33,6 +33,17 @@ use crate::types::py_types::{
 #[cfg(feature = "python")]
 use pyo3::prelude::*;
 
+#[derive(Debug, Clone, Default)]
+pub struct PersistentData {
+    pub weapon: Weapon,
+    pub activity: Activity,
+    pub ability: Ability,
+    pub enemy: Enemy,
+}
+thread_local! {
+    static PERS_DATA: RefCell<PersistentData> = RefCell::new(PersistentData::default());
+}
+
 #[cfg(feature = "wasm")]
 #[wasm_bindgen]
 extern "C" {
@@ -53,16 +64,6 @@ pub fn start() {
     console_log!("D2 Calculator Loaded");
 }
 
-#[derive(Debug, Clone, Default)]
-pub struct PersistentData {
-    pub weapon: Weapon,
-    pub activity: Activity,
-    pub ability: Ability,
-    pub enemy: Enemy,
-}
-thread_local! {
-    static PERS_DATA: RefCell<PersistentData> = RefCell::new(PersistentData::default());
-}
 
 //---------------WEAPONS---------------//
 #[cfg(feature = "wasm")]
