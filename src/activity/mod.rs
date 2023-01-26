@@ -4,10 +4,10 @@ pub mod damage_calc;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum PlayerClass {
-    Titan,
-    Hunter,
-    Warlock,
-    Unknown,
+    Unknown = 0,
+    Titan = 1,
+    Hunter = 2,
+    Warlock = 3,
 }
 impl Default for PlayerClass {
     fn default() -> Self {

@@ -3,4 +3,8 @@
 *.py
 *.dll
 *.pyc
+*.pyi
+*.old
 zdata.json
+database/weapon.json
+/zPythonStuff

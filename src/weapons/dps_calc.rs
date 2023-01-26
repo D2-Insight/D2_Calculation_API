@@ -91,7 +91,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
     let base_dmg = weapon.base_damage;
     let base_crit_mult = weapon.base_crit_mult;
 
-    let base_mag = weapon.calc_mag_size(None).mag_size;
+    let base_mag = weapon.calc_ammo_sizes(None).mag_size;
     let maximum_shots = if base_mag*5 < 15 {15} else {base_mag*5};
 
     let firing_settings = _weapon.firing_data.clone();
@@ -112,7 +112,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
     let mut num_reloads = 0_i32;
 
     let mut reserve = weapon
-        .calc_reserve_size(Some(weapon.static_calc_input()))
+        .calc_ammo_sizes(Some(weapon.static_calc_input()))
         .reserve_size;
 
     #[allow(unused_mut)]
@@ -121,7 +121,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
         let mut shots_this_mag = 0;
         //MAGAZINE/////////////////////
         let mag_calc_input = weapon.sparse_calc_input(total_shots_fired, total_time);
-        let mut mag = weapon.calc_mag_size(Some(mag_calc_input)).mag_size;
+        let mut mag = weapon.calc_ammo_sizes(Some(mag_calc_input)).mag_size;
         if mag > reserve {
             mag = reserve
         }

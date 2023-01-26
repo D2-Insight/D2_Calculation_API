@@ -79,7 +79,7 @@ pub struct AmmoFormula {
     pub mag: QuadraticFormula,
     pub round_to_nearest: i32,
     pub is_primary: bool,
-    pub reserves: HashMap<i32, QuadraticFormula>,
+    pub reserve_id: i32
 }
 
 #[derive(Debug, Clone, Default)]
@@ -88,6 +88,7 @@ pub struct RangeResponse {
     pub hip_falloff_end: f64,
     pub ads_falloff_start: f64,
     pub ads_falloff_end: f64,
+    pub floor_percent: f64,
 }
 
 #[derive(Debug, Clone, Default, Copy)]
@@ -98,12 +99,8 @@ pub struct HandlingResponse {
 }
 
 #[derive(Debug, Clone, Default)]
-pub struct MagazineResponse {
+pub struct AmmoResponse {
     pub mag_size: i32,
-}
-
-#[derive(Debug, Clone, Default)]
-pub struct ReserveResponse {
     pub reserve_size: i32,
 }
 

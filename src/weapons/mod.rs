@@ -1,24 +1,29 @@
 pub mod dps_calc;
 pub mod stat_calc;
 mod ttk_calc;
+pub mod reserve_calc;
 
 use std::collections::HashMap;
 
 use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponSlot, WeaponType};
+use crate::enemies::Enemy;
 use crate::perks::{
     get_magazine_modifier, get_perk_stats, get_reserve_modifier, lib::CalculationInput, Perk,
 };
-use crate::types::py_types::PyWeapon;
+
 use crate::types::rs_types::{
-    AmmoFormula, DamageMods, HandlingFormula, RangeFormula, ReloadFormula,
+    AmmoFormula, DamageMods, HandlingFormula, RangeFormula, ReloadFormula, DpsResponse,
 };
 
 //JavaScript
 #[cfg(feature = "wasm")]
-use crate::types::js_types::{JsDamageModifiers, JsPerk, JsStat, JsWeaponFormula};
-#[cfg(feature = "wasm")]
-use wasm_bindgen::prelude::wasm_bindgen;
+use crate::types::js_types::{JsWeapon};
 //Python
+#[cfg(feature = "python")]
+use crate::types::py_types::PyWeapon;
+
+use self::dps_calc::complex_dps_calc;
+
 
 #[derive(Debug, Clone)]
 pub struct Stat {
@@ -39,15 +44,6 @@ impl Stat {
     }
     pub fn perk_val(&self) -> i32 {
         self.base_value + self.part_value + self.perk_value
-    }
-    #[cfg(feature = "wasm")]
-    pub fn to_js(&self, _hash: u32) -> JsStat {
-        JsStat {
-            stat_hash: _hash,
-            base_value: self.base_value,
-            part_value: self.part_value,
-            perk_value: self.perk_value,
-        }
     }
 }
 impl From<i32> for Stat {
@@ -156,7 +152,7 @@ impl Weapon {
             &self.ammo_type,
             self.base_damage,
             self.base_crit_mult,
-            self.calc_mag_size(None).mag_size,
+            self.calc_ammo_sizes(None).mag_size,
             _total_shots_fired,
             _total_time,
         )
@@ -183,6 +179,9 @@ impl Weapon {
                 stat.perk_value = b.unwrap().clone();
             }
         }
+    }
+    fn weapon_dps(&self, _enemy: Enemy, _pl_dmg_mult: f64) -> DpsResponse {
+        complex_dps_calc(self.clone(), _enemy, _pl_dmg_mult)
     }
 }
 impl Default for Weapon {
@@ -211,6 +210,7 @@ impl Default for Weapon {
         }
     }
 }
+#[cfg(feature = "python")]
 impl From<PyWeapon> for Weapon {
     fn from(_py_weapon: PyWeapon) -> Weapon {
         let mut weapon = Weapon::default();

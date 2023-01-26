@@ -2,35 +2,67 @@
 
 use std::collections::HashMap;
 
-use crate::{types::rs_types::QuadraticFormula, weapons::FiringConfig};
+use crate::{types::rs_types::QuadraticFormula, weapons::{FiringConfig, Stat}};
 use serde::{Deserialize, Serialize};
-use tsify::Tsify;
+// use tsify::Tsify;
 use wasm_bindgen::prelude::wasm_bindgen;
 
 use super::{
     rs_types::{
-        AmmoFormula, DamageMods, DpsResponse, HandlingFormula, HandlingResponse, MagazineResponse,
-        RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, ReserveResponse, TtkResponse,
+        AmmoFormula, DamageMods, DpsResponse, HandlingFormula, HandlingResponse, AmmoResponse,
+        RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, TtkResponse,
     }
 };
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
-// #[serde(rename = "Weapon")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[derive(Debug, Clone)]
+#[wasm_bindgen(js_name = "Weapon")]
 pub struct JsWeapon {
     pub hash: u32,
     pub weapon_type: u32,
     pub damage_type: u32,
     pub weapon_slot: u32,
     pub ammo_type: u32,
-    pub stats: HashMap<u32, i32>,
+    #[wasm_bindgen(skip)]
+    pub stats: Vec<js_sys::BigInt64Array>,
     pub damage_modifiers: JsDamageModifiers,
     pub formulas: JsWeaponFormula,
 }
+#[wasm_bindgen]
+impl JsWeapon {
+    #[wasm_bindgen(constructor)]
+    pub fn new(
+        hash: u32,
+        weapon_type: u32,
+        damage_type: u32,
+        weapon_slot: u32,
+        ammo_type: u32,
+        stats: Vec<js_sys::BigInt64Array>,
+        damage_modifiers: JsDamageModifiers,
+        formulas: JsWeaponFormula,
+    ) -> JsWeapon {
+        JsWeapon {
+            hash,
+            weapon_type,
+            damage_type,
+            weapon_slot,
+            ammo_type,
+            stats,
+            damage_modifiers,
+            formulas,
+        }
+    }
+    #[wasm_bindgen(getter)]
+    pub fn stats(&self) -> Vec<js_sys::BigInt64Array> {
+        self.stats.clone()
+    }
+    #[wasm_bindgen(setter)]
+    pub fn set_stats(&mut self, stats: Vec<js_sys::BigInt64Array>) {
+        self.stats = stats;
+    }
+}
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
-// #[serde(rename = "DamageModifiers")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[wasm_bindgen(js_name = "DamageModifiers")]
 pub struct JsDamageModifiers {
     pub global: f64, // not reccomended to use but gives users a way to update sstuff themselves
     pub vehicle: f64,
@@ -69,9 +101,8 @@ impl Into<DamageMods> for JsDamageModifiers {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
-// #[serde(rename = "RangeFormula")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[wasm_bindgen(js_name = "RangeFormula")]
 pub struct JsRangeFormula {
     pub vpp_start: f64,
     pub offset_start: f64,
@@ -123,9 +154,9 @@ impl Into<RangeFormula> for JsRangeFormula {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 // #[serde(rename = "ReloadFormula")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[wasm_bindgen(js_name = "ReloadFormula")]
 pub struct JsReloadFormula {
     pub evpp: f64,
     pub vpp: f64,
@@ -162,9 +193,9 @@ impl Into<ReloadFormula> for JsReloadFormula {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 // #[serde(rename = "HandlingFormula")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[wasm_bindgen(js_name = "HandlingFormula")]
 pub struct JsHandlingFormula {
     pub ready_vpp: f64,
     pub ready_offset: f64,
@@ -219,9 +250,9 @@ impl Into<HandlingFormula> for JsHandlingFormula {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 // #[serde(rename = "FiringData")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[wasm_bindgen(js_name = "FiringData")]
 pub struct JsFiringData {
     pub damage: f64,
     pub crit_mult: f64,
@@ -273,15 +304,15 @@ impl Into<FiringConfig> for JsFiringData {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
-// #[serde(rename = "AmmoData")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[wasm_bindgen(js_name = "AmmoData")]
 pub struct JsAmmoFormula {
     pub mag_evpp: f64,
     pub mag_vpp: f64,
     pub mag_offset: f64,
     pub mag_round_to_nearest: i32,
-    pub reserve_formulas: HashMap<i32, (f64, f64)>,
+    pub is_primary: bool,
+    pub reserve_id: i32,
 }
 #[wasm_bindgen]
 impl JsAmmoFormula {
@@ -292,17 +323,9 @@ impl JsAmmoFormula {
             mag_vpp: 0.0,
             mag_offset: 0.0,
             mag_round_to_nearest: 1,
-            reserve_formulas: HashMap::new(),
+            is_primary: false,
+            reserve_id: 0,
         }
-    }
-}
-impl JsAmmoFormula {
-    pub fn is_null(&self) -> bool {
-        self.mag_evpp == 0.0
-            && self.mag_vpp == 0.0
-            && self.mag_offset == 0.0
-            && self.mag_round_to_nearest < 2
-            && self.reserve_formulas.is_empty()
     }
 }
 impl Into<AmmoFormula> for JsAmmoFormula {
@@ -314,27 +337,14 @@ impl Into<AmmoFormula> for JsAmmoFormula {
                 offset: self.mag_offset,
             },
             round_to_nearest: self.mag_round_to_nearest,
-            reserves: self
-                .reserve_formulas
-                .into_iter()
-                .map(|(k, v)| {
-                    (
-                        k,
-                        QuadraticFormula {
-                            evpp: 0.0,
-                            vpp: v.0,
-                            offset: v.1,
-                        },
-                    )
-                })
-                .collect(),
+            is_primary: self.is_primary,
+            reserve_id: self.reserve_id,
         }
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
-// #[serde(rename = "WeaponFormula")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[wasm_bindgen(js_name = "WeaponFormula")]
 pub struct JsWeaponFormula {
     pub range_data: JsRangeFormula,
     pub reload_data: JsReloadFormula,
@@ -356,11 +366,12 @@ impl JsWeaponFormula {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
-// #[serde(rename = "Perk")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[derive(Debug, Clone)]
+#[wasm_bindgen(js_name = "Perk")]
 pub struct JsPerk {
-    pub stat_buffs: HashMap<u32, i32>,
+    //first entry in array is key next is value
+    #[wasm_bindgen(skip)]
+    pub stat_buffs: Vec<js_sys::BigInt64Array>,
     pub enhanced: bool,
     pub value: i32, //used for toggle and stacks
     pub id: u32,
@@ -370,19 +381,42 @@ impl JsPerk {
     #[wasm_bindgen(constructor)]
     pub fn new() -> JsPerk {
         JsPerk {
-            stat_buffs: HashMap::new(),
+            stat_buffs: Vec::new(),
             enhanced: false,
             value: 0,
             id: 0,
         }
     }
+    #[wasm_bindgen(getter)]
+    pub fn stat_buffs(&self) -> Vec<js_sys::BigInt64Array> {
+        self.stat_buffs
+            .iter()
+            .map(|x| {
+                let arr = js_sys::BigInt64Array::new_with_length(2);
+                arr.set_index(0, x.get_index(0));
+                arr.set_index(1, x.get_index(1));
+                arr
+            })
+            .collect()
+    }
+    #[wasm_bindgen(setter)]
+    pub fn set_stat_buffs(&mut self, stat_buffs: Vec<js_sys::BigInt64Array>) {
+        self.stat_buffs = stat_buffs
+            .iter()
+            .map(|x| {
+                let arr = js_sys::BigInt64Array::new_with_length(2);
+                arr.set_index(0, x.get_index(0));
+                arr.set_index(1, x.get_index(1));
+                arr
+            })
+            .collect();
+    }
 }
 
 
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
-// #[serde(rename = "HandlingResponse")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[wasm_bindgen(js_name = "HandlingResponse")]
 pub struct JsHandlingResponse {
     pub ready_time: f64,
     pub stow_time: f64,
@@ -405,14 +439,14 @@ impl From<HandlingResponse> for JsHandlingResponse {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
-// #[serde(rename = "RangeResponse")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[wasm_bindgen(js_name = "RangeResponse")]
 pub struct JsRangeResponse {
     pub hip_falloff_start: f64,
     pub hip_falloff_end: f64,
     pub ads_falloff_start: f64,
     pub ads_falloff_end: f64,
+    pub floor_percent: f64,
 }
 #[wasm_bindgen]
 impl JsRangeResponse {
@@ -428,13 +462,13 @@ impl From<RangeResponse> for JsRangeResponse {
             hip_falloff_end: range.hip_falloff_end,
             ads_falloff_start: range.ads_falloff_start,
             ads_falloff_end: range.ads_falloff_end,
+            floor_percent: range.floor_percent,
         }
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
-// #[serde(rename = "ReloadResponse")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[wasm_bindgen(js_name = "ReloadResponse")]
 pub struct JsReloadResponse {
     pub reload_time: f64,
     pub ammo_time: f64,
@@ -455,9 +489,8 @@ impl From<ReloadResponse> for JsReloadResponse {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
-// #[serde(rename = "TtkResponse")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[wasm_bindgen(js_name = "TtkResponse")]
 pub struct JsTtkResponse {
     pub ammo_needed: i32,
     pub hits_needed: i32,
@@ -484,12 +517,13 @@ impl From<TtkResponse> for JsTtkResponse {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
-// #[serde(rename = "DpsResponse")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[derive(Debug, Clone)]
+#[wasm_bindgen(js_name = "DpsResponse")]
 pub struct JsDpsResponse {
+    #[wasm_bindgen(skip)]
     pub dps_per_mag: Vec<f64>,
-    pub time_damage_data: Vec<(f64, f64)>,
+    #[wasm_bindgen(skip)]
+    pub time_damage_data: Vec<js_sys::Float64Array>,
     pub total_damage: f64,
     pub total_time: f64,
     pub total_shots: i32,
@@ -500,12 +534,28 @@ impl JsDpsResponse {
     pub fn to_string(self) -> String {
         format!("{:?}", self)
     }
+    #[wasm_bindgen(getter)]
+    pub fn time_damage_data(&self) -> Vec<js_sys::Float64Array> {
+        self.time_damage_data.clone()
+    }
+    #[wasm_bindgen(getter)]
+    pub fn dps_per_mag(&self) -> Vec<f64> {
+        self.dps_per_mag.clone()
+    }
 }
 impl From<DpsResponse> for JsDpsResponse {
     fn from(dps: DpsResponse) -> Self {
+        //turn dps.time_damage_data into vec of js_sys::Float64Array
+        let mut time_damage_data = Vec::new();
+        for time_data in dps.time_damage_data {
+            let time_data_array = js_sys::Float64Array::new_with_length(2);
+            time_data_array.set_index(0 as u32, time_data.0);
+            time_data_array.set_index(1 as u32, time_data.1);
+            time_damage_data.push(time_data_array);
+        }
         JsDpsResponse {
             dps_per_mag: dps.dps_per_mag,
-            time_damage_data: dps.time_damage_data,
+            time_damage_data: time_damage_data,
             total_damage: dps.total_damage,
             total_time: dps.total_time,
             total_shots: dps.total_shots,
@@ -513,53 +563,32 @@ impl From<DpsResponse> for JsDpsResponse {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
-// #[serde(rename = "MagazineResponse")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
-pub struct JsMagazineResponse {
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[wasm_bindgen(js_name = "AmmoResponse")]
+pub struct JsAmmoResponse {
     pub mag_size: i32,
-}
-#[wasm_bindgen]
-impl JsMagazineResponse {
-    #[wasm_bindgen(js_name = toString)]
-    pub fn to_string(self) -> String {
-        format!("{:?}", self)
-    }
-}
-impl From<MagazineResponse> for JsMagazineResponse {
-    fn from(ammo: MagazineResponse) -> Self {
-        JsMagazineResponse {
-            mag_size: ammo.mag_size,
-        }
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify)]
-// #[serde(rename = "ReserveResponse")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
-pub struct JsReserveResponse {
     pub reserve_size: i32,
+
 }
 #[wasm_bindgen]
-impl JsReserveResponse {
+impl JsAmmoResponse {
     #[wasm_bindgen(js_name = toString)]
     pub fn to_string(self) -> String {
         format!("{:?}", self)
     }
 }
-impl From<ReserveResponse> for JsReserveResponse {
-    fn from(ammo: ReserveResponse) -> Self {
-        JsReserveResponse {
+impl From<AmmoResponse> for JsAmmoResponse {
+    fn from(ammo: AmmoResponse) -> Self {
+        JsAmmoResponse {
+            mag_size: ammo.mag_size,
             reserve_size: ammo.reserve_size,
         }
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify, Default)]
-// #[serde(rename = "Stat")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, Default)]
+#[wasm_bindgen(js_name = "Stat")]
 pub struct JsStat {
-    pub stat_hash: u32,
     pub base_value: i32,
     pub part_value: i32,
     pub perk_value: i32,
@@ -571,26 +600,12 @@ impl JsStat {
         format!("{:?}", self)
     }
 }
-
-#[derive(Debug, Clone, Serialize, Deserialize, Tsify, Default)]
-// #[serde(rename = "WeaponOut")]
-#[tsify(into_wasm_abi, from_wasm_abi)]
-pub struct JsWeaponOut {
-    pub is_pvp: bool,
-
-    pub perks: HashMap<u32, JsPerk>,
-    pub stats: HashMap<u32, JsStat>,
-    pub id: u32,
-
-    pub weapon_type: String,
-    pub weapon_slot: String,
-    pub damage_type: String,
-    pub ammo_type: String,
-}
-#[wasm_bindgen]
-impl JsWeaponOut {
-    #[wasm_bindgen(js_name = toString)]
-    pub fn to_string(self) -> String {
-        format!("{:?}", self)
+impl From<Stat> for JsStat {
+    fn from(stat: Stat) -> Self {
+        JsStat {
+            base_value: stat.base_value,
+            part_value: stat.part_value,
+            perk_value: stat.perk_value,
+        }
     }
 }

@@ -5,7 +5,7 @@ version = "0.1.0"
 rust-version = "1.65"
 
 [features]
-wasm = ["serde-wasm-bindgen", "wasm-bindgen", "wasm-bindgen-futures", "console_error_panic_hook", "tsify"]
+wasm = ["serde-wasm-bindgen", "wasm-bindgen", "wasm-bindgen-futures", "console_error_panic_hook", "js-sys"]
 python = ["pyo3"]
 
 
@@ -18,9 +18,9 @@ serde-wasm-bindgen = { version = "^0.4", optional = true}
 console_error_panic_hook = { version = "0.1.7", optional = true}
 wasm-bindgen-futures = { version = "^0.4", optional = true}
 wasm-bindgen = { version = "^0.2", optional = true}
-tsify = { version = "0.4.3", optional = true}
+js-sys = { version = "^0.3", optional = true}
 
-pyo3 = { version = "^0.17", features = ["extension-module"], optional = true}
+pyo3 = { version = "^0.18", features = ["extension-module"], optional = true}
 
 [lib]
 crate-type = ["cdylib"]

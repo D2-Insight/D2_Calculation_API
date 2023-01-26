@@ -1,4 +1,4 @@
-use super::{Stat, Weapon};
+use super::{Stat, Weapon, reserve_calc::calc_reserves};
 use crate::{
     d2_enums::StatHashes,
     perks::{
@@ -10,8 +10,8 @@ use crate::{
         },
     },
     types::rs_types::{
-        AmmoFormula, HandlingFormula, HandlingResponse, MagazineResponse, RangeFormula,
-        RangeResponse, ReloadFormula, ReloadResponse, ReserveResponse,
+        AmmoFormula, HandlingFormula, HandlingResponse, RangeFormula,
+        RangeResponse, ReloadFormula, ReloadResponse, AmmoResponse
     },
 };
 
@@ -58,6 +58,7 @@ impl RangeFormula {
         _range_stat: i32,
         _zoom_stat: i32,
         _modifiers: RangeModifierResponse,
+        _floor: f64,
     ) -> RangeResponse {
         let range_stat = if (_range_stat + _modifiers.range_stat_add) > 100 {
             100
@@ -86,6 +87,7 @@ impl RangeFormula {
             hip_falloff_end,
             ads_falloff_start,
             ads_falloff_end,
+            floor_percent: _floor,
         }
     }
 }
@@ -105,12 +107,13 @@ impl Weapon {
             let modifiers =
                 get_range_modifier(self.list_perks(), &_calc_input.unwrap(), self.is_pvp);
             self.range_formula
-                .calc_range_falloff_formula(range_stat, zoom_stat, modifiers)
+                .calc_range_falloff_formula(range_stat, zoom_stat, modifiers, self.range_formula.floor_percent)
         } else {
             self.range_formula.calc_range_falloff_formula(
                 range_stat,
                 zoom_stat,
                 RangeModifierResponse::default(),
+                self.range_formula.floor_percent
             )
         }
     }
@@ -128,8 +131,11 @@ impl HandlingFormula {
             _handling_stat + _modifiers.handling_stat_add
         } as f64;
         let ready_time = self.ready.solve_at(handling_stat) * _modifiers.handling_swap_scale;
-        let stow_time = self.stow.solve_at(handling_stat) * _modifiers.handling_swap_scale;
+        let mut stow_time = self.stow.solve_at(handling_stat) * _modifiers.handling_swap_scale;
         let ads_time = self.ads.solve_at(handling_stat) * _modifiers.handling_ads_scale;
+        if stow_time < self.stow.solve_at(handling_stat) {
+            stow_time = self.stow.solve_at(handling_stat);
+        }
         HandlingResponse {
             ready_time,
             stow_time,
@@ -157,93 +163,66 @@ impl Weapon {
 }
 
 impl AmmoFormula {
-    pub fn calc_mag_size_formula(
+    pub fn calc_ammo_size_formula(
         &self,
         _mag_stat: i32,
-        _modifiers: MagazineModifierResponse,
-    ) -> MagazineResponse {
-        let mag_stat = if (_mag_stat + _modifiers.magazine_stat_add) > 100 {
+        _mag_modifiers: MagazineModifierResponse,
+        _reserve_stat: i32,
+        _inv_modifiers: InventoryModifierResponse,
+        _calc_inv: bool,
+        _inv_id: i32,
+    ) -> AmmoResponse {
+        let mag_stat = if (_mag_stat + _mag_modifiers.magazine_stat_add) > 100 {
             100
         } else {
-            _mag_stat + _modifiers.magazine_stat_add
+            _mag_stat + _mag_modifiers.magazine_stat_add
         } as f64;
+
+        let inv_stat = if (_reserve_stat + _inv_modifiers.inv_stat_add) > 100 {
+            100
+        } else {
+            _reserve_stat + _inv_modifiers.inv_stat_add
+        } as f64;
+
+        let raw_mag_size = (self.mag.evpp * (mag_stat.powi(2))) + (self.mag.vpp * mag_stat) + self.mag.offset;
 
         let mut mag_size =
             (((self.mag.evpp * (mag_stat.powi(2))) + (self.mag.vpp * mag_stat) + self.mag.offset)
-                * _modifiers.magazine_scale
-                + _modifiers.magazine_add)
+                * _mag_modifiers.magazine_scale
+                + _mag_modifiers.magazine_add)
                 .ceil() as i32;
         if mag_size < 1 {
             mag_size = 1;
         }
-        MagazineResponse { mag_size }
-    }
-    pub fn calc_reserve_size_formula(
-        &self,
-        _reserve_stat: i32,
-        _modifiers: InventoryModifierResponse,
-    ) -> ReserveResponse {
-        if self.is_primary {
-            //primary weapons have infinite reserves
-            return ReserveResponse {
-                reserve_size: 9999,
-            };
-        }
-        let reserve_stat = if (_reserve_stat + _modifiers.inv_stat_add) > 100 {
-            100
-        } else {
-            _reserve_stat + _modifiers.inv_stat_add
-        } as f64;
 
-        let reserve_known_values = self.reserves.keys().collect::<Vec<&i32>>();
-        //find value in reserve_known_values that is closest to reserve_stat
-        let closest_reserve_value = *reserve_known_values
-            .iter()
-            .min_by(|a, b| {
-                let a_diff = (***a - _reserve_stat).abs();
-                let b_diff = (***b - _reserve_stat).abs();
-                a_diff.cmp(&b_diff)
-            })
-            .unwrap()
-            .clone();
-        let reserve_formula_data = &*self.reserves.get(&closest_reserve_value).unwrap();
-        let reserve_size = ((reserve_formula_data.vpp * reserve_stat + reserve_formula_data.offset)
-            * _modifiers.inv_scale
-            + _modifiers.inv_add)
-            .ceil() as i32;
-        ReserveResponse { reserve_size }
+        let mut reserve_size = 0;
+        if _calc_inv {
+            reserve_size = calc_reserves(raw_mag_size, inv_stat as i32, _inv_id);
+        }
+        AmmoResponse { mag_size, reserve_size }
     }
 }
 impl Weapon {
-    pub fn calc_mag_size(&self, _calc_input: Option<CalculationInput>) -> MagazineResponse {
+    pub fn calc_ammo_sizes(&self, _calc_input: Option<CalculationInput>) -> AmmoResponse {
         let mag_stat = self
             .stats
             .get(&StatHashes::MAGAZINE.to_u32())
             .unwrap_or(&Stat::new())
             .val();
-        if _calc_input.is_some() {
-            let modifiers =
-                get_magazine_modifier(self.list_perks(), &_calc_input.unwrap(), self.is_pvp);
-            self.ammo_formula.calc_mag_size_formula(mag_stat, modifiers)
-        } else {
-            self.ammo_formula
-                .calc_mag_size_formula(mag_stat, MagazineModifierResponse::default())
-        }
-    }
-    pub fn calc_reserve_size(&self, _calc_input: Option<CalculationInput>) -> ReserveResponse {
-        let reserve_stat = self
+        let inv_stat = self
             .stats
             .get(&StatHashes::INVENTORY_SIZE.to_u32())
             .unwrap_or(&Stat::new())
             .val();
         if _calc_input.is_some() {
-            let modifiers =
-                get_reserve_modifier(self.list_perks(), &_calc_input.unwrap(), self.is_pvp);
-            self.ammo_formula
-                .calc_reserve_size_formula(reserve_stat, modifiers)
+            let mag_modifiers =
+                get_magazine_modifier(self.list_perks(), &_calc_input.clone().unwrap(), self.is_pvp);
+            let inv_modifiers =
+                get_reserve_modifier(self.list_perks(), &_calc_input.clone().unwrap(), self.is_pvp);
+            self.ammo_formula.calc_ammo_size_formula(mag_stat, mag_modifiers, inv_stat, inv_modifiers, true, self.ammo_formula.reserve_id)
         } else {
             self.ammo_formula
-                .calc_reserve_size_formula(reserve_stat, InventoryModifierResponse::default())
+                .calc_ammo_size_formula(mag_stat, MagazineModifierResponse::default(), inv_stat, InventoryModifierResponse::default(),true, self.ammo_formula.reserve_id)
         }
     }
 }

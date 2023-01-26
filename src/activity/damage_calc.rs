@@ -109,12 +109,22 @@ impl DifficultyOptions {
         }
     }
 }
+impl From<i32> for DifficultyOptions {
+    fn from(i: i32) -> Self {
+        match i {
+            1 => DifficultyOptions::NORMAL,
+            2 => DifficultyOptions::RAID,
+            3 => DifficultyOptions::MASTER,
+            _ => DifficultyOptions::NORMAL,
+        }
+    }
+}
 
 pub(super) fn rpl_mult(_rpl: f64) -> f64 {
     return (1.0 + ((1.0 / 30.0) * _rpl)) / (1.0 + 1.0 / 3.0);
 }
 
-pub(super) fn pl_delta(_activity: Activity, _gpl: f64) -> f64 {
+pub(super) fn gpl_delta(_activity: Activity, _gpl: f64) -> f64 {
     let difficulty_data = _activity.difficulty.get_difficulty_data();
     let curve = difficulty_data.table;
     let rpl = _activity.rpl;
@@ -127,5 +137,5 @@ pub(super) fn pl_delta(_activity: Activity, _gpl: f64) -> f64 {
     };
     let wep_delta_mult = WWEAPON_DELTA_EXPONENT.powf(rpl);
     let gear_delta_mult = curve.evaluate(delta);
-    rpl_mult(rpl) * wep_delta_mult * gear_delta_mult
+    wep_delta_mult * gear_delta_mult
 }

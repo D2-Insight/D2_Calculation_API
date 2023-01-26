@@ -317,6 +317,7 @@ impl Perks {
             3469412970 => Perks::Hedrons,
             83039194 => Perks::HeatRises,
             4194622036 => Perks::FlowState,
+            4071163871 => Perks::ThreatDetector,
             222 => Perks::EmpowermentBuffs,
             333 => Perks::WeakenDebuffs, //also stuff like tractor and div, any non stacking ones
             999 => Perks::MasterWork,
