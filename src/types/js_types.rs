@@ -311,7 +311,6 @@ pub struct JsAmmoFormula {
     pub mag_vpp: f64,
     pub mag_offset: f64,
     pub mag_round_to_nearest: i32,
-    pub is_primary: bool,
     pub reserve_id: i32,
 }
 #[wasm_bindgen]
@@ -323,7 +322,6 @@ impl JsAmmoFormula {
             mag_vpp: 0.0,
             mag_offset: 0.0,
             mag_round_to_nearest: 1,
-            is_primary: false,
             reserve_id: 0,
         }
     }
@@ -337,7 +335,6 @@ impl Into<AmmoFormula> for JsAmmoFormula {
                 offset: self.mag_offset,
             },
             round_to_nearest: self.mag_round_to_nearest,
-            is_primary: self.is_primary,
             reserve_id: self.reserve_id,
         }
     }

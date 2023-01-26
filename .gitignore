@@ -8,4 +8,5 @@
 *.zip
 zdata.json
 database/weapon.json
+database/weapon_test.json
 /zPythonStuff

@@ -8,7 +8,7 @@ use super::{
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
         HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
-        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverideResponse,
+        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse,
     },
 };
 

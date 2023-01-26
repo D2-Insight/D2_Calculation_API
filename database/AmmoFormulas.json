@@ -155,9 +155,8 @@
         "2881100038": {"name": "Lorentz Driver",   "category": "default"},
         "default": {
             "magazine": {"evpp": 0.0, "vpp": 0.0293, "offset": 3.2},
-            "reserve": {
-                "is_primary": false
-            }
+            "is_primary": false,
+            "reserve_id": 22
         }
 
     },

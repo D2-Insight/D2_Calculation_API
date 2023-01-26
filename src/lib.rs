@@ -29,7 +29,7 @@ use wasm_bindgen::prelude::*;
 use crate::types::py_types::{
     PyAmmoFormula, PyDamageModifiers, PyFiringData, PyHandlingFormula, PyPerk, PyRangeFormula,
     PyReloadFormula, PyWeapon, PyWeaponFormula, PyRangeResponse, PyHandlingResponse, PyActivity,
-    PyPlayer, PyEnemy, PyEnemyType
+    PyPlayer, PyEnemy, PyEnemyType, PyDpsResponse, PyDifficultyOptions, PyPlayerClass
 };
 #[cfg(feature = "python")]
 use pyo3::prelude::*;
@@ -197,6 +197,20 @@ fn get_weapon_handling(_dynamic_perks: bool) -> PyResult<PyHandlingResponse> {
 }
 
 #[cfg(feature = "python")]
+#[pyfunction(name = "get_dps")]
+fn get_weapon_dps(_do_rpl_mult: bool) -> PyResult<PyDpsResponse> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    let enemy = PERS_DATA.with(|perm_data| perm_data.borrow().enemy.clone());
+    let pl_dmg_mult = PERS_DATA.with(|perm_data| perm_data.borrow().activity.get_pl_delta());
+    let mut dps_response = weapon.calc_dps(enemy, pl_dmg_mult);
+    let rpl_mult = PERS_DATA.with(|perm_data| perm_data.borrow().activity.get_rpl_mult());
+    if _do_rpl_mult{
+        dps_response.apply_rpl(rpl_mult)
+    }
+    Ok(dps_response.into())
+}
+
+#[cfg(feature = "python")]
 fn register_weapon_interface(py: Python<'_>, parent_module: &PyModule) -> PyResult<()> {
     let weapon_interface = PyModule::new(py, "WeaponInterface")?;
     //functions
@@ -207,6 +221,7 @@ fn register_weapon_interface(py: Python<'_>, parent_module: &PyModule) -> PyResu
     weapon_interface.add_function(wrap_pyfunction!(add_perk, weapon_interface)?)?;
     weapon_interface.add_function(wrap_pyfunction!(set_weapon, weapon_interface)?)?;
     weapon_interface.add_function(wrap_pyfunction!(is_weapon_assigned, weapon_interface)?)?;
+    weapon_interface.add_function(wrap_pyfunction!(get_weapon_dps, weapon_interface)?)?;
 
     //classes
     weapon_interface.add_class::<PyWeapon>()?;
@@ -220,6 +235,7 @@ fn register_weapon_interface(py: Python<'_>, parent_module: &PyModule) -> PyResu
     weapon_interface.add_class::<PyReloadFormula>()?;
     weapon_interface.add_class::<PyRangeResponse>()?;
     weapon_interface.add_class::<PyHandlingResponse>()?;
+    weapon_interface.add_class::<PyDpsResponse>()?;
     parent_module.add_submodule(weapon_interface)?;
     Ok(())
 }
@@ -273,6 +289,8 @@ fn register_activity_interface(py: Python<'_>, parent_module: &PyModule) -> PyRe
     //classes
     activity_interface.add_class::<PyActivity>()?;
     activity_interface.add_class::<PyPlayer>()?;
+    activity_interface.add_class::<PyDifficultyOptions>()?;
+    activity_interface.add_class::<PyPlayerClass>()?;
 
     parent_module.add_submodule(activity_interface)?;
     Ok(())

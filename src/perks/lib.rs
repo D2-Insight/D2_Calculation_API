@@ -1,5 +1,5 @@
 use crate::{
-    d2_enums::{AmmoType, StatHashes, WeaponSlot, WeaponType},
+    d2_enums::{AmmoType, StatHashes, WeaponSlot, WeaponType, DamageType},
     enemies::EnemyType,
     types::rs_types::HandlingResponse,
     weapons::{FiringConfig, Stat},
@@ -21,7 +21,7 @@ pub struct CalculationInput<'a> {
     pub time_this_mag: f64,
     pub stats: &'a HashMap<u32, Stat>,
     pub weapon_type: &'a WeaponType,
-    pub weapon_slot: &'a WeaponSlot,
+    pub damage_type: &'a DamageType,
     pub ammo_type: &'a AmmoType,
     pub handling_data: HandlingResponse,
     pub num_reloads: f64,
@@ -35,6 +35,7 @@ impl<'a> CalculationInput<'a> {
         _stats: &'a HashMap<u32, Stat>,
         _weapon_type: &'a WeaponType,
         _ammo_type: &'a AmmoType,
+        _damage_type: &'a DamageType,
         _base_damage: f64,
         _base_crit_mult: f64,
         _base_mag_size: i32,
@@ -55,7 +56,7 @@ impl<'a> CalculationInput<'a> {
             time_this_mag: 0.0,
             stats: &_stats,
             weapon_type: &_weapon_type,
-            weapon_slot: &WeaponSlot::KINETIC,
+            damage_type: _damage_type,
             ammo_type: &_ammo_type,
             handling_data: HandlingResponse::default(),
             num_reloads: 0.0,
@@ -88,7 +89,7 @@ impl<'a> CalculationInput<'a> {
             time_this_mag: 0.0,
             stats: _stats,
             weapon_type: _weapon_type,
-            weapon_slot: &WeaponSlot::KINETIC,
+            damage_type: &DamageType::STASIS,
             ammo_type: _ammo_type,
             handling_data: _handling_data,
             num_reloads: 0.0,
@@ -116,7 +117,7 @@ impl<'a> CalculationInput<'a> {
             time_this_mag: 0.0,
             stats: _stats,
             weapon_type: _weapon_type,
-            weapon_slot: &WeaponSlot::KINETIC,
+            damage_type: &DamageType::STASIS,
             ammo_type: _ammo_type,
             handling_data: HandlingResponse::default(),
             num_reloads: 0.0,
@@ -146,7 +147,7 @@ pub struct ExtraDamageResponse {
     pub time_for_additive_damage: f64,
     //basically is this happening concurrently with the main damage?
     pub increment_total_time: bool,
-    // will increment shots hit but not shots fired, shots fired is what *most* 
+    // will increment shots hit but not shots fired, shots fired is what *most*
     // perks use for calculation EDR shouldn't mess with other perks in unwanted ways
     pub times_to_hit: i32,
     //is_dot takes priority; makes it put dmg*count at in-time+time_for_additive_damage
@@ -292,24 +293,24 @@ impl Default for InventoryModifierResponse {
 }
 
 #[derive(Debug, Clone)]
-pub struct ReloadOverideResponse {
+pub struct ReloadOverrideResponse {
     pub valid: bool,
     pub reload_time: f64,
-    pub ammo_to_reload: f64,
+    pub ammo_to_reload: i32,
     pub priority: i32,
-    pub increments_reload_count: bool,
+    pub count_as_reload: bool,
     pub uses_ammo: bool,
 }
-impl ReloadOverideResponse {
+impl ReloadOverrideResponse {
     pub fn invalid() -> Self {
         Self {
             //an easy way for dps calculator to throw out
             valid: false,
             reload_time: 0.0,
-            ammo_to_reload: 0.0,
+            ammo_to_reload: 0,
             priority: 0,
             //this will also reset mag stats
-            increments_reload_count: false,
+            count_as_reload: false,
             uses_ammo: false,
         }
     }

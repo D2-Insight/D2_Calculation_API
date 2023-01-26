@@ -2,9 +2,11 @@ use std::collections::HashMap;
 use std::{cell::RefCell, rc::Rc};
 
 use super::{FiringConfig, Weapon};
-use crate::d2_enums::AmmoType;
+use crate::d2_enums::{AmmoType, WeaponType};
 use crate::enemies::Enemy;
-use crate::perks::lib::{CalculationInput, RefundResponse, ExtraDamageResponse};
+use crate::perks::lib::{
+    CalculationInput, ExtraDamageResponse, RefundResponse, ReloadOverrideResponse,
+};
 use crate::perks::*;
 use crate::types::rs_types::DpsResponse;
 
@@ -25,7 +27,7 @@ pub struct ExtraDamageResult {
     pub extra_time: f64,
     pub extra_dmg: f64,
     pub extra_hits: i32,
-    pub extra_time_dmg: Vec<(f64,f64)>
+    pub extra_time_dmg: Vec<(f64, f64)>,
 }
 #[derive(Debug, Clone)]
 pub struct ExtraDamageBuffInfo {
@@ -35,55 +37,81 @@ pub struct ExtraDamageBuffInfo {
     pub combatant_buff: f64,
 }
 impl ExtraDamageBuffInfo {
-    pub fn get_buff_amount(&self, entry: &ExtraDamageResponse) -> f64{
+    pub fn get_buff_amount(&self, entry: &ExtraDamageResponse) -> f64 {
         let mut buff = self.pl_buff;
-        if entry.weapon_scale { buff *= self.weapon_buff };
-        if entry.crit_scale { buff *= self.crit_buff };
-        if entry.combatant_scale { buff *= self.combatant_buff };
+        if entry.weapon_scale {
+            buff *= self.weapon_buff
+        };
+        if entry.crit_scale {
+            buff *= self.crit_buff
+        };
+        if entry.combatant_scale {
+            buff *= self.combatant_buff
+        };
         buff
     }
 }
-pub fn calc_extra_dmg(_total_time: f64, _extra_dmg_entries: Vec<ExtraDamageResponse>, _dmg_buffs: ExtraDamageBuffInfo) -> ExtraDamageResult {
+pub fn calc_extra_dmg(
+    _total_time: f64,
+    _extra_dmg_entries: Vec<ExtraDamageResponse>,
+    _dmg_buffs: ExtraDamageBuffInfo,
+) -> ExtraDamageResult {
     let mut extra_time = 0.0;
     let mut extra_dmg = 0.0;
     let mut extra_hits = 0;
-    let mut extra_time_dmg: Vec<(f64,f64)> = Vec::new();
+    let mut extra_time_dmg: Vec<(f64, f64)> = Vec::new();
     for entry in _extra_dmg_entries {
         if entry.additive_damage > 0.0 {
             if entry.hit_at_same_time {
                 let mut bonus_dmg = entry.additive_damage * entry.times_to_hit as f64;
                 bonus_dmg *= _dmg_buffs.get_buff_amount(&entry);
                 extra_dmg += bonus_dmg;
-                if entry.increment_total_time { extra_time += entry.time_for_additive_damage};
+                if entry.increment_total_time {
+                    extra_time += entry.time_for_additive_damage
+                };
                 extra_time_dmg.push((_total_time + entry.time_for_additive_damage, bonus_dmg));
                 extra_hits += entry.times_to_hit;
-            } else if entry.is_dot == false{
+            } else if entry.is_dot == false {
                 for i in 0..entry.times_to_hit {
                     let mut bonus_dmg = entry.additive_damage;
                     bonus_dmg *= _dmg_buffs.get_buff_amount(&entry);
                     extra_dmg += bonus_dmg;
-                    if entry.increment_total_time { extra_time += entry.time_for_additive_damage};
-                    extra_time_dmg.push((_total_time + entry.time_for_additive_damage * i as f64, bonus_dmg));
+                    if entry.increment_total_time {
+                        extra_time += entry.time_for_additive_damage
+                    };
+                    extra_time_dmg.push((
+                        _total_time + entry.time_for_additive_damage * i as f64,
+                        bonus_dmg,
+                    ));
                     extra_hits += 1;
-                };
+                }
             } else {
                 //all dot does is increment time backwards
                 for i in 0..entry.times_to_hit {
                     let mut bonus_dmg = entry.additive_damage;
                     bonus_dmg *= _dmg_buffs.get_buff_amount(&entry);
                     extra_dmg += bonus_dmg;
-                    if entry.increment_total_time { extra_time += entry.time_for_additive_damage};
-                    extra_time_dmg.push((_total_time - entry.time_for_additive_damage * i as f64, bonus_dmg));
+                    if entry.increment_total_time {
+                        extra_time += entry.time_for_additive_damage
+                    };
+                    extra_time_dmg.push((
+                        _total_time - entry.time_for_additive_damage * i as f64,
+                        bonus_dmg,
+                    ));
                     extra_hits += 1;
-                };
+                }
             }
         }
     }
-    ExtraDamageResult { extra_time, extra_dmg, extra_hits, extra_time_dmg}
+    ExtraDamageResult {
+        extra_time,
+        extra_dmg,
+        extra_hits,
+        extra_time_dmg,
+    }
 }
 
 pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> DpsResponse {
-
     let weapon = Rc::new(_weapon.clone());
     let stats = weapon.stats.clone();
     let weapon_type = weapon.weapon_type.clone();
@@ -92,7 +120,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
     let base_crit_mult = weapon.base_crit_mult;
 
     let base_mag = weapon.calc_ammo_sizes(None).mag_size;
-    let maximum_shots = if base_mag*5 < 15 {15} else {base_mag*5};
+    let maximum_shots = if base_mag * 5 < 15 { 15 } else { base_mag * 5 };
 
     let firing_settings = _weapon.firing_data.clone();
     let perks = weapon.list_perks();
@@ -132,7 +160,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
         let handling_calc_input = weapon.sparse_calc_input(total_shots_fired, total_time);
         let handling_data = weapon.calc_handling_times(Some(handling_calc_input));
         ///////////////////////////////
-        let start_time = total_time.clone();
+        let mut start_time = total_time.clone();
         while mag > 0 {
             //DMG MODIFIERS////////////////
             let before_shot_input_data = CalculationInput {
@@ -151,7 +179,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                 reserves_left: reserve as f64,
                 time_total: total_time,
                 time_this_mag: (total_time - start_time),
-                weapon_slot: &weapon.weapon_slot,
+                damage_type: &weapon.damage_type,
                 handling_data: handling_data,
                 num_reloads: num_reloads as f64,
                 has_overshield: false,
@@ -169,20 +197,34 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                 * weapon.damage_mods.get_mod(&_enemy.type_)
                 * weapon.damage_mods.pve;
 
-            let shot_burst_delay = (burst_delay + firing_mods.burst_delay_add) * firing_mods.burst_delay_scale;
-            let shot_burst_duration = burst_duration*firing_mods.burst_duration_scale;
+            // println!{"({}*{}) * ({}*{}) * {} * {} * {}",
+            //         base_dmg,
+            //         dmg_mods.dmg_scale,
+            //         base_crit_mult,
+            //         dmg_mods.crit_scale,
+            //         _pl_dmg_mult,
+            //         weapon.damage_mods.get_mod(&_enemy.type_),
+            //         weapon.damage_mods.pve};
+
+            let shot_burst_delay =
+                (burst_delay + firing_mods.burst_delay_add) * firing_mods.burst_delay_scale;
+            let shot_burst_duration = burst_duration * firing_mods.burst_duration_scale;
             let shot_burst_size = burst_size + firing_mods.burst_size_add;
             let shot_inner_burst_delay = shot_burst_duration / (shot_burst_size - 1.0);
+
+            // if total_shots_fired == 0 && firing_settings.is_charge {
+            //     total_time += shot_burst_delay*0.5;
+            // }
 
             if firing_settings.one_ammo_burst && burst_size > 1.0 {
                 total_shots_fired += 1;
                 shots_this_mag += 1;
                 total_shots_hit += shot_burst_size as i32;
                 total_damage += dmg * shot_burst_size;
-                for i in 0..firing_settings.burst_size {
+                for i in 0..shot_burst_size as i32 {
                     time_damage_data.push((total_time + shot_inner_burst_delay * i as f64, dmg));
                 }
-                total_time += firing_settings.burst_duration
+                total_time += shot_burst_duration
             } else {
                 let spec_delay = if shots_this_mag % burst_size as i32 == 0 {
                     shot_burst_delay
@@ -199,7 +241,9 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                     total_damage += dmg;
                     time_damage_data.push((total_time, dmg));
                 }
-                total_time += spec_delay;
+                if total_shots_fired > 0 {
+                    total_time += spec_delay;
+                }
             }
             mag -= 1;
 
@@ -229,7 +273,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                 reserves_left: reserve as f64,
                 time_total: total_time,
                 time_this_mag: (total_time - start_time),
-                weapon_slot: &weapon.weapon_slot,
+                damage_type: &weapon.damage_type,
                 handling_data: handling_data,
                 num_reloads: num_reloads as f64,
                 has_overshield: false,
@@ -237,12 +281,18 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
             ///////////////////////////////
 
             //EXTRA DMG////////////////////
-            let extra_dmg_responses = get_extra_damage(perks.clone(), &after_shot_input_data, false, &persistent_calc_data);
-            let buffs = ExtraDamageBuffInfo{ 
-                pl_buff: _pl_dmg_mult, 
+            let extra_dmg_responses = get_extra_damage(
+                perks.clone(),
+                &after_shot_input_data,
+                false,
+                &persistent_calc_data,
+            );
+            let buffs = ExtraDamageBuffInfo {
+                pl_buff: _pl_dmg_mult,
                 weapon_buff: weapon.damage_mods.pve * dmg_mods.dmg_scale,
                 crit_buff: base_crit_mult * dmg_mods.crit_scale,
-                combatant_buff: weapon.damage_mods.get_mod(&_enemy.type_),};
+                combatant_buff: weapon.damage_mods.get_mod(&_enemy.type_),
+            };
             let tmp_out_data = calc_extra_dmg(total_time, extra_dmg_responses, buffs);
             total_damage += tmp_out_data.extra_dmg;
             total_time += tmp_out_data.extra_time;
@@ -251,17 +301,63 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
             ///////////////////////////////
 
             //RELOAD OVERRIDE//////////////
-            if mag == 0 {}
+            if mag == 0 {
+                let reload_override_responses = get_reload_overrides(
+                    perks.clone(),
+                    &after_shot_input_data,
+                    false,
+                    &persistent_calc_data,
+                );
+                if reload_override_responses.len() > 0 {
+                    let mut final_response = ReloadOverrideResponse::invalid();
+                    for response in reload_override_responses {
+                        if response.priority > final_response.priority {
+                            final_response = response;
+                        }
+                    }
+                    if final_response.valid {
+                        total_time += final_response.reload_time;
+                        if final_response.uses_ammo {
+                            let ammo_to_add = if final_response.ammo_to_reload > reserve {reserve} else {final_response.ammo_to_reload};
+                            mag = ammo_to_add;
+                            reserve -= ammo_to_add;
+                        } else {
+                            mag = final_response.ammo_to_reload;
+                        }
+                        if final_response.count_as_reload {
+                            num_reloads += 1;
+                            start_time = total_time;
+                            shots_this_mag = 0;
+                        }
+                    }
+                }
+            } else {
+                if weapon.weapon_type == WeaponType::FUSIONRIFLE {
+                    total_time += shot_burst_delay * 0.45
+                } else if weapon.weapon_type == WeaponType::LINEARFUSIONRIFLE {
+                    total_time += shot_burst_delay * 0.95
+                }
+            }
             ///////////////////////////////
-        }
-
-        reserve -= mag;
-        dps_per_mag.push(total_damage / total_time);
-        if weapon.ammo_type == AmmoType::PRIMARY {
-            if total_shots_fired > maximum_shots {
+            if weapon.ammo_type == AmmoType::PRIMARY {
+                if total_shots_fired > maximum_shots {
+                    reserve = 0;
+                    break;
+                }
+            } else {
+                if total_shots_fired > base_mag*8+20 {
+                    reserve = 0;
+                    break;
+                }
+            }
+            if reserve <= 0 {
                 break;
             }
         }
+
+        reserve -= base_mag;
+        dps_per_mag.push(total_damage / total_time);
+
 
         //RELOAD///////////////////////
         let reload_input_data = CalculationInput {
@@ -280,7 +376,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
             reserves_left: reserve as f64,
             time_total: total_time,
             time_this_mag: (total_time - start_time),
-            weapon_slot: &weapon.weapon_slot,
+            damage_type: &weapon.damage_type,
             handling_data: handling_data,
             num_reloads: num_reloads as f64,
             has_overshield: false,

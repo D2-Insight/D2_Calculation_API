@@ -7,11 +7,11 @@ use super::{
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
         HandlingModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
-        ReloadModifierResponse, ReloadOverideResponse,
+        ReloadModifierResponse, ReloadOverrideResponse,
     },
 };
 
-pub fn sbr_air_assault(
+pub(super) fn sbr_air_assault(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -25,7 +25,7 @@ pub fn sbr_air_assault(
     stats
 }
 
-pub fn fmr_archers_tempo(
+pub(super) fn fmr_archers_tempo(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -40,7 +40,7 @@ pub fn fmr_archers_tempo(
     }
 }
 
-pub fn dmr_explosive_head(
+pub(super) fn dmr_explosive_head(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -61,7 +61,7 @@ pub fn dmr_explosive_head(
     }
 }
 
-pub fn rsmr_feeding_frenzy(
+pub(super) fn rsmr_feeding_frenzy(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -98,7 +98,7 @@ pub fn rsmr_feeding_frenzy(
     }
 }
 
-pub fn sbr_feeding_frenzy(
+pub(super) fn sbr_feeding_frenzy(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -127,7 +127,7 @@ pub fn sbr_feeding_frenzy(
     stats
 }
 
-pub fn dmr_firing_line(
+pub(super) fn dmr_firing_line(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -135,7 +135,7 @@ pub fn dmr_firing_line(
     _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut crit_mult = 1.0;
-    if _value > 1 {
+    if _value > 0 {
         crit_mult = 1.2;
     }
     DamageModifierResponse {
@@ -144,7 +144,7 @@ pub fn dmr_firing_line(
     }
 }
 
-pub fn rr_fourth_times(
+pub(super) fn rr_fourth_times(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -159,14 +159,15 @@ pub fn rr_fourth_times(
     }
 }
 
-pub fn dmr_killing_tally(
+pub(super) fn dmr_killing_tally(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    let mut damage_mult = 0.1 * _value as f64;
+    let val = clamp(_value, 0, 3);
+    let mut damage_mult = 0.1 * val as f64;
     if _pvp {
         damage_mult *= 0.5;
     };
@@ -179,7 +180,7 @@ pub fn dmr_killing_tally(
     }
 }
 
-pub fn mmr_overflow(
+pub(super) fn mmr_overflow(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -197,7 +198,7 @@ pub fn mmr_overflow(
     }
 }
 
-pub fn rsmr_rapid_hit(
+pub(super) fn rsmr_rapid_hit(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -227,7 +228,7 @@ pub fn rsmr_rapid_hit(
     }
 }
 
-pub fn dmr_resevoir_burst(
+pub(super) fn dmr_resevoir_burst(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -274,18 +275,18 @@ pub(super) fn ror_demolitionist(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
-) -> ReloadOverideResponse {
+) -> ReloadOverrideResponse {
     //todo implement system for cooldown
     let grenade_throw_time = 0.8;
     if _value == 1 {
-        return ReloadOverideResponse {
+        return ReloadOverrideResponse {
             valid: true,
             reload_time: _input.handling_data.ready_time + grenade_throw_time,
-            ammo_to_reload: _input.base_mag,
+            ammo_to_reload: _input.base_mag as i32,
             priority: 0,
-            increments_reload_count: false,
+            count_as_reload: false,
             uses_ammo: true,
         };
     }
-    ReloadOverideResponse::invalid()
+    ReloadOverrideResponse::invalid()
 }

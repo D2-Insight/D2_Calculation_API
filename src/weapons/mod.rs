@@ -150,6 +150,7 @@ impl Weapon {
             &self.stats,
             &self.weapon_type,
             &self.ammo_type,
+            &self.damage_type,
             self.base_damage,
             self.base_crit_mult,
             self.calc_ammo_sizes(None).mag_size,
@@ -180,7 +181,7 @@ impl Weapon {
             }
         }
     }
-    fn weapon_dps(&self, _enemy: Enemy, _pl_dmg_mult: f64) -> DpsResponse {
+    pub fn calc_dps(&self, _enemy: Enemy, _pl_dmg_mult: f64) -> DpsResponse {
         complex_dps_calc(self.clone(), _enemy, _pl_dmg_mult)
     }
 }
@@ -233,6 +234,7 @@ impl From<PyWeapon> for Weapon {
         for perk in _py_weapon.perks {
             weapon.perks.insert(perk.0, perk.1.into());
         };
+        weapon.perks.insert(0, Perk::default());
         weapon
     }
 }

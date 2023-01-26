@@ -463,8 +463,7 @@ pub struct PyAmmoFormula {
     pub mag_vpp: f64,
     pub mag_offset: f64,
     pub mag_round_to_nearest: i32,
-    pub is_primary: bool,
-    pub reserve_id: i32,
+    pub reserve_id: u32,
 }
 #[pymethods]
 impl PyAmmoFormula {
@@ -474,15 +473,13 @@ impl PyAmmoFormula {
         mag_vpp: f64,
         mag_offset: f64,
         mag_round_to_nearest: i32,
-        is_primary: bool,
-        reserve_id: i32,
+        reserve_id: u32,
     ) -> Self {
         PyAmmoFormula {
             mag_evpp,
             mag_vpp,
             mag_offset,
             mag_round_to_nearest,
-            is_primary,
             reserve_id,
         }
     }
@@ -512,8 +509,7 @@ impl PyAmmoFormula {
             }
             match key.as_str() {
                 "magazine" => (),
-                "is_primary" => ammo_formula.is_primary = value.extract::<bool>()?,
-                "reserve_id" => ammo_formula.reserve_id = value.extract::<i32>()?,
+                "reserve_id" => ammo_formula.reserve_id = value.extract::<u32>()?,
                 _ => return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>(err_str)),
             }
         }
@@ -535,7 +531,6 @@ impl Into<AmmoFormula> for PyAmmoFormula {
                 offset: self.mag_offset,
             },
             round_to_nearest: self.mag_round_to_nearest,
-            is_primary: self.is_primary,
             reserve_id: self.reserve_id,
         }
     }
@@ -687,6 +682,50 @@ impl From<HandlingResponse> for PyHandlingResponse {
             ready_time: r.ready_time,
             stow_time: r.stow_time,
             ads_time: r.ads_time,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default)]
+#[pyclass(name = "DpsResponse")]
+pub struct PyDpsResponse {
+    #[pyo3(get)]
+    pub dps_per_mag: Vec<f64>,
+    #[pyo3(get)]
+    pub time_damage_data: Vec<(f64, f64)>,
+    #[pyo3(get)]
+    pub total_damage: f64,
+    #[pyo3(get)]
+    pub total_time: f64,
+    #[pyo3(get)]
+    pub total_shots: i32,
+}
+#[pymethods]
+impl PyDpsResponse {
+    fn over_time_span(&self, _start: f64, _end: f64) -> PyResult<(f64, f64)> {
+        let mut total = 0.0;
+        for (time, damage) in &self.time_damage_data {
+            if *time >= _start && *time <= _end {
+                total += damage;
+            }
+        }
+        Ok((total, total/(_end-_start)))
+    }
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!(
+            "DpsResponse(dps_per_mag={:?}, time_damage_data={:?}, total_damage={}, total_time={}, total_shots={})",
+            self.dps_per_mag, self.time_damage_data, self.total_damage, self.total_time, self.total_shots
+        ))
+    }
+}
+impl From<DpsResponse> for PyDpsResponse {
+    fn from(r: DpsResponse) -> Self {
+        PyDpsResponse {
+            dps_per_mag: r.dps_per_mag,
+            time_damage_data: r.time_damage_data,
+            total_damage: r.total_damage,
+            total_time: r.total_time,
+            total_shots: r.total_shots,
         }
     }
 }

@@ -60,7 +60,7 @@
                 "combatant_scalers": {"vehicle": 1.15, "boss": 1.15, "champion": 1.2, "miniboss": 1.2, "elite": 1.3, "minor": 1.3}
             },
             "Cerberus":{
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000855689, "vpp": -0.0242021, "offset": 2.80673006666667},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -100,8 +100,8 @@
 
         "cat": {
             "default": {
-                "range":    null,
-                "reload":   null,
+                "range":    {},
+                "reload":   {},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -109,8 +109,8 @@
                 "combatant_scalers": {"vehicle": 1.5, "boss": 1.5, "champion": 1.5, "miniboss": 1.5, "elite": 1.9, "minor": 2.3}
             },
             "exotic": {
-                "range":    null,
-                "reload":   null,
+                "range":    {},
+                "reload":   {},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -140,7 +140,7 @@
 
         "cat": {
             "default": {
-                "range":    {"zrm": 1.3, "zrm_tier": null, "vpp": 0.0324, "base_min": 10.56, "base_max": 15.1, "scale": true},
+                "range":    {"zrm": 1.3, "zrm_tier": {}, "vpp": 0.0324, "base_min": 10.56, "base_max": 15.1, "scale": true},
                 "reload":   {"evpp": 0.0000615281, "vpp": -0.0198054, "offset": 2.82857040000000, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -149,8 +149,8 @@
                 "combatant_scalers": {"vehicle": 2.18, "boss": 2.55, "champion": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
             },
             "1KV": {
-                "range":    null,
-                "reload":   null,
+                "range":    {},
+                "reload":   {},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -158,7 +158,7 @@
                 "combatant_scalers": {"vehicle": 2.63, "boss": 2.55, "champion": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
             },
             "Telesto": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000615281, "vpp": -0.0198054, "offset": 2.82857040000000, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -167,7 +167,7 @@
                 "combatant_scalers": {"vehicle": 2.18, "boss": 2.55, "champion": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
             },
             "Jotunn": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000615281, "vpp": -0.0198054, "offset": 2.82857040000000, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -215,7 +215,7 @@
 
         "cat": {
             "special": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000724199, "vpp": -0.0216432, "offset": 3.24104606666667, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -224,7 +224,7 @@
                 "combatant_scalers": {"vehicle": 2.5, "boss": 2.5, "champion": 2.63, "miniboss": 2.63, "elite": 2.63, "minor": 3.13}
             },
             "lion": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000724199, "vpp": -0.0216432, "offset": 3.24104606666667, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -233,7 +233,7 @@
                 "combatant_scalers": {"vehicle": 2.5, "boss": 2.5, "champion": 2.63, "miniboss": 2.63, "elite": 2.63, "minor": 3.13}
             },
             "heavy": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000755233, "vpp": -0.0248947, "offset": 4.12880153333333, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -242,7 +242,7 @@
                 "combatant_scalers": {"vehicle": 2.25, "boss": 2.25, "champion": 2.36, "miniboss": 2.36, "elite": 2.36, "minor": 3.13}
             },
             "anarchy": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000755233, "vpp": -0.0248947, "offset": 4.12880153333333, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -251,7 +251,7 @@
                 "combatant_scalers": {"vehicle": 1.13, "boss": 1.58, "champion": 2.36, "miniboss": 2.36, "elite": 2.36, "minor": 3.13}
             },
             "parasite": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000755233, "vpp": -0.0248947, "offset": 4.12880153333333, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -346,15 +346,15 @@
         }
     },
     "Linear Fusion Rifle": {
-        "1531126198": {"name": "The Queenbreaker", "cat": "default", "pve":1.10},
-        "2057203855": {"name": "Precision Frame",  "cat": "default", "pve":1.10},
-        "2564164194": {"name": "Arbalest",         "cat": "arbalest", "pve":1.10},
-        "3884127242": {"name": "Sleeper Simulant", "cat": "default" },
-        "2881100038": {"name": "Lorentz Driver",   "cat": "special", "pve":1.10},
+        "1531126198": {"name": "The Queenbreaker", "cat": "default",  "subFam": "QueenBreaker", "magProf": "default","pve":1.10},
+        "2057203855": {"name": "Precision Frame",  "cat": "default",  "subFam": "Precision", "magProf": "default","pve":1.10},
+        "2564164194": {"name": "Arbalest",         "cat": "arbalest", "subFam": "Precision", "magProf": "default","pve":1.10},
+        "3884127242": {"name": "Sleeper Simulant", "cat": "default",  "subFam": "SleeperSim", "magProf": "default" },
+        "2881100038": {"name": "Lorentz Driver",   "cat": "special",  "subFam": "Precision", "magProf": "default","pve":1.10},
 
         "cat": {
             "default": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000588462, "vpp": -0.0199884, "offset": 2.87206463333, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -363,7 +363,7 @@
                 "combatant_scalers": {"vehicle": 1.81, "boss": 1.81, "champion": 1.92, "miniboss": 1.92, "elite": 1.92, "minor": 2.03}
             },
             "special": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000588462, "vpp": -0.0199884, "offset": 2.87206463333, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -372,7 +372,7 @@
                 "combatant_scalers": {"vehicle": 1.81, "boss": 1.54, "champion": 1.64, "miniboss": 1.64, "elite": 1.92, "minor": 2.03}
             },
             "arbalest": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000588462, "vpp": -0.0199884, "offset": 2.87206463333, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -387,6 +387,14 @@
             "Aggressive":   {"damage": 78.283, "crit_mult": 3.009, "burst_delay": 0.533, "burst_size": 3, "burst_duration": 0.38, "oneAmmoBurst": true},
             "QueenBreaker": {"damage": 131,    "crit_mult": 2.5,   "burst_delay": 0.300, "burst_size": 1, "burst_duration": 0.0},
             "SleeperSim":   {"damage": 726,    "crit_mult": 1.2,   "burst_delay": 1.033, "burst_size": 1, "burst_duration": 0.0}
+        },
+
+        "magProf": {
+            "default": {
+                "magazine": {"evpp": 0.0, "vpp": 0.0293, "offset": 3.2},
+                "is_primary": false,
+                "reserve_id": 22
+            }
         }
     },
     "Machine Gun": {
@@ -400,7 +408,7 @@
 
         "cat": {
             "default": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -409,7 +417,7 @@
                 "combatant_scalers": {"vehicle": 2.38, "boss": 2.16, "champion": 2.25, "miniboss": 2.25, "elite": 3.36, "minor": 4.20}
             },
             "Xenophage": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -418,7 +426,7 @@
                 "combatant_scalers": {"vehicle": 2.38, "boss": 1.80, "champion": 2.25, "miniboss": 2.25, "elite": 3.36, "minor": 4.20}
             },
             "GrandOverture": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -509,7 +517,7 @@
         "1294026524": {"name": "Adaptive Frame",        "cat": "default" },
         "2200569208": {"name": "Eyes of Tomorrow",      "cat": "default" },
         "2473404935": {"name": "The Wardcliff Coil",    "cat": "default" },
-        "2491817779": {"name": "Disabled",              "cat": null      },
+        "2491817779": {"name": "Disabled",              "cat": {}      },
         "3419274965": {"name": "Precision Frame",       "cat": "default" },
         "3468089894": {"name": "Aggressive Frame",      "cat": "default" },
         "3649430342": {"name": "Two-Tailed Fox",        "cat": "default" },
@@ -517,7 +525,7 @@
 
         "cat": {
             "default": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.000103959, "vpp": -0.0252069, "offset": 4.09182213333333, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.003998740554, "offset": 0.6635944584},
@@ -564,7 +572,7 @@
             },
             "DMT": {
                 "range":    {"vpp": 0.169, "base_min": 29.2, "base_max": 60.8, "scale": false, "floor_percent": 0.5},
-                "reload":   null,
+                "reload":   {},
                 "handling": {
                     "ready":{"vpp": -0.002853368560, "offset": 0.540561867},
                     "stow": {"vpp": -0.002941215324, "offset": 0.527217745},
@@ -596,7 +604,7 @@
         "2223914385": {"name": "The Fourth Horseman", "cat": "default",   "subFam": "FourthHorse" },
         "3054949324": {"name": "Shot Package",        "cat": "default",   "subFam": "Aggressive",  "pve":1.10},
         "3468089894": {"name": "Aggressive Frame",    "cat": "default",   "subFam": "Aggressive",  "pve":1.10},
-        "3751354116": {"name": "Disabled",            "cat": null,        "subFam": null          },
+        "3751354116": {"name": "Disabled",            "cat": {},        "subFam": {}          },
         "3983457027": {"name": "Aggressive Frame",    "cat": "default",   "subFam": "Aggressive",  "pve":1.10},
 
         "cat": {
@@ -631,7 +639,7 @@
                 "combatant_scalers": {"vehicle": 2.80, "boss": 2.30, "champion": 2.5, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
             },
             "Duality": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.003271255061, "offset": 0.5388744939},
@@ -641,7 +649,7 @@
                 "combatant_scalers": {"vehicle": 2.80, "boss": 2.30, "champion": 2.5, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
             },
             "Tractor": {
-                "range":    null,
+                "range":    {},
                 "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061, "mag_multiplier": false},
                 "handling": {
                     "ready":{"vpp": -0.003271255061, "offset": 0.5388744939},
@@ -795,8 +803,8 @@
 
         "cat": {
             "default": {
-                "range":    null,
-                "reload":   null,
+                "range":    {},
+                "reload":   {},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -815,7 +823,7 @@
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.0546,"offset_start": 15.0,"vpp_end": 0.198,"offset_end": 30.33, "floor_percent": 0.33},
-                "reload":   null,
+                "reload":   {},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -836,7 +844,7 @@
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.1017,"offset_start": 14.756,"vpp_end": 0.0,"offset_end": 35.9, "floor_percent": 0.4},
-                "reload":   null,
+                "reload":   {},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}

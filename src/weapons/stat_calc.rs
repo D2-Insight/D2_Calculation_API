@@ -170,7 +170,7 @@ impl AmmoFormula {
         _reserve_stat: i32,
         _inv_modifiers: InventoryModifierResponse,
         _calc_inv: bool,
-        _inv_id: i32,
+        _inv_id: u32,
     ) -> AmmoResponse {
         let mag_stat = if (_mag_stat + _mag_modifiers.magazine_stat_add) > 100 {
             100

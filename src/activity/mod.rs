@@ -1,4 +1,4 @@
-use self::damage_calc::{DifficultyOptions, rpl_mult};
+use self::damage_calc::{DifficultyOptions, rpl_mult, gpl_delta};
 
 pub mod damage_calc;
 
@@ -39,5 +39,14 @@ impl Default for Activity {
             cap: 100.0,
             player: Player{pl: expansion_base as u32 +200, class: PlayerClass::default()},
         }
+    }
+}
+impl Activity {
+    pub fn get_pl_delta(&self) -> f64 {
+        let gpl = self.player.pl as f64;
+        gpl_delta(self.clone(), gpl)
+    }
+    pub fn get_rpl_mult(&self) -> f64 {
+        rpl_mult(self.rpl)
     }
 }

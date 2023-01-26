@@ -1,3 +1,6 @@
+
+#![allow(clippy::all)]
+
 pub mod exotic_perks;
 pub mod lib;
 pub mod other_perks;
@@ -13,15 +16,12 @@ use serde::{Deserialize, Serialize};
 
 use crate::d2_enums::StatHashes;
 
-#[cfg(feature = "wasm")]
-use crate::types::js_types::JsPerk;
-
 use self::{
     exotic_perks::*,
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
         HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
-        RangeModifierResponse, RefundResponse, ReloadModifierResponse,
+        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse,
     },
     other_perks::*,
     year_1_perks::*,
@@ -41,7 +41,7 @@ pub fn clamp<T: PartialOrd>(n: T, min: T, max: T) -> T {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct Perk {
     pub stat_buffs: HashMap<u32, i32>,
     pub enhanced: bool,
@@ -320,7 +320,6 @@ impl Perks {
             4071163871 => Perks::ThreatDetector,
             222 => Perks::EmpowermentBuffs,
             333 => Perks::WeakenDebuffs, //also stuff like tractor and div, any non stacking ones
-            999 => Perks::MasterWork,
             _ => Perks::Ignore,
         }
     }
@@ -418,7 +417,8 @@ pub fn get_dmg_modifier(
 ) -> DamageModifierResponse {
     let mut dmg_modifier = DamageModifierResponse::default();
     for perk in _perks {
-        let tmp = get_perk_dmr(perk, _input_data, _pvp);
+        let tmp = get_perk_dmr(perk.clone(), _input_data, _pvp);
+        // println!{"{:?}: {:?}", Perks::from_u32(perk.hash), tmp}
         dmg_modifier.dmg_scale *= tmp.dmg_scale;
         dmg_modifier.crit_scale *= tmp.crit_scale;
     }
@@ -464,6 +464,12 @@ fn get_perk_dmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> Dama
         Perks::LagragianSight => {
             dmr_lagragian_sight(_input_data, val, enhanced, _pvp, &HashMap::new())
         }
+        Perks::EmpowermentBuffs => {
+            dmr_empowerment_buffs(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
+        Perks::WeakenDebuffs => {dmr_weaken_debuffs(_input_data, val, enhanced, _pvp, &HashMap::new())}
+        Perks::BuiltIn => dmr_built_in(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::BossSpec => dmr_boss_spec(_input_data, val, enhanced, _pvp, &HashMap::new()),
         _ => DamageModifierResponse::default(),
     }
 }
@@ -706,9 +712,7 @@ fn get_perk_rmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> Rang
         Perks::SlideShot => rmr_slide_shot(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::KillingWind => rmr_killing_wind(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::FragileFocus => rmr_fragile_focus(_input_data, val, enhanced, _pvp, &HashMap::new()),
-        Perks::OffhandStrike => {
-            rmr_offhand_strike(_input_data, val, enhanced, _pvp, &HashMap::new())
-        }
+        Perks::OffhandStrike => {rmr_offhand_strike(_input_data, val, enhanced, _pvp, &HashMap::new())}
         Perks::StatsForAll => rmr_stats_for_all(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::WellRounded => rmr_well_rounded(_input_data, val, enhanced, _pvp, &HashMap::new()),
         _ => RangeModifierResponse::default(),
@@ -769,5 +773,35 @@ fn get_perk_edr(
     match perk_enum {
         Perks::ReignHavoc => edr_reign_havoc(_input_data, val, enhanced, _pvp, &_cached_data),
         _ => ExtraDamageResponse::default(),
+    }
+}
+
+pub fn get_reload_overrides(
+    _perks: Vec<Perk>,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> Vec<ReloadOverrideResponse> {
+    let mut reload_overrides = vec![];
+    for perk in _perks {
+        let tmp = get_perk_ror(perk, _input_data, _pvp);
+        if tmp.valid{
+            reload_overrides.push(tmp);
+        }
+    }
+    reload_overrides
+}
+fn get_perk_ror(
+    _perk: Perk,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+) -> ReloadOverrideResponse {
+    let perk_enum = Perks::from_u32(_perk.hash);
+    let val = _perk.value;
+    let enhanced = _perk.enhanced;
+    match perk_enum {
+        Perks::Demolitionist => ror_demolitionist(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::VeistStinger => ror_veist_stinger(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        _ => ReloadOverrideResponse::invalid(),
     }
 }

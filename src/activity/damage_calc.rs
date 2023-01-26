@@ -14,6 +14,9 @@ struct LinearTable {
 }
 impl LinearTable {
     fn evaluate(&self, time: f64) -> f64 {
+        if time > 0.0 {
+            return self.table[self.table.len() - 1].value;
+        }
         let mut index = 0;
         for i in 0..self.table.len() {
             if self.table[i].time > time {
@@ -50,7 +53,7 @@ impl LinearTable {
 #[derive(Debug, Clone)]
 pub struct DifficultyData {
     name: String,
-    cap: i32,
+    cap: f64,
     table: LinearTable,
 }
 
@@ -93,17 +96,17 @@ impl DifficultyOptions {
         match self {
             DifficultyOptions::NORMAL => DifficultyData {
                 name: "Normal".to_string(),
-                cap: 50,
+                cap: 50.0,
                 table: LinearTable::from_vecs(NORMAL_TIMES, NORMAL_VALUES),
             },
             DifficultyOptions::MASTER => DifficultyData {
                 name: "Master".to_string(),
-                cap: 20,
+                cap: 20.0,
                 table: LinearTable::from_vecs(MASTER_TIMES, MASTER_VALUES),
             },
             DifficultyOptions::RAID => DifficultyData {
                 name: "Raid & Dungeon".to_string(),
-                cap: 20,
+                cap: 20.0,
                 table: LinearTable::from_vecs(RAID_TIMES, RAID_VALUES),
             },
         }
@@ -128,14 +131,14 @@ pub(super) fn gpl_delta(_activity: Activity, _gpl: f64) -> f64 {
     let difficulty_data = _activity.difficulty.get_difficulty_data();
     let curve = difficulty_data.table;
     let rpl = _activity.rpl;
-    let activity_cap = _activity.cap;
+    let cap = if _activity.cap<difficulty_data.cap {_activity.cap} else {difficulty_data.cap};
     let mut delta = _gpl - rpl;
     if delta < -99.0 {
         return 0.0;
-    } else if delta > activity_cap {
-        delta = activity_cap;
-    };
-    let wep_delta_mult = WWEAPON_DELTA_EXPONENT.powf(rpl);
+    } else if delta > cap {
+        delta = cap;
+    }
+    let wep_delta_mult = WWEAPON_DELTA_EXPONENT.powf(delta);
     let gear_delta_mult = curve.evaluate(delta);
     wep_delta_mult * gear_delta_mult
 }

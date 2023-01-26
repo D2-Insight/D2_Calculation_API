@@ -7,6 +7,7 @@ use super::{
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
         HandlingModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
+        ReloadOverrideResponse,
     },
 };
 
@@ -414,5 +415,22 @@ pub(super) fn rmr_well_rounded(
         range_all_scale: 1.0,
         range_hip_scale: 1.0,
         range_zoom_scale: 1.0,
+    }
+}
+
+pub(super) fn ror_veist_stinger(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> ReloadOverrideResponse {
+    ReloadOverrideResponse {
+        count_as_reload: false,
+        reload_time: 0.0,
+        ammo_to_reload: _input.base_mag as i32,
+        priority: 9,
+        uses_ammo: true,
+        valid: true,
     }
 }

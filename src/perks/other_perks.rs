@@ -1,13 +1,13 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{StatHashes, WeaponType};
+use crate::d2_enums::{StatHashes, WeaponType, DamageType};
 
 use super::{
     clamp,
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
         HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
-        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverideResponse,
+        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse,
     },
 };
 
@@ -22,7 +22,10 @@ pub(super) fn dmr_built_in(
     #[allow(unused_mut)]
     let mut dmg_scale = 1.0;
     if *_input.weapon_type == WeaponType::LINEARFUSIONRIFLE {
-        crit_scale *= 1.141;
+        crit_scale *= 1.15;
+    };
+    if *_input.damage_type == DamageType::KINETIC {
+        dmg_scale *= 1.05;
     };
     DamageModifierResponse {
         crit_scale,
@@ -397,3 +400,52 @@ pub(super) fn sbr_loader_mods(
     };
     stats
 }
+
+pub(super) fn dmr_empowerment_buffs(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let val = clamp(_value, 0, 40) as f64;
+    DamageModifierResponse {
+        dmg_scale: 1.0 + (val / 100.0),
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn dmr_weaken_debuffs(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let val = clamp(_value, 0, 40) as f64;
+    DamageModifierResponse {
+        dmg_scale: 1.0 + (val / 100.0),
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn dmr_boss_spec(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> DamageModifierResponse {
+    DamageModifierResponse {
+        dmg_scale: 1.077,
+        crit_scale: 1.0,
+    }
+}
+
+
+
+
+
+
+
+

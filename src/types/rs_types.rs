@@ -78,8 +78,7 @@ pub struct HandlingFormula {
 pub struct AmmoFormula {
     pub mag: QuadraticFormula,
     pub round_to_nearest: i32,
-    pub is_primary: bool,
-    pub reserve_id: i32
+    pub reserve_id: u32
 }
 
 #[derive(Debug, Clone, Default)]
