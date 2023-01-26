@@ -3,7 +3,7 @@
 use pyo3::{prelude::*, types::PyDict};
 use std::collections::HashMap;
 
-use crate::{weapons::FiringConfig, perks::Perk};
+use crate::{weapons::FiringConfig, perks::Perk, activity::{damage_calc::DifficultyOptions, PlayerClass, Activity, Player}, enemies::{EnemyType, Enemy}};
 
 use super::rs_types::{
     AmmoFormula, DamageMods, DpsResponse, HandlingFormula, HandlingResponse, AmmoResponse,
@@ -692,17 +692,336 @@ impl From<HandlingResponse> for PyHandlingResponse {
 }
 
 
-// #[derive(Debug, Clone, Default)]
-// #[pyclass(name = "Activity")]
-// pub struct PyActivity {
-//     #[pyo3(get)]
-//     pub name: String,
-//     #[pyo3(get)]
-//     pub difficulty: u32,
-//     #[pyo3(get)]
-//     pub rpl: f64,
-//     #[pyo3(get)]
-//     pub cap: f64,
-//     #[pyo3(get)]
-//     pub player: PyPlayer,
-// }
+#[derive(Debug, Clone, Default)]
+#[pyclass(name = "Activity")]
+pub struct PyActivity {
+    #[pyo3(get, set)]
+    pub name: String,
+    #[pyo3(get, set)]
+    pub difficulty: PyDifficultyOptions,
+    #[pyo3(get, set)]
+    pub rpl: f64,
+    #[pyo3(get, set)]
+    pub cap: f64,
+}
+#[pymethods]
+impl PyActivity {
+    #[new]
+    pub fn new(_name: String, _difficulty: PyDifficultyOptions, _rpl: f64, _cap: f64) -> Self {
+        PyActivity {
+            name: _name,
+            difficulty: _difficulty,
+            rpl: _rpl,
+            cap: _cap,
+        }
+    }
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!(
+            "Activity(name={}, difficulty={:?}, rpl={}, cap={})",
+            self.name, self.difficulty, self.rpl, self.cap
+        ))
+    }
+}
+impl From<Activity> for PyActivity {
+    fn from(a: Activity) -> Self {
+        let diff = match a.difficulty {
+            DifficultyOptions::NORMAL => PyDifficultyOptions::NORMAL,
+            DifficultyOptions::RAID => PyDifficultyOptions::RAID,
+            DifficultyOptions::MASTER => PyDifficultyOptions::MASTER,
+        };
+        PyActivity {
+            name: a.name,
+            difficulty: diff,
+            rpl: a.rpl,
+            cap: a.cap,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default)]
+#[pyclass(name = "Player")]
+pub struct PyPlayer {
+    #[pyo3(get, set)]
+    pub powerl_level: u32,
+    #[pyo3(get, set)]
+    pub class: PyPlayerClass
+}
+#[pymethods]
+impl PyPlayer {
+    #[new]
+    pub fn new(_power_level: u32, _class: PyPlayerClass) -> Self {
+        PyPlayer {
+            powerl_level: _power_level,
+            class: _class
+        }
+    }
+    #[pyo3(name = "default")]
+    #[staticmethod]
+    fn py_default() -> Self {
+        PyPlayer::default()
+    }
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!(
+            "Player(power_level={}, class={:?})",
+            self.powerl_level, self.class
+        ))
+    }
+}
+impl Into<Player> for PyPlayer {
+    fn into(self) -> Player {
+        Player {
+            pl: self.powerl_level,
+            class: self.class.into()
+        }
+    }
+}
+impl From<Player> for PyPlayer {
+    fn from(p: Player) -> Self {
+        PyPlayer {
+            powerl_level: p.pl,
+            class: p.class.into()
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default)]
+#[pyclass(name = "Enemy")]
+pub struct PyEnemy {
+    #[pyo3(get, set)]
+    pub health: f64,
+    #[pyo3(get, set)]
+    pub damage: f64,
+    #[pyo3(get, set)]
+    pub damage_resistance: f64,
+    #[pyo3(get, set)]
+    pub type_: PyEnemyType,
+    #[pyo3(get, set)]
+    pub tier: u8,
+}
+#[pymethods]
+impl PyEnemy {
+    #[new]
+    pub fn new(_health: f64, _damage: f64, _damage_resistance: f64, _type_: PyEnemyType, _tier: u8) -> Self {
+        PyEnemy {
+            health: _health,
+            damage: _damage,
+            damage_resistance: _damage_resistance,
+            type_: _type_,
+            tier: _tier,
+        }
+    }
+    #[pyo3(name = "default")]
+    #[staticmethod]
+    fn py_default() -> Self {
+        PyEnemy::default()
+    }
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!(
+            "Enemy(health={}, damage={}, damage_resistance={}, type_={:?}, tier={})",
+            self.health, self.damage, self.damage_resistance, self.type_, self.tier
+        ))
+    }
+}
+impl From<Enemy> for PyEnemy {
+    fn from(e: Enemy) -> Self {
+        PyEnemy {
+            health: e.health,
+            damage: e.damage,
+            damage_resistance: e.damage_resistance,
+            type_: e.type_.into(),
+            tier: e.tier,
+        }
+    }
+}
+impl Into<Enemy> for PyEnemy {
+    fn into(self) -> Enemy {
+        Enemy {
+            health: self.health,
+            damage: self.damage,
+            damage_resistance: self.damage_resistance,
+            type_: self.type_.into(),
+            tier: self.tier,
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+//ENUMS///////////////////////
+#[derive(Debug, Clone)]
+#[pyclass(name = "DifficultyOptions")]
+pub enum PyDifficultyOptions {
+    NORMAL = 1,
+    RAID = 2,
+    MASTER = 3,
+}
+#[pymethods]
+impl PyDifficultyOptions {
+    #[pyo3(name = "default")]
+    #[staticmethod]
+    fn py_default() -> Self {
+        PyDifficultyOptions::default()
+    }
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!(
+            "DifficultyOptions({})",
+            match self {
+                PyDifficultyOptions::NORMAL => "NORMAL",
+                PyDifficultyOptions::RAID => "RAID",
+                PyDifficultyOptions::MASTER => "MASTER",
+            }
+        ))
+    }
+}
+impl Default for PyDifficultyOptions {
+    fn default() -> Self {
+        PyDifficultyOptions::NORMAL
+    }
+}
+impl Into<DifficultyOptions> for PyDifficultyOptions {
+    fn into(self) -> DifficultyOptions {
+        match self {
+            PyDifficultyOptions::NORMAL => DifficultyOptions::NORMAL,
+            PyDifficultyOptions::RAID => DifficultyOptions::RAID,
+            PyDifficultyOptions::MASTER => DifficultyOptions::MASTER,
+        }
+    }
+}
+impl From<DifficultyOptions> for PyDifficultyOptions {
+    fn from(d: DifficultyOptions) -> Self {
+        match d {
+            DifficultyOptions::NORMAL => PyDifficultyOptions::NORMAL,
+            DifficultyOptions::RAID => PyDifficultyOptions::RAID,
+            DifficultyOptions::MASTER => PyDifficultyOptions::MASTER,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+#[pyclass(name = "PlayerClass")]
+pub enum PyPlayerClass {
+    Unknown = 0,
+    Titan = 1,
+    Hunter = 2,
+    Warlock = 3,
+}
+#[pymethods]
+impl PyPlayerClass {
+    #[pyo3(name = "default")]
+    #[staticmethod]
+    fn py_default() -> Self {
+        PyPlayerClass::default()
+    }
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!(
+            "PlayerClass({})",
+            match self {
+                PyPlayerClass::Unknown => "Unknown",
+                PyPlayerClass::Titan => "Titan",
+                PyPlayerClass::Hunter => "Hunter",
+                PyPlayerClass::Warlock => "Warlock",
+            }
+        ))
+    }
+}
+impl Default for PyPlayerClass {
+    fn default() -> Self {
+        PyPlayerClass::Unknown
+    }
+}
+impl Into<PlayerClass> for PyPlayerClass {
+    fn into(self) -> PlayerClass {
+        match self {
+            PyPlayerClass::Unknown => PlayerClass::Unknown,
+            PyPlayerClass::Titan => PlayerClass::Titan,
+            PyPlayerClass::Hunter => PlayerClass::Hunter,
+            PyPlayerClass::Warlock => PlayerClass::Warlock,
+        }
+    }
+}
+impl From<PlayerClass> for PyPlayerClass {
+    fn from(p: PlayerClass) -> Self {
+        match p {
+            PlayerClass::Unknown => PyPlayerClass::Unknown,
+            PlayerClass::Titan => PyPlayerClass::Titan,
+            PlayerClass::Hunter => PyPlayerClass::Hunter,
+            PlayerClass::Warlock => PyPlayerClass::Warlock,
+        }
+    }
+}
+
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[pyclass(name = "EnemyType")]
+pub enum PyEnemyType {
+    MINOR,
+    ELITE,
+    MINIBOSS,
+    BOSS,
+    VEHICLE,
+    ENCLAVE,
+    PLAYER,
+    CHAMPION
+}
+#[pymethods]
+impl PyEnemyType {
+    #[pyo3(name = "default")]
+    #[staticmethod]
+    fn py_default() -> Self {
+        PyEnemyType::default()
+    }
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!(
+            "EnemyType({})",
+            match self {
+                PyEnemyType::MINOR => "MINOR",
+                PyEnemyType::ELITE => "ELITE",
+                PyEnemyType::MINIBOSS => "MINIBOSS",
+                PyEnemyType::BOSS => "BOSS",
+                PyEnemyType::VEHICLE => "VEHICLE",
+                PyEnemyType::ENCLAVE => "ENCLAVE",
+                PyEnemyType::PLAYER => "PLAYER",
+                PyEnemyType::CHAMPION => "CHAMPION",
+            }
+        ))
+    }
+}
+impl Default for PyEnemyType {
+    fn default() -> Self {
+        PyEnemyType::ENCLAVE
+    }
+}
+impl Into<EnemyType> for PyEnemyType {
+    fn into(self) -> EnemyType {
+        match self {
+            PyEnemyType::MINOR => EnemyType::MINOR,
+            PyEnemyType::ELITE => EnemyType::ELITE,
+            PyEnemyType::MINIBOSS => EnemyType::MINIBOSS,
+            PyEnemyType::BOSS => EnemyType::BOSS,
+            PyEnemyType::VEHICLE => EnemyType::VEHICLE,
+            PyEnemyType::ENCLAVE => EnemyType::ENCLAVE,
+            PyEnemyType::PLAYER => EnemyType::PLAYER,
+            PyEnemyType::CHAMPION => EnemyType::CHAMPION,
+        }
+    }
+}
+impl From<EnemyType> for PyEnemyType {
+    fn from(e: EnemyType) -> Self {
+        match e {
+            EnemyType::MINOR => PyEnemyType::MINOR,
+            EnemyType::ELITE => PyEnemyType::ELITE,
+            EnemyType::MINIBOSS => PyEnemyType::MINIBOSS,
+            EnemyType::BOSS => PyEnemyType::BOSS,
+            EnemyType::VEHICLE => PyEnemyType::VEHICLE,
+            EnemyType::ENCLAVE => PyEnemyType::ENCLAVE,
+            EnemyType::PLAYER => PyEnemyType::PLAYER,
+            EnemyType::CHAMPION => PyEnemyType::CHAMPION,
+        }
+    }
+}

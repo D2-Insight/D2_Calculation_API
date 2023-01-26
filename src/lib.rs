@@ -28,7 +28,8 @@ use wasm_bindgen::prelude::*;
 #[cfg(feature = "python")]
 use crate::types::py_types::{
     PyAmmoFormula, PyDamageModifiers, PyFiringData, PyHandlingFormula, PyPerk, PyRangeFormula,
-    PyReloadFormula, PyWeapon, PyWeaponFormula, PyRangeResponse, PyHandlingResponse
+    PyReloadFormula, PyWeapon, PyWeaponFormula, PyRangeResponse, PyHandlingResponse, PyActivity,
+    PyPlayer, PyEnemy, PyEnemyType
 };
 #[cfg(feature = "python")]
 use pyo3::prelude::*;
@@ -138,92 +139,195 @@ pub fn change_perk_value(perk_hash: u32, new_value: u32) {
 
 
 #[cfg(feature = "python")]
-#[derive(Debug, Clone, Default)]
-#[pyclass(name = "WeaponInterface")]
-pub struct PyWeaponFuncs;
+#[pyfunction(name = "is_weapon_set")]
+fn is_weapon_assigned() -> PyResult<bool> {
+    let val = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.hash);
+    Ok(val != 0)
+}
 #[cfg(feature = "python")]
-#[pymethods]
-impl PyWeaponFuncs {
-    #[pyo3(name = "isWeaponSet")]
-    #[staticmethod]
-    fn is_weapon_assigned() -> PyResult<bool> {
-        let val = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.hash);
-        Ok(val != 0)
-    }
-
-    #[pyo3(name = "setWeapon")]
-    #[staticmethod]
-    fn set_weapon(weapon: PyWeapon) -> PyResult<()> {
-        PERS_DATA.with(|perm_data| {
-            let new_weapon: Weapon = weapon.into();
-            perm_data.borrow_mut().weapon = new_weapon;
-        });
-        Ok(())
-    }
-
-    #[pyo3(name = "addPerk")]
-    #[staticmethod]
-    fn add_perk(_perk: PyPerk) -> PyResult<()> {
-        PERS_DATA.with(
-            |perm_data| 
-            perm_data.borrow_mut().weapon.add_perk(_perk.into()));
-        Ok(())
-    }
-
-    #[pyo3(name = "removePerk")]
-    #[staticmethod]
-    fn remove_perk(_perk: PyPerk) -> PyResult<()> {
-        PERS_DATA.with(
-            |perm_data| 
-            perm_data.borrow_mut().weapon.remove_perk(_perk.into()));
-        Ok(())
-    }
-
-    #[pyo3(name = "stringifyWeapon")]
-    #[staticmethod]
-    fn weapon_as_string() -> PyResult<String> {
-        let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
-        Ok(format!("{:?}", weapon))
-    }
-
-    #[pyo3(name = "getWeaponRange")]
-    #[staticmethod]
-    fn get_weapon_range(_dynamic_perks: bool) -> PyResult<PyRangeResponse> {
-        let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
-        if _dynamic_perks {
-            Ok(weapon.calc_range_falloff(Some(weapon.static_calc_input())).into())
-        } else {
-            Ok(weapon.calc_range_falloff(None).into())
-        }
-    }
-
-    #[pyo3(name = "getWeaponHandling")]
-    #[staticmethod]
-    fn get_weapon_handling(_dynamic_perks: bool) -> PyResult<PyHandlingResponse> {
-        let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
-        if _dynamic_perks {
-            Ok(weapon.calc_handling_times(Some(weapon.static_calc_input())).into())
-        } else {
-            Ok(weapon.calc_handling_times(None).into())
-        }
+#[pyfunction(name = "set_weapon")]
+fn set_weapon(weapon: PyWeapon) -> PyResult<()> {
+    PERS_DATA.with(|perm_data| {
+        let new_weapon: Weapon = weapon.into();
+        perm_data.borrow_mut().weapon = new_weapon;
+    });
+    Ok(())
+}
+#[cfg(feature = "python")]
+#[pyfunction(name = "add_perk")]
+fn add_perk(_perk: PyPerk) -> PyResult<()> {
+    PERS_DATA.with(
+        |perm_data| 
+        perm_data.borrow_mut().weapon.add_perk(_perk.into()));
+    Ok(())
+}
+#[cfg(feature = "python")]
+#[pyfunction(name = "remove_perk")]
+fn remove_perk(_perk: PyPerk) -> PyResult<()> {
+    PERS_DATA.with(
+        |perm_data| 
+        perm_data.borrow_mut().weapon.remove_perk(_perk.into()));
+    Ok(())
+}
+#[cfg(feature = "python")]
+#[pyfunction(name = "stringify_weapon")]
+fn weapon_as_string() -> PyResult<String> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    Ok(format!("{:?}", weapon))
+}
+#[cfg(feature = "python")]
+#[pyfunction(name = "get_range_falloff")]
+fn get_weapon_range(_dynamic_perks: bool) -> PyResult<PyRangeResponse> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    if _dynamic_perks {
+        Ok(weapon.calc_range_falloff(Some(weapon.static_calc_input())).into())
+    } else {
+        Ok(weapon.calc_range_falloff(None).into())
     }
 }
+#[cfg(feature = "python")]
+#[pyfunction(name = "get_handling_times")]
+fn get_weapon_handling(_dynamic_perks: bool) -> PyResult<PyHandlingResponse> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    if _dynamic_perks {
+        Ok(weapon.calc_handling_times(Some(weapon.static_calc_input())).into())
+    } else {
+        Ok(weapon.calc_handling_times(None).into())
+    }
+}
+
+#[cfg(feature = "python")]
+fn register_weapon_interface(py: Python<'_>, parent_module: &PyModule) -> PyResult<()> {
+    let weapon_interface = PyModule::new(py, "WeaponInterface")?;
+    //functions
+    weapon_interface.add_function(wrap_pyfunction!(get_weapon_handling, weapon_interface)?)?;
+    weapon_interface.add_function(wrap_pyfunction!(get_weapon_range, weapon_interface)?)?;
+    weapon_interface.add_function(wrap_pyfunction!(weapon_as_string, weapon_interface)?)?;
+    weapon_interface.add_function(wrap_pyfunction!(remove_perk, weapon_interface)?)?;
+    weapon_interface.add_function(wrap_pyfunction!(add_perk, weapon_interface)?)?;
+    weapon_interface.add_function(wrap_pyfunction!(set_weapon, weapon_interface)?)?;
+    weapon_interface.add_function(wrap_pyfunction!(is_weapon_assigned, weapon_interface)?)?;
+
+    //classes
+    weapon_interface.add_class::<PyWeapon>()?;
+    weapon_interface.add_class::<PyPerk>()?;
+    weapon_interface.add_class::<PyWeaponFormula>()?;
+    weapon_interface.add_class::<PyDamageModifiers>()?;
+    weapon_interface.add_class::<PyFiringData>()?;
+    weapon_interface.add_class::<PyAmmoFormula>()?;
+    weapon_interface.add_class::<PyHandlingFormula>()?;
+    weapon_interface.add_class::<PyRangeFormula>()?;
+    weapon_interface.add_class::<PyReloadFormula>()?;
+    weapon_interface.add_class::<PyRangeResponse>()?;
+    weapon_interface.add_class::<PyHandlingResponse>()?;
+    parent_module.add_submodule(weapon_interface)?;
+    Ok(())
+}
+
+
+#[cfg(feature = "python")]
+#[pyfunction(name = "set_activity")]
+fn set_activity(_activity: PyActivity) -> PyResult<()> {
+    PERS_DATA.with(|perm_data| {
+        perm_data.borrow_mut().activity.cap = _activity.cap;
+        perm_data.borrow_mut().activity.name = _activity.name;
+        perm_data.borrow_mut().activity.rpl = _activity.rpl;
+        perm_data.borrow_mut().activity.difficulty = _activity.difficulty.into();
+    });
+    Ok(())
+}
+
+#[cfg(feature = "python")]
+#[pyfunction(name = "get_activity")]
+fn get_activity() -> PyResult<PyActivity> {
+    let activity = PERS_DATA.with(|perm_data| perm_data.borrow().activity.clone());
+    Ok(activity.into())
+}
+
+#[cfg(feature = "python")]
+#[pyfunction(name = "set_player")]
+fn set_player(_player: PyPlayer) -> PyResult<()> {
+    PERS_DATA.with(|perm_data| {
+        perm_data.borrow_mut().activity.player = _player.into();
+    });
+    Ok(())
+}
+
+#[cfg(feature = "python")]
+#[pyfunction(name = "get_player")]
+fn get_player() -> PyResult<PyPlayer> {
+    let player = PERS_DATA.with(|perm_data| perm_data.borrow().activity.player.clone());
+    Ok(player.into())
+}
+
+
+#[cfg(feature = "python")]
+fn register_activity_interface(py: Python<'_>, parent_module: &PyModule) -> PyResult<()> {
+    let activity_interface = PyModule::new(py, "ActivityInterface")?;
+    //functions
+    activity_interface.add_function(wrap_pyfunction!(get_activity, activity_interface)?)?;
+    activity_interface.add_function(wrap_pyfunction!(set_activity, activity_interface)?)?;
+    activity_interface.add_function(wrap_pyfunction!(get_player, activity_interface)?)?;
+    activity_interface.add_function(wrap_pyfunction!(set_player, activity_interface)?)?;
+
+    //classes
+    activity_interface.add_class::<PyActivity>()?;
+    activity_interface.add_class::<PyPlayer>()?;
+
+    parent_module.add_submodule(activity_interface)?;
+    Ok(())
+}
+
+
+#[cfg(feature = "python")]
+#[pyfunction(name = "get_enemy")]
+fn get_enemy() -> PyResult<PyEnemy> {
+    let enemy = PERS_DATA.with(|perm_data| perm_data.borrow().enemy.clone());
+    Ok(enemy.into())
+}
+
+#[cfg(feature = "python")]
+#[pyfunction(name = "set_enemy")]
+fn set_enemy(_enemy: PyEnemy) -> PyResult<()> {
+    PERS_DATA.with(|perm_data| {
+        perm_data.borrow_mut().enemy = _enemy.into();
+    });
+    Ok(())
+}
+
+#[cfg(feature = "python")]
+#[pyfunction(name = "set_enemy_type")]
+fn set_enemy_type(_enemy_type: PyEnemyType) -> PyResult<()> {
+    PERS_DATA.with(|perm_data| {
+        perm_data.borrow_mut().enemy.type_ = _enemy_type.into();
+    });
+    Ok(())
+}
+
+#[cfg(feature = "python")]
+fn register_enemy_interface(py: Python<'_>, parent_module: &PyModule) -> PyResult<()> {
+    let enemy_interface = PyModule::new(py, "EnemyInterface")?;
+    //functions
+    enemy_interface.add_function(wrap_pyfunction!(get_enemy, enemy_interface)?)?;
+    enemy_interface.add_function(wrap_pyfunction!(set_enemy, enemy_interface)?)?;
+    enemy_interface.add_function(wrap_pyfunction!(set_enemy_type, enemy_interface)?)?;
+
+    //classes
+    enemy_interface.add_class::<PyEnemy>()?;
+    enemy_interface.add_class::<PyEnemyType>()?;
+
+    parent_module.add_submodule(enemy_interface)?;
+    Ok(())
+}
+
+
 
 
 #[cfg(feature = "python")]
 #[pymodule]
 fn d2_calculation_api(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
-    m.add_class::<PyWeapon>()?;
-    m.add_class::<PyPerk>()?;
-    m.add_class::<PyWeaponFormula>()?;
-    m.add_class::<PyDamageModifiers>()?;
-    m.add_class::<PyFiringData>()?;
-    m.add_class::<PyAmmoFormula>()?;
-    m.add_class::<PyHandlingFormula>()?;
-    m.add_class::<PyRangeFormula>()?;
-    m.add_class::<PyReloadFormula>()?;
-    m.add_class::<PyWeaponFuncs>()?;
-    m.add_class::<PyRangeResponse>()?;
-    m.add_class::<PyHandlingResponse>()?;
+    register_weapon_interface(_py, m)?;
+    register_activity_interface(_py, m)?;
+    register_enemy_interface(_py, m)?;
     Ok(())
 }

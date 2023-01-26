@@ -336,14 +336,12 @@
             "small": {
                 "magazine": {"evpp": 0.0, "vpp": 0.1, "offset": 3.5, "round_to_nearest": 1},
                 "is_primary": true,
-                "reserve": {
-                }
+                "reserve_id": 0
             },
             "large": {
                 "magazine": {"evpp": 0.0, "vpp": 0.14166, "offset": 4.25, "round_to_nearest": 1},
                 "is_primary": true,
-                "reserve": {
-                }
+                "reserve_id": 0
             }
         }
     },

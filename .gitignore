@@ -5,6 +5,7 @@
 *.pyc
 *.pyi
 *.old
+*.zip
 zdata.json
 database/weapon.json
 /zPythonStuff

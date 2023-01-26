@@ -17,7 +17,7 @@ impl Default for PlayerClass {
 
 #[derive(Debug, Clone, Default)]
 pub struct Player {
-    pub pl: f64,
+    pub pl: u32,
     pub class: PlayerClass,
 }
 
@@ -37,21 +37,7 @@ impl Default for Activity {
             difficulty: DifficultyOptions::default(),
             rpl: expansion_base,
             cap: 100.0,
-            player: Player{pl: expansion_base+200.0, class: PlayerClass::default()},
+            player: Player{pl: expansion_base as u32 +200, class: PlayerClass::default()},
         }
-    }
-}
-impl Activity {
-    pub fn get_rpl_mult(&self) -> f64 {
-        rpl_mult(self.rpl)
-    }
-    pub fn set_difficulty(&mut self, _difficulty: DifficultyOptions) {
-        self.difficulty = _difficulty;
-    }
-    pub fn set_player_pl(&mut self, _pl: f64) {
-        self.player.pl = _pl;
-    }
-    pub fn set_player_class(&mut self, _class: PlayerClass) {
-        self.player.class = _class;
     }
 }
