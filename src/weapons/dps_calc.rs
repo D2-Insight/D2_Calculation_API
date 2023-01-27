@@ -116,8 +116,8 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
     let stats = weapon.stats.clone();
     let weapon_type = weapon.weapon_type.clone();
     let ammo_type = weapon.ammo_type.clone();
-    let base_dmg = weapon.base_damage;
-    let base_crit_mult = weapon.base_crit_mult;
+    let base_dmg = weapon.firing_data.damage;
+    let base_crit_mult = weapon.firing_data.crit_mult;
 
     let base_mag = weapon.calc_ammo_sizes(None).mag_size;
     let maximum_shots = if base_mag * 5 < 15 { 15 } else { base_mag * 5 };
@@ -216,7 +216,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
             //     total_time += shot_burst_delay*0.5;
             // }
 
-            if firing_settings.one_ammo_burst && burst_size > 1.0 {
+            if firing_settings.one_ammo && burst_size > 1.0 {
                 total_shots_fired += 1;
                 shots_this_mag += 1;
                 total_shots_hit += shot_burst_size as i32;
@@ -318,7 +318,11 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                     if final_response.valid {
                         total_time += final_response.reload_time;
                         if final_response.uses_ammo {
-                            let ammo_to_add = if final_response.ammo_to_reload > reserve {reserve} else {final_response.ammo_to_reload};
+                            let ammo_to_add = if final_response.ammo_to_reload > reserve {
+                                reserve
+                            } else {
+                                final_response.ammo_to_reload
+                            };
                             mag = ammo_to_add;
                             reserve -= ammo_to_add;
                         } else {
@@ -345,7 +349,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                     break;
                 }
             } else {
-                if total_shots_fired > base_mag*8+20 {
+                if total_shots_fired > base_mag * 8 + 20 {
                     reserve = 0;
                     break;
                 }
@@ -357,7 +361,6 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
 
         reserve -= base_mag;
         dps_per_mag.push(total_damage / total_time);
-
 
         //RELOAD///////////////////////
         let reload_input_data = CalculationInput {

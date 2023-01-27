@@ -1,4 +1,3 @@
-
 use super::FiringConfig;
 
 //just to make code cleaner for now
@@ -57,7 +56,7 @@ pub fn simple_calc_ttk(
     let burst_duration: f64 = _firing_config.burst_duration;
     let burst_size: f64 = _firing_config.burst_size as f64;
 
-    let dmg_per_ammo: f64 = if _firing_config.one_ammo_burst {
+    let dmg_per_ammo: f64 = if _firing_config.one_ammo {
         dmg * (burst_size as f64)
     } else {
         dmg

@@ -1,8 +1,10 @@
 use std::collections::HashMap;
 
+use serde::{Deserialize, Serialize};
+
 use crate::enemies::EnemyType;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize)]
 pub struct DamageMods {
     pub pve: f64,
     pub minor: f64,
@@ -49,7 +51,7 @@ pub struct RangeFormula {
 }
 
 //even if just linear use this
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Deserialize)]
 pub struct StatQuadraticFormula {
     pub evpp: f64,
     pub vpp: f64,
@@ -67,17 +69,17 @@ pub struct ReloadFormula {
     pub ammo_percent: f64,
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Deserialize)]
 pub struct HandlingFormula {
     pub ready: StatQuadraticFormula,
     pub stow: StatQuadraticFormula,
     pub ads: StatQuadraticFormula,
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Deserialize)]
 pub struct AmmoFormula {
     pub mag: StatQuadraticFormula,
-    pub round_to_nearest: i32,
+    pub round_to: i32,
     pub reserve_id: u32,
 }
 

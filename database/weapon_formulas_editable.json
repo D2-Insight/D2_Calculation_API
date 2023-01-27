@@ -90,19 +90,19 @@
 
         "magProf": {
             "large": {
-                "magazine": {"evpp": 0.0 ,"vpp": 0.322, "offset": 39.9},
+                "mag": {"evpp": 0.0 ,"vpp": 0.322, "offset": 39.9},
                 "reserve_id": 0
             },
             "medium": {
-                "magazine": {"evpp": 0.0 ,"vpp": 0.262, "offset": 33.1},
+                "mag": {"evpp": 0.0 ,"vpp": 0.262, "offset": 33.1},
                 "reserve_id": 0
             },
             "small": {
-                "magazine": {"evpp": 0.0 ,"vpp": 0.2, "offset": 25.0},
+                "mag": {"evpp": 0.0 ,"vpp": 0.2, "offset": 25.0},
                 "reserve_id": 0
             },
             "sweet_buiss": {
-                "magazine": {"evpp": 0.0 ,"vpp": 0.0, "offset": 150.0},
+                "mag": {"evpp": 0.0 ,"vpp": 0.0, "offset": 150.0},
                 "reserve_id": 0
             }
         }
@@ -144,11 +144,11 @@
         },
         "magProg": {
             "default": {
-                "magazine": {"evpp": 0.0 ,"vpp": 0.0, "offset": 1},
+                "mag": {"evpp": 0.0 ,"vpp": 0.0, "offset": 1},
                 "reserve_id": 0
             },
             "leviathan": {
-                "magazine": {"evpp": 0.0 ,"vpp": 0.0, "offset": 1},
+                "mag": {"evpp": 0.0 ,"vpp": 0.0, "offset": 1},
                 "reserve_id": 1699724249
             }
         }
@@ -169,7 +169,7 @@
         "cat": {
             "default": {
                 "range":    {"zrm": 1.3, "zrm_tier": {}, "vpp": 0.0324, "base_min": 10.56, "base_max": 15.1, "scale": true},
-                "reload":   {"evpp": 0.0000615281, "vpp": -0.0198054, "offset": 2.82857040000000, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000615281, "vpp": -0.0198054, "offset": 2.82857040000000},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -187,7 +187,7 @@
             },
             "Telesto": {
                 "range":    {},
-                "reload":   {"evpp": 0.0000615281, "vpp": -0.0198054, "offset": 2.82857040000000, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000615281, "vpp": -0.0198054, "offset": 2.82857040000000},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -196,7 +196,7 @@
             },
             "Jotunn": {
                 "range":    {},
-                "reload":   {"evpp": 0.0000615281, "vpp": -0.0198054, "offset": 2.82857040000000, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000615281, "vpp": -0.0198054, "offset": 2.82857040000000},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -205,7 +205,7 @@
             },
             "Vex": {
                 "range":    {"vpp": 0.0963, "base_min": 11.87, "base_max": 40.8, "scale": false, "floor_percent": 0.5},
-                "reload":   {"evpp": 0.0000855689, "vpp": -0.0242021, "offset": 2.80673006666667, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000855689, "vpp": -0.0242021, "offset": 2.80673006666667},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -225,7 +225,7 @@
         },
         "magProf": {
             "default": {
-                "magazine": {"evpp": 0.0 ,"vpp": 0.05, "offset": 2.51},
+                "mag": {"evpp": 0.0 ,"vpp": 0.05, "offset": 2.51},
                 "reserve_id": 111
             }
         }
@@ -248,7 +248,7 @@
         "cat": {
             "special": {
                 "range":    {},
-                "reload":   {"evpp": 0.0000724199, "vpp": -0.0216432, "offset": 3.24104606666667, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000724199, "vpp": -0.0216432, "offset": 3.24104606666667},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -257,7 +257,7 @@
             },
             "lion": {
                 "range":    {},
-                "reload":   {"evpp": 0.0000724199, "vpp": -0.0216432, "offset": 3.24104606666667, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000724199, "vpp": -0.0216432, "offset": 3.24104606666667},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -266,7 +266,7 @@
             },
             "heavy": {
                 "range":    {},
-                "reload":   {"evpp": 0.0000755233, "vpp": -0.0248947, "offset": 4.12880153333333, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000755233, "vpp": -0.0248947, "offset": 4.12880153333333},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -275,7 +275,7 @@
             },
             "anarchy": {
                 "range":    {},
-                "reload":   {"evpp": 0.0000755233, "vpp": -0.0248947, "offset": 4.12880153333333, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000755233, "vpp": -0.0248947, "offset": 4.12880153333333},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -284,7 +284,7 @@
             },
             "parasite": {
                 "range":    {},
-                "reload":   {"evpp": 0.0000755233, "vpp": -0.0248947, "offset": 4.12880153333333, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000755233, "vpp": -0.0248947, "offset": 4.12880153333333},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -294,7 +294,7 @@
         },
         "magProf": {
             "default": {
-                "magazine": {"evpp": -0.000233 ,"vpp": 0.09785, "offset": -0.031468},
+                "mag": {"evpp": -0.000233 ,"vpp": 0.09785, "offset": -0.031468},
                 "reserve_id": 231
             }
         }
@@ -320,7 +320,7 @@
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.0877,"offset_start": 16.83,"vpp_end": 0.0352,"offset_end": 29.67, "floor_percent": 0.33},
-                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "ammo_percent": 0.71, "mag_multiplier": false},
+                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "ammo_percent": 0.71},
                 "handling": {
                     "ready":{"vpp": -0.002942857143, "offset": 0.4782571429},
                     "stow": {"vpp": -0.002952380952, "offset": 0.5133809524},
@@ -330,7 +330,7 @@
             },
             "120 RPM": {
                 "range":    {"vpp_start": 0.102,"offset_start": 18.65,"vpp_end": 0.0205,"offset_end": 32.8, "floor_percent": 0.33},
-                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "ammo_percent": 0.71, "mag_multiplier": false},
+                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "ammo_percent": 0.71},
                 "handling": {
                     "ready":{"vpp": -0.002942857143, "offset": 0.4782571429},
                     "stow": {"vpp": -0.002952380952, "offset": 0.5133809524},
@@ -340,7 +340,7 @@
             },
             "Eriana": {
                 "range":    {"vpp_start": 0.0,"offset_start": 38.0,"vpp_end": 0.0,"offset_end": 70.0, "floor_percent": 0.33},
-                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "ammo_percent": 0.71, "mag_multiplier": false},
+                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "ammo_percent": 0.71},
                 "handling": {
                     "ready":{"vpp": -0.002942857143, "offset": 0.4782571429},
                     "stow": {"vpp": -0.002952380952, "offset": 0.5133809524},
@@ -350,7 +350,7 @@
             },
             "LastWord": {
                 "range":    {"vpp_start": 0.0,"offset_start": 19.3,"vpp_end": 0.0,"offset_end": 29.67, "floor_percent": 0.33},
-                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "ammo_percent": 0.71, "mag_multiplier": false},
+                "reload":   {"evpp": 0.000129019, "vpp": -0.0363945, "offset": 4.19575, "ammo_percent": 0.71},
                 "handling": {
                     "ready":{"vpp": -0.002942857143, "offset": 0.4782571429},
                     "stow": {"vpp": -0.002952380952, "offset": 0.5133809524},
@@ -371,19 +371,19 @@
         },
         "magProf": {
             "small": {
-                "magazine": {"evpp": 0.0, "vpp": 0.1, "offset": 3.5},
+                "mag": {"evpp": 0.0, "vpp": 0.1, "offset": 3.5},
                 "reserve_id": 0
             },
             "large": {
-                "magazine": {"evpp": 0.0, "vpp": 0.14166, "offset": 4.25},
+                "mag": {"evpp": 0.0, "vpp": 0.14166, "offset": 4.25},
                 "reserve_id": 0
             },
             "eriana": {
-                "magazine": {"evpp": 0.0, "vpp": 0.1, "offset": 3.5},
+                "mag": {"evpp": 0.0, "vpp": 0.1, "offset": 3.5},
                 "reserve_id": 3174300811
             },
             "crimson": {
-                "magazine": {"evpp": 0.0, "vpp": 0.0, "offset": 24},
+                "mag": {"evpp": 0.0, "vpp": 0.0, "offset": 24},
                 "reserve_id": 0
             }
         }
@@ -398,28 +398,31 @@
         "cat": {
             "default": {
                 "range":    {},
-                "reload":   {"evpp": 0.0000588462, "vpp": -0.0199884, "offset": 2.87206463333, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000588462, "vpp": -0.0199884, "offset": 2.87206463333},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"evpp": 0.0, "vpp": -0.001448069241, "offset": 0.4990612517},
+                    "stow": {"evpp": 0.0, "vpp": -0.002863515313, "offset": 0.4445712383},
+                    "ads":  {"evpp": 0.0, "vpp": -0.001693741678, "offset": 0.4112330226}
                 },
                 "combatant_scalars": {"vehicle": 1.81, "boss": 1.81, "champion": 1.92, "miniboss": 1.92, "elite": 1.92, "minor": 2.03}
             },
             "special": {
                 "range":    {},
-                "reload":   {"evpp": 0.0000588462, "vpp": -0.0199884, "offset": 2.87206463333, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000588462, "vpp": -0.0199884, "offset": 2.87206463333},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"evpp": 0.0, "vpp": -0.001448069241, "offset": 0.4990612517},
+                    "stow": {"evpp": 0.0, "vpp": -0.002863515313, "offset": 0.4445712383},
+                    "ads":  {"evpp": 0.0, "vpp": -0.001693741678, "offset": 0.4112330226}
                 },
                 "combatant_scalars": {"vehicle": 1.81, "boss": 1.54, "champion": 1.64, "miniboss": 1.64, "elite": 1.92, "minor": 2.03}
             },
             "arbalest": {
                 "range":    {},
-                "reload":   {"evpp": 0.0000588462, "vpp": -0.0199884, "offset": 2.87206463333, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000588462, "vpp": -0.0199884, "offset": 2.87206463333},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"evpp": 0.0, "vpp": -0.001448069241, "offset": 0.4990612517},
+                    "stow": {"evpp": 0.0, "vpp": -0.002863515313, "offset": 0.4445712383},
+                    "ads":  {"evpp": 0.0, "vpp": -0.001693741678, "offset": 0.4112330226}
                 },
                 "combatant_scalars": {"vehicle": 1.81, "boss": 1.54, "champion": 1.23, "miniboss": 1.64, "elite": 1.92, "minor": 2.03}
             }
@@ -434,7 +437,7 @@
 
         "magProf": {
             "default": {
-                "magazine": {"evpp": 0.0, "vpp": 0.0293, "offset": 3.2},
+                "mag": {"evpp": 0.0, "vpp": 0.0293, "offset": 3.2},
                 "reserve_id": 221
             }
         }
@@ -450,7 +453,7 @@
         "cat": {
             "default": {
                 "range":    {},
-                "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -459,7 +462,7 @@
             },
             "Xenophage": {
                 "range":    {},
-                "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -468,7 +471,7 @@
             },
             "GrandOverture": {
                 "range":    {},
-                "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -487,19 +490,19 @@
 
         "magProf": {
             "large": {
-                "magazine": {"evpp": 0.0, "vpp": 0.7, "offset": 45.0},
+                "mag": {"evpp": 0.0, "vpp": 0.7, "offset": 45.0},
                 "reserve_id": 81
             },
             "small": {
-                "magazine": {"evpp": 0.0, "vpp": 0.45, "offset": 29.5},
+                "mag": {"evpp": 0.0, "vpp": 0.45, "offset": 29.5},
                 "reserve_id": 82
             },
             "xenophage": {
-                "magazine": {"evpp": 0.0, "vpp": 0.0, "offset": 13},
+                "mag": {"evpp": 0.0, "vpp": 0.0, "offset": 13},
                 "reserve_id": 2261491232
             },
             "overture": {
-                "magazine": {"evpp": 0.0, "vpp": 0.0, "offset": 20},
+                "mag": {"evpp": 0.0, "vpp": 0.0, "offset": 20},
                 "reserve_id": 2940035732
             }
         }
@@ -520,7 +523,7 @@
         "cat": {
             "default": {
                 "range":    {"vpp": 0.072, "base_min": 17.3, "base_max": 40.4, "scale": false, "floor_percent": 0.5},
-                "reload":   {"evpp": 0.0000926208, "vpp": -0.0256877, "offset": 2.92627266666667, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000926208, "vpp": -0.0256877, "offset": 2.92627266666667},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -529,7 +532,7 @@
             },
             "aggresive": {
                 "range":    {"vpp": 0.072, "base_min": 17.3, "base_max": 40.4, "scale": false, "floor_percent": 0.5},
-                "reload":   {"evpp": 0.0000926208, "vpp": -0.0256877, "offset": 2.92627266666667, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000926208, "vpp": -0.0256877, "offset": 2.92627266666667},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -548,32 +551,52 @@
         },
         "magProf": {
             "default": {
-                "magazine": {"evpp": 0.0, "vpp": 0.3, "offset": 17.5},
+                "mag": {"evpp": 0.0, "vpp": 0.3, "offset": 17.5},
                 "reserve_id": 0
             }
         }
     },
     "Rocket Launcher": {
-        "216781713":  {"name": "Häkke Precision Frame", "cat": "default", "magProf": "default"},
-        "411799453":  {"name": "Deathbringer",          "cat": "default", "magProf": "default"},
-        "1019291327": {"name": "High-Impact Frame",     "cat": "default", "magProf": "default"},
-        "1294026524": {"name": "Adaptive Frame",        "cat": "default", "magProf": "default"},
-        "2200569208": {"name": "Eyes of Tomorrow",      "cat": "default", "magProf": "default"},
-        "2473404935": {"name": "The Wardcliff Coil",    "cat": "default", "magProf": "default"},
-        "2491817779": {"name": "Disabled",              "cat": ""       , "magProf": "default"},
-        "3419274965": {"name": "Precision Frame",       "cat": "default", "magProf": "default"},
-        "3468089894": {"name": "Aggressive Frame",      "cat": "default", "magProf": "default"},
-        "3649430342": {"name": "Two-Tailed Fox",        "cat": "default", "magProf": "default"},
-        "2962361451": {"name": "Gjallarhorn",           "cat": "default", "magProf": "default", "pve":0.75},
+        "216781713":  {"name": "Häkke Precision Frame", "cat": "default",   "subFam": "Precision", "magProf": "default"},
+        "411799453":  {"name": "Deathbringer",          "cat": "default",   "subFam": "DeathBringer", "magProf": "default"},
+        "1019291327": {"name": "High-Impact Frame",     "cat": "default",   "subFam": "High-Impact", "magProf": "default"},
+        "1294026524": {"name": "Adaptive Frame",        "cat": "default",   "subFam": "Adaptive", "magProf": "default"},
+        "2200569208": {"name": "Eyes of Tomorrow",      "cat": "eyestmrw",  "subFam": "Wardcliff", "magProf": "default"},
+        "2473404935": {"name": "The Wardcliff Coil",    "cat": "wardcliff", "subFam": "Wardcliff", "magProf": "default"},
+        "3419274965": {"name": "Precision Frame",       "cat": "default",   "subFam": "Precision", "magProf": "default"},
+        "3468089894": {"name": "Aggressive Frame",      "cat": "default",   "subFam": "Aggressive", "magProf": "default"},
+        "3649430342": {"name": "Two-Tailed Fox",        "cat": "default",   "subFam": "TwoTailed", "magProf": "default"},
+        "2962361451": {"name": "Gjallarhorn",           "cat": "default",   "subFam": "Adaptive", "magProf": "default", "pve":0.75},
         "cat": {
             "default": {
                 "range":    {},
-                "reload":   {"evpp": 0.000103959, "vpp": -0.0252069, "offset": 4.09182213333333, "mag_multiplier": false},
+                "reload":   {"evpp": 0.000103959, "vpp": -0.0252069, "offset": 4.09182213333333},
                 "handling": {
                     "ready":{"vpp": -0.003998740554, "offset": 0.6635944584},
                     "stow": {"vpp": -0.003296509536, "offset": 0.5463332134},
                     "ads":  {"vpp": -0.002139258726, "offset": 0.5289841670}
-                }
+                },
+                "combatant_scalars": {"vehicle": 4.70, "boss": 4.70, "champion": 4.70, "miniboss": 5.0, "elite": 1.05, "minor": 6.0}
+            },
+            "wardcliff": {
+                "range":    {},
+                "reload":   {"evpp": 0.000103959, "vpp": -0.0252069, "offset": 4.09182213333333},
+                "handling": {
+                    "ready":{"vpp": -0.003998740554, "offset": 0.6635944584},
+                    "stow": {"vpp": -0.003296509536, "offset": 0.5463332134},
+                    "ads":  {"vpp": -0.002139258726, "offset": 0.5289841670}
+                },
+                "combatant_scalars": {"vehicle": 0.94, "boss": 0.94, "champion": 0.94, "miniboss": 0.94, "elite": 1.05, "minor": 6.0}
+            },
+            "eyestmrw": {
+                "range":    {},
+                "reload":   {"evpp": 0.000103959, "vpp": -0.0252069, "offset": 4.09182213333333},
+                "handling": {
+                    "ready":{"vpp": -0.003998740554, "offset": 0.6635944584},
+                    "stow": {"vpp": -0.003296509536, "offset": 0.5463332134},
+                    "ads":  {"vpp": -0.002139258726, "offset": 0.5289841670}
+                },
+                "combatant_scalars": {"vehicle": 2.12, "boss": 2.12, "champion": 2.72, "miniboss": 2.72, "elite": 1.05, "minor": 6.0}
             }
         },
         "subFam": {
@@ -582,33 +605,35 @@
             "Precision":   {"damage": 405, "crit_mult": 1.0, "burst_delay": 4.0, "burst_size": 1, "burst_duration": 0},
             "Adaptive":    {"damage": 495, "crit_mult": 1.0, "burst_delay": 3.0, "burst_size": 1, "burst_duration": 0},
             "Wardcliff":   {"damage": 300, "crit_mult": 1.0, "burst_delay": 1.0, "burst_size": 8, "burst_duration": 0.7, "oneAmmoBurst": true},
-            "TwoTailed":   {"damage": 193, "crit_mult": 1.0, "burst_delay": 1.0, "burst_size": 2, "burst_duration": 0.3, "oneAmmoBurst": true}
+            "TwoTailed":   {"damage": 193, "crit_mult": 1.0, "burst_delay": 1.0, "burst_size": 2, "burst_duration": 0.3, "oneAmmoBurst": true},
+            "EyesOfTmrw":  {"damage": 400, "crit_mult": 1.0, "burst_delay": 1.0, "burst_size": 8, "burst_duration": 0.7, "oneAmmoBurst": true},
+            "DeathBringer":{"damage": 150, "crit_mult": 1.0, "burst_delay": 1.0, "burst_size": 8, "burst_duration": 0.0, "oneAmmoBurst": true}
         },
         "magProf": {
             "default": {
-                "magazine": {"evpp": 0.0 ,"vpp": 0.0, "offset": 1},
+                "mag": {"evpp": 0.0 ,"vpp": 0.0, "offset": 1},
                 "reserve_id": 101
             }
         }
     },
     "Scout Rifle": {
-        "377257911":  {"name": "MIDA Multi-Tool",   "cat": "default", "subFam": "Lightweight" },
-        "1000724343": {"name": "Polaris Lance",     "cat": "default", "subFam": "High-Impact" },
-        "1019291327": {"name": "High-Impact Frame", "cat": "default", "subFam": "High-Impact" },
-        "1319823571": {"name": "Dead Man's Tale",   "cat": "DMT"    , "subFam": "Aggressive",  "pve":1.20},
-        "1458010786": {"name": "Lightweight Frame", "cat": "default", "subFam": "Lightweight" },
-        "1636108362": {"name": "Precision Frame",   "cat": "default", "subFam": "Precision"   },
-        "2741975068": {"name": "Skyburner's Oath",  "cat": "default", "subFam": "High-Impact" },
-        "3364911712": {"name": "VEIST Rapid-Fire",  "cat": "default", "subFam": "Rapid-Fire"  },
-        "3668782036": {"name": "The Jade Rabbit",   "cat": "default", "subFam": "High-Impact" },
-        "3920852688": {"name": "Rapid-Fire Frame",  "cat": "default", "subFam": "Rapid-Fire"  },
-        "4185339856": {"name": "Symmetry",          "cat": "default", "subFam": "Rapid-Fire"  },
-        "3468089894": {"name": "Aggressive Frame",  "cat": "DMT"    , "subFam": "Aggressive"  },
-        "2724693746": {"name": "Touch Of Malice",   "cat": "default", "subFam": "Rapid-Fire"  },
+        "377257911":  {"name": "MIDA Multi-Tool",   "cat": "default", "subFam": "Lightweight", "magProf": "default"},
+        "1000724343": {"name": "Polaris Lance",     "cat": "default", "subFam": "High-Impact", "magProf": "default"},
+        "1019291327": {"name": "High-Impact Frame", "cat": "default", "subFam": "High-Impact", "magProf": "default"},
+        "1319823571": {"name": "Dead Man's Tale",   "cat": "DMT"    , "subFam": "Aggressive", "magProf": "default", "pve":1.20},
+        "1458010786": {"name": "Lightweight Frame", "cat": "default", "subFam": "Lightweight", "magProf": "default"},
+        "1636108362": {"name": "Precision Frame",   "cat": "default", "subFam": "Precision",   "magProf": "default"},
+        "2741975068": {"name": "Skyburner's Oath",  "cat": "default", "subFam": "High-Impact", "magProf": "default"},
+        "3364911712": {"name": "VEIST Rapid-Fire",  "cat": "default", "subFam": "Rapid-Fire",  "magProf": "default"},
+        "3668782036": {"name": "The Jade Rabbit",   "cat": "default", "subFam": "High-Impact", "magProf": "default"},
+        "3920852688": {"name": "Rapid-Fire Frame",  "cat": "default", "subFam": "Rapid-Fire",  "magProf": "default"},
+        "4185339856": {"name": "Symmetry",          "cat": "default", "subFam": "Rapid-Fire",  "magProf": "default"},
+        "3468089894": {"name": "Aggressive Frame",  "cat": "DMT"    , "subFam": "Aggressive",  "magProf": "default"},
+        "2724693746": {"name": "Touch Of Malice",   "cat": "default", "subFam": "Rapid-Fire",  "magProf": "default"},
         "cat": {
             "default": {
                 "range":    {"vpp": 0.1521, "base_min": 30.89, "base_max": 60.8, "scale": false, "floor_percent": 0.5},
-                "reload":   {"evpp": 0.000102915, "vpp": -0.0276889, "offset": 3.11797356666666, "mag_multiplier": false},
+                "reload":   {"evpp": 0.000102915, "vpp": -0.0276889, "offset": 3.11797356666666},
                 "handling": {
                     "ready":{"vpp": -0.002853368560, "offset": 0.540561867},
                     "stow": {"vpp": -0.002941215324, "offset": 0.527217745},
@@ -636,31 +661,30 @@
         },
         "magProf": {
             "default": {
-                "magazine": {"evpp": 0.0, "vpp": 0.1, "offset": 10.0},
+                "mag": {"evpp": 0.0, "vpp": 0.1, "offset": 10.0},
                 "reserve_id": 0
             }
         }
     },
     "Shotgun": {
-        "372430833":  {"name": "Legend of Acrius",    "cat": "default",   "subFam": ""            },
-        "481338655":  {"name": "Lord of Wolves",      "cat": "LoW",       "subFam": "LoW"         },
-        "895140517":  {"name": "Precision Frame",     "cat": "default",   "subFam": "Precision",   "pve":1.10},
-        "536517534":  {"name": "Duality",             "cat": "Duality",   "subFam": "Slug",        "pve":1.23},
-        "918679156":  {"name": "Precision Frame",     "cat": "slug",      "subFam": "Slug",        "pve":1.23},
-        "996573084":  {"name": "Rapid-Fire Frame",    "cat": "default",   "subFam": "Rapid-Fire",  "pve":0.83},
-        "1210807262": {"name": "Tractor Cannon",      "cat": "Tractor",   "subFam": "Lightweight", "pve":1.10},
-        "1394384862": {"name": "The Chaperone",       "cat": "slug",      "subFam": "Slug",        "pve":1.23},
-        "1458010786": {"name": "Lightweight Frame",   "cat": "default",   "subFam": "Lightweight", "pve":1.10},
-        "1636108362": {"name": "Precision Frame",     "cat": "default",   "subFam": "Precision",   "pve":1.10},
-        "2223914385": {"name": "The Fourth Horseman", "cat": "default",   "subFam": "FourthHorse" },
-        "3054949324": {"name": "Shot Package",        "cat": "default",   "subFam": "Aggressive",  "pve":1.10},
-        "3468089894": {"name": "Aggressive Frame",    "cat": "default",   "subFam": "Aggressive",  "pve":1.10},
-        "3751354116": {"name": "Disabled",            "cat": {},        "subFam": {}          },
-        "3983457027": {"name": "Aggressive Frame",    "cat": "default",   "subFam": "Aggressive",  "pve":1.10},
+        "372430833":  {"name": "Legend of Acrius",    "cat": "default",   "subFam": "Aggressive",  "magProf": "default"},
+        "481338655":  {"name": "Lord of Wolves",      "cat": "LoW",       "subFam": "LoW",         "magProf": "default"},
+        "895140517":  {"name": "Precision Frame",     "cat": "default",   "subFam": "Precision",   "magProf": "default", "pve":1.10},
+        "536517534":  {"name": "Duality",             "cat": "Duality",   "subFam": "Slug",        "magProf": "default", "pve":1.23},
+        "918679156":  {"name": "Precision Frame",     "cat": "slug",      "subFam": "Slug",        "magProf": "default", "pve":1.23},
+        "996573084":  {"name": "Rapid-Fire Frame",    "cat": "default",   "subFam": "Rapid-Fire",  "magProf": "default", "pve":0.83},
+        "1210807262": {"name": "Tractor Cannon",      "cat": "Tractor",   "subFam": "Lightweight", "magProf": "default", "pve":1.10},
+        "1394384862": {"name": "The Chaperone",       "cat": "slug",      "subFam": "Slug",        "magProf": "default", "pve":1.23},
+        "1458010786": {"name": "Lightweight Frame",   "cat": "default",   "subFam": "Lightweight", "magProf": "default", "pve":1.10},
+        "1636108362": {"name": "Precision Frame",     "cat": "default",   "subFam": "Precision",   "magProf": "default", "pve":1.10},
+        "2223914385": {"name": "The Fourth Horseman", "cat": "default",   "subFam": "FourthHorse", "magProf": "default"},
+        "3054949324": {"name": "Shot Package",        "cat": "default",   "subFam": "Aggressive",  "magProf": "default", "pve":1.10},
+        "3468089894": {"name": "Aggressive Frame",    "cat": "default",   "subFam": "Aggressive",  "magProf": "default", "pve":1.10},
+        "3983457027": {"name": "Aggressive Frame",    "cat": "default",   "subFam": "Aggressive",  "magProf": "default", "pve":1.10},
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.0294,"offset_start": 3.77,"vpp_end": 0.0,"offset_end": 14.5, "floor_percent": 0.001},
-                "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061},
                 "handling": {
                     "ready":{"vpp": -0.003271255061, "offset": 0.5388744939},
                     "stow": {"vpp": -0.003388663968, "offset": 0.5711336032},
@@ -670,7 +694,7 @@
             },
             "slug": {
                 "range":    {"vpp_start": 0.0295,"offset_start": 5.77,"vpp_end": 0.0,"offset_end": 12.75, "floor_percent": 0.001},
-                "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061},
                 "handling": {
                     "ready":{"vpp": -0.003271255061, "offset": 0.5388744939},
                     "stow": {"vpp": -0.003388663968, "offset": 0.5711336032},
@@ -680,7 +704,7 @@
             },
             "LoW": {
                 "range":    {  "vpp": 0,           "base_min": 9,        "base_max": 9, "scale": false},
-                "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061},
                 "handling": {
                     "ready":{"vpp": -0.003271255061, "offset": 0.5388744939},
                     "stow": {"vpp": -0.003388663968, "offset": 0.5711336032},
@@ -690,7 +714,7 @@
             },
             "Duality": {
                 "range":    {},
-                "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061},
                 "handling": {
                     "ready":{"vpp": -0.003271255061, "offset": 0.5388744939},
                     "stow": {"vpp": -0.003388663968, "offset": 0.5711336032},
@@ -700,7 +724,7 @@
             },
             "Tractor": {
                 "range":    {},
-                "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061},
                 "handling": {
                     "ready":{"vpp": -0.003271255061, "offset": 0.5388744939},
                     "stow": {"vpp": -0.003388663968, "offset": 0.5711336032},
@@ -720,30 +744,30 @@
         },
         "magProf": {
             "default": {
-                "magazine": {"evpp": 0.0, "vpp": 0.0375, "offset": 3.625},
+                "mag": {"evpp": 0.0, "vpp": 0.0375, "offset": 3.625},
                 "reserve_id": 71
             }
         }
     },
     "Sidearm": {
-        "31057037":   {"name": "Omolon Adaptive Frame", "cat": "default"   , "subFam": "Adaptive_Burst"},
-        "334466122":  {"name": "Devil's Ruin",          "cat": "default"   , "subFam": "Adaptive"},
-        "806997698":  {"name": "SUROS Rapid-Fire",      "cat": "default"   , "subFam": "Rapid-Fire"},
-        "975429949":  {"name": "Traveler's Chosen",     "cat": "default"   , "subFam": "Precision"},
-        "986191425":  {"name": "Cryosthesia 77K",       "cat": "default"   , "subFam": "Precision"},
-        "1282254042": {"name": "Together Forever",      "cat": "default"   , "subFam": "Precision"},
-        "1294026524": {"name": "Adaptive Frame",        "cat": "default"   , "subFam": "Adaptive"},
-        "1458010786": {"name": "Lightweight Frame",     "cat": "default"   , "subFam": "Lightweight"},
-        "1636108362": {"name": "Precision Frame",       "cat": "default"   , "subFam": "Precision"},
-        "2121086290": {"name": "Rat King",              "cat": "default"   , "subFam": "Adaptive"},
-        "3330548924": {"name": "Aggressive Burst",      "cat": "default"   , "subFam": "Aggressive_Burst"},
-        "3449390870": {"name": "Adaptive Frame",        "cat": "default"   , "subFam": "Adaptive"},
-        "2641107734": {"name": "Trespasser",            "cat": "default"   , "subFam": "Adaptive_Burst"},
-        "2984682260": {"name": "Forerunner",            "cat": "Forerunner", "subFam": "Forerunner"},
+        "31057037":   {"name": "Omolon Adaptive Frame", "cat": "default"   , "subFam": "Adaptive_Burst",   "magProf": "small"},
+        "334466122":  {"name": "Devil's Ruin",          "cat": "default"   , "subFam": "Adaptive",         "magProf": "small"},
+        "806997698":  {"name": "SUROS Rapid-Fire",      "cat": "default"   , "subFam": "Rapid-Fire",       "magProf": "small"},
+        "975429949":  {"name": "Traveler's Chosen",     "cat": "default"   , "subFam": "Precision",        "magProf": "small"},
+        "986191425":  {"name": "Cryosthesia 77K",       "cat": "default"   , "subFam": "Precision",        "magProf": "small"},
+        "1282254042": {"name": "Together Forever",      "cat": "default"   , "subFam": "Precision",        "magProf": "small"},
+        "1294026524": {"name": "Adaptive Frame",        "cat": "default"   , "subFam": "Adaptive",         "magProf": "small"},
+        "1458010786": {"name": "Lightweight Frame",     "cat": "default"   , "subFam": "Lightweight",      "magProf": "small"},
+        "1636108362": {"name": "Precision Frame",       "cat": "default"   , "subFam": "Precision",        "magProf": "small"},
+        "2121086290": {"name": "Rat King",              "cat": "default"   , "subFam": "Adaptive",         "magProf": "small"},
+        "3330548924": {"name": "Aggressive Burst",      "cat": "default"   , "subFam": "Aggressive_Burst", "magProf": "small"},
+        "3449390870": {"name": "Adaptive Frame",        "cat": "default"   , "subFam": "Adaptive",         "magProf": "small"},
+        "2641107734": {"name": "Trespasser",            "cat": "default"   , "subFam": "Adaptive_Burst",   "magProf": "small"},
+        "2984682260": {"name": "Forerunner",            "cat": "Forerunner", "subFam": "Forerunner",       "magProf": "forerunner"},
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.0295,"offset_start": 11.85,"vpp_end": 0.0287,"offset_end": 22.85, "floor_percent": 0.5},
-                "reload":   {"evpp": 0.0000238311, "vpp": -0.0124553, "offset": 2.14667245000000, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000238311, "vpp": -0.0124553, "offset": 2.14667245000000},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -752,7 +776,7 @@
             },
             "Forerunner": {
                 "range":    {"vpp_start": 0.0,"offset_start": 28.3,"vpp_end": 0.0,"offset_end": 43.2, "floor_percent": 0.5},
-                "reload":   {"evpp": 0.0000238311, "vpp": -0.0124553, "offset": 2.64667245000000, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000238311, "vpp": -0.0124553, "offset": 2.64667245000000},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -771,11 +795,12 @@
         },
         "magProf": {
             "small": {
-                "magazine": {"evpp": 0.0, "vpp": 0.11942675159235666, "offset": 5.289808917197453, "round_to_nearest": 3},
+                "mag": {"evpp": 0.0, "vpp": 0.11942675159235666, "offset": 5.289808917197453},
+                "round_to": 3,
                 "reserve_id": 17
             },
             "forerunner": {
-                "magazine": {"evpp": 0.0, "vpp": 0.0, "offset": 12},
+                "mag": {"evpp": 0.0, "vpp": 0.0, "offset": 12},
                 "reserve_id": 2984682260
             }
         }
@@ -792,7 +817,7 @@
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
-                "reload":   {"evpp": 0.0000674498, "vpp": -0.0231542, "offset": 3.8384, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000674498, "vpp": -0.0231542, "offset": 3.8384},
                 "handling": {
                     "ready":{"vpp": -0.002623944983, "offset": 0.5079465458},
                     "stow": {"vpp": -0.002083932479, "offset": 0.4392525789},
@@ -809,27 +834,27 @@
         },
         "magProf": {
             "default": {
-                "magazine": {"vpp": 0.03, "offset": 2.4},
+                "mag": {"vpp": 0.03, "offset": 2.4},
                 "reserve_id": 12
             }
         }
     },
     "Submachine Gun": {
-        "630329983":  {"name": "The Huckleberry",   "cat": "default", "subFam": "Aggressive", "pve": 1.0},
-        "1294026524": {"name": "Adaptive Frame",    "cat": "default", "subFam": "Adaptive",   "pve": 1.0},
-        "1458010786": {"name": "Lightweight Frame", "cat": "default", "subFam": "Lightweight","pve": 1.0},
-        "1525239159": {"name": "Aggressive Frame",  "cat": "default", "subFam": "Aggressive", "pve": 1.0},
-        "1636108362": {"name": "Precision Frame",   "cat": "default", "subFam": "Precision",  "pve": 1.0},
-        "2213377102": {"name": "MIDA Synergy",      "cat": "default", "subFam": "Lightweight","pve": 1.0},
-        "2516532331": {"name": "Riskrunner",        "cat": "default", "subFam": "Adaptive",   "pve": 1.0},
-        "2540536653": {"name": "Tarrabah",          "cat": "default", "subFam": "Aggressive", "pve": 1.0},
-        "3468089894": {"name": "Aggressive Frame",  "cat": "default", "subFam": "Aggressive", "pve": 1.0},
-        "2965975126": {"name": "Osteo Striga",      "cat": "striga" , "subFam": "Osteo",      "pve": 1.0},
-        "228577175":  {"name": "The Manticore",     "cat": "default", "subFam": "Lightweight","pve": 1.0},
+        "630329983":  {"name": "The Huckleberry",   "cat": "default", "subFam": "Aggressive",  "magProf": "small"},
+        "1294026524": {"name": "Adaptive Frame",    "cat": "default", "subFam": "Adaptive",    "magProf": "large"},
+        "1458010786": {"name": "Lightweight Frame", "cat": "default", "subFam": "Lightweight", "magProf": "large"},
+        "1525239159": {"name": "Aggressive Frame",  "cat": "default", "subFam": "Aggressive",  "magProf": "small"},
+        "1636108362": {"name": "Precision Frame",   "cat": "default", "subFam": "Precision",   "magProf": "small"},
+        "2213377102": {"name": "MIDA Synergy",      "cat": "default", "subFam": "Lightweight", "magProf": "large"},
+        "2516532331": {"name": "Riskrunner",        "cat": "default", "subFam": "Adaptive",    "magProf": "large"},
+        "2540536653": {"name": "Tarrabah",          "cat": "default", "subFam": "Aggressive",  "magProf": "small"},
+        "3468089894": {"name": "Aggressive Frame",  "cat": "default", "subFam": "Aggressive",  "magProf": "small"},
+        "2965975126": {"name": "Osteo Striga",      "cat": "striga" , "subFam": "Osteo",       "magProf": "large"},
+        "228577175":  {"name": "The Manticore",     "cat": "default", "subFam": "Lightweight", "magProf": "large"},
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.093,"offset_start": 7.8,"vpp_end": 0.0,"offset_end": 23.71, "floor_percent": 0.5},
-                "reload":   {"evpp": 0.0000608642, "vpp": -0.0191345, "offset": 2.62769, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000608642, "vpp": -0.0191345, "offset": 2.62769},
                 "handling": {
                     "ready":{"vpp": -0.002376970528, "offset": 0.4710178204},
                     "stow": {"vpp": -0.002547978067, "offset": 0.4481295408},
@@ -839,7 +864,7 @@
             },
             "striga": {
                 "range":    {"vpp": 0.1247, "base_min": 9.0835, "base_max": 9.0835, "scale": false, "floor_percent": 0.5},
-                "reload":   {"evpp": 0.0000608642, "vpp": -0.0191345, "offset": 2.62769, "mag_multiplier": false},
+                "reload":   {"evpp": 0.0000608642, "vpp": -0.0191345, "offset": 2.62769},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -856,11 +881,11 @@
         },
         "magProf": {
             "small": {
-                "magazine": {"evpp": 0.0, "vpp": 0.1, "offset": 23.9},
+                "mag": {"evpp": 0.0, "vpp": 0.1, "offset": 23.9},
                 "reserve_id": 0
             },
             "large": {
-                "magazine": {"evpp": 0.0, "vpp": 0.1, "offset": 28.9},
+                "mag": {"evpp": 0.0, "vpp": 0.1, "offset": 28.9},
                 "reserve_id": 0
             }
         }
@@ -888,11 +913,11 @@
         }
     },
     "Glaive":{
-        "1900919151": {"name": "Edge Of Action",      "cat": "default","subFam": ""},
-        "3551884421": {"name": "Edge Of Concurrence", "cat": "default","subFam": ""},
-        "3024740338": {"name": "Edge Of Intent",      "cat": "default","subFam": ""},
-        "131675355":  {"name": "Adaptive Glaive",     "cat": "default","subFam": ""},
-        "1986105578": {"name": "Aggressive Glaive",   "cat": "default","subFam": ""},
+        "1900919151": {"name": "Edge Of Action",      "cat": "default","subFam": "Adaptive",    "magProf": "default"},
+        "3551884421": {"name": "Edge Of Concurrence", "cat": "default","subFam": "Lightweight", "magProf": "default"},
+        "3024740338": {"name": "Edge Of Intent",      "cat": "default","subFam": "Aggressive",  "magProf": "default"},
+        "131675355":  {"name": "Adaptive Glaive",     "cat": "default","subFam": "Adaptive",    "magProf": "default"},
+        "1986105578": {"name": "Aggressive Glaive",   "cat": "default","subFam": "Aggressive",  "magProf": "default"},
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.0546,"offset_start": 15.0,"vpp_end": 0.198,"offset_end": 30.33, "floor_percent": 0.33},
@@ -906,24 +931,24 @@
         },
         "subFam": {
             "Lightweight": {"damage":105.77, "crit_mult":1.0, "burst_delay":0.75, "burst_size":1, "burst_duration":0},
-            "Aggressive":  {"damage":130.97, "crit_mult":1.0, "burst_delay":1.33, "burst_size":1, "burst_duration":0},
-            "Precision":   {"damage":146.05, "crit_mult":1.0, "burst_delay":1.09, "burst_size":1, "burst_duration":0}
+            "Aggressive":  {"damage":146.05, "crit_mult":1.0, "burst_delay":1.33, "burst_size":1, "burst_duration":0},
+            "Adaptive":   {"damage":130.97, "crit_mult":1.0, "burst_delay":1.09, "burst_size":1, "burst_duration":0}
         },
         "magProf": {
             "default": {
-                "magazine": {"evpp": 0.0, "vpp": 0.035, "offset": 1.75},
+                "mag": {"evpp": 0.0, "vpp": 0.035, "offset": 1.75},
                 "reserve_id": 331
             }
         }
     },
     "Trace Rifle":{
-        "459441288":  {"name": "Wavesplitter",    "cat": "default"},
-        "571267712":  {"name": "Prometheus Lens", "cat": "default"},
-        "1036269296": {"name": "Coldheart",       "cat": "default"},
-        "1657401727": {"name": "Ruinous Effigy",  "cat": "default"},
-        "1797707170": {"name": "Divinity",        "cat": "default"},
-        "1294026524": {"name": "Adaptive Frame",  "cat": "default"},
-        "3164944314": {"name": "Ager's Scepter",  "cat": "default"},
+        "459441288":  {"name": "Wavesplitter",    "cat": "default", "subFam": "Adaptive", "magProf": "default"},
+        "571267712":  {"name": "Prometheus Lens", "cat": "default", "subFam": "Adaptive", "magProf": "default"},
+        "1036269296": {"name": "Coldheart",       "cat": "default", "subFam": "Adaptive", "magProf": "default"},
+        "1657401727": {"name": "Ruinous Effigy",  "cat": "default", "subFam": "Adaptive", "magProf": "default"},
+        "1797707170": {"name": "Divinity",        "cat": "default", "subFam": "Adaptive", "magProf": "default"},
+        "1294026524": {"name": "Adaptive Frame",  "cat": "default", "subFam": "Adaptive", "magProf": "default"},
+        "3164944314": {"name": "Ager's Scepter",  "cat": "default", "subFam": "Adaptive", "magProf": "default"},
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.1017,"offset_start": 14.756,"vpp_end": 0.0,"offset_end": 35.9, "floor_percent": 0.4},
@@ -940,7 +965,7 @@
         },
         "magProf": {
             "default": {
-                "magazine": {"evpp": 0.0, "vpp": 0.3, "offset": 74.0},
+                "mag": {"evpp": 0.0, "vpp": 0.3, "offset": 74.0},
                 "reserve_id": 251
             }
         }

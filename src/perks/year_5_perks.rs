@@ -62,7 +62,7 @@ pub fn dmr_focused_fury(
 ) -> DamageModifierResponse {
     let mut dmg_boost = 1.0;
     let shots_needed;
-    if _input.curr_firing_data.one_ammo_burst == false || _input.curr_firing_data.burst_size == 1 {
+    if _input.curr_firing_data.one_ammo == false || _input.curr_firing_data.burst_size == 1 {
         shots_needed = _input.base_mag / 2.0;
     } else {
         shots_needed = (_input.base_mag * (_input.curr_firing_data.burst_size as f64)) / 2.0;

@@ -7,7 +7,6 @@ pub mod enemies;
 pub mod perks;
 pub mod types;
 pub mod weapons;
-pub mod json;
 
 use crate::perks::{Perk, Perks};
 use crate::weapons::Weapon;
@@ -71,12 +70,6 @@ pub fn start() {
 #[wasm_bindgen(js_name = "isWeaponInitialized")]
 pub fn is_weapon_init() -> bool {
     PERS_DATA.with(|weapon| weapon.borrow().weapon.hash != 0)
-}
-
-#[cfg(feature = "wasm")]
-#[wasm_bindgen(js_name = "getString")]
-pub fn get_string() -> String {
-    json::get_data().to_string()
 }
 
 #[cfg(feature = "wasm")]
@@ -160,6 +153,17 @@ fn set_weapon(weapon: PyWeapon) -> PyResult<()> {
     });
     Ok(())
 }
+
+#[cfg(feature = "python")]
+#[pyfunction(name = "set_weapon_simple")]
+fn set_weapon_simple(_hash: u32, _weapon_type_id: u32, _intrinsic_hash: u32, _ammo_type_id: u32, _damage_type_id: u32) -> PyResult<()> {
+    PERS_DATA.with(|perm_data| {
+        let new_weapon: Weapon = Weapon::generate_weapon(_hash, _weapon_type_id, _intrinsic_hash, _ammo_type_id, _damage_type_id).unwrap();
+        perm_data.borrow_mut().weapon = new_weapon;
+    });
+    Ok(())
+}
+
 #[cfg(feature = "python")]
 #[pyfunction(name = "add_perk")]
 fn add_perk(_perk: PyPerk) -> PyResult<()> {
@@ -229,6 +233,7 @@ fn register_weapon_interface(py: Python<'_>, parent_module: &PyModule) -> PyResu
     weapon_interface.add_function(wrap_pyfunction!(set_weapon, weapon_interface)?)?;
     weapon_interface.add_function(wrap_pyfunction!(is_weapon_assigned, weapon_interface)?)?;
     weapon_interface.add_function(wrap_pyfunction!(get_weapon_dps, weapon_interface)?)?;
+    weapon_interface.add_function(wrap_pyfunction!(set_weapon_simple, weapon_interface)?)?;
 
     //classes
     weapon_interface.add_class::<PyWeapon>()?;

@@ -1,9 +1,12 @@
 pub mod dps_calc;
+pub mod reserve_calc;
 pub mod stat_calc;
 mod ttk_calc;
-pub mod reserve_calc;
+pub mod weapon_formulas;
 
 use std::collections::HashMap;
+
+use serde::Deserialize;
 
 use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponType};
 use crate::enemies::Enemy;
@@ -12,18 +15,20 @@ use crate::perks::{
 };
 
 use crate::types::rs_types::{
-    AmmoFormula, DamageMods, HandlingFormula, RangeFormula, ReloadFormula, DpsResponse,
+    AmmoFormula, DamageMods, DpsResponse, HandlingFormula, RangeFormula, ReloadFormula,
 };
 
 //JavaScript
 #[cfg(feature = "wasm")]
-use crate::types::js_types::{JsWeapon};
+use crate::types::js_types::JsWeapon;
 //Python
 #[cfg(feature = "python")]
 use crate::types::py_types::PyWeapon;
 
 use self::dps_calc::complex_dps_calc;
 
+#[derive(Debug, Clone)]
+pub struct PsuedoWeapon {}
 
 #[derive(Debug, Clone)]
 pub struct Stat {
@@ -56,34 +61,33 @@ impl From<i32> for Stat {
     }
 }
 
-#[derive(Debug, Clone, Default, Copy)]
+#[derive(Debug, Clone, Default, Copy, Deserialize)]
 pub struct FiringConfig {
+    pub damage: f64,
+    pub crit_mult: f64,
     pub burst_delay: f64,
     pub burst_duration: f64,
     pub burst_size: i32,
-    pub one_ammo_burst: bool,
-    pub is_charge: bool,
-    pub is_explosive: bool,
+    pub one_ammo: bool,
+    pub charge: bool,
+    pub explosive: bool,
 }
 
 #[derive(Debug, Clone)]
 pub struct Weapon {
     //ideally entirely interfaced with through funcs when acting mutably
     pub is_pvp: bool,
+    pub hash: u32,
 
     pub perks: HashMap<u32, Perk>,
     pub stats: HashMap<u32, Stat>,
+
     pub damage_mods: DamageMods,
     pub firing_data: FiringConfig,
-    pub hash: u32,
-
     pub range_formula: RangeFormula,
     pub ammo_formula: AmmoFormula,
     pub handling_formula: HandlingFormula,
     pub reload_formula: ReloadFormula,
-
-    pub base_damage: f64,
-    pub base_crit_mult: f64,
 
     pub weapon_type: WeaponType,
     pub damage_type: DamageType,
@@ -126,8 +130,6 @@ impl Weapon {
         self.hash = 0;
         self.damage_mods = DamageMods::default();
         self.firing_data = FiringConfig::default();
-        self.base_damage = 0.0;
-        self.base_crit_mult = 0.0;
         self.range_formula = RangeFormula::default();
         self.ammo_formula = AmmoFormula::default();
         self.handling_formula = HandlingFormula::default();
@@ -150,8 +152,8 @@ impl Weapon {
             &self.weapon_type,
             &self.ammo_type,
             &self.damage_type,
-            self.base_damage,
-            self.base_crit_mult,
+            self.firing_data.damage,
+            self.firing_data.crit_mult,
             self.calc_ammo_sizes(None).mag_size,
             _total_shots_fired,
             _total_time,
@@ -195,9 +197,6 @@ impl Default for Weapon {
             damage_mods: DamageMods::default(),
             firing_data: FiringConfig::default(),
 
-            base_damage: 0.0,
-            base_crit_mult: 0.0,
-
             range_formula: RangeFormula::default(),
             ammo_formula: AmmoFormula::default(),
             handling_formula: HandlingFormula::default(),
@@ -215,23 +214,20 @@ impl From<PyWeapon> for Weapon {
         let mut weapon = Weapon::default();
         weapon.hash = _py_weapon.hash;
         weapon.damage_mods = _py_weapon.damage_mods.into();
-        weapon.base_damage = _py_weapon.formulas.firing_data.damage;
-        weapon.base_crit_mult = _py_weapon.formulas.firing_data.crit_mult;
         weapon.firing_data = _py_weapon.formulas.firing_data.into();
         weapon.range_formula = _py_weapon.formulas.range_data.into();
         weapon.ammo_formula = _py_weapon.formulas.ammo_data.into();
         weapon.handling_formula = _py_weapon.formulas.handling_data.into();
         weapon.reload_formula = _py_weapon.formulas.reload_data.into();
         weapon.weapon_type = WeaponType::from_u32(_py_weapon.weapon_type);
-        weapon.weapon_slot = WeaponSlot::from_u32(_py_weapon.weapon_slot);
         weapon.damage_type = DamageType::from_u32(_py_weapon.damage_type);
         weapon.ammo_type = AmmoType::from_u32(_py_weapon.ammo_type);
         for stat in _py_weapon.stats {
             weapon.stats.insert(stat.0, Stat::from(stat.1));
-        };
+        }
         for perk in _py_weapon.perks {
             weapon.perks.insert(perk.0, perk.1.into());
-        };
+        }
         weapon.perks.insert(0, Perk::default());
         weapon
     }

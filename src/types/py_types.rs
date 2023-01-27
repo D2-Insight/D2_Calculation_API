@@ -3,11 +3,16 @@
 use pyo3::{prelude::*, types::PyDict};
 use std::collections::HashMap;
 
-use crate::{weapons::FiringConfig, perks::Perk, activity::{damage_calc::DifficultyOptions, PlayerClass, Activity, Player}, enemies::{EnemyType, Enemy}};
+use crate::{
+    activity::{damage_calc::DifficultyOptions, Activity, Player, PlayerClass},
+    enemies::{Enemy, EnemyType},
+    perks::Perk,
+    weapons::FiringConfig,
+};
 
 use super::rs_types::{
-    AmmoFormula, DamageMods, DpsResponse, HandlingFormula, HandlingResponse, AmmoResponse,
-    RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, TtkResponse, QuadraticFormula,
+    AmmoFormula, AmmoResponse, DamageMods, DpsResponse, HandlingFormula, HandlingResponse,
+    RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, StatQuadraticFormula, TtkResponse,
 };
 
 #[derive(Debug, Clone, Default)]
@@ -40,8 +45,8 @@ impl PyWeapon {
         _ammo_type: u32,
         _perks: HashMap<u32, PyPerk>,
         _stats: HashMap<u32, i32>,
-        _damage_mods: PyDamageModifiers, 
-        _formulas: PyWeaponFormula
+        _damage_mods: PyDamageModifiers,
+        _formulas: PyWeaponFormula,
     ) -> Self {
         PyWeapon {
             hash: _hash,
@@ -69,7 +74,6 @@ impl PyWeapon {
     }
 }
 
-
 #[derive(Debug, Clone, Default)]
 #[pyclass(name = "DamageModifiers", dict)]
 pub struct PyDamageModifiers {
@@ -84,7 +88,15 @@ pub struct PyDamageModifiers {
 #[pymethods]
 impl PyDamageModifiers {
     #[new]
-    fn new(_pve: f64, _vehicle: f64, _boss: f64, _minboss: f64, _champion: f64, _elite: f64, _minor: f64) -> Self {
+    fn new(
+        _pve: f64,
+        _vehicle: f64,
+        _boss: f64,
+        _minboss: f64,
+        _champion: f64,
+        _elite: f64,
+        _minor: f64,
+    ) -> Self {
         PyDamageModifiers {
             pve: 1.0,
             vehicle: 1.0,
@@ -205,12 +217,12 @@ impl PyRangeFormula {
 impl Into<RangeFormula> for PyRangeFormula {
     fn into(self) -> RangeFormula {
         RangeFormula {
-            start: QuadraticFormula {
+            start: StatQuadraticFormula {
                 evpp: 0.0,
                 vpp: self.vpp_start,
                 offset: self.offset_start,
             },
-            end: QuadraticFormula {
+            end: StatQuadraticFormula {
                 evpp: 0.0,
                 vpp: self.vpp_end,
                 offset: self.offset_end,
@@ -233,13 +245,7 @@ pub struct PyReloadFormula {
 #[pymethods]
 impl PyReloadFormula {
     #[new]
-    fn new(
-        _evpp: f64,
-        _vpp: f64,
-        _offset: f64,
-        _ammo_percent: f64,
-        _mag_multiplier: bool,
-    ) -> Self {
+    fn new(_evpp: f64, _vpp: f64, _offset: f64, _ammo_percent: f64, _mag_multiplier: bool) -> Self {
         PyReloadFormula {
             evpp: _evpp,
             vpp: _vpp,
@@ -280,7 +286,7 @@ impl PyReloadFormula {
 impl Into<ReloadFormula> for PyReloadFormula {
     fn into(self) -> ReloadFormula {
         ReloadFormula {
-            reload_data: QuadraticFormula {
+            reload_data: StatQuadraticFormula {
                 evpp: self.evpp,
                 vpp: self.vpp,
                 offset: self.offset,
@@ -333,9 +339,18 @@ impl PyHandlingFormula {
             let err_str = format!("Invalid key: {}", key);
             let value = value.extract::<HashMap<String, f64>>()?;
             match key.as_str() {
-                "ready" => {handling_formula.ready_vpp = value["vpp"]; handling_formula.ready_offset = value["offset"];}
-                "stow" => {handling_formula.stow_vpp = value["vpp"]; handling_formula.stow_offset = value["offset"];}
-                "ads" => {handling_formula.ads_vpp = value["vpp"]; handling_formula.ads_offset = value["offset"];}
+                "ready" => {
+                    handling_formula.ready_vpp = value["vpp"];
+                    handling_formula.ready_offset = value["offset"];
+                }
+                "stow" => {
+                    handling_formula.stow_vpp = value["vpp"];
+                    handling_formula.stow_offset = value["offset"];
+                }
+                "ads" => {
+                    handling_formula.ads_vpp = value["vpp"];
+                    handling_formula.ads_offset = value["offset"];
+                }
                 _ => return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>(err_str)),
             }
         }
@@ -351,17 +366,17 @@ impl PyHandlingFormula {
 impl Into<HandlingFormula> for PyHandlingFormula {
     fn into(self) -> HandlingFormula {
         HandlingFormula {
-            ready: QuadraticFormula {
+            ready: StatQuadraticFormula {
                 evpp: 0.0,
                 vpp: self.ready_vpp,
                 offset: self.ready_offset,
             },
-            stow: QuadraticFormula {
+            stow: StatQuadraticFormula {
                 evpp: 0.0,
                 vpp: self.stow_vpp,
                 offset: self.stow_offset,
             },
-            ads: QuadraticFormula {
+            ads: StatQuadraticFormula {
                 evpp: 0.0,
                 vpp: self.ads_vpp,
                 offset: self.ads_offset,
@@ -441,12 +456,14 @@ impl PyFiringData {
 impl Into<FiringConfig> for PyFiringData {
     fn into(self) -> FiringConfig {
         FiringConfig {
+            damage: self.damage,
+            crit_mult: self.crit_mult,
             burst_delay: self.burst_delay,
             burst_duration: self.burst_duration,
             burst_size: self.burst_size,
-            one_ammo_burst: self.one_ammo_burst,
-            is_charge: self.is_charge,
-            is_explosive: self.is_explosive,
+            one_ammo: self.one_ammo_burst,
+            charge: self.is_charge,
+            explosive: self.is_explosive,
         }
     }
 }
@@ -520,12 +537,12 @@ impl PyAmmoFormula {
 impl Into<AmmoFormula> for PyAmmoFormula {
     fn into(self) -> AmmoFormula {
         AmmoFormula {
-            mag: QuadraticFormula {
+            mag: StatQuadraticFormula {
                 evpp: self.mag_evpp,
                 vpp: self.mag_vpp,
                 offset: self.mag_offset,
             },
-            round_to_nearest: self.mag_round_to_nearest,
+            round_to: self.mag_round_to_nearest,
             reserve_id: self.reserve_id,
         }
     }
@@ -581,12 +598,7 @@ pub struct PyPerk {
 #[pymethods]
 impl PyPerk {
     #[new]
-    pub fn new(
-        _stat_buffs: HashMap<u32, i32>,
-        _enhanced: bool,
-        _value: u32,
-        _hash: u32,
-    ) -> Self {
+    pub fn new(_stat_buffs: HashMap<u32, i32>, _enhanced: bool, _value: u32, _hash: u32) -> Self {
         PyPerk {
             stat_buffs: _stat_buffs,
             enhanced: _enhanced,
@@ -704,7 +716,7 @@ impl PyDpsResponse {
                 total += damage;
             }
         }
-        Ok((total, total/(_end-_start)))
+        Ok((total, total / (_end - _start)))
     }
     fn __repr__(&self) -> PyResult<String> {
         Ok(format!(
@@ -724,7 +736,6 @@ impl From<DpsResponse> for PyDpsResponse {
         }
     }
 }
-
 
 #[derive(Debug, Clone, Default)]
 #[pyclass(name = "Activity")]
@@ -778,7 +789,7 @@ pub struct PyPlayer {
     #[pyo3(get, set)]
     pub powerl_level: u32,
     #[pyo3(get, set)]
-    pub class: PyPlayerClass
+    pub class: PyPlayerClass,
 }
 #[pymethods]
 impl PyPlayer {
@@ -786,7 +797,7 @@ impl PyPlayer {
     pub fn new(_power_level: u32, _class: PyPlayerClass) -> Self {
         PyPlayer {
             powerl_level: _power_level,
-            class: _class
+            class: _class,
         }
     }
     #[pyo3(name = "default")]
@@ -805,7 +816,7 @@ impl Into<Player> for PyPlayer {
     fn into(self) -> Player {
         Player {
             pl: self.powerl_level,
-            class: self.class.into()
+            class: self.class.into(),
         }
     }
 }
@@ -813,7 +824,7 @@ impl From<Player> for PyPlayer {
     fn from(p: Player) -> Self {
         PyPlayer {
             powerl_level: p.pl,
-            class: p.class.into()
+            class: p.class.into(),
         }
     }
 }
@@ -835,7 +846,13 @@ pub struct PyEnemy {
 #[pymethods]
 impl PyEnemy {
     #[new]
-    pub fn new(_health: f64, _damage: f64, _damage_resistance: f64, _type_: PyEnemyType, _tier: u8) -> Self {
+    pub fn new(
+        _health: f64,
+        _damage: f64,
+        _damage_resistance: f64,
+        _type_: PyEnemyType,
+        _tier: u8,
+    ) -> Self {
         PyEnemy {
             health: _health,
             damage: _damage,
@@ -878,14 +895,6 @@ impl Into<Enemy> for PyEnemy {
         }
     }
 }
-
-
-
-
-
-
-
-
 
 //ENUMS///////////////////////
 #[derive(Debug, Clone)]
@@ -990,7 +999,6 @@ impl From<PlayerClass> for PyPlayerClass {
     }
 }
 
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[pyclass(name = "EnemyType")]
 pub enum PyEnemyType {
@@ -1001,7 +1009,7 @@ pub enum PyEnemyType {
     VEHICLE,
     ENCLAVE,
     PLAYER,
-    CHAMPION
+    CHAMPION,
 }
 #[pymethods]
 impl PyEnemyType {
