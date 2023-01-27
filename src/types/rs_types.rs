@@ -42,20 +42,20 @@ impl DamageMods {
 
 #[derive(Debug, Clone, Default)]
 pub struct RangeFormula {
-    pub start: QuadraticFormula,
-    pub end: QuadraticFormula,
+    pub start: StatQuadraticFormula,
+    pub end: StatQuadraticFormula,
     pub floor_percent: f64,
     pub is_fusion: bool,
 }
 
 //even if just linear use this
 #[derive(Debug, Clone, Default)]
-pub struct QuadraticFormula {
+pub struct StatQuadraticFormula {
     pub evpp: f64,
     pub vpp: f64,
     pub offset: f64,
 }
-impl QuadraticFormula {
+impl StatQuadraticFormula {
     pub fn solve_at(&self, _x: f64) -> f64 {
         self.evpp * _x * _x + self.vpp * _x + self.offset
     }
@@ -63,22 +63,22 @@ impl QuadraticFormula {
 
 #[derive(Debug, Clone, Default)]
 pub struct ReloadFormula {
-    pub reload_data: QuadraticFormula,
+    pub reload_data: StatQuadraticFormula,
     pub ammo_percent: f64,
 }
 
 #[derive(Debug, Clone, Default)]
 pub struct HandlingFormula {
-    pub ready: QuadraticFormula,
-    pub stow: QuadraticFormula,
-    pub ads: QuadraticFormula,
+    pub ready: StatQuadraticFormula,
+    pub stow: StatQuadraticFormula,
+    pub ads: StatQuadraticFormula,
 }
 
 #[derive(Debug, Clone, Default)]
 pub struct AmmoFormula {
-    pub mag: QuadraticFormula,
+    pub mag: StatQuadraticFormula,
     pub round_to_nearest: i32,
-    pub reserve_id: u32
+    pub reserve_id: u32,
 }
 
 #[derive(Debug, Clone, Default)]

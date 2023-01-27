@@ -5,7 +5,7 @@ pub mod reserve_calc;
 
 use std::collections::HashMap;
 
-use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponSlot, WeaponType};
+use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponType};
 use crate::enemies::Enemy;
 use crate::perks::{
     get_magazine_modifier, get_perk_stats, get_reserve_modifier, lib::CalculationInput, Perk,
@@ -86,7 +86,6 @@ pub struct Weapon {
     pub base_crit_mult: f64,
 
     pub weapon_type: WeaponType,
-    pub weapon_slot: WeaponSlot,
     pub damage_type: DamageType,
     pub ammo_type: AmmoType,
 }
@@ -205,7 +204,6 @@ impl Default for Weapon {
             reload_formula: ReloadFormula::default(),
 
             weapon_type: WeaponType::UNKNOWN,
-            weapon_slot: WeaponSlot::UNKNOWN,
             damage_type: DamageType::UNKNOWN,
             ammo_type: AmmoType::UNKNOWN,
         }

@@ -1,5 +1,5 @@
 use crate::{
-    d2_enums::{AmmoType, StatHashes, WeaponSlot, WeaponType, DamageType},
+    d2_enums::{AmmoType, StatHashes, WeaponType, DamageType},
     enemies::EnemyType,
     types::rs_types::HandlingResponse,
     weapons::{FiringConfig, Stat},

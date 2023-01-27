@@ -20,8 +20,6 @@ pub struct PyWeapon {
     #[pyo3(get, set)]
     pub damage_type: u32,
     #[pyo3(get, set)]
-    pub weapon_slot: u32,
-    #[pyo3(get, set)]
     pub ammo_type: u32,
     #[pyo3(get, set)]
     pub perks: HashMap<u32, PyPerk>,
@@ -39,7 +37,6 @@ impl PyWeapon {
         _hash: u32,
         _weapon_type: u32,
         _damage_type: u32,
-        _weapon_slot: u32,
         _ammo_type: u32,
         _perks: HashMap<u32, PyPerk>,
         _stats: HashMap<u32, i32>,
@@ -50,7 +47,6 @@ impl PyWeapon {
             hash: _hash,
             weapon_type: _weapon_type,
             damage_type: _damage_type,
-            weapon_slot: _weapon_slot,
             ammo_type: _ammo_type,
             perks: _perks,
             stats: _stats,
@@ -60,11 +56,10 @@ impl PyWeapon {
     }
     fn __repr__(&self) -> PyResult<String> {
         Ok(format!(
-            "Weapon(hash={}, weapon_type={}, damage_type={}, weapon_slot={}, ammo_type={}, perks={:?}, stats={:?}, damage_mods={}, formulas={})",
+            "Weapon(hash={}, weapon_type={}, damage_type={}, ammo_type={}, perks={:?}, stats={:?}, damage_mods={}, formulas={})",
             self.hash,
             self.weapon_type,
             self.damage_type,
-            self.weapon_slot,
             self.ammo_type,
             self.perks,
             self.stats,

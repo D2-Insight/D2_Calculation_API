@@ -353,7 +353,9 @@ pub(super) fn sbr_reserve_mods(
         inv_buff = 10;
     } else if *_input.weapon_type == WeaponType::GLAIVE {
         inv_buff = 5;
-    };
+    } else if *_input.weapon_type == WeaponType::GRENADELAUNCHER {
+        inv_buff = 0;
+    }
     if _value < 1 {
         inv_buff = 0;
     };

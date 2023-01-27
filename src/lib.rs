@@ -7,6 +7,7 @@ pub mod enemies;
 pub mod perks;
 pub mod types;
 pub mod weapons;
+pub mod json;
 
 use crate::perks::{Perk, Perks};
 use crate::weapons::Weapon;
@@ -70,6 +71,12 @@ pub fn start() {
 #[wasm_bindgen(js_name = "isWeaponInitialized")]
 pub fn is_weapon_init() -> bool {
     PERS_DATA.with(|weapon| weapon.borrow().weapon.hash != 0)
+}
+
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "getString")]
+pub fn get_string() -> String {
+    json::get_data().to_string()
 }
 
 #[cfg(feature = "wasm")]

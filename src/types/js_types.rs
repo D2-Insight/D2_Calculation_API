@@ -2,16 +2,17 @@
 
 use std::collections::HashMap;
 
-use crate::{types::rs_types::QuadraticFormula, weapons::{FiringConfig, Stat}};
+use crate::{
+    types::rs_types::StatQuadraticFormula,
+    weapons::{FiringConfig, Stat},
+};
 use serde::{Deserialize, Serialize};
 // use tsify::Tsify;
 use wasm_bindgen::prelude::wasm_bindgen;
 
-use super::{
-    rs_types::{
-        AmmoFormula, DamageMods, DpsResponse, HandlingFormula, HandlingResponse, AmmoResponse,
-        RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, TtkResponse,
-    }
+use super::rs_types::{
+    AmmoFormula, AmmoResponse, DamageMods, DpsResponse, HandlingFormula, HandlingResponse,
+    RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, TtkResponse,
 };
 
 #[derive(Debug, Clone)]
@@ -138,12 +139,12 @@ impl JsRangeFormula {
 impl Into<RangeFormula> for JsRangeFormula {
     fn into(self) -> RangeFormula {
         RangeFormula {
-            start: QuadraticFormula {
+            start: StatQuadraticFormula {
                 evpp: 0.0,
                 vpp: self.vpp_start,
                 offset: self.offset_start,
             },
-            end: QuadraticFormula {
+            end: StatQuadraticFormula {
                 evpp: 0.0,
                 vpp: self.vpp_end,
                 offset: self.offset_end,
@@ -183,7 +184,7 @@ impl JsReloadFormula {
 impl Into<ReloadFormula> for JsReloadFormula {
     fn into(self) -> ReloadFormula {
         ReloadFormula {
-            reload_data: QuadraticFormula {
+            reload_data: StatQuadraticFormula {
                 evpp: self.evpp,
                 vpp: self.vpp,
                 offset: self.offset,
@@ -231,17 +232,17 @@ impl JsHandlingFormula {
 impl Into<HandlingFormula> for JsHandlingFormula {
     fn into(self) -> HandlingFormula {
         HandlingFormula {
-            ready: QuadraticFormula {
+            ready: StatQuadraticFormula {
                 evpp: 0.0,
                 vpp: self.ready_vpp,
                 offset: self.ready_offset,
             },
-            stow: QuadraticFormula {
+            stow: StatQuadraticFormula {
                 evpp: 0.0,
                 vpp: self.stow_vpp,
                 offset: self.stow_offset,
             },
-            ads: QuadraticFormula {
+            ads: StatQuadraticFormula {
                 evpp: 0.0,
                 vpp: self.ads_vpp,
                 offset: self.ads_offset,
@@ -311,7 +312,7 @@ pub struct JsAmmoFormula {
     pub mag_vpp: f64,
     pub mag_offset: f64,
     pub mag_round_to_nearest: i32,
-    pub reserve_id: i32,
+    pub reserve_id: u32,
 }
 #[wasm_bindgen]
 impl JsAmmoFormula {
@@ -329,7 +330,7 @@ impl JsAmmoFormula {
 impl Into<AmmoFormula> for JsAmmoFormula {
     fn into(self) -> AmmoFormula {
         AmmoFormula {
-            mag: QuadraticFormula {
+            mag: StatQuadraticFormula {
                 evpp: self.mag_evpp,
                 vpp: self.mag_vpp,
                 offset: self.mag_offset,
@@ -409,8 +410,6 @@ impl JsPerk {
             .collect();
     }
 }
-
-
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 #[wasm_bindgen(js_name = "HandlingResponse")]
@@ -565,7 +564,6 @@ impl From<DpsResponse> for JsDpsResponse {
 pub struct JsAmmoResponse {
     pub mag_size: i32,
     pub reserve_size: i32,
-
 }
 #[wasm_bindgen]
 impl JsAmmoResponse {

@@ -94,31 +94,6 @@ impl WeaponType {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum WeaponSlot {
-    KINETIC,
-    ENERGY,
-    POWER,
-    UNKNOWN,
-}
-impl WeaponSlot {
-    pub fn from_u32(_value: u32) -> WeaponSlot {
-        match _value {
-            1498876634 => WeaponSlot::KINETIC,
-            2465295065 => WeaponSlot::ENERGY,
-            953998645 => WeaponSlot::POWER,
-            _ => WeaponSlot::UNKNOWN,
-        }
-    }
-    pub fn to_string(&self) -> String {
-        match self {
-            WeaponSlot::KINETIC => "Kinetic".to_string(),
-            WeaponSlot::ENERGY => "Energy".to_string(),
-            WeaponSlot::POWER => "Power".to_string(),
-            _ => "Unknown".to_string(),
-        }
-    }
-}
 
 #[allow(non_snake_case, non_camel_case_types)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
