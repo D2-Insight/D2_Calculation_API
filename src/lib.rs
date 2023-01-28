@@ -66,6 +66,24 @@ pub fn start() {
 }
 
 //---------------WEAPONS---------------//
+
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "stringifyWeapon")]
+pub fn weapon_as_string() -> Result<String, JsValue> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    Ok(format!("{:?}", weapon))
+}
+
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "setWeapon")]
+pub fn set_weapon_simple(_hash: u32, _weapon_type_id: u8, _intrinsic_hash: u32, _ammo_type_id: u32, _damage_type_id: u32) -> Result<(), JsValue> {
+    PERS_DATA.with(|perm_data| {
+        let new_weapon: Weapon = Weapon::generate_weapon(_hash, _weapon_type_id, _intrinsic_hash, _ammo_type_id, _damage_type_id).unwrap();
+        perm_data.borrow_mut().weapon = new_weapon;
+    });
+    Ok(())
+}
+
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "isWeaponInitialized")]
 pub fn is_weapon_init() -> bool {
@@ -156,7 +174,7 @@ fn set_weapon(weapon: PyWeapon) -> PyResult<()> {
 
 #[cfg(feature = "python")]
 #[pyfunction(name = "set_weapon_simple")]
-fn set_weapon_simple(_hash: u32, _weapon_type_id: u32, _intrinsic_hash: u32, _ammo_type_id: u32, _damage_type_id: u32) -> PyResult<()> {
+fn set_weapon_simple(_hash: u32, _weapon_type_id: u8, _intrinsic_hash: u32, _ammo_type_id: u32, _damage_type_id: u32) -> PyResult<()> {
     PERS_DATA.with(|perm_data| {
         let new_weapon: Weapon = Weapon::generate_weapon(_hash, _weapon_type_id, _intrinsic_hash, _ammo_type_id, _damage_type_id).unwrap();
         perm_data.borrow_mut().weapon = new_weapon;

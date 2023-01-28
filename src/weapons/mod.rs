@@ -18,9 +18,7 @@ use crate::types::rs_types::{
     AmmoFormula, DamageMods, DpsResponse, HandlingFormula, RangeFormula, ReloadFormula,
 };
 
-//JavaScript
-#[cfg(feature = "wasm")]
-use crate::types::js_types::JsWeapon;
+
 //Python
 #[cfg(feature = "python")]
 use crate::types::py_types::PyWeapon;
@@ -146,7 +144,7 @@ impl Weapon {
     }
 
     pub fn sparse_calc_input(&self, _total_shots_fired: i32, _total_time: f64) -> CalculationInput {
-        let tmp = CalculationInput::construct_pve_sparse(
+        CalculationInput::construct_pve_sparse(
             &self.firing_data,
             &self.stats,
             &self.weapon_type,
@@ -158,7 +156,25 @@ impl Weapon {
             _total_shots_fired,
             _total_time,
         )
-        .clone();
+    }
+    pub fn pvp_calc_input(&self, _total_shots_fired: f64, _total_shots_hit: f64, _total_time: f64, _overshield: bool) -> CalculationInput {
+        let base_mag = self.calc_ammo_sizes(None).mag_size as f64;
+        let mut tmp = CalculationInput::construct_pvp(
+            &self.firing_data, 
+            &self.stats, 
+            &self.weapon_type, 
+            &self.ammo_type, 
+            self.firing_data.damage, 
+            self.firing_data.crit_mult,
+            base_mag, 
+            _overshield, 
+            self.calc_handling_times(None)
+        );
+        tmp.time_this_mag = _total_time; 
+        tmp.time_total = _total_time;
+        tmp.shots_fired_this_mag = _total_shots_fired;
+        tmp.total_shots_fired = _total_shots_fired;
+        tmp.total_shots_hit = _total_shots_hit;
         tmp
     }
     fn update_stats(&mut self) {

@@ -84,7 +84,7 @@ impl<'a> CalculationInput<'a> {
             total_shots_hit: 0.0,
             base_mag: _mag_size,
             curr_mag: _mag_size,
-            reserves_left: 100.0,
+            reserves_left: 999.0,
             time_total: 0.0,
             time_this_mag: 0.0,
             stats: _stats,

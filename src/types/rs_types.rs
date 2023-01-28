@@ -47,7 +47,7 @@ pub struct RangeFormula {
     pub start: StatQuadraticFormula,
     pub end: StatQuadraticFormula,
     pub floor_percent: f64,
-    pub is_fusion: bool,
+    pub fusion: bool,
 }
 
 //even if just linear use this

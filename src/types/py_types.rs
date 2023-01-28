@@ -180,7 +180,7 @@ impl PyRangeFormula {
             vpp_end: _vpp_end,
             offset_end: _offset_end,
             floor_percent: _floor_percent,
-            is_fusion: _is_fusion,
+            fusion: _is_fusion,
         }
     }
     #[pyo3(name = "default")]

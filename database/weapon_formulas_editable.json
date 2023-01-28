@@ -51,7 +51,7 @@
 
         "cat": {
             "default": {
-                "range":    {"vpp": 0.0963, "base_min": 11.87, "base_max": 40.8, "scale": false, "floor_percent": 0.5},
+                "range":    {"vpp_start": 0.09615, "offset_start": 11.75, "vpp_end": 0.0, "offset_end": 41.0, "floor_percent": 0.5},
                 "reload":   {"evpp": 0.0000855689, "vpp": -0.0242021, "offset": 2.80673006666667},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -69,7 +69,7 @@
                 "combatant_scalars": {"vehicle": 1.15, "boss": 1.15, "champion": 1.2, "miniboss": 1.2, "elite": 1.3, "minor": 1.3}
             },
             "hard_light": {
-                "range":    {"vpp": 0.0963, "base_min": 11.87, "base_max": 40.8, "scale": false, "floor_percent": 0.7},
+                "range":    {"vpp_start": 0.09615, "offset_start": 11.75, "vpp_end": 0.0, "offset_end": 41.0, "floor_percent": 0.7},
                 "reload":   {"evpp": 0.0000855689, "vpp": -0.0242021, "offset": 2.80673006666667},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -154,21 +154,21 @@
         }
     },
     "Fusion Rifle":{
-        "656200654":  {"name": "Merciless",           "cat": "default", "magProf": "default", "pve":1.20},
-        "878286503":  {"name": "Rapid-Fire Frame",    "cat": "default", "magProf": "default", "pve":1.20},
-        "1019291327": {"name": "High-Impact Frame",   "cat": "default", "magProf": "default", "pve":1.20},
-        "1186480754": {"name": "Bastion",             "cat": "default", "magProf": "default"  },
-        "1294026524": {"name": "Adaptive Frame",      "cat": "default", "magProf": "default", "pve":1.15},
-        "1636108362": {"name": "Precision Frame",     "cat": "default", "magProf": "default"  },
-        "1656957541": {"name": "Jötunn",              "cat": "Jotunn",  "magProf": "default"  },
-        "1657056865": {"name": "One Thousand Voices", "cat": "1KV",     "magProf": "default"  },
-        "1927916065": {"name": "Telesto",             "cat": "Telesto", "magProf": "default"  },
-        "2518716062": {"name": "Aggressive Frame",    "cat": "default", "magProf": "default"  },
-        "3610750208": {"name": "Vex Mythoclast",      "cat": "Vex",     "magProf": "default"  },
-        "2585427437": {"name": "Delicate Tomb",       "cat": "default", "magProf": "default"  },
+        "656200654":  {"name": "Merciless",           "cat": "default", "subFam": "High-Impact", "magProf": "default", "pve":1.20},
+        "878286503":  {"name": "Rapid-Fire Frame",    "cat": "default", "subFam": "Rapid-Fire",  "magProf": "default", "pve":1.20},
+        "1019291327": {"name": "High-Impact Frame",   "cat": "default", "subFam": "High-Impact", "magProf": "default", "pve":1.20},
+        "1186480754": {"name": "Bastion",             "cat": "default", "subFam": "Bastion",     "magProf": "default"  },
+        "1294026524": {"name": "Adaptive Frame",      "cat": "default", "subFam": "Adaptive",    "magProf": "default", "pve":1.15},
+        "1636108362": {"name": "Precision Frame",     "cat": "default", "subFam": "Precision",   "magProf": "default"  },
+        "1656957541": {"name": "Jötunn",              "cat": "Jotunn",  "subFam": "Jotunn",      "magProf": "default"  },
+        "1657056865": {"name": "One Thousand Voices", "cat": "1KV",     "subFam": "",            "magProf": "default"  },
+        "1927916065": {"name": "Telesto",             "cat": "Telesto", "subFam": "Precision",   "magProf": "default"  },
+        "2518716062": {"name": "Aggressive Frame",    "cat": "default", "subFam": "Aggressive",  "magProf": "default"  },
+        "3610750208": {"name": "Vex Mythoclast",      "cat": "Vex",     "subFam": "Vex",         "magProf": "default"  },
+        "2585427437": {"name": "Delicate Tomb",       "cat": "default", "subFam": "Rapid-Fire",  "magProf": "default"  },
         "cat": {
             "default": {
-                "range":    {"zrm": 1.3, "zrm_tier": {}, "vpp": 0.0324, "base_min": 10.56, "base_max": 15.1, "scale": true},
+                "range":    {"vpp_start": 0.0324, "offset_start": 10.56, "vpp_end": 0.025, "offset_end": 15.1, "floor_percent": 0.5, "fusion": true},
                 "reload":   {"evpp": 0.0000615281, "vpp": -0.0198054, "offset": 2.82857040000000},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -204,7 +204,7 @@
                 "combatant_scalars": {"vehicle": 2.18, "boss": 2.55, "champion": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
             },
             "Vex": {
-                "range":    {"vpp": 0.0963, "base_min": 11.87, "base_max": 40.8, "scale": false, "floor_percent": 0.5},
+                "range":    {"vpp_start": 0.09615, "offset_start": 11.75, "vpp_end": 0.0, "offset_end": 41.0, "floor_percent": 0.5},
                 "reload":   {"evpp": 0.0000855689, "vpp": -0.0242021, "offset": 2.80673006666667},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -214,14 +214,14 @@
             }
         },
         "subFam": {
-            "Rapid-Fire":  {"damage": 27.22, "crit_mult": 1.0, "burst_delay": 0.500, "burst_size": 9, "burst_duration": 0.233, "oneAmmoBurst": true},
-            "High-Impact": {"damage": 66.00, "crit_mult": 1.0, "burst_delay": 0.960, "burst_size": 5, "burst_duration": 0.233, "oneAmmoBurst": true},
-            "Precision":   {"damage": 40.00, "crit_mult": 1.0, "burst_delay": 0.780, "burst_size": 7, "burst_duration": 0.233, "oneAmmoBurst": true},
-            "Adaptive":    {"damage": 38.60, "crit_mult": 1.0, "burst_delay": 0.66 , "burst_size": 7, "burst_duration": 0.233, "oneAmmoBurst": true},
-            "Aggressive":  {"damage": 38.60, "crit_mult": 1.0, "burst_delay": 0.66 , "burst_size": 7, "burst_duration": 0.000, "oneAmmoBurst": true},
-            "Jotunn":      {"damage": 326.0, "crit_mult": 1.0, "burst_delay": 0.767, "burst_size": 1, "burst_duration": 0.000, "oneAmmoBurst": true},
-            "Bastion":     {"damage": 26.50, "crit_mult": 1.0, "burst_delay": 0.733, "burst_size": 21,"burst_duration": 0.000, "oneAmmoBurst": true},
-            "Vex":         {"damage": 22.00, "crit_mult": 1.6, "burst_delay": 0.153, "burst_size": 1, "burst_duration": 0.000}
+            "Rapid-Fire":  {"damage": 27.22, "crit_mult": 1.0, "burst_delay": 0.500, "burst_size": 9, "burst_duration": 0.233,  "one_ammo": true},
+            "High-Impact": {"damage": 66.00, "crit_mult": 1.0, "burst_delay": 0.960, "burst_size": 5, "burst_duration": 0.233,  "one_ammo": true},
+            "Precision":   {"damage": 40.00, "crit_mult": 1.0, "burst_delay": 0.780, "burst_size": 7, "burst_duration": 0.233,  "one_ammo": true},
+            "Adaptive":    {"damage": 38.60, "crit_mult": 1.0, "burst_delay": 0.66 , "burst_size": 7, "burst_duration": 0.233,  "one_ammo": true},
+            "Aggressive":  {"damage": 38.60, "crit_mult": 1.0, "burst_delay": 0.66 , "burst_size": 7, "burst_duration": 0.000,  "one_ammo": true},
+            "Jotunn":      {"damage": 326.0, "crit_mult": 1.0, "burst_delay": 0.767, "burst_size": 1, "burst_duration": 0.000   },
+            "Bastion":     {"damage": 25.927, "crit_mult": 1.0, "burst_delay": 0.733, "burst_size": 21,"burst_duration": 0.000, "one_ammo": true},
+            "Vex":         {"damage": 22.00, "crit_mult": 1.6, "burst_delay": 0.153, "burst_size": 1, "burst_duration": 0.000   }
         },
         "magProf": {
             "default": {
@@ -231,20 +231,20 @@
         }
     },
     "Grenade Launcher": {
-        "389268985":  {"name": "Anarchy",           "cat": "anarchy", "magProf": "default" },
-        "425960662":  {"name": "Fighting Lion",     "cat": "special", "magProf": "default", "pve":0.78},
-        "474269988":  {"name": "Lightweight Frame", "cat": "special", "magProf": "default", "pve":1.10},
-        "1294026524": {"name": "Adaptive Frame",    "cat": "heavy",   "magProf": "default" },
-        "1315870387": {"name": "Salvation's Grip",  "cat": "heavy",   "magProf": "default" },
-        "1395789926": {"name": "Wave Frame",        "cat": "lion",    "magProf": "default", "pve":1.50},
-        "1458010786": {"name": "Lightweight Frame", "cat": "special", "magProf": "default" },
-        "2353477480": {"name": "Rapid-Fire Frame",  "cat": "heavy",   "magProf": "default" },
-        "2977709078": {"name": "The Prospector",    "cat": "heavy",   "magProf": "default" },
-        "3063320916": {"name": "Witherhoard",       "cat": "special", "magProf": "default" },
-        "3913463509": {"name": "The Colony",        "cat": "heavy",   "magProf": "default" },
-        "4130495068": {"name": "Precision Frame",   "cat": "heavy",   "magProf": "default" },
-        "1174163613": {"name": "Parasite",          "cat": "parasite","magProf": "default" },
-        "1759472859": {"name": "Double Fire",       "cat": "special", "magProf": "default" },
+        "389268985":  {"name": "Anarchy",           "cat": "anarchy", "subFam": "", "magProf": "default" },
+        "425960662":  {"name": "Fighting Lion",     "cat": "special", "subFam": "", "magProf": "default", "pve":0.78},
+        "474269988":  {"name": "Lightweight Frame", "cat": "special", "subFam": "", "magProf": "default", "pve":1.10},
+        "1294026524": {"name": "Adaptive Frame",    "cat": "heavy",   "subFam": "", "magProf": "default" },
+        "1315870387": {"name": "Salvation's Grip",  "cat": "heavy",   "subFam": "", "magProf": "default" },
+        "1395789926": {"name": "Wave Frame",        "cat": "lion",    "subFam": "", "magProf": "default", "pve":1.50},
+        "1458010786": {"name": "Lightweight Frame", "cat": "special", "subFam": "", "magProf": "default" },
+        "2353477480": {"name": "Rapid-Fire Frame",  "cat": "heavy",   "subFam": "", "magProf": "default" },
+        "2977709078": {"name": "The Prospector",    "cat": "heavy",   "subFam": "", "magProf": "default" },
+        "3063320916": {"name": "Witherhoard",       "cat": "special", "subFam": "", "magProf": "default" },
+        "3913463509": {"name": "The Colony",        "cat": "heavy",   "subFam": "", "magProf": "default" },
+        "4130495068": {"name": "Precision Frame",   "cat": "heavy",   "subFam": "", "magProf": "default" },
+        "1174163613": {"name": "Parasite",          "cat": "parasite","subFam": "", "magProf": "default" },
+        "1759472859": {"name": "Double Fire",       "cat": "special", "subFam": "", "magProf": "default" },
         "cat": {
             "special": {
                 "range":    {},
@@ -291,6 +291,9 @@
                 },
                 "combatant_scalars": {"vehicle": 2.27, "boss": 2.27, "champion": 2.38, "miniboss": 2.38, "elite": 2.36, "minor": 3.13}
             }
+        },
+        "subFam": {
+            "WaveFrame": {"damage": 22.00, "crit_mult": 1.6, "burst_delay": 0.153, "burst_size": 1, "burst_duration": 0.000}
         },
         "magProf": {
             "default": {
@@ -522,7 +525,7 @@
         "3441203855": {"name": "Collective Obligation",  "cat": "default",   "subFam": "Adaptive",      "magProf": "default"},
         "cat": {
             "default": {
-                "range":    {"vpp": 0.072, "base_min": 17.3, "base_max": 40.4, "scale": false, "floor_percent": 0.5},
+                "range":    {"vpp_start": 0.07378,"offset_start": 16.329,"vpp_end": 0.0,"offset_end": 40.4, "floor_percent": 0.5},
                 "reload":   {"evpp": 0.0000926208, "vpp": -0.0256877, "offset": 2.92627266666667},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -531,7 +534,7 @@
                 "combatant_scalars": {"vehicle": 0.90, "boss": 1.00, "champion": 1.05, "miniboss": 1.05, "elite": 1.05, "minor": 1.48}
             },
             "aggresive": {
-                "range":    {"vpp": 0.072, "base_min": 17.3, "base_max": 40.4, "scale": false, "floor_percent": 0.5},
+                "range":    {"vpp_start": 0.07378,"offset_start": 16.329,"vpp_end": 0.0,"offset_end": 40.4, "floor_percent": 0.5},
                 "reload":   {"evpp": 0.0000926208, "vpp": -0.0256877, "offset": 2.92627266666667},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -541,13 +544,13 @@
             }
         },
         "subFam": {
-            "Aggressive":    {"damage": 15.5, "crit_mult": 1.7, "burst_delay": 0.13333, "burst_size": 4, "burst_duration": 0.2333, "oneAmmoBurst": false},
-            "High-Impact":   {"damage": 22.0, "crit_mult": 1.65, "burst_delay": 0.17647, "burst_size": 3, "burst_duration": 0.1667, "oneAmmoBurst": false},
-            "Rapid-Fire":    {"damage": 14.0, "crit_mult": 1.7, "burst_delay": 0.11111, "burst_size": 3, "burst_duration": 0.1667, "oneAmmoBurst": false},
-            "Adaptive":      {"damage": 19.0, "crit_mult": 1.7, "burst_delay": 0.15385, "burst_size": 3, "burst_duration": 0.1667, "oneAmmoBurst": false},
-            "Lightweight":   {"damage": 16.0, "crit_mult": 1.65, "burst_delay": 0.11111, "burst_size": 3, "burst_duration": 0.1667, "oneAmmoBurst": false},
-            "VigilanceWing": {"damage": 15.7, "crit_mult": 1.46, "burst_delay": 0.11321, "burst_size": 5, "burst_duration": 0.3000, "oneAmmoBurst": false},
-            "GravitonLance": {"damage": 23.0, "crit_mult": 1.65, "burst_delay": 0.23346, "burst_size": 5, "burst_duration": 0.1000, "oneAmmoBurst": false}
+            "Aggressive":    {"damage": 15.5, "crit_mult": 1.7, "burst_delay": 0.13333, "burst_size": 4, "burst_duration": 0.2333 },
+            "High-Impact":   {"damage": 22.0, "crit_mult": 1.65, "burst_delay": 0.17647, "burst_size": 3, "burst_duration": 0.1667},
+            "Rapid-Fire":    {"damage": 14.0, "crit_mult": 1.7, "burst_delay": 0.11111, "burst_size": 3, "burst_duration": 0.1667 },
+            "Adaptive":      {"damage": 19.0, "crit_mult": 1.7, "burst_delay": 0.15385, "burst_size": 3, "burst_duration": 0.1667 },
+            "Lightweight":   {"damage": 16.0, "crit_mult": 1.65, "burst_delay": 0.11111, "burst_size": 3, "burst_duration": 0.1667},
+            "VigilanceWing": {"damage": 15.7, "crit_mult": 1.46, "burst_delay": 0.11321, "burst_size": 5, "burst_duration": 0.3000},
+            "GravitonLance": {"damage": 23.0, "crit_mult": 1.65, "burst_delay": 0.23346, "burst_size": 5, "burst_duration": 0.1000}
         },
         "magProf": {
             "default": {
@@ -604,10 +607,10 @@
             "Aggressive":  {"damage": 495, "crit_mult": 1.0, "burst_delay": 2.4, "burst_size": 1, "burst_duration": 0},
             "Precision":   {"damage": 405, "crit_mult": 1.0, "burst_delay": 4.0, "burst_size": 1, "burst_duration": 0},
             "Adaptive":    {"damage": 495, "crit_mult": 1.0, "burst_delay": 3.0, "burst_size": 1, "burst_duration": 0},
-            "Wardcliff":   {"damage": 300, "crit_mult": 1.0, "burst_delay": 1.0, "burst_size": 8, "burst_duration": 0.7, "oneAmmoBurst": true},
-            "TwoTailed":   {"damage": 193, "crit_mult": 1.0, "burst_delay": 1.0, "burst_size": 2, "burst_duration": 0.3, "oneAmmoBurst": true},
-            "EyesOfTmrw":  {"damage": 400, "crit_mult": 1.0, "burst_delay": 1.0, "burst_size": 8, "burst_duration": 0.7, "oneAmmoBurst": true},
-            "DeathBringer":{"damage": 150, "crit_mult": 1.0, "burst_delay": 1.0, "burst_size": 8, "burst_duration": 0.0, "oneAmmoBurst": true}
+            "Wardcliff":   {"damage": 300, "crit_mult": 1.0, "burst_delay": 1.0, "burst_size": 8, "burst_duration": 0.7, "one_ammo": true},
+            "TwoTailed":   {"damage": 193, "crit_mult": 1.0, "burst_delay": 1.0, "burst_size": 2, "burst_duration": 0.3, "one_ammo": true},
+            "EyesOfTmrw":  {"damage": 400, "crit_mult": 1.0, "burst_delay": 1.0, "burst_size": 8, "burst_duration": 0.7, "one_ammo": true},
+            "DeathBringer":{"damage": 150, "crit_mult": 1.0, "burst_delay": 1.0, "burst_size": 8, "burst_duration": 0.0, "one_ammo": true}
         },
         "magProf": {
             "default": {
@@ -617,22 +620,22 @@
         }
     },
     "Scout Rifle": {
-        "377257911":  {"name": "MIDA Multi-Tool",   "cat": "default", "subFam": "Lightweight", "magProf": "default"},
-        "1000724343": {"name": "Polaris Lance",     "cat": "default", "subFam": "High-Impact", "magProf": "default"},
-        "1019291327": {"name": "High-Impact Frame", "cat": "default", "subFam": "High-Impact", "magProf": "default"},
-        "1319823571": {"name": "Dead Man's Tale",   "cat": "DMT"    , "subFam": "Aggressive", "magProf": "default", "pve":1.20},
-        "1458010786": {"name": "Lightweight Frame", "cat": "default", "subFam": "Lightweight", "magProf": "default"},
-        "1636108362": {"name": "Precision Frame",   "cat": "default", "subFam": "Precision",   "magProf": "default"},
-        "2741975068": {"name": "Skyburner's Oath",  "cat": "default", "subFam": "High-Impact", "magProf": "default"},
-        "3364911712": {"name": "VEIST Rapid-Fire",  "cat": "default", "subFam": "Rapid-Fire",  "magProf": "default"},
-        "3668782036": {"name": "The Jade Rabbit",   "cat": "default", "subFam": "High-Impact", "magProf": "default"},
-        "3920852688": {"name": "Rapid-Fire Frame",  "cat": "default", "subFam": "Rapid-Fire",  "magProf": "default"},
-        "4185339856": {"name": "Symmetry",          "cat": "default", "subFam": "Rapid-Fire",  "magProf": "default"},
-        "3468089894": {"name": "Aggressive Frame",  "cat": "DMT"    , "subFam": "Aggressive",  "magProf": "default"},
-        "2724693746": {"name": "Touch Of Malice",   "cat": "default", "subFam": "Rapid-Fire",  "magProf": "default"},
+        "377257911":  {"name": "MIDA Multi-Tool",   "cat": "default",   "subFam": "Lightweight", "magProf": "default"},
+        "1000724343": {"name": "Polaris Lance",     "cat": "default",   "subFam": "High-Impact", "magProf": "default"},
+        "1019291327": {"name": "High-Impact Frame", "cat": "default",   "subFam": "High-Impact", "magProf": "default"},
+        "1319823571": {"name": "Dead Man's Tale",   "cat": "aggresive", "subFam": "Aggressive",  "magProf": "default", "pve":1.20},
+        "1458010786": {"name": "Lightweight Frame", "cat": "default",   "subFam": "Lightweight", "magProf": "default"},
+        "1636108362": {"name": "Precision Frame",   "cat": "default",   "subFam": "Precision",   "magProf": "default"},
+        "2741975068": {"name": "Skyburner's Oath",  "cat": "default",   "subFam": "High-Impact", "magProf": "default"},
+        "3364911712": {"name": "VEIST Rapid-Fire",  "cat": "default",   "subFam": "Rapid-Fire",  "magProf": "default"},
+        "3668782036": {"name": "The Jade Rabbit",   "cat": "default",   "subFam": "High-Impact", "magProf": "default"},
+        "3920852688": {"name": "Rapid-Fire Frame",  "cat": "default",   "subFam": "Rapid-Fire",  "magProf": "default"},
+        "4185339856": {"name": "Symmetry",          "cat": "default",   "subFam": "Rapid-Fire",  "magProf": "default"},
+        "3468089894": {"name": "Aggressive Frame",  "cat": "aggresive", "subFam": "Aggressive",  "magProf": "default"},
+        "2724693746": {"name": "Touch Of Malice",   "cat": "default",   "subFam": "Rapid-Fire",  "magProf": "default"},
         "cat": {
             "default": {
-                "range":    {"vpp": 0.1521, "base_min": 30.89, "base_max": 60.8, "scale": false, "floor_percent": 0.5},
+                "range":    {"vpp_start": 0.1568, "offset_start": 30.25, "vpp_end": 0.0, "offset_end": 60.75, "floor_percent": 0.5},
                 "reload":   {"evpp": 0.000102915, "vpp": -0.0276889, "offset": 3.11797356666666},
                 "handling": {
                     "ready":{"vpp": -0.002853368560, "offset": 0.540561867},
@@ -641,8 +644,8 @@
                 },
                 "combatant_scalars": {"vehicle": 1.30, "boss": 1.30, "champion": 1.30, "miniboss": 1.30, "elite": 1.30, "minor": 1.90}
             },
-            "DMT": {
-                "range":    {"vpp": 0.169, "base_min": 29.2, "base_max": 60.8, "scale": false, "floor_percent": 0.5},
+            "aggresive": {
+                "range":    {"vpp_start": 0.1568, "offset_start": 30.25, "vpp_end": 0.0, "offset_end": 60.75, "floor_percent": 0.5},
                 "reload":   {},
                 "handling": {
                     "ready":{"vpp": -0.002853368560, "offset": 0.540561867},
@@ -703,7 +706,7 @@
                 "combatant_scalars": {"vehicle": 2.80, "boss": 2.30, "champion": 2.5, "miniboss": 2.50, "elite": 2.88, "minor": 3.20}
             },
             "LoW": {
-                "range":    {  "vpp": 0,           "base_min": 9,        "base_max": 9, "scale": false},
+                "range":    {},
                 "reload":   {"evpp": 0.0000640462, "vpp": -0.0141721,   "offset": 1.25061},
                 "handling": {
                     "ready":{"vpp": -0.003271255061, "offset": 0.5388744939},
@@ -734,13 +737,13 @@
             }
         },
         "subFam": {
-            "Rapid-Fire":      {"damage":16.7, "crit_mult":1.1, "burst_delay":0.433213, "burst_size":12, "burst_duration":0, "oneAmmoBurst": true},
-            "Precision":       {"damage":19.1, "crit_mult":1.1, "burst_delay":0.933126, "burst_size":12, "burst_duration":0, "oneAmmoBurst": true},
-            "Aggressive":      {"damage":22.3, "crit_mult":1.1, "burst_delay":1.099908, "burst_size":12, "burst_duration":0, "oneAmmoBurst": true},
-            "Slug":            {"damage":151.0, "crit_mult":1.75, "burst_delay":0.933126, "burst_size":1, "burst_duration":0, "oneAmmoBurst": true},
-            "Disabled":        {"damage":0, "crit_mult":1.0, "burst_delay":0, "burst_size":0, "burst_duration":0, "oneAmmoBurst": true},
-            "LoW":             {"damage":35.0, "crit_mult":1.44, "burst_delay":0.1, "burst_size":5, "burst_duration":0.29},
-            "FourthHorse":     {"damage":16.7, "crit_mult":1.1, "burst_delay":0.166667, "burst_size":12, "burst_duration":0, "oneAmmoBurst": true}
+            "Rapid-Fire":  {"damage":16.7,  "crit_mult":1.1, "burst_delay":0.433213, "burst_size":12, "burst_duration":0, "one_ammo": true},
+            "Precision":   {"damage":19.1,  "crit_mult":1.1, "burst_delay":0.933126, "burst_size":12, "burst_duration":0, "one_ammo": true},
+            "Aggressive":  {"damage":22.3,  "crit_mult":1.1, "burst_delay":1.099908, "burst_size":12, "burst_duration":0, "one_ammo": true},
+            "Slug":        {"damage":151.0, "crit_mult":1.75, "burst_delay":0.93312, "burst_size":1,  "burst_duration":0, "one_ammo": true},
+            "LoW":         {"damage":35.0,  "crit_mult":1.44, "burst_delay":0.1,     "burst_size":5,  "burst_duration":0.29},
+            "Lightweight": {"damage":18.33, "crit_mult":1.1, "burst_delay":0.75,     "burst_size":12, "burst_duration":0, "one_ammo": true},
+            "FourthHorse": {"damage":16.7,  "crit_mult":1.1, "burst_delay":0.166667, "burst_size":12, "burst_duration":0, "one_ammo": true}
         },
         "magProf": {
             "default": {
@@ -806,14 +809,14 @@
         }
     },
     "Sniper Rifle": {
-        "281315705":  {"name": "Whisper of the Worm", "cat": "default", "subFam": "Whisper"   },
-        "878286503":  {"name": "Rapid-Fire Frame",    "cat": "default", "subFam": "Rapid-Fire"},
-        "938999636":  {"name": "D.A.R.C.I.",          "cat": "default", "subFam": "Rapid-Fire"},
-        "1070100196": {"name": "Izanagi's Burden",    "cat": "default", "subFam": "Adaptive"  },
-        "1294026524": {"name": "Adaptive Frame",      "cat": "default", "subFam": "Adaptive"  },
-        "2909403175": {"name": "Cloudstrike",         "cat": "default", "subFam": "Rapid-Fire"},
-        "3081173348": {"name": "Borealis",            "cat": "default", "subFam": "Aggressive"},
-        "3468089894": {"name": "Aggressive Frame",    "cat": "default", "subFam": "Aggressive"},
+        "281315705":  {"name": "Whisper of the Worm", "cat": "default", "subFam": "Whisper",    "magProf": "default"},
+        "878286503":  {"name": "Rapid-Fire Frame",    "cat": "default", "subFam": "Rapid-Fire", "magProf": "default"},
+        "938999636":  {"name": "D.A.R.C.I.",          "cat": "default", "subFam": "Rapid-Fire", "magProf": "default"},
+        "1070100196": {"name": "Izanagi's Burden",    "cat": "default", "subFam": "Adaptive",   "magProf": "default"},
+        "1294026524": {"name": "Adaptive Frame",      "cat": "default", "subFam": "Adaptive",   "magProf": "default"},
+        "2909403175": {"name": "Cloudstrike",         "cat": "default", "subFam": "Rapid-Fire", "magProf": "default"},
+        "3081173348": {"name": "Borealis",            "cat": "default", "subFam": "Aggressive", "magProf": "default"},
+        "3468089894": {"name": "Aggressive Frame",    "cat": "default", "subFam": "Aggressive", "magProf": "default"},
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
@@ -863,7 +866,7 @@
                 "combatant_scalars": {"vehicle": 1.40, "boss": 1.53, "champion": 1.53, "miniboss": 1.53, "elite": 1.90, "minor": 1.90}
             },
             "striga": {
-                "range":    {"vpp": 0.1247, "base_min": 9.0835, "base_max": 9.0835, "scale": false, "floor_percent": 0.5},
+                "range":    {"vpp_start": 0.1247, "offset_start": 9.0835, "vpp_end": 0.0, "offset_end": 28.11, "floor_percent": 0.5},
                 "reload":   {"evpp": 0.0000608642, "vpp": -0.0191345, "offset": 2.62769},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},

@@ -1,4 +1,4 @@
-use super::{Stat, Weapon, reserve_calc::calc_reserves};
+use super::{reserve_calc::calc_reserves, Stat, Weapon};
 use crate::{
     d2_enums::StatHashes,
     perks::{
@@ -10,8 +10,8 @@ use crate::{
         },
     },
     types::rs_types::{
-        AmmoFormula, HandlingFormula, HandlingResponse, RangeFormula,
-        RangeResponse, ReloadFormula, ReloadResponse, AmmoResponse
+        AmmoFormula, AmmoResponse, HandlingFormula, HandlingResponse, RangeFormula, RangeResponse,
+        ReloadFormula, ReloadResponse,
     },
 };
 
@@ -67,7 +67,7 @@ impl RangeFormula {
         } as f64;
         let zoom_stat = _zoom_stat as f64 * _modifiers.range_zoom_scale;
 
-        let zoom_mult = if self.is_fusion {
+        let zoom_mult = if self.fusion {
             1.0 + 0.02 * zoom_stat
         } else {
             0.1 * zoom_stat - 0.025
@@ -106,14 +106,18 @@ impl Weapon {
         if _calc_input.is_some() {
             let modifiers =
                 get_range_modifier(self.list_perks(), &_calc_input.unwrap(), self.is_pvp);
-            self.range_formula
-                .calc_range_falloff_formula(range_stat, zoom_stat, modifiers, self.range_formula.floor_percent)
+            self.range_formula.calc_range_falloff_formula(
+                range_stat,
+                zoom_stat,
+                modifiers,
+                self.range_formula.floor_percent,
+            )
         } else {
             self.range_formula.calc_range_falloff_formula(
                 range_stat,
                 zoom_stat,
                 RangeModifierResponse::default(),
-                self.range_formula.floor_percent
+                self.range_formula.floor_percent,
             )
         }
     }
@@ -184,7 +188,8 @@ impl AmmoFormula {
             _reserve_stat + _inv_modifiers.inv_stat_add
         } as f64;
 
-        let raw_mag_size = (self.mag.evpp * (mag_stat.powi(2))) + (self.mag.vpp * mag_stat) + self.mag.offset;
+        let raw_mag_size =
+            (self.mag.evpp * (mag_stat.powi(2))) + (self.mag.vpp * mag_stat) + self.mag.offset;
 
         let mut mag_size =
             (((self.mag.evpp * (mag_stat.powi(2))) + (self.mag.vpp * mag_stat) + self.mag.offset)
@@ -199,7 +204,10 @@ impl AmmoFormula {
         if _calc_inv {
             reserve_size = calc_reserves(raw_mag_size, inv_stat as i32, _inv_id);
         }
-        AmmoResponse { mag_size, reserve_size }
+        AmmoResponse {
+            mag_size,
+            reserve_size,
+        }
     }
 }
 impl Weapon {
@@ -215,14 +223,33 @@ impl Weapon {
             .unwrap_or(&Stat::new())
             .val();
         if _calc_input.is_some() {
-            let mag_modifiers =
-                get_magazine_modifier(self.list_perks(), &_calc_input.clone().unwrap(), self.is_pvp);
-            let inv_modifiers =
-                get_reserve_modifier(self.list_perks(), &_calc_input.clone().unwrap(), self.is_pvp);
-            self.ammo_formula.calc_ammo_size_formula(mag_stat, mag_modifiers, inv_stat, inv_modifiers, true, self.ammo_formula.reserve_id)
+            let mag_modifiers = get_magazine_modifier(
+                self.list_perks(),
+                &_calc_input.clone().unwrap(),
+                self.is_pvp,
+            );
+            let inv_modifiers = get_reserve_modifier(
+                self.list_perks(),
+                &_calc_input.clone().unwrap(),
+                self.is_pvp,
+            );
+            self.ammo_formula.calc_ammo_size_formula(
+                mag_stat,
+                mag_modifiers,
+                inv_stat,
+                inv_modifiers,
+                true,
+                self.ammo_formula.reserve_id,
+            )
         } else {
-            self.ammo_formula
-                .calc_ammo_size_formula(mag_stat, MagazineModifierResponse::default(), inv_stat, InventoryModifierResponse::default(),true, self.ammo_formula.reserve_id)
+            self.ammo_formula.calc_ammo_size_formula(
+                mag_stat,
+                MagazineModifierResponse::default(),
+                inv_stat,
+                InventoryModifierResponse::default(),
+                true,
+                self.ammo_formula.reserve_id,
+            )
         }
     }
 }
