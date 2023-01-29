@@ -9,7 +9,7 @@ pub mod types;
 pub mod weapons;
 
 use crate::perks::{Perk, Perks};
-use crate::weapons::Weapon;
+use crate::weapons::{Stat, Weapon};
 use abilities::Ability;
 use activity::Activity;
 use d2_enums::StatHashes;
@@ -20,19 +20,21 @@ use std::panic;
 
 //JavaScript
 #[cfg(feature = "wasm")]
-use crate::types::js_types::{JsPerk, JsStat};
+use crate::types::js_types::{JsStat, JsRangeResponse, JsHandlingResponse, 
+    JsReloadResponse, JsAmmoResponse, JsTtkResponse, JsDpsResponse, JsDifficultyOptions,
+    JsEnemyType};
 #[cfg(feature = "wasm")]
 use wasm_bindgen::prelude::*;
 
 //python
 #[cfg(feature = "python")]
 use crate::types::py_types::{
-    PyAmmoFormula, PyDamageModifiers, PyFiringData, PyHandlingFormula, PyPerk, PyRangeFormula,
-    PyReloadFormula, PyWeapon, PyWeaponFormula, PyRangeResponse, PyHandlingResponse, PyActivity,
-    PyPlayer, PyEnemy, PyEnemyType, PyDpsResponse, PyDifficultyOptions, PyPlayerClass
+    PyActivity, PyAmmoFormula, PyDamageModifiers, PyDifficultyOptions, PyDpsResponse, PyEnemy,
+    PyEnemyType, PyFiringData, PyHandlingFormula, PyHandlingResponse, PyPerk, PyPlayer,
+    PyPlayerClass, PyRangeFormula, PyRangeResponse, PyReloadFormula, PyWeapon, PyWeaponFormula,
 };
 #[cfg(feature = "python")]
-use pyo3::prelude::*;
+use pyo3::{prelude::*, types::PyDict};
 
 #[derive(Debug, Clone, Default)]
 pub struct PersistentData {
@@ -50,12 +52,12 @@ thread_local! {
 extern "C" {
     //foreign function interface
     #[wasm_bindgen(js_namespace = console)]
-    fn log(s: &str);
+    pub fn log(s: &str);
 }
+
 #[cfg(feature = "wasm")]
+#[macro_export]
 macro_rules! console_log {
-    // Note that this is using the `log` function imported above during
-    // `bare_bones`
     ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
 }
 #[cfg(feature = "wasm")]
@@ -76,72 +78,101 @@ pub fn weapon_as_string() -> Result<String, JsValue> {
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "setWeapon")]
-pub fn set_weapon_simple(_hash: u32, _weapon_type_id: u8, _intrinsic_hash: u32, _ammo_type_id: u32, _damage_type_id: u32) -> Result<(), JsValue> {
+pub fn set_weapon(
+    _hash: u32,
+    _weapon_type_id: u8,
+    _intrinsic_hash: u32,
+    _ammo_type_id: u32,
+    _damage_type_id: u32,
+) -> Result<(), JsValue> {
     PERS_DATA.with(|perm_data| {
-        let new_weapon: Weapon = Weapon::generate_weapon(_hash, _weapon_type_id, _intrinsic_hash, _ammo_type_id, _damage_type_id).unwrap();
-        perm_data.borrow_mut().weapon = new_weapon;
+        let new_weapon = Weapon::generate_weapon(
+            _hash,
+            _weapon_type_id,
+            _intrinsic_hash,
+            _ammo_type_id,
+            _damage_type_id,
+        );
+        if new_weapon.is_err() {
+            console_log!(
+                "Could not find weapon data for type: {}, intrinsic: {}",
+                _weapon_type_id,
+                _intrinsic_hash
+            );
+            perm_data.borrow_mut().weapon = Weapon::default();
+        } else {
+            perm_data.borrow_mut().weapon = new_weapon.unwrap();
+        };
     });
     Ok(())
 }
 
 #[cfg(feature = "wasm")]
-#[wasm_bindgen(js_name = "isWeaponInitialized")]
-pub fn is_weapon_init() -> bool {
-    PERS_DATA.with(|weapon| weapon.borrow().weapon.hash != 0)
-}
-
-#[cfg(feature = "wasm")]
-#[wasm_bindgen(js_name = "getWeaponId")]
-pub fn get_weapon_id() -> u32 {
-    PERS_DATA.with(|perm_data| perm_data.borrow().weapon.hash)
+#[wasm_bindgen(js_name = "getWeaponHash")]
+pub fn get_weapon_hash() -> Result<bool, JsValue> {
+    Ok(PERS_DATA.with(|weapon| weapon.borrow().weapon.hash != 0))
 }
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getStat")]
-pub fn get_stat(_stat: u32) -> JsStat {
-    let stats = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.stats.clone());
-    let stat = stats.get(&_stat);
-    if stat.is_some() {
-        stat.unwrap().clone().into()
-    } else {
-        JsStat {
-            base_value: 0,
-            perk_value: 0,
-            part_value: 0,
-        }
+pub fn get_stats() -> Result<JsValue, JsValue> {
+    let stat_map = PERS_DATA.with(|perm_data| {
+        perm_data.borrow().weapon.stats.clone()
+    });
+    //turn stat map into a map of u32 and jsstat
+    let mut js_stat_map = HashMap::new();
+    for (key, value) in stat_map {
+        js_stat_map.insert(key, JsStat::from(value));
     }
+    let value = serde_wasm_bindgen::to_value(&js_stat_map);
+    if value.is_err() {
+        return Err(JsValue::from_str("Could not convert stats to JsValue"));
+    }
+    Ok(value.unwrap())
 }
 
 #[cfg(feature = "wasm")]
-#[wasm_bindgen(js_name = "isPerkImplemented")]
-pub fn is_perk_implemented(perk_hash: u32) -> bool {
-    //really meant for debugging
-    Perks::from_u32(perk_hash) != Perks::Ignore
+#[wasm_bindgen(js_name = "setStat")]
+pub fn set_stats(_stat_hashes: Vec<u32>, _stat_values: Vec<i32>) -> Result<(), JsValue> {
+    if _stat_hashes.len() != _stat_values.len() {
+        return Err(JsValue::from_str(
+            "Stat hashes and values must be the same length",
+        ));
+    }
+    let mut stats = HashMap::new();
+    for i in 0.._stat_hashes.len() {
+        stats.insert(_stat_hashes[i], Stat::from(_stat_values[i]));
+    }
+    PERS_DATA.with(|perm_data| perm_data.borrow_mut().weapon.stats = stats);
+    Ok(())
 }
 
-// #[cfg(feature = "wasm")]
-// #[wasm_bindgen(js_name = "addPerk")]
-// pub fn modify_perks(perk_data: JsPerk, add: bool) {
-//     let perk = Perk::from_js(perk_data);
-//     if is_weapon_init() {
-//         if add {
-//             PERS_DATA.with(|perm_data| perm_data.borrow_mut().weapon.add_perk(perk));
-//         } else {
-//             PERS_DATA.with(|perm_data| perm_data.borrow_mut().weapon.remove_perk(perk));
-//         }
-//     } else {
-//         console_log!("Weapon is not ready for perks");
-//     };
-// }
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "addTrait")]
+pub fn add_perk_complex(_stats: JsValue, _value: u32, _hash: u32) -> Result<(), JsValue> {
+    let perk = Perk {
+        stat_buffs: serde_wasm_bindgen::from_value(_stats).unwrap(),
+        enhanced: false,
+        value: _value,
+        hash: _hash,
+    };
+    PERS_DATA.with(|perm_data| {
+        perm_data
+            .borrow_mut()
+            .weapon
+            .add_perk(perk)
+    });
+    Ok(())
+}
 
 #[cfg(feature = "wasm")]
-#[wasm_bindgen(js_name = "queryPerks")]
+#[wasm_bindgen(js_name = "getTraitHashes")]
 pub fn query_perks() -> Vec<u32> {
     PERS_DATA.with(|perm_data| perm_data.borrow_mut().weapon.list_perk_ids())
 }
 
 #[cfg(feature = "wasm")]
-#[wasm_bindgen(js_name = "changePerkValue")]
+#[wasm_bindgen(js_name = "setTraitValue")]
 pub fn change_perk_value(perk_hash: u32, new_value: u32) {
     PERS_DATA.with(|perm_data| {
         perm_data
@@ -151,51 +182,145 @@ pub fn change_perk_value(perk_hash: u32, new_value: u32) {
     });
 }
 
-//---------------ACTIVITY---------------//
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "getWeaponRangeFalloff")]
+pub fn get_weapon_range(_dynamic_traits: bool) -> Result<JsRangeResponse, JsValue> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    if _dynamic_traits {
+        Ok(weapon
+            .calc_range_falloff(Some(weapon.static_calc_input()))
+            .into())
+    } else {
+        Ok(weapon.calc_range_falloff(None).into())
+    }
+}
+
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "getWeaponHandlingTimes")]
+pub fn get_weapon_handling(_dynamic_traits: bool) -> Result<JsHandlingResponse, JsValue> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    if _dynamic_traits {
+        Ok(weapon
+            .calc_handling_times(Some(weapon.static_calc_input()))
+            .into())
+    } else {
+        Ok(weapon.calc_handling_times(None).into())
+    }
+}
+
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "getWeaponReloadTimes")]
+pub fn get_weapon_reload(_dynamic_traits: bool) -> Result<JsReloadResponse, JsValue> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    if _dynamic_traits {
+        Ok(weapon
+            .calc_reload_time(Some(weapon.static_calc_input()))
+            .into())
+    } else {
+        Ok(weapon.calc_reload_time(None).into())
+    }
+}
+
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "getWeaponAmmoSizes")]
+pub fn get_weapon_ammo(_dynamic_traits: bool) -> Result<JsAmmoResponse, JsValue> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    if _dynamic_traits {
+        Ok(weapon
+            .calc_ammo_sizes(Some(weapon.static_calc_input()))
+            .into())
+    } else {
+        Ok(weapon.calc_ammo_sizes(None).into())
+    }
+}
+
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "getWeaponTtk")]
+pub fn get_weapon_ttk(_overhsield: f64) -> Result<JsTtkResponse, JsValue> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    Ok(JsTtkResponse{data: weapon.calc_ttk(_overhsield)})
+}
+
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "getWeaponDps")]
+pub fn get_weapon_dps(_use_rpl: bool) -> Result<JsDpsResponse, JsValue> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    let enemy = PERS_DATA.with(|perm_data| perm_data.borrow().enemy.clone());
+    let pl_dmg_mult = PERS_DATA.with(|perm_data| perm_data.borrow().activity.get_pl_delta());
+    let mut dps_response = weapon.calc_dps(enemy, pl_dmg_mult);
+    let rpl_mult = PERS_DATA.with(|perm_data| perm_data.borrow().activity.get_rpl_mult());
+    if _use_rpl {
+        dps_response.apply_rpl(rpl_mult)
+    }
+    Ok(dps_response.into())
+}
+
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "setEncounter")]
+pub fn set_encounter(_rpl: u32, _override_cap: i32, _difficulty: JsDifficultyOptions, _enemy_type: JsEnemyType) -> Result<(), JsValue> {
+    PERS_DATA.with(|perm_data| {
+        let mut activity = &mut perm_data.borrow_mut().activity;
+        activity.rpl = _rpl;
+        activity.cap = _override_cap;
+        activity.difficulty = _difficulty.into();
+        activity.player.pl = 2000;
+    });
+    PERS_DATA.with(|perm_data| {
+        let mut enemy = &mut perm_data.borrow_mut().enemy;
+        enemy.type_ = _enemy_type.into();
+    });
+    Ok(())
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 #[cfg(feature = "python")]
-#[pyfunction(name = "is_weapon_set")]
-fn is_weapon_assigned() -> PyResult<bool> {
-    let val = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.hash);
-    Ok(val != 0)
+#[pyfunction(name = "get_hash")]
+fn get_weapon_hash() -> PyResult<u32> {
+    Ok(PERS_DATA.with(|perm_data| perm_data.borrow().weapon.hash))
 }
+
 #[cfg(feature = "python")]
 #[pyfunction(name = "set_weapon")]
-fn set_weapon(weapon: PyWeapon) -> PyResult<()> {
+fn set_weapon(
+    _hash: u32,
+    _weapon_type_id: u8,
+    _intrinsic_hash: u32,
+    _ammo_type_id: u32,
+    _damage_type_id: u32,
+) -> PyResult<()> {
     PERS_DATA.with(|perm_data| {
-        let new_weapon: Weapon = weapon.into();
-        perm_data.borrow_mut().weapon = new_weapon;
+        let new_weapon = Weapon::generate_weapon(
+            _hash,
+            _weapon_type_id,
+            _intrinsic_hash,
+            _ammo_type_id,
+            _damage_type_id,
+        );
+        if new_weapon.is_err() {
+            #[cfg(feature = "python")]
+            println!(
+                "Could not find weapon data for type: {}, intrinsic: {}",
+                _weapon_type_id, _intrinsic_hash
+            );
+            perm_data.borrow_mut().weapon = Weapon::default();
+        } else {
+            perm_data.borrow_mut().weapon = new_weapon.unwrap();
+        };
     });
     Ok(())
 }
 
 #[cfg(feature = "python")]
-#[pyfunction(name = "set_weapon_simple")]
-fn set_weapon_simple(_hash: u32, _weapon_type_id: u8, _intrinsic_hash: u32, _ammo_type_id: u32, _damage_type_id: u32) -> PyResult<()> {
-    PERS_DATA.with(|perm_data| {
-        let new_weapon: Weapon = Weapon::generate_weapon(_hash, _weapon_type_id, _intrinsic_hash, _ammo_type_id, _damage_type_id).unwrap();
-        perm_data.borrow_mut().weapon = new_weapon;
-    });
-    Ok(())
-}
-
-#[cfg(feature = "python")]
-#[pyfunction(name = "add_perk")]
+#[pyfunction(name = "add_trait")]
 fn add_perk(_perk: PyPerk) -> PyResult<()> {
-    PERS_DATA.with(
-        |perm_data| 
-        perm_data.borrow_mut().weapon.add_perk(_perk.into()));
+    PERS_DATA.with(|perm_data| perm_data.borrow_mut().weapon.add_perk(_perk.into()));
     Ok(())
 }
 #[cfg(feature = "python")]
-#[pyfunction(name = "remove_perk")]
-fn remove_perk(_perk: PyPerk) -> PyResult<()> {
-    PERS_DATA.with(
-        |perm_data| 
-        perm_data.borrow_mut().weapon.remove_perk(_perk.into()));
+#[pyfunction(name = "remove_trait")]
+fn remove_perk(_perk_hash: u32) -> PyResult<()> {
+    PERS_DATA.with(|perm_data| perm_data.borrow_mut().weapon.remove_perk(_perk_hash));
     Ok(())
 }
 #[cfg(feature = "python")]
@@ -206,20 +331,24 @@ fn weapon_as_string() -> PyResult<String> {
 }
 #[cfg(feature = "python")]
 #[pyfunction(name = "get_range_falloff")]
-fn get_weapon_range(_dynamic_perks: bool) -> PyResult<PyRangeResponse> {
+fn get_weapon_range(_use_traits: bool) -> PyResult<PyRangeResponse> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
-    if _dynamic_perks {
-        Ok(weapon.calc_range_falloff(Some(weapon.static_calc_input())).into())
+    if _use_traits {
+        Ok(weapon
+            .calc_range_falloff(Some(weapon.static_calc_input()))
+            .into())
     } else {
         Ok(weapon.calc_range_falloff(None).into())
     }
 }
 #[cfg(feature = "python")]
 #[pyfunction(name = "get_handling_times")]
-fn get_weapon_handling(_dynamic_perks: bool) -> PyResult<PyHandlingResponse> {
+fn get_weapon_handling(_use_traits: bool) -> PyResult<PyHandlingResponse> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
-    if _dynamic_perks {
-        Ok(weapon.calc_handling_times(Some(weapon.static_calc_input())).into())
+    if _use_traits {
+        Ok(weapon
+            .calc_handling_times(Some(weapon.static_calc_input()))
+            .into())
     } else {
         Ok(weapon.calc_handling_times(None).into())
     }
@@ -233,10 +362,37 @@ fn get_weapon_dps(_do_rpl_mult: bool) -> PyResult<PyDpsResponse> {
     let pl_dmg_mult = PERS_DATA.with(|perm_data| perm_data.borrow().activity.get_pl_delta());
     let mut dps_response = weapon.calc_dps(enemy, pl_dmg_mult);
     let rpl_mult = PERS_DATA.with(|perm_data| perm_data.borrow().activity.get_rpl_mult());
-    if _do_rpl_mult{
+    if _do_rpl_mult {
         dps_response.apply_rpl(rpl_mult)
     }
     Ok(dps_response.into())
+}
+
+#[cfg(feature = "python")]
+#[pyfunction(name = "get_ttk")]
+fn get_weapon_ttk(_overshield: f64) -> PyResult<Vec<types::py_types::PyResillienceSummary>> {
+    let rs_resill_array =
+        PERS_DATA.with(|perm_data| perm_data.borrow().weapon.calc_ttk(_overshield));
+    //call into on every item in the array
+    let mut py_resill_array = Vec::new();
+    for rs_resill in rs_resill_array {
+        py_resill_array.push(rs_resill.into());
+    }
+    Ok(py_resill_array)
+}
+
+#[cfg(feature = "python")]
+#[pyfunction(name = "set_stats")]
+fn set_weapon_stats(_in: &PyDict) {
+    let mut stats = HashMap::new();
+    for (key, value) in _in.iter() {
+        let key = key.extract::<u32>().unwrap();
+        let value: Stat = value.extract::<i32>().unwrap().into();
+        stats.insert(key, value);
+    }
+    PERS_DATA.with(|perm_data| {
+        perm_data.borrow_mut().weapon.stats = stats;
+    });
 }
 
 #[cfg(feature = "python")]
@@ -248,28 +404,21 @@ fn register_weapon_interface(py: Python<'_>, parent_module: &PyModule) -> PyResu
     weapon_interface.add_function(wrap_pyfunction!(weapon_as_string, weapon_interface)?)?;
     weapon_interface.add_function(wrap_pyfunction!(remove_perk, weapon_interface)?)?;
     weapon_interface.add_function(wrap_pyfunction!(add_perk, weapon_interface)?)?;
-    weapon_interface.add_function(wrap_pyfunction!(set_weapon, weapon_interface)?)?;
-    weapon_interface.add_function(wrap_pyfunction!(is_weapon_assigned, weapon_interface)?)?;
+    weapon_interface.add_function(wrap_pyfunction!(get_weapon_hash, weapon_interface)?)?;
     weapon_interface.add_function(wrap_pyfunction!(get_weapon_dps, weapon_interface)?)?;
-    weapon_interface.add_function(wrap_pyfunction!(set_weapon_simple, weapon_interface)?)?;
+    weapon_interface.add_function(wrap_pyfunction!(set_weapon, weapon_interface)?)?;
+    weapon_interface.add_function(wrap_pyfunction!(get_weapon_ttk, weapon_interface)?)?;
+    weapon_interface.add_function(wrap_pyfunction!(set_weapon_stats, weapon_interface)?)?;
 
     //classes
     weapon_interface.add_class::<PyWeapon>()?;
     weapon_interface.add_class::<PyPerk>()?;
-    weapon_interface.add_class::<PyWeaponFormula>()?;
-    weapon_interface.add_class::<PyDamageModifiers>()?;
-    weapon_interface.add_class::<PyFiringData>()?;
-    weapon_interface.add_class::<PyAmmoFormula>()?;
-    weapon_interface.add_class::<PyHandlingFormula>()?;
-    weapon_interface.add_class::<PyRangeFormula>()?;
-    weapon_interface.add_class::<PyReloadFormula>()?;
     weapon_interface.add_class::<PyRangeResponse>()?;
     weapon_interface.add_class::<PyHandlingResponse>()?;
     weapon_interface.add_class::<PyDpsResponse>()?;
     parent_module.add_submodule(weapon_interface)?;
     Ok(())
 }
-
 
 #[cfg(feature = "python")]
 #[pyfunction(name = "set_activity")]
@@ -306,7 +455,6 @@ fn get_player() -> PyResult<PyPlayer> {
     Ok(player.into())
 }
 
-
 #[cfg(feature = "python")]
 fn register_activity_interface(py: Python<'_>, parent_module: &PyModule) -> PyResult<()> {
     let activity_interface = PyModule::new(py, "ActivityInterface")?;
@@ -325,7 +473,6 @@ fn register_activity_interface(py: Python<'_>, parent_module: &PyModule) -> PyRe
     parent_module.add_submodule(activity_interface)?;
     Ok(())
 }
-
 
 #[cfg(feature = "python")]
 #[pyfunction(name = "get_enemy")]
@@ -367,9 +514,6 @@ fn register_enemy_interface(py: Python<'_>, parent_module: &PyModule) -> PyResul
     parent_module.add_submodule(enemy_interface)?;
     Ok(())
 }
-
-
-
 
 #[cfg(feature = "python")]
 #[pymodule]

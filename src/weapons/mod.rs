@@ -1,12 +1,12 @@
 pub mod dps_calc;
 pub mod reserve_calc;
 pub mod stat_calc;
-mod ttk_calc;
+pub mod ttk_calc;
 pub mod weapon_formulas;
 
 use std::collections::HashMap;
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponType};
 use crate::enemies::Enemy;
@@ -18,17 +18,12 @@ use crate::types::rs_types::{
     AmmoFormula, DamageMods, DpsResponse, HandlingFormula, RangeFormula, ReloadFormula,
 };
 
-
-//Python
-#[cfg(feature = "python")]
-use crate::types::py_types::PyWeapon;
-
 use self::dps_calc::complex_dps_calc;
 
 #[derive(Debug, Clone)]
 pub struct PsuedoWeapon {}
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Stat {
     pub base_value: i32,
     pub part_value: i32,
@@ -94,9 +89,11 @@ pub struct Weapon {
 impl Weapon {
     pub fn add_perk(&mut self, _perk: Perk) {
         self.perks.insert(_perk.hash, _perk);
+        self.update_stats();
     }
-    pub fn remove_perk(&mut self, _perk: Perk) {
-        self.perks.remove(&_perk.hash);
+    pub fn remove_perk(&mut self, _perk_hash: u32) {
+        self.perks.remove(&_perk_hash);
+        self.update_stats();
     }
     pub fn list_perk_ids(&self) -> Vec<u32> {
         let mut perk_list: Vec<u32> = Vec::new();
@@ -121,6 +118,10 @@ impl Weapon {
     pub fn get_stats(&mut self) -> HashMap<u32, Stat> {
         self.update_stats();
         self.stats.clone()
+    }
+    pub fn set_stats(&mut self, _stats: HashMap<u32, Stat>) {
+        self.stats = _stats;
+        self.update_stats()
     }
     pub fn reset(&mut self) {
         self.perks = HashMap::new();
@@ -177,7 +178,7 @@ impl Weapon {
         tmp.total_shots_hit = _total_shots_hit;
         tmp
     }
-    fn update_stats(&mut self) {
+    pub fn update_stats(&mut self) {
         let input = CalculationInput::construct_static(
             &self.firing_data,
             &self.stats,
@@ -222,29 +223,5 @@ impl Default for Weapon {
             damage_type: DamageType::UNKNOWN,
             ammo_type: AmmoType::UNKNOWN,
         }
-    }
-}
-#[cfg(feature = "python")]
-impl From<PyWeapon> for Weapon {
-    fn from(_py_weapon: PyWeapon) -> Weapon {
-        let mut weapon = Weapon::default();
-        weapon.hash = _py_weapon.hash;
-        weapon.damage_mods = _py_weapon.damage_mods.into();
-        weapon.firing_data = _py_weapon.formulas.firing_data.into();
-        weapon.range_formula = _py_weapon.formulas.range_data.into();
-        weapon.ammo_formula = _py_weapon.formulas.ammo_data.into();
-        weapon.handling_formula = _py_weapon.formulas.handling_data.into();
-        weapon.reload_formula = _py_weapon.formulas.reload_data.into();
-        weapon.weapon_type = WeaponType::from_u32(_py_weapon.weapon_type);
-        weapon.damage_type = DamageType::from_u32(_py_weapon.damage_type);
-        weapon.ammo_type = AmmoType::from_u32(_py_weapon.ammo_type);
-        for stat in _py_weapon.stats {
-            weapon.stats.insert(stat.0, Stat::from(stat.1));
-        }
-        for perk in _py_weapon.perks {
-            weapon.perks.insert(perk.0, perk.1.into());
-        }
-        weapon.perks.insert(0, Perk::default());
-        weapon
     }
 }

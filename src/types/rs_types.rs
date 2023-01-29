@@ -130,12 +130,3 @@ impl DpsResponse {
         self.total_damage *= rpl;
     }
 }
-
-#[derive(Debug, Clone, Default)]
-pub struct TtkResponse {
-    pub ammo_needed: i32,
-    pub hits_needed: i32,
-    pub optimal_ttk: f64,
-    pub crit_percent: f64,
-    pub bodyshot_ttk: f64,
-}

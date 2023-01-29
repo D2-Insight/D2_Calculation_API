@@ -1,11 +1,11 @@
 {
     "COMMENTS": {
         "MossyMax": "for all the pve scaling numbers , alot of base dmg numbers and just being the GOAT",
-        "archetypeNotes": [
+        "subfamilyNotes": [
             "because of how infrequently some values vary they have had been made reliant upon defaualts",
-            "isExplosive is defaulted to false, if true dmg*critmult is impact. so dmg of 100 and crit mult of 0.3 would be 30 impact",
-            "oneAmmoBurst is defaulted to false, if the gun shoots multiple bullets in a \"burst\" but only uses one ammo per burst set this to true",
-            "isCharge is defaulted to false, if the gun has a charge time set this to true"
+            "explosive is defaulted to false, if true dmg*critmult is impact. so dmg of 100 and crit mult of 0.3 would be 30 impact",
+            "one_ammo is defaulted to false, if the gun shoots multiple bullets in a \"burst\" but only uses one ammo per burst set this to true",
+            "charge is defaulted to false, if the gun has a charge time set this to true"
         ],
         "usageNotes": [
             "does not subscribe to a consistent schema for easier readability",
@@ -13,7 +13,8 @@
             "if you are using this in a strongly typed language keep that in mind using the propper abstraction for your language"],
         "nomenclature": [
             "vpp stands for value per point; on the same note evpp stands for exponential value per point",
-            "cat stands for category, subFam stands for sub family, magProf stands for mag profile"
+            "cat stands for category, subFam stands for sub family, magProf stands for mag profile",
+            "next_bullet_scale acts as a float and bool, you will input a float but if value != 0.0 it will load each bullet 1 by 1"
         ]
     },
     "INDEX": {
@@ -54,8 +55,9 @@
                 "range":    {"vpp_start": 0.09615, "offset_start": 11.75, "vpp_end": 0.0, "offset_end": 41.0, "floor_percent": 0.5},
                 "reload":   {"evpp": 0.0000855689, "vpp": -0.0242021, "offset": 2.80673006666667},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.00279338, "offset": 0.51985381},
+                    "stow": {"vpp": -0.00268436, "offset": 0.48414822},
+                    "ads":  {"vpp": -0.001875,   "offset": 0.38975   }
                 },
                 "combatant_scalars": {"vehicle": 1.15, "boss": 1.15, "champion": 1.2, "miniboss": 1.2, "elite": 1.3, "minor": 1.3}
             },
@@ -63,8 +65,9 @@
                 "range":    {},
                 "reload":   {"evpp": 0.0000855689, "vpp": -0.0242021, "offset": 2.80673006666667},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.00279338, "offset": 0.51985381},
+                    "stow": {"vpp": -0.00268436, "offset": 0.48414822},
+                    "ads":  {"vpp": -0.001875,   "offset": 0.38975   }
                 },
                 "combatant_scalars": {"vehicle": 1.15, "boss": 1.15, "champion": 1.2, "miniboss": 1.2, "elite": 1.3, "minor": 1.3}
             },
@@ -72,8 +75,9 @@
                 "range":    {"vpp_start": 0.09615, "offset_start": 11.75, "vpp_end": 0.0, "offset_end": 41.0, "floor_percent": 0.7},
                 "reload":   {"evpp": 0.0000855689, "vpp": -0.0242021, "offset": 2.80673006666667},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.00279338, "offset": 0.51985381},
+                    "stow": {"vpp": -0.00268436, "offset": 0.48414822},
+                    "ads":  {"vpp": -0.001875,   "offset": 0.38975   }
                 },
                 "combatant_scalars": {"vehicle": 1.15, "boss": 1.15, "champion": 1.2, "miniboss": 1.2, "elite": 1.3, "minor": 1.3}
             }
@@ -119,20 +123,22 @@
 
         "cat": {
             "default": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.002909930716, "offset": 0.7364549654},
+                    "stow": {"vpp": -0.00179330254,  "offset": 0.5396466513},
+                    "ads":  {"vpp": -0.001855658199, "offset": 0.5293778291}
                 },
                 "combatant_scalars": {"vehicle": 1.5, "boss": 1.5, "champion": 1.5, "miniboss": 1.5, "elite": 1.9, "minor": 2.3}
             },
             "exotic": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.002909930716, "offset": 0.7364549654},
+                    "stow": {"vpp": -0.00179330254,  "offset": 0.5396466513},
+                    "ads":  {"vpp": -0.001855658199, "offset": 0.5293778291}
                 },
                 "combatant_scalars": {"vehicle": 1.5, "boss": 1.5, "champion": 1.5, "miniboss": 1.5, "elite": 1.9, "minor": 2.5}
             }
@@ -177,7 +183,7 @@
                 "combatant_scalars": {"vehicle": 2.18, "boss": 2.55, "champion": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
             },
             "1KV": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -186,7 +192,7 @@
                 "combatant_scalars": {"vehicle": 2.63, "boss": 2.55, "champion": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
             },
             "Telesto": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {"evpp": 0.0000615281, "vpp": -0.0198054, "offset": 2.82857040000000},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -195,7 +201,7 @@
                 "combatant_scalars": {"vehicle": 2.18, "boss": 2.55, "champion": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
             },
             "Jotunn": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {"evpp": 0.0000615281, "vpp": -0.0198054, "offset": 2.82857040000000},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
@@ -207,8 +213,9 @@
                 "range":    {"vpp_start": 0.09615, "offset_start": 11.75, "vpp_end": 0.0, "offset_end": 41.0, "floor_percent": 0.5},
                 "reload":   {"evpp": 0.0000855689, "vpp": -0.0242021, "offset": 2.80673006666667},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.00279338, "offset": 0.51985381},
+                    "stow": {"vpp": -0.00268436, "offset": 0.48414822},
+                    "ads":  {"vpp": -0.001875,   "offset": 0.38975   }
                 },
                 "combatant_scalars": {"vehicle": 2.0, "boss": 2.0, "champion": 2.0, "miniboss": 2.0, "elite": 2.0, "minor": 2.0}
             }
@@ -247,47 +254,52 @@
         "1759472859": {"name": "Double Fire",       "cat": "special", "subFam": "", "magProf": "default" },
         "cat": {
             "special": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {"evpp": 0.0000724199, "vpp": -0.0216432, "offset": 3.24104606666667},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.00272791, "offset": 0.55133684},
+                    "stow": {"vpp": -0.00232786, "offset": 0.48726765},
+                    "ads":  {"vpp": -0.00187072, "offset": 0.50019128}
                 },
                 "combatant_scalars": {"vehicle": 2.5, "boss": 2.5, "champion": 2.63, "miniboss": 2.63, "elite": 2.63, "minor": 3.13}
             },
             "lion": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {"evpp": 0.0000724199, "vpp": -0.0216432, "offset": 3.24104606666667},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.00272791, "offset": 0.55133684},
+                    "stow": {"vpp": -0.00232786, "offset": 0.48726765},
+                    "ads":  {"vpp": -0.00187072, "offset": 0.50019128}
                 },
                 "combatant_scalars": {"vehicle": 2.5, "boss": 2.5, "champion": 2.63, "miniboss": 2.63, "elite": 2.63, "minor": 3.13}
             },
             "heavy": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {"evpp": 0.0000755233, "vpp": -0.0248947, "offset": 4.12880153333333},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.00272791, "offset": 0.55133684},
+                    "stow": {"vpp": -0.00232786, "offset": 0.48726765},
+                    "ads":  {"vpp": -0.00187072, "offset": 0.50019128}
                 },
                 "combatant_scalars": {"vehicle": 2.25, "boss": 2.25, "champion": 2.36, "miniboss": 2.36, "elite": 2.36, "minor": 3.13}
             },
             "anarchy": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {"evpp": 0.0000755233, "vpp": -0.0248947, "offset": 4.12880153333333},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.00272791, "offset": 0.55133684},
+                    "stow": {"vpp": -0.00232786, "offset": 0.48726765},
+                    "ads":  {"vpp": -0.00187072, "offset": 0.50019128}
                 },
                 "combatant_scalars": {"vehicle": 1.13, "boss": 1.58, "champion": 2.36, "miniboss": 2.36, "elite": 2.36, "minor": 3.13}
             },
             "parasite": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {"evpp": 0.0000755233, "vpp": -0.0248947, "offset": 4.12880153333333},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.00272791, "offset": 0.55133684},
+                    "stow": {"vpp": -0.00232786, "offset": 0.48726765},
+                    "ads":  {"vpp": -0.00187072, "offset": 0.50019128}
                 },
                 "combatant_scalars": {"vehicle": 2.27, "boss": 2.27, "champion": 2.38, "miniboss": 2.38, "elite": 2.36, "minor": 3.13}
             }
@@ -386,7 +398,7 @@
                 "reserve_id": 3174300811
             },
             "crimson": {
-                "mag": {"evpp": 0.0, "vpp": 0.0, "offset": 24},
+                "mag": {"evpp": 0.0, "vpp": 0.0, "offset": 24.0},
                 "reserve_id": 0
             }
         }
@@ -400,32 +412,32 @@
 
         "cat": {
             "default": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {"evpp": 0.0000588462, "vpp": -0.0199884, "offset": 2.87206463333},
                 "handling": {
-                    "ready":{"evpp": 0.0, "vpp": -0.001448069241, "offset": 0.4990612517},
-                    "stow": {"evpp": 0.0, "vpp": -0.002863515313, "offset": 0.4445712383},
-                    "ads":  {"evpp": 0.0, "vpp": -0.001693741678, "offset": 0.4112330226}
+                    "ready":{"vpp": -0.001448069241, "offset": 0.4990612517},
+                    "stow": {"vpp": -0.002863515313, "offset": 0.4445712383},
+                    "ads":  {"vpp": -0.001693741678, "offset": 0.4112330226}
                 },
                 "combatant_scalars": {"vehicle": 1.81, "boss": 1.81, "champion": 1.92, "miniboss": 1.92, "elite": 1.92, "minor": 2.03}
             },
             "special": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {"evpp": 0.0000588462, "vpp": -0.0199884, "offset": 2.87206463333},
                 "handling": {
-                    "ready":{"evpp": 0.0, "vpp": -0.001448069241, "offset": 0.4990612517},
-                    "stow": {"evpp": 0.0, "vpp": -0.002863515313, "offset": 0.4445712383},
-                    "ads":  {"evpp": 0.0, "vpp": -0.001693741678, "offset": 0.4112330226}
+                    "ready":{"vpp": -0.001448069241, "offset": 0.4990612517},
+                    "stow": {"vpp": -0.002863515313, "offset": 0.4445712383},
+                    "ads":  {"vpp": -0.001693741678, "offset": 0.4112330226}
                 },
                 "combatant_scalars": {"vehicle": 1.81, "boss": 1.54, "champion": 1.64, "miniboss": 1.64, "elite": 1.92, "minor": 2.03}
             },
             "arbalest": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {"evpp": 0.0000588462, "vpp": -0.0199884, "offset": 2.87206463333},
                 "handling": {
-                    "ready":{"evpp": 0.0, "vpp": -0.001448069241, "offset": 0.4990612517},
-                    "stow": {"evpp": 0.0, "vpp": -0.002863515313, "offset": 0.4445712383},
-                    "ads":  {"evpp": 0.0, "vpp": -0.001693741678, "offset": 0.4112330226}
+                    "ready":{"vpp": -0.001448069241, "offset": 0.4990612517},
+                    "stow": {"vpp": -0.002863515313, "offset": 0.4445712383},
+                    "ads":  {"vpp": -0.001693741678, "offset": 0.4112330226}
                 },
                 "combatant_scalars": {"vehicle": 1.81, "boss": 1.54, "champion": 1.23, "miniboss": 1.64, "elite": 1.92, "minor": 2.03}
             }
@@ -458,8 +470,9 @@
                 "range":    {},
                 "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.002391721353, "offset": 0.4950499748},
+                    "stow": {"vpp": -0.002041393236, "offset": 0.4547501262},
+                    "ads":  {"vpp": -0.001234477537, "offset": 0.4574687027}
                 },
                 "combatant_scalars": {"vehicle": 2.38, "boss": 2.16, "champion": 2.25, "miniboss": 2.25, "elite": 3.36, "minor": 4.20}
             },
@@ -467,8 +480,9 @@
                 "range":    {},
                 "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.002391721353, "offset": 0.4950499748},
+                    "stow": {"vpp": -0.002041393236, "offset": 0.4547501262},
+                    "ads":  {"vpp": -0.001234477537, "offset": 0.4574687027}
                 },
                 "combatant_scalars": {"vehicle": 2.38, "boss": 1.80, "champion": 2.25, "miniboss": 2.25, "elite": 3.36, "minor": 4.20}
             },
@@ -476,19 +490,20 @@
                 "range":    {},
                 "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.002391721353, "offset": 0.4950499748},
+                    "stow": {"vpp": -0.002041393236, "offset": 0.4547501262},
+                    "ads":  {"vpp": -0.001234477537, "offset": 0.4574687027}
                 },
                 "combatant_scalars": {"vehicle": 2.38, "boss": 1.80, "champion": 2.25, "miniboss": 2.25, "elite": 4.80, "minor": 4.20}
             }
         },
 
         "subFam": {
-            "High-Impact": {"damage": 34, "crit_mult": 1.4, "burst_delay": 0.16667, "burst_size": 1, "burst_duration": 0.0},
-            "Adaptive":    {"damage": 30, "crit_mult": 1.4, "burst_delay": 0.13333, "burst_size": 1, "burst_duration": 0.0},
-            "Rapid-Fire":  {"damage": 18, "crit_mult": 1.3, "burst_delay": 0.06667, "burst_size": 1, "burst_duration": 0.0},
+            "High-Impact": {"damage": 34,  "crit_mult": 1.4, "burst_delay": 0.16667, "burst_size": 1, "burst_duration": 0.0},
+            "Adaptive":    {"damage": 30,  "crit_mult": 1.4, "burst_delay": 0.13333, "burst_size": 1, "burst_duration": 0.0},
+            "Rapid-Fire":  {"damage": 18,  "crit_mult": 1.3, "burst_delay": 0.06667, "burst_size": 1, "burst_duration": 0.0},
             "Xenophage":   {"damage": 150, "crit_mult": 1.0, "burst_delay": 0.5000, "burst_size": 1, "burst_duration": 0.0},
-            "HeirApparent":{"damage": 30, "crit_mult": 1.4, "burst_delay": 0.13333, "burst_size": 1, "burst_duration": 0.0}
+            "HeirApparent":{"damage": 234, "crit_mult": 1.4, "burst_delay": 0.13333, "burst_size": 1, "burst_duration": 0.0}
         },
 
         "magProf": {
@@ -528,8 +543,9 @@
                 "range":    {"vpp_start": 0.07378,"offset_start": 16.329,"vpp_end": 0.0,"offset_end": 40.4, "floor_percent": 0.5},
                 "reload":   {"evpp": 0.0000926208, "vpp": -0.0256877, "offset": 2.92627266666667},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.00312085, "offset": 0.54370932},
+                    "stow": {"vpp": -0.00355450, "offset": 0.55005845},
+                    "ads":  {"vpp": -0.00196208, "offset": 0.45746870}
                 },
                 "combatant_scalars": {"vehicle": 0.90, "boss": 1.00, "champion": 1.05, "miniboss": 1.05, "elite": 1.05, "minor": 1.48}
             },
@@ -537,8 +553,9 @@
                 "range":    {"vpp_start": 0.07378,"offset_start": 16.329,"vpp_end": 0.0,"offset_end": 40.4, "floor_percent": 0.5},
                 "reload":   {"evpp": 0.0000926208, "vpp": -0.0256877, "offset": 2.92627266666667},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.00312085, "offset": 0.54370932},
+                    "stow": {"vpp": -0.00355450, "offset": 0.55005845},
+                    "ads":  {"vpp": -0.00196208, "offset": 0.45746870}
                 },
                 "combatant_scalars": {"vehicle": 0.90, "boss": 0.90, "champion": 1.05, "miniboss": 1.05, "elite": 1.05, "minor": 1.48}
             }
@@ -572,7 +589,7 @@
         "2962361451": {"name": "Gjallarhorn",           "cat": "default",   "subFam": "Adaptive", "magProf": "default", "pve":0.75},
         "cat": {
             "default": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {"evpp": 0.000103959, "vpp": -0.0252069, "offset": 4.09182213333333},
                 "handling": {
                     "ready":{"vpp": -0.003998740554, "offset": 0.6635944584},
@@ -582,7 +599,7 @@
                 "combatant_scalars": {"vehicle": 4.70, "boss": 4.70, "champion": 4.70, "miniboss": 5.0, "elite": 1.05, "minor": 6.0}
             },
             "wardcliff": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {"evpp": 0.000103959, "vpp": -0.0252069, "offset": 4.09182213333333},
                 "handling": {
                     "ready":{"vpp": -0.003998740554, "offset": 0.6635944584},
@@ -592,7 +609,7 @@
                 "combatant_scalars": {"vehicle": 0.94, "boss": 0.94, "champion": 0.94, "miniboss": 0.94, "elite": 1.05, "minor": 6.0}
             },
             "eyestmrw": {
-                "range":    {},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {"evpp": 0.000103959, "vpp": -0.0252069, "offset": 4.09182213333333},
                 "handling": {
                     "ready":{"vpp": -0.003998740554, "offset": 0.6635944584},
@@ -749,6 +766,10 @@
             "default": {
                 "mag": {"evpp": 0.0, "vpp": 0.0375, "offset": 3.625},
                 "reserve_id": 71
+            },
+            "LoW": {
+                "mag": {"evpp": 0.0, "vpp": 0.0, "offset": 30.0},
+                "reserve_id": 481338655
             }
         }
     },
@@ -800,7 +821,7 @@
             "small": {
                 "mag": {"evpp": 0.0, "vpp": 0.11942675159235666, "offset": 5.289808917197453},
                 "round_to": 3,
-                "reserve_id": 17
+                "reserve_id": 0
             },
             "forerunner": {
                 "mag": {"evpp": 0.0, "vpp": 0.0, "offset": 12},
@@ -838,7 +859,7 @@
         "magProf": {
             "default": {
                 "mag": {"vpp": 0.03, "offset": 2.4},
-                "reserve_id": 12
+                "reserve_id": 121
             }
         }
     },
@@ -876,11 +897,11 @@
             }
         },
         "subFam": {
-            "Aggressive": {"damage":15.0, "crit_mult":1.44, "burst_delay":0.08333, "burst_size":1, "burst_duration":0},
-            "Lightweight":{"damage":10.9, "crit_mult":1.65, "burst_delay":0.06667, "burst_size":1, "burst_duration":0},
-            "Precision":  {"damage":17.0, "crit_mult":1.40, "burst_delay":0.10000, "burst_size":1, "burst_duration":0},
-            "Adaptive":   {"damage":11.2, "crit_mult":1.44, "burst_delay":0.06667, "burst_size":1, "burst_duration":0},
-            "Osteo"   :   {"damage":18.7, "crit_mult":1.40, "burst_delay":0.10000, "burst_size":1, "burst_duration":0}
+            "Aggressive": {"damage":15.0,  "crit_mult":1.44, "burst_delay":0.08333, "burst_size":1, "burst_duration":0},
+            "Lightweight":{"damage":10.86, "crit_mult":1.65, "burst_delay":0.06667, "burst_size":1, "burst_duration":0},
+            "Precision":  {"damage":17.0,  "crit_mult":1.40, "burst_delay":0.10000, "burst_size":1, "burst_duration":0},
+            "Adaptive":   {"damage":11.25, "crit_mult":1.50, "burst_delay":0.06667, "burst_size":1, "burst_duration":0},
+            "Osteo"   :   {"damage":18.73, "crit_mult":1.40, "burst_delay":0.10000, "burst_size":1, "burst_duration":0}
         },
         "magProf": {
             "small": {

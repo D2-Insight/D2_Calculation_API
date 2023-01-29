@@ -53,7 +53,7 @@ impl LinearTable {
 #[derive(Debug, Clone)]
 pub struct DifficultyData {
     name: String,
-    cap: f64,
+    cap: i32,
     table: LinearTable,
 }
 
@@ -96,17 +96,17 @@ impl DifficultyOptions {
         match self {
             DifficultyOptions::NORMAL => DifficultyData {
                 name: "Normal".to_string(),
-                cap: 50.0,
+                cap: 50,
                 table: LinearTable::from_vecs(NORMAL_TIMES, NORMAL_VALUES),
             },
             DifficultyOptions::MASTER => DifficultyData {
                 name: "Master".to_string(),
-                cap: 20.0,
+                cap: 20,
                 table: LinearTable::from_vecs(MASTER_TIMES, MASTER_VALUES),
             },
             DifficultyOptions::RAID => DifficultyData {
                 name: "Raid & Dungeon".to_string(),
-                cap: 20.0,
+                cap: 20,
                 table: LinearTable::from_vecs(RAID_TIMES, RAID_VALUES),
             },
         }
@@ -127,18 +127,18 @@ pub(super) fn rpl_mult(_rpl: f64) -> f64 {
     return (1.0 + ((1.0 / 30.0) * _rpl)) / (1.0 + 1.0 / 3.0);
 }
 
-pub(super) fn gpl_delta(_activity: Activity, _gpl: f64) -> f64 {
+pub(super) fn gpl_delta(_activity: Activity, _gpl: u32) -> f64 {
     let difficulty_data = _activity.difficulty.get_difficulty_data();
     let curve = difficulty_data.table;
     let rpl = _activity.rpl;
     let cap = if _activity.cap<difficulty_data.cap {_activity.cap} else {difficulty_data.cap};
-    let mut delta = _gpl - rpl;
-    if delta < -99.0 {
+    let mut delta = _gpl as i32 - rpl as i32;
+    if delta < -99 {
         return 0.0;
     } else if delta > cap {
         delta = cap;
     }
-    let wep_delta_mult = WWEAPON_DELTA_EXPONENT.powf(delta);
-    let gear_delta_mult = curve.evaluate(delta);
+    let wep_delta_mult = WWEAPON_DELTA_EXPONENT.powi(delta);
+    let gear_delta_mult = curve.evaluate(delta as f64);
     wep_delta_mult * gear_delta_mult
 }

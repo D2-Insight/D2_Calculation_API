@@ -418,7 +418,6 @@ pub fn get_dmg_modifier(
     let mut dmg_modifier = DamageModifierResponse::default();
     for perk in _perks {
         let tmp = get_perk_dmr(perk.clone(), _input_data, _pvp);
-        // println!{"{:?}: {:?}", Perks::from_u32(perk.hash), tmp}
         dmg_modifier.dmg_scale *= tmp.dmg_scale;
         dmg_modifier.crit_scale *= tmp.crit_scale;
     }
@@ -470,6 +469,7 @@ fn get_perk_dmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> Dama
         Perks::WeakenDebuffs => {dmr_weaken_debuffs(_input_data, val, enhanced, _pvp, &HashMap::new())}
         Perks::BuiltIn => dmr_built_in(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::BossSpec => dmr_boss_spec(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::Rampage => dmr_rampage(_input_data, val, enhanced, _pvp, &HashMap::new()),
         _ => DamageModifierResponse::default(),
     }
 }

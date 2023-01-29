@@ -562,3 +562,40 @@ pub(super) fn sbr_tap_the_trigger(
     }
     out
 }
+
+pub(super) fn dmr_rampage(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let val = clamp(_value, 0, 3);
+    let mut damage_mult = 0.1 * val as f64;
+    let duration = if _is_enhanced { 5.0 } else { 4.0 };
+    if _input.time_total > duration {
+        damage_mult = 0.0;
+    };
+    DamageModifierResponse {
+        dmg_scale: 1.0 + damage_mult,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn dmr_kill_clip(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut damage_mult = if _value > 0 { 0.25 } else { 0.0 };
+    let duration = if _is_enhanced { 5.0 } else { 4.0 };
+    if _input.time_total > duration {
+        damage_mult = 0.0;
+    };
+    DamageModifierResponse {
+        dmg_scale: 1.0 + damage_mult,
+        crit_scale: 1.0,
+    }
+}

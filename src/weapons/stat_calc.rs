@@ -1,6 +1,6 @@
 use super::{reserve_calc::calc_reserves, Stat, Weapon};
 use crate::{
-    d2_enums::StatHashes,
+    d2_enums::{StatHashes, WeaponType},
     perks::{
         get_handling_modifier, get_magazine_modifier, get_range_modifier, get_reload_modifier,
         get_reserve_modifier,
@@ -202,7 +202,7 @@ impl AmmoFormula {
 
         let mut reserve_size = 0;
         if _calc_inv {
-            reserve_size = calc_reserves(raw_mag_size, inv_stat as i32, _inv_id);
+            reserve_size = calc_reserves(raw_mag_size, _mag_stat as i32, inv_stat as i32, _inv_id);
         }
         AmmoResponse {
             mag_size,
@@ -222,6 +222,7 @@ impl Weapon {
             .get(&StatHashes::INVENTORY_SIZE.to_u32())
             .unwrap_or(&Stat::new())
             .val();
+        let mut out;
         if _calc_input.is_some() {
             let mag_modifiers = get_magazine_modifier(
                 self.list_perks(),
@@ -233,23 +234,27 @@ impl Weapon {
                 &_calc_input.clone().unwrap(),
                 self.is_pvp,
             );
-            self.ammo_formula.calc_ammo_size_formula(
+            out = self.ammo_formula.calc_ammo_size_formula(
                 mag_stat,
                 mag_modifiers,
                 inv_stat,
                 inv_modifiers,
                 true,
                 self.ammo_formula.reserve_id,
-            )
+            );
         } else {
-            self.ammo_formula.calc_ammo_size_formula(
+            out = self.ammo_formula.calc_ammo_size_formula(
                 mag_stat,
                 MagazineModifierResponse::default(),
                 inv_stat,
                 InventoryModifierResponse::default(),
                 true,
                 self.ammo_formula.reserve_id,
-            )
+            );
         }
+        if mag_stat == 100 && self.weapon_type == WeaponType::SNIPER {
+            out.mag_size = 1;
+        }
+        out
     }
 }

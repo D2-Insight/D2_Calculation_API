@@ -13,20 +13,6 @@ const AMMO_DATA:     [AmmoFormula; {AMMO_REPLACE_POINT_len}] = {AMMO_REPLACE_POI
 
 const META_POINTERS: [(u8, usize); {META_REPLACE_POINT_len}] = {META_REPLACE_POINT};
 
-fn get_weapon_paths() -> HashMap<u8, HashMap<&u32, &DataPointers>> {
-    let weapon_paths:  [Vec<(u32, DataPointers)>; {PATH_REPLACE_POINT_len}] = {PATH_REPLACE_POINT};
-    let mut meta_pointer_map = HashMap::new();
-        let i = 0;
-        while i < META_POINTERS.len() {
-            let pair = META_POINTERS[i];
-            let mut tmp_map = HashMap::new();
-            for (k, v) in weapon_paths[pair.1].iter() {
-                tmp_map.insert(*k, v.clone());
-            }
-            meta_pointer_map.insert(pair.0, tmp_map);
-        }
-    meta_pointer_map
-}
 
 #[derive(Debug, Clone)]
 struct DataPointers {
@@ -38,23 +24,35 @@ struct DataPointers {
     a: usize,
 }
 
+fn get_data_pointers(_weapon_type_id: u8, _intrinsic_hash: u32,) -> Result<DataPointers,()> {
+    let weapon_paths:  [Vec<(u32, DataPointers)>; {META_REPLACE_POINT_len}] = {PATH_REPLACE_POINT};
+    let meta_pointer_map = HashMap::from(META_POINTERS);
+    let intrinsic_pointer = meta_pointer_map.get(&_weapon_type_id).clone();
+    if intrinsic_pointer.is_none() {
+        return Err(());
+    };
+    let intrinsic_vec = &weapon_paths[*intrinsic_pointer.unwrap()];
+    let mut intrinsic_map = HashMap::new();
+    for (hash, pointer) in intrinsic_vec {
+        intrinsic_map.insert(hash, pointer);
+    };
+    let intrinsic_pointer = intrinsic_map.get(&_intrinsic_hash);
+    if intrinsic_pointer.is_none() {
+        return Err(());
+    };
+    let intrinsic_pointer = intrinsic_pointer.unwrap().clone();
+    Ok(intrinsic_pointer.clone())
+}
+
+
 impl Weapon {
     pub fn generate_weapon(_hash: u32, _weapon_type_id: u8, _intrinsic_hash: u32, _ammo_type_id: u32, _damage_type_id: u32) -> Result<Weapon, ()> {
-        
-        let meta_pointer_map = get_weapon_paths();
 
-        let intrinsic_map = meta_pointer_map.get(&_weapon_type_id);
-        if intrinsic_map.is_none() {
-            return Err(());
-        };
-        let intrinsic_map = intrinsic_map.unwrap();
-
-        let data_pointer = intrinsic_map.get(&_intrinsic_hash);
-        if data_pointer.is_none() {
-            return Err(());
-        };
-        let data_pointer = data_pointer.unwrap().clone();
-
+        let data_pointer_result = get_data_pointers(_weapon_type_id, _intrinsic_hash);
+        if data_pointer_result.is_err() {
+            return Err(())
+        }
+        let data_pointer = data_pointer_result.unwrap();
 
         let range_formula: RangeFormula = RANGE_DATA[data_pointer.r].clone();
 

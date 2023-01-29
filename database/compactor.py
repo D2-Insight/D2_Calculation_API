@@ -36,9 +36,9 @@ def verify_stat_formula(_stat_formula: dict) -> dict:
     _stat_formula["offset"] = offset_val
     if len(_stat_formula) > 3:
         raise Exception("Bad entries in stat formula")
-    _stat_formula["evpp"] = float(_stat_formula["evpp"])
-    _stat_formula["vpp"] = float(_stat_formula["vpp"])
-    _stat_formula["offset"] = float(_stat_formula["offset"])
+    _stat_formula["evpp"] = round(float(_stat_formula["evpp"]), 8)
+    _stat_formula["vpp"] = round(float(_stat_formula["vpp"]), 8)
+    _stat_formula["offset"] = round(float(_stat_formula["offset"]), 8)
     return _stat_formula
 
 def verify_handling_data(_handling_data: dict) -> dict:

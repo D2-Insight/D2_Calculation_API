@@ -7,12 +7,12 @@ use crate::{
     activity::{damage_calc::DifficultyOptions, Activity, Player, PlayerClass},
     enemies::{Enemy, EnemyType},
     perks::Perk,
-    weapons::FiringConfig,
+    weapons::{FiringConfig, ttk_calc::ResillienceSummary},
 };
 
 use super::rs_types::{
     AmmoFormula, AmmoResponse, DamageMods, DpsResponse, HandlingFormula, HandlingResponse,
-    RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, StatQuadraticFormula, TtkResponse,
+    RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, StatQuadraticFormula,
 };
 
 #[derive(Debug, Clone, Default)]
@@ -180,7 +180,7 @@ impl PyRangeFormula {
             vpp_end: _vpp_end,
             offset_end: _offset_end,
             floor_percent: _floor_percent,
-            fusion: _is_fusion,
+            is_fusion: _is_fusion,
         }
     }
     #[pyo3(name = "default")]
@@ -228,7 +228,7 @@ impl Into<RangeFormula> for PyRangeFormula {
                 offset: self.offset_end,
             },
             floor_percent: self.floor_percent,
-            is_fusion: self.is_fusion,
+            fusion: self.is_fusion,
         }
     }
 }
@@ -588,7 +588,7 @@ impl PyWeaponFormula {
 }
 
 #[derive(Debug, Clone, Default)]
-#[pyclass(name = "Perk")]
+#[pyclass(name = "Trait")]
 pub struct PyPerk {
     pub stat_buffs: HashMap<u32, i32>,
     pub enhanced: bool,
@@ -733,6 +733,75 @@ impl From<DpsResponse> for PyDpsResponse {
             total_damage: r.total_damage,
             total_time: r.total_time,
             total_shots: r.total_shots,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+#[pyclass(name = "OptimalKillData")]
+pub struct PyOptimalKillData{
+    headshots: i32,
+    bodyshots: i32,
+    time_taken: f64,
+    //defines how far away this ttk is achievalbe if all hits ar crits
+    all_crit_range: f64,
+}
+#[pymethods]
+impl PyOptimalKillData {
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!(
+            "OptimalKillData(headshots={}, bodyshots={}, time_taken={}, all_crit_range={})",
+            self.headshots, self.bodyshots, self.time_taken, self.all_crit_range
+        ))
+    }
+}
+
+#[derive(Debug, Clone)]
+#[pyclass(name = "BodyKillData")]
+pub struct PyBodyKillData{
+    bodyshots: i32,
+    time_taken: f64,
+}
+#[pymethods]
+impl PyBodyKillData {
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!(
+            "BodyKillData(bodyshots={}, time_taken={})",
+            self.bodyshots, self.time_taken
+        ))
+    }
+}
+
+#[derive(Debug, Clone)]
+#[pyclass(name = "ResillienceSummary")]
+pub struct PyResillienceSummary{
+    value: i32,
+    body_ttk: PyBodyKillData,
+    optimal_ttk: PyOptimalKillData,
+}
+#[pymethods]
+impl PyResillienceSummary {
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!(
+            "ResillienceSummary(value={}, body_ttk={:?}, optimal_ttk={:?})",
+            self.value, self.body_ttk, self.optimal_ttk
+        ))
+    }
+}
+impl From<ResillienceSummary> for PyResillienceSummary {
+    fn from(r: ResillienceSummary) -> Self {
+        PyResillienceSummary {
+            value: r.value,
+            body_ttk: PyBodyKillData{
+                bodyshots: r.body_ttk.bodyshots,
+                time_taken: r.body_ttk.time_taken,
+            },
+            optimal_ttk: PyOptimalKillData{
+                headshots: r.optimal_ttk.headshots,
+                bodyshots: r.optimal_ttk.bodyshots,
+                time_taken: r.optimal_ttk.time_taken,
+                all_crit_range: r.optimal_ttk.all_crit_range,
+            }
         }
     }
 }
