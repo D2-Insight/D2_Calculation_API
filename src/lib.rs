@@ -8,6 +8,7 @@ extern crate wee_alloc;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
+use perks::enhanced_handler::enhanced_check;
 pub mod abilities;
 pub mod activity;
 pub mod d2_enums;
@@ -159,11 +160,12 @@ pub fn set_stats(_stat_hashes: Vec<u32>, _stat_values: Vec<i32>) -> Result<(), J
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "addTrait")]
 pub fn add_perk(_stats: JsValue, _value: u32, _hash: u32) -> Result<(), JsValue> {
+    let data = enhanced_check(_hash);
     let perk = Perk {
         stat_buffs: serde_wasm_bindgen::from_value(_stats).unwrap(),
-        enhanced: false,
+        enhanced: data.1,
         value: _value,
-        hash: _hash,
+        hash: data.0,
     };
     PERS_DATA.with(|perm_data| {
         perm_data
@@ -189,6 +191,17 @@ pub fn change_perk_value(perk_hash: u32, new_value: u32) {
             .weapon
             .change_perk_val(perk_hash, new_value)
     });
+}
+
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "getTraitOptions")]
+pub fn get_perk_options_js(_perks: Vec<u32>) -> Result<JsValue, JsValue> {
+    let options = perks::perk_options_handler::get_perk_options(_perks);
+    let value = serde_wasm_bindgen::to_value(&options);
+    if value.is_err() {
+        return Err(JsValue::from_str("Could not convert perk options to JsValue"));
+    }
+    Ok(value.unwrap())
 }
 
 #[cfg(feature = "wasm")]

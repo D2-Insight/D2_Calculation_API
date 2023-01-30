@@ -19,12 +19,11 @@ pub(super) fn dmr_built_in(
     _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut crit_scale = 1.0;
-    #[allow(unused_mut)]
     let mut dmg_scale = 1.0;
-    if *_input.weapon_type == WeaponType::LINEARFUSIONRIFLE {
+    if *_input.weapon_type == WeaponType::LINEARFUSIONRIFLE && !_pvp {
         crit_scale *= 1.15;
     };
-    if *_input.damage_type == DamageType::KINETIC {
+    if *_input.damage_type == DamageType::KINETIC && !_pvp {
         dmg_scale *= 1.05;
     };
     DamageModifierResponse {
@@ -364,7 +363,7 @@ pub(super) fn sbr_reserve_mods(
     stats
 }
 
-pub(super) fn rsmr_laoder_mods(
+pub(super) fn rsmr_loader_mods(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,

@@ -4,7 +4,9 @@ enum ReserveIDs {
     Primary,
     LeviathansBreath,
     Fusions,
-    GrenadeLaunchers,
+    SpecialGrenadeLaunchers,
+    SmallGrenadeLaunchers,
+    LargeGrenadeLaunchers,
     ErianasVow,
     LinearFusions,
     SmallMachineGuns,
@@ -25,7 +27,7 @@ impl From<u32> for ReserveIDs {
             0 => ReserveIDs::Primary,
             1699724249 => ReserveIDs::LeviathansBreath,
             111 => ReserveIDs::Fusions,
-            231 => ReserveIDs::GrenadeLaunchers,
+            // 231 => ReserveIDs::GrenadeLaunchers,
             3174300811 => ReserveIDs::ErianasVow,
             221 => ReserveIDs::LinearFusions,
             81 => ReserveIDs::SmallMachineGuns,
@@ -56,19 +58,21 @@ pub fn calc_reserves(_mag_size: f64, _mag_stat:i32 ,_inv_stat: i32, _id: u32) ->
         ReserveIDs::Glaive => glaives(_mag_size, _mag_stat, _inv_stat),
         ReserveIDs::SniperRifles => sniper_rifles(_mag_size, _mag_stat, _inv_stat),
         ReserveIDs::Shotguns => shotguns(_mag_size, _mag_stat, _inv_stat),
+        ReserveIDs::Xenophage => xenophage(_mag_size, _mag_stat, _inv_stat),
+        ReserveIDs::Overture => overture(_mag_size, _mag_stat, _inv_stat),
+        ReserveIDs::ForeRunner => forerunner(_mag_size, _mag_stat, _inv_stat),
+        ReserveIDs::ErianasVow => eriana_vow(_mag_size, _mag_stat, _inv_stat),
+        ReserveIDs::RocketLaunchers => rockets(_mag_size, _mag_stat, _inv_stat),
 
         //placeholders
         ReserveIDs::LeviathansBreath => 8,
         ReserveIDs::Fusions => 21,
-        ReserveIDs::GrenadeLaunchers => 23,
-        ReserveIDs::ErianasVow => 30,
-        ReserveIDs::LinearFusions => 27,
+        ReserveIDs::SmallGrenadeLaunchers => 18,
+        ReserveIDs::LargeGrenadeLaunchers => 20,
+        ReserveIDs::SpecialGrenadeLaunchers => 21,
+        ReserveIDs::LinearFusions => 21,
         ReserveIDs::LargeMachineGuns => 400,
-        ReserveIDs::Xenophage => 41,
-        ReserveIDs::Overture => 80,
-        ReserveIDs::RocketLaunchers => 7,
         ReserveIDs::LordOfWolves => 120,
-        ReserveIDs::ForeRunner => 84,
     }
 }
 
@@ -112,3 +116,26 @@ fn shotguns(_mag_size: f64, _mag_stat:i32 ,_inv_stat: i32) -> i32 {
     (base * (1.0+mult_vpp*_inv_stat as f64)).ceil() as i32
 }
 
+fn forerunner(_mag_size: f64, _mag_stat:i32 ,_inv_stat: i32) -> i32 {
+    (_inv_stat as f64 * 0.325 + 53.45).ceil() as i32
+}
+
+fn overture(_mag_size: f64, _mag_stat:i32 ,_inv_stat: i32) -> i32 {
+    let inv_stat = _inv_stat as f64;
+    (0.005 * (inv_stat*inv_stat) + inv_stat * -0.4 + 67.375).ceil() as i32
+}
+
+fn xenophage(_mag_size: f64, _mag_stat:i32 ,_inv_stat: i32) -> i32 {
+    let inv_stat = _inv_stat as f64;
+    (0.01 * (inv_stat*inv_stat) + inv_stat * 0.56 + 25.91).ceil() as i32
+}
+
+
+fn eriana_vow(_mag_size: f64, _mag_stat:i32 ,_inv_stat: i32) -> i32 {
+    let inv_stat = _inv_stat as f64;
+    (-0.00126 * (inv_stat*inv_stat) + inv_stat * 0.225 + 29.5).ceil() as i32
+}
+
+fn rockets(_mag_size: f64, _mag_stat:i32 ,_inv_stat: i32) -> i32 {
+    (_inv_stat as f64 * 0.05 + 4.5).ceil() as i32
+}

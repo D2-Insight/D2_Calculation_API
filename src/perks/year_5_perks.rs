@@ -11,7 +11,7 @@ use super::{
     },
 };
 
-pub fn fmr_cascade_point(
+pub(super) fn fmr_cascade_point(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -37,7 +37,7 @@ pub fn fmr_cascade_point(
     }
 }
 
-pub fn sbr_encore(
+pub(super) fn sbr_encore(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -53,7 +53,22 @@ pub fn sbr_encore(
     map
 }
 
-pub fn dmr_focused_fury(
+pub(super) fn rmr_encore(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> RangeModifierResponse {
+    let val = clamp(_value, 0, 4) as i32;
+    let range_boost = 5 * val;
+    RangeModifierResponse {
+        range_stat_add: range_boost,
+        ..Default::default()
+    }
+}
+
+pub(super) fn dmr_focused_fury(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -76,7 +91,7 @@ pub fn dmr_focused_fury(
     }
 }
 
-pub fn rmr_fragile_focus(
+pub(super) fn rmr_fragile_focus(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -92,7 +107,7 @@ pub fn rmr_fragile_focus(
     }
 }
 
-pub fn sbr_fragile_focus(
+pub(super) fn sbr_fragile_focus(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -108,7 +123,7 @@ pub fn sbr_fragile_focus(
     map
 }
 
-pub fn dmr_gutshot_straight(
+pub(super) fn dmr_gutshot_straight(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -133,7 +148,7 @@ pub fn dmr_gutshot_straight(
     }
 }
 
-pub fn sbr_offhand_strike(
+pub(super) fn sbr_offhand_strike(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -149,7 +164,7 @@ pub fn sbr_offhand_strike(
     map
 }
 
-pub fn rmr_offhand_strike(
+pub(super) fn rmr_offhand_strike(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -168,7 +183,7 @@ pub fn rmr_offhand_strike(
     }
 }
 
-pub fn hmr_slickdraw(
+pub(super) fn hmr_slickdraw(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -485,6 +500,56 @@ pub(super) fn rsmr_compulsive_reloader(
         }
     } else {
         ReloadModifierResponse::default()
+    }
+}
+
+
+pub(super) fn sbr_sleight_of_hand(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let val = clamp(_value, 0, 3) as i32;
+    let mut map = HashMap::new();
+    let stat_base = 10;
+    let stat_bump = stat_base * val;
+    map.insert(StatHashes::STABILITY.to_u32(), stat_bump);
+    map.insert(StatHashes::RANGE.to_u32(), stat_bump);
+    map.insert(StatHashes::HANDLING.to_u32(), stat_bump);
+    map
+}
+
+pub(super) fn hmr_sleight_of_hand(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    let val = clamp(_value, 0, 3) as i32;
+    let stat_base = 10;
+    let handling = stat_base * val;
+    HandlingModifierResponse {
+        handling_stat_add: handling,
+        ..Default::default()
+    }
+}
+
+pub(super) fn rmr_sleight_of_hand(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> RangeModifierResponse {
+    let val = clamp(_value, 0, 3) as i32;
+    let stat_base = 10;
+    let range = stat_base * val;
+    RangeModifierResponse {
+        range_stat_add: range,
+        ..Default::default()
     }
 }
 

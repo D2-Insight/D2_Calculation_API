@@ -423,3 +423,66 @@ pub(super) fn sbr_danger_zone(
     };
     out
 }
+
+pub(super) fn dmr_one_for_all(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut dmg = 0.0;
+    let duration = if _is_enhanced { 11.0 } else { 10.0 };
+    if _value > 0 {
+        dmg = 0.35;
+    };
+    if _input.time_total > duration {
+        dmg = 0.0;
+    };
+    DamageModifierResponse {
+        dmg_scale: 1.0 + dmg,
+        ..Default::default()
+    }
+}
+
+pub(super) fn rsmr_fire_fly(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> ReloadModifierResponse {
+    let duration = if _is_enhanced { 7.0 } else { 6.0 };
+    if _value > 0 && _input.time_total < duration {
+        ReloadModifierResponse {
+            reload_stat_add: 50,
+            reload_time_scale: 1.0,
+        }
+    } else {
+        ReloadModifierResponse::default()
+    }
+}
+
+pub(super) fn dmr_golden_tricorn(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let val = clamp(_value, 0, 2);
+    let mut duration = if val == 2 { 10.0 } else { 7.0 };
+    if _is_enhanced && val == 1{
+        duration += 1.0;
+    };
+    let damage_mult = if val == 2 { 0.5 } else { 0.15 };
+    if _value > 0 && _input.time_total < duration {
+        DamageModifierResponse {
+            dmg_scale: 1.0 + damage_mult,
+            ..Default::default()
+        }
+    } else {
+        DamageModifierResponse::default()
+    }
+}
+

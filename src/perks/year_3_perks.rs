@@ -11,7 +11,7 @@ use super::lib::{
     ReloadModifierResponse,
 };
 
-pub fn mmr_clown_cartridge(
+pub(super) fn mmr_clown_cartridge(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -25,7 +25,7 @@ pub fn mmr_clown_cartridge(
     }
 }
 
-pub fn sbr_elemental_capacitor(
+pub(super) fn sbr_elemental_capacitor(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -80,7 +80,7 @@ pub(super) fn rsmr_elemental_capacitor(
     }
 }
 
-pub fn sbr_killing_wind(
+pub(super) fn sbr_killing_wind(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -95,7 +95,7 @@ pub fn sbr_killing_wind(
     stats
 }
 
-pub fn rmr_killing_wind(
+pub(super) fn rmr_killing_wind(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -119,7 +119,7 @@ pub fn rmr_killing_wind(
     }
 }
 
-pub fn dmr_lasting_impressions(
+pub(super) fn dmr_lasting_impressions(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,

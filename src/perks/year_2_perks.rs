@@ -290,3 +290,21 @@ pub(super) fn ror_demolitionist(
     }
     ReloadOverrideResponse::invalid()
 }
+
+
+pub(super) fn dmr_full_court(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut damage_mult = 1.0;
+    if _value > 0 {
+        damage_mult = 1.2;
+    };
+    DamageModifierResponse {
+        dmg_scale: damage_mult,
+        crit_scale: 1.0,
+    }
+}

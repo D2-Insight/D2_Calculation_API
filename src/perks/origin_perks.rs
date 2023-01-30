@@ -7,7 +7,7 @@ use super::{
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
         HandlingModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
-        ReloadOverrideResponse,
+        ReloadOverrideResponse, MagazineModifierResponse,
     },
 };
 
@@ -105,7 +105,7 @@ pub(super) fn sbr_ambush(
     let handling = if _is_enhanced {40} else {20};
     if _input.time_total < 2.0 && _value > 0 {
         map.insert(StatHashes::RANGE.to_u32(), range);
-        map.insert(StatHashes::RELOAD.to_u32(), handling);
+        map.insert(StatHashes::HANDLING.to_u32(), handling);
     }
     map
 }
@@ -195,6 +195,110 @@ pub(super) fn rsmr_quiet_moment(
     }
 }
 
+pub(super) fn sbr_quiet_moment(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut map = HashMap::new();
+    if _value > 0{
+        map.insert(StatHashes::RELOAD.to_u32(), 40);
+    }
+    map
+}
 
+
+pub(super) fn rsmr_bitter_spite(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> ReloadModifierResponse {
+    let val = clamp(_value, 0, 5) as i32;
+    ReloadModifierResponse {
+        reload_stat_add: val*10,
+        ..Default::default()
+    }
+}
+
+pub(super) fn sbr_bitter_spite(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut map = HashMap::new();
+    let val = clamp(_value, 0, 5) as i32;
+    map.insert(StatHashes::RELOAD.to_u32(), val*10);
+    map
+}
+
+
+pub(super) fn rmr_right_hook(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> RangeModifierResponse {
+    let range_add = if _is_enhanced { 20 } else { 10 };
+    if _value > 0 {
+        RangeModifierResponse {
+            range_stat_add: range_add,
+            ..Default::default()
+        }
+    } else {
+        RangeModifierResponse::default()
+    }
+}
+
+
+pub(super) fn sbr_right_hook(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut map = HashMap::new();
+    let stat_bump = if _is_enhanced { 20 } else { 10 };
+    if _value > 0 {
+        map.insert(StatHashes::AIM_ASSIST.to_u32(), stat_bump);
+        map.insert(StatHashes::RANGE.to_u32(), stat_bump);
+    }
+    map
+}
+
+pub(super) fn hmr_search_party(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    HandlingModifierResponse {
+        handling_ads_scale: 0.85,
+        ..Default::default()
+    }
+}
+
+
+pub(super) fn mmr_runneth_over(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> MagazineModifierResponse {
+    let val = clamp(_value, 0, 5) as f64;
+    MagazineModifierResponse {
+        magazine_scale: val*0.1,
+        ..Default::default()
+    }
+}
 
 

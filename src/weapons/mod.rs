@@ -114,6 +114,7 @@ impl Weapon {
         if perk_opt.is_some() {
             perk_opt.unwrap().value = _val;
         }
+        self.update_stats();
     }
     pub fn get_stats(&mut self) -> HashMap<u32, Stat> {
         self.update_stats();

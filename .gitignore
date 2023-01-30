@@ -11,4 +11,5 @@ database/weapon_formulas.rs
 zdata.json
 database/weapon.json
 database/weapon_test.json
+database/enhanced_handler.rs
 /zPythonStuff

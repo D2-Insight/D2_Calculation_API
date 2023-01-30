@@ -10,6 +10,8 @@ pub mod year_3_perks;
 pub mod year_4_perks;
 pub mod year_5_perks;
 pub mod origin_perks;
+pub mod enhanced_handler;
+pub mod perk_options_handler;
 
 use std::collections::HashMap;
 
@@ -135,7 +137,7 @@ pub enum Perks {
     Recombination,
     HeatingUp,
     GoldenTricorn,
-    SlightOfHand,
+    SleightOfHand,
     BitterSpite,
     TexBalancedStock,
     ShotSwap,
@@ -151,6 +153,7 @@ pub enum Perks {
     ReloadMod,
     ReserveMod,
     TargetingMod,
+    LoaderMod,
 
     ////STATIC////
     GutShot,
@@ -193,6 +196,7 @@ pub enum Perks {
     FullAutoTrigger,
     HeadSeeker,
     DualLoader,
+    SearchParty,
 
     //armor
     QuickCharge,
@@ -245,6 +249,9 @@ impl From<u32> for Perks {
             222 => Perks::EmpowermentBuffs,
             333 => Perks::WeakenDebuffs,
 
+            //intrinsics
+            902 => Perks::RapidFireFrame,
+
             //armor
             
             //parts
@@ -275,7 +282,7 @@ impl From<u32> for Perks {
             3907865655 => Perks::RightHook,
             192157151 => Perks::Ambush,
             2437618208 => Perks::TexBalancedStock,
-
+            2250679103 => Perks::SearchParty,
 
 
             //season 1 | year 1
@@ -392,7 +399,7 @@ impl From<u32> for Perks {
             671806388 => Perks::CompulsiveReloader,
             2896038713 => Perks::FocusedFury,
             2978966579 => Perks::ChillClip,
-            2172504645 => Perks::SlightOfHand,
+            2172504645 => Perks::SleightOfHand,
             1583705720 => Perks::StatsForAll,
             509074078 => Perks::SteadyHands,
             2652708987 => Perks::SuccesfulWarmup,
@@ -419,10 +426,11 @@ impl From<u32> for Perks {
 
 
 
-            1111111111 => Perks::DexterityMod,
-            2222222222 => Perks::ReloadMod,
-            3333333333 => Perks::ReserveMod,
-            3333333334 => Perks::TargetingMod,
+            111111111 => Perks::DexterityMod,
+            222222222 => Perks::ReloadMod,
+            333333333 => Perks::ReserveMod,
+            444444444 => Perks::LoaderMod,
+            555555555 => Perks::TargetingMod,
             1484685884 => Perks::QuickCharge,
             1301843770 => Perks::CranialSpikeCat,
             970163821 => Perks::AgersCall,
@@ -541,6 +549,18 @@ fn dyanmic_perk_stats(
         Perks::StatsForAll => sbr_stats_for_all(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::SteadyHands => sbr_steady_hands(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::WellRounded => sbr_well_rounded(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::Alacrity => sbr_alacrity(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::Ambush => sbr_ambush(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::FluidDynamics => sbr_fluid_dynamics(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::QuietMoment => sbr_quiet_moment(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::BitterSpite => sbr_bitter_spite(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::RightHook => sbr_right_hook(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::BackupPlan => sbr_backup_plan(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::DangerZone => sbr_danger_zone(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::SleightOfHand => {
+            sbr_sleight_of_hand(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
+        Perks::Slickdraw => sbr_slickdraw(_input_data, val, enhanced, _pvp, &HashMap::new()),
         _ => HashMap::new(),
     }
 }
@@ -605,6 +625,20 @@ fn get_perk_dmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> Dama
         Perks::BuiltIn => dmr_built_in(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::BossSpec => dmr_boss_spec(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::Rampage => dmr_rampage(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::ToM => dmr_tom(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::KillClip => dmr_kill_clip(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::BackupPlan => dmr_backup_plan(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::DisruptionBreak => {
+            dmr_disruption_break(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
+        Perks::FullCourt => dmr_full_court(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::OneForAll => dmr_one_for_all(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::GoldenTricorn => {
+            dmr_golden_tricorn(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
+        Perks::BaitAndSwitch => {
+            dmr_bait_and_switch(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         _ => DamageModifierResponse::default(),
     }
 }
@@ -663,6 +697,18 @@ fn get_perk_rsmr(
             rsmr_perpetual_motion(_input_data, val, enhanced, _pvp, &HashMap::new())
         }
         Perks::StatsForAll => rsmr_stats_for_all(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::Alacrity => rsmr_alacrity(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::FluidDynamics => {
+            rsmr_fluid_dynamics(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
+        Perks::QuietMoment => rsmr_quiet_moment(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::BitterSpite => rsmr_bitter_spite(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::LoaderMod => rsmr_loader_mods(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::Outlaw => rsmr_outlaw(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::FireFly => rsmr_fire_fly(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::CompulsiveReloader => {
+            rsmr_compulsive_reloader(_input_data, val, enhanced, _pvp, &HashMap::new())
+        }
         _ => ReloadModifierResponse::default(),
     }
 }
@@ -695,6 +741,7 @@ fn get_perk_fmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> Firi
         Perks::Cornered => fmr_cornered(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::CascadePoint => fmr_cascade_point(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::ReignHavoc => fmr_reign_havoc(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::BackupPlan => fmr_backup_plan(_input_data, val, enhanced, _pvp, &HashMap::new()),
         _ => FiringModifierResponse::default(),
     }
 }
@@ -751,6 +798,12 @@ fn get_perk_hmr(
         Perks::StatsForAll => hmr_stats_for_all(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::SteadyHands => hmr_steady_hands(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::WellRounded => hmr_well_rounded(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::HotSwap => hmr_hot_swap(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::SearchParty => hmr_search_party(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::DexterityMod => hmr_dexterity_mods(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::TargetingMod => hmr_targeting_mods(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::BackupPlan => hmr_backup_plan(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::SleightOfHand => hmr_sleight_of_hand(_input_data, val, enhanced, _pvp, &HashMap::new()),
         _ => HandlingModifierResponse::default(),
     }
 }
@@ -789,6 +842,7 @@ fn get_perk_mmr(
         Perks::Reconstruction => {
             mmr_reconstruction(_input_data, val, enhanced, _pvp, &HashMap::new())
         }
+        Perks::RunnethOver => mmr_runneth_over(_input_data, val, enhanced, _pvp, &HashMap::new()),
         _ => MagazineModifierResponse::default(),
     }
 }
@@ -817,6 +871,7 @@ fn get_perk_imr(
     let enhanced = _perk.enhanced;
     match perk_enum {
         Perks::FieldPrep => imr_field_prep(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::ReserveMod => imr_reserve_mods(_input_data, val, enhanced, _pvp, &HashMap::new()),
         _ => InventoryModifierResponse::default(),
     }
 }
@@ -850,6 +905,10 @@ fn get_perk_rmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> Rang
         Perks::OffhandStrike => {rmr_offhand_strike(_input_data, val, enhanced, _pvp, &HashMap::new())}
         Perks::StatsForAll => rmr_stats_for_all(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::WellRounded => rmr_well_rounded(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::Alacrity => rmr_alacrity(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::RightHook => rmr_right_hook(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::SleightOfHand => rmr_sleight_of_hand(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::Encore => rmr_encore(_input_data, val, enhanced, _pvp, &HashMap::new()),
         _ => RangeModifierResponse::default(),
     }
 }
@@ -907,6 +966,8 @@ fn get_perk_edr(
     let enhanced = _perk.enhanced;
     match perk_enum {
         Perks::ReignHavoc => edr_reign_havoc(_input_data, val, enhanced, _pvp, &_cached_data),
+        Perks::ClusterBomb => edr_cluster_bomb(_input_data, val, enhanced, _pvp, &_cached_data),
+        Perks::BaitAndSwitch => edr_bait_and_switch(_input_data, val, enhanced, _pvp, &_cached_data),
         _ => ExtraDamageResponse::default(),
     }
 }

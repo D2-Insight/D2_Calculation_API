@@ -113,7 +113,7 @@
     },
     "Combat Bow": {
         "715195141":  {"name": "Precision Frame",    "cat": "default", "subFam": "Precision" },
-        "1470121888": {"name": "Wish-Ender",         "cat": "exotic",  "subFam": "" },
+        "1470121888": {"name": "Wish-Ender",         "cat": "exotic",  "subFam": "Precision" },
         "1573888036": {"name": "Trinity Ghoul",      "cat": "exotic",  "subFam": "Trinity" },
         "1699724249": {"name": "Leviathan's Breath", "cat": "exotic",  "subFam": "leviathan" },
         "2108556049": {"name": "Lightweight Frame",  "cat": "default", "subFam": "Lightweight" },
@@ -241,19 +241,19 @@
     },
     "Grenade Launcher": {
         "389268985":  {"name": "Anarchy",           "cat": "anarchy", "subFam": "", "magProf": "default" },
-        "425960662":  {"name": "Fighting Lion",     "cat": "special", "subFam": "FightingLion", "magProf": "default", "pve":0.78},
-        "474269988":  {"name": "Lightweight Frame", "cat": "special", "subFam": "", "magProf": "default", "pve":1.10},
+        "425960662":  {"name": "Fighting Lion",     "cat": "special", "subFam": "FightingLion", "magProf": "special", "pve":0.78},
+        "474269988":  {"name": "Lightweight Frame", "cat": "special", "subFam": "Lightweight", "magProf": "special", "pve":1.10},
         "1294026524": {"name": "Adaptive Frame",    "cat": "heavy",   "subFam": "", "magProf": "default" },
         "1315870387": {"name": "Salvation's Grip",  "cat": "heavy",   "subFam": "", "magProf": "default" },
-        "1395789926": {"name": "Wave Frame",        "cat": "special", "subFam": "WaveFrame", "magProf": "default", "pve":1.50},
+        "1395789926": {"name": "Wave Frame",        "cat": "special", "subFam": "WaveFrame", "magProf": "special", "pve":1.50},
         "1458010786": {"name": "Lightweight Frame", "cat": "special", "subFam": "", "magProf": "default" },
         "2353477480": {"name": "Rapid-Fire Frame",  "cat": "heavy",   "subFam": "", "magProf": "default" },
         "2977709078": {"name": "The Prospector",    "cat": "heavy",   "subFam": "", "magProf": "default" },
-        "3063320916": {"name": "Witherhoard",       "cat": "special", "subFam": "", "magProf": "default" },
+        "3063320916": {"name": "Witherhoard",       "cat": "special", "subFam": "", "magProf": "special" },
         "3913463509": {"name": "The Colony",        "cat": "heavy",   "subFam": "", "magProf": "default" },
         "4130495068": {"name": "Precision Frame",   "cat": "heavy",   "subFam": "", "magProf": "default" },
         "1174163613": {"name": "Parasite",          "cat": "parasite","subFam": "", "magProf": "default" },
-        "1759472859": {"name": "Double Fire",       "cat": "special", "subFam": "", "magProf": "default" },
+        "1759472859": {"name": "Double Fire",       "cat": "special", "subFam": "", "magProf": "special" },
         "cat": {
             "special": {
                 "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
@@ -469,8 +469,8 @@
         "2940035732": {"name": "Grand Overture",    "cat": "default", "subFam": "Xenophage",    "magProf": "overture"},
         "cat": {
             "default": {
-                "range":    {},
-                "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000},
+                "range":    {"vpp_start": 0.0223,"offset_start": 28.5,"vpp_end": 0.0,"offset_end": 38.2, "floor_percent": 0.5},
+                "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000, "ammo_percent": 0.65},
                 "handling": {
                     "ready":{"vpp": -0.002391721353, "offset": 0.4950499748},
                     "stow": {"vpp": -0.002041393236, "offset": 0.4547501262},
@@ -479,8 +479,8 @@
                 "combatant_scalars": {"vehicle": 2.38, "boss": 2.16, "champion": 2.25, "miniboss": 2.25, "elite": 3.36, "minor": 4.20}
             },
             "Xenophage": {
-                "range":    {},
-                "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000},
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
+                "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.1219905, "ammo_percent": 0.65},
                 "handling": {
                     "ready":{"vpp": -0.002391721353, "offset": 0.4950499748},
                     "stow": {"vpp": -0.002041393236, "offset": 0.4547501262},
@@ -490,7 +490,7 @@
             },
             "GrandOverture": {
                 "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
-                "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.12199050000000},
+                "reload":   {"evpp": 0.0000905351, "vpp": -0.0305819, "offset": 6.1219905, "ammo_percent": 0.65},
                 "handling": {
                     "ready":{"vpp": -0.002391721353, "offset": 0.4950499748},
                     "stow": {"vpp": -0.002041393236, "offset": 0.4547501262},

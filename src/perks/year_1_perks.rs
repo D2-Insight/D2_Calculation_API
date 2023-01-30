@@ -459,6 +459,25 @@ pub(super) fn sbr_outlaw(
     out
 }
 
+pub(super) fn rsmr_outlaw(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> ReloadModifierResponse {
+    let duration = if _is_enhanced { 7.0 } else { 6.0 };
+    if _value > 0 && _input.time_total < duration {
+        ReloadModifierResponse {
+            reload_stat_add: 70,
+            reload_time_scale: 0.9,
+        }
+    } else {
+        ReloadModifierResponse::default()
+    }
+    
+}
+
 pub(super) fn rmr_range_finder(
     _input: &CalculationInput,
     _value: u32,

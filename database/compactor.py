@@ -314,7 +314,7 @@ for weapon_id in new_jdata:
 def list_str(_list: list) -> str:
     return str([json.JSONEncoder().encode(i).replace(" ", "") for i in _list])
 
-with open("database\\template.rs", "r") as f:
+with open("database/weapon_formulas_template.rs", "r") as f:
     template = f.read()
 
 
