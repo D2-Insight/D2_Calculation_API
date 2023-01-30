@@ -9,6 +9,7 @@ pub mod year_2_perks;
 pub mod year_3_perks;
 pub mod year_4_perks;
 pub mod year_5_perks;
+pub mod origin_perks;
 
 use std::collections::HashMap;
 
@@ -29,6 +30,7 @@ use self::{
     year_3_perks::*,
     year_4_perks::*,
     year_5_perks::*,
+    origin_perks::*,
 };
 
 pub fn clamp<T: PartialOrd>(n: T, min: T, max: T) -> T {
@@ -87,8 +89,24 @@ pub enum Perks {
     OffhandStrike,
     TakenSpec,
     OverFlow,
-    Reconstruction,//new
+    Reconstruction,
+    UnderPressure,
     TrenchBarrel,
+    DisruptionBreak,
+    UnderDog,
+    OneForAll,
+    FireFly,
+    DangerZone,
+    TunnelVision,
+    Alacrity,
+    FluidDynamics,
+    QuietMoment,
+    SurosSynergy,
+    CompulsiveReloader,
+    BaitAndSwitch,
+    UnstoppableForce,
+    HotSwap,
+    RightHook,
     //class
     Amplified,
     Tempering,
@@ -113,6 +131,14 @@ pub enum Perks {
     AirAssault,
     KillingTally,
     AmbitiousAssassin,
+    FullCourt,
+    Recombination,
+    HeatingUp,
+    GoldenTricorn,
+    SlightOfHand,
+    BitterSpite,
+    TexBalancedStock,
+    ShotSwap,
     //class
     OnYourMark,
     //weird
@@ -161,8 +187,12 @@ pub enum Perks {
     ArchersTempo,
     Snapshot,
     Slickdraw,
-    ClownCartridge, // new
+    ClownCartridge,
     RangeFinder,
+    ClusterBomb,
+    FullAutoTrigger,
+    HeadSeeker,
+    DualLoader,
 
     //armor
     QuickCharge,
@@ -210,56 +240,189 @@ pub enum Perks {
 impl From<u32> for Perks {
     fn from(_value: u32) -> Perks {
         match _value {
+            //Meta perks
             0 => Perks::BuiltIn,
+            222 => Perks::EmpowermentBuffs,
+            333 => Perks::WeakenDebuffs,
+
+            //armor
+            
+            //parts
+            3796465595 => Perks::ImpactCasing,
+            3721627275 => Perks::SwapMag,
+            1047830412 => Perks::FullChoke,
+            3301904089 => Perks::SpikeGrenades,
+            1431678320 => Perks::AlloyMag,
+
+            //mods
+            1334978104 => Perks::QuickAccessSling,
+            2788909693 => Perks::BossSpec,
+            984527513 => Perks::MajorSpec,
+            4091000557 => Perks::MinorSpec,
+            3018373291 => Perks::BigOnesSpec,
+            1513326571 => Perks::TakenSpec,
+
+            //origin | year 5+
             3988215619 => Perks::VeistStinger,
-            3708227201 => Perks::Surrounded,
-            438098033 => Perks::Harmony,
-            4104185692 => Perks::Frenzy,
             1607056502 => Perks::HakkeBreach,
-            1782407750 => Perks::CloseToMelee,
-            509074078 => Perks::SteadyHands,
-            1799762209 => Perks::Cornered,
-            1015611457 => Perks::KillClip,
-            2621346526 => Perks::Ensemble,
-            1771339417 => Perks::FiringLine,
-            1583705720 => Perks::StatsForAll,
-            2451262963 => Perks::FragileFocus,
-            2450788523 => Perks::KillingWind,
-            3047969693 => Perks::Desperado,
-            3751912585 => Perks::CascadePoint,
-            1168162263 => Perks::Outlaw,
-            1600092898 => Perks::BackupPlan,
-            2551157718 => Perks::BoxBreathing,
-            691659142 => Perks::Pugilist,
-            744594675 => Perks::WellRounded,
-            3194351027 => Perks::ExplosiveLight,
-            3673922083 => Perks::Adagio,
-            192157151 => Perks::Ambush,
-            2869569095 => Perks::FieldPrep,
-            2779035018 => Perks::FeedingFrenzy,
+            2988596335 => Perks::Alacrity,
+            2839173408 => Perks::FluidDynamics,
+            4091460919 => Perks::QuietMoment,
+            4008116374 => Perks::SurosSynergy,
+            4154828211 => Perks::BitterSpite,
             120721526 => Perks::RunnethOver,
-            2458213969 => Perks::MultikillClip,
-            1195158366 => Perks::Encore,
-            2652708987 => Perks::SuccesfulWarmup,
-            4082225868 => Perks::Swashbuckler,
-            3436462433 => Perks::Surplus,
-            247725512 => Perks::RapidHit,
-            1428297954 => Perks::PerpetualMotion,
-            11612903 => Perks::AdrenalineJunkie,
+            1260401931 => Perks::HotSwap,
+            3907865655 => Perks::RightHook,
+            192157151 => Perks::Ambush,
+            2437618208 => Perks::TexBalancedStock,
+
+
+
+            //season 1 | year 1
+            1015611457 => Perks::KillClip,
+            1168162263 => Perks::Outlaw,
+            1528281896 => Perks::Outlaw, //rose?
+            1600092898 => Perks::BackupPlan,
+            2869569095 => Perks::FieldPrep,
             3425386926 => Perks::Rampage,
+            47981717 => Perks::OpeningShot,
+            588594999 => Perks::MovingTarget,
+            2010801679 => Perks::AmbitiousAssassin,
+            1275731761 => Perks::ClusterBomb,
+            3038247973 => Perks::ExplosivePayload,
+            280464955 => Perks::FirmlyPlanted,
+            2117683199 => Perks::FullAutoTrigger,
+            460017080 => Perks::HeadSeeker,
+            2213355989 => Perks::HighImpactReserves,
+            1866048759 => Perks::HipFireGrip,
+            957782887 => Perks::Snapshot,
+            1890422124 => Perks::TapTheTrigger,
+            2039302152 => Perks::SlideWays,
+            706527188 => Perks::QuickDraw,
+            1954620775 => Perks::TimedPayload,
+            4071163871 => Perks::ThreatDetector,
+            3161816588 => Perks::SlideShot,
+            3400784728 => Perks::TripleTap,
+            3124871000 => Perks::Outlaw,//redrix only
+            1645158859 => Perks::UnderPressure,
+
+            //season 2 | year 1
+            //lmao bozo
+            
+            //season 3 | year 1
+            2846385770 => Perks::RangeFinder,
+            3871884143 => Perks::DisruptionBreak,
+            1683379515 => Perks::DisruptionBreak,
+            806159697 => Perks::TrenchBarrel,
+            2360754333 => Perks::TrenchBarrel,
+            3047969693 => Perks::Desperado,
+            2551157718 => Perks::BoxBreathing,
+
+
+            //season 4 | year 2
+            201365942 => Perks::ArchersTempo,
+            3365897133 => Perks::ExplosiveHead,
+            2779035018 => Perks::FeedingFrenzy,
+            1354429876 => Perks::FourthTimesTheCharm,
+            247725512 => Perks::RapidHit,
+
+            //season 5 | year 2
+            1427256713 => Perks::ResevoirBurst,
+            3708227201 => Perks::Surrounded,
+            3722653512 => Perks::AirAssault,
+
+            //season 6 | year 2
+            1771339417 => Perks::FiringLine,
+            2888557110 => Perks::FullCourt,
+            2782457288 => Perks::KillingTally,
+            557221067 => Perks::KillingTally,
+            3523296417 => Perks::Demolitionist,
+            2458213969 => Perks::MultikillClip,
+            4082225868 => Perks::Swashbuckler,
+
+            //season 7 | year 2
+            205890336 => Perks::UnderDog,
+            3194351027 => Perks::ExplosiveLight,
+
+            //season 8 | year 3
+            //TODO
+
+            //season 9 | year 3
+            2284787283 => Perks::ClownCartridge,
+            3511092054 => Perks::ElementalCapacitor,
+            1546637391 => Perks::Vorpal,
+
+            //season 10 | year 3
+            //bad season lmao
+
+            //season 11 | year 3
+            2450788523 => Perks::KillingWind,
+
+            //season 12 | year 4
+            25606670 => Perks::DualLoader,
+            4049631843 => Perks::OneForAll,
+            469285294 => Perks::Recombination,
+            1523832109 => Perks::Reconstruction,
+            3436462433 => Perks::Surplus,
+
+            //season 13 | year 4
+            951095735 => Perks::ImpulseAmplifier,
+            4104185692 => Perks::Frenzy,
+            3927722942 => Perks::LastingImpression,
+
+            //season 14 | year 4
+            1799762209 => Perks::Cornered,
+            11612903 => Perks::AdrenalineJunkie,
+            3418782618 => Perks::RewindRounds,
+            1570042021 => Perks::HeatingUp,
+            3824105627 => Perks::FireFly,
+            960810156 => Perks::DangerZone,
+            2946784966 => Perks::TunnelVision,
+
+            //season 15 | year 4
+            1195158366 => Perks::Encore,
+            2621346526 => Perks::Ensemble,
+            2610012052 => Perks::GoldenTricorn,
+            438098033 => Perks::Harmony,
+            1428297954 => Perks::PerpetualMotion,
+            3673922083 => Perks::Adagio,
+
+            //season 16 | year 5
+            3078487919 => Perks::BaitAndSwitch,
+            671806388 => Perks::CompulsiveReloader,
+            2896038713 => Perks::FocusedFury,
+            2978966579 => Perks::ChillClip,
+            2172504645 => Perks::SlightOfHand,
+            1583705720 => Perks::StatsForAll,
+            509074078 => Perks::SteadyHands,
+            2652708987 => Perks::SuccesfulWarmup,
+            2224838837 => Perks::UnstoppableForce,
+
+            //season 17 | year 5
+            2451262963 => Perks::FragileFocus,
+            744594675 => Perks::WellRounded,
+
+            //season 18 | year 5
+            1365187766 => Perks::GutShot,
+            691659142 => Perks::Pugilist,
+            1821614984 => Perks::Slickdraw,
+            1870851715 => Perks::OverUnder,
+
+            //season 19 | year 5
+            3751912585 => Perks::CascadePoint,
+            1782407750 => Perks::CloseToMelee,
+            2416023159 => Perks::OffhandStrike,
+            2272927194 => Perks::PerfectFloat,
+            2586829431 => Perks::ShotSwap,
+            365154968 => Perks::TargetLock,
+
+
+
+
             1111111111 => Perks::DexterityMod,
             2222222222 => Perks::ReloadMod,
             3333333333 => Perks::ReserveMod,
             3333333334 => Perks::TargetingMod,
-            1365187766 => Perks::GutShot,
-            1546637391 => Perks::Vorpal,
-            951095735 => Perks::ImpulseAmplifier,
-            588594999 => Perks::MovingTarget,
-            365154968 => Perks::TargetLock,
-            2213355989 => Perks::HighImpactReserves,
-            2896038713 => Perks::FocusedFury,
-            2978966579 => Perks::ChillClip,
-            3927722942 => Perks::LastingImpression,
             1484685884 => Perks::QuickCharge,
             1301843770 => Perks::CranialSpikeCat,
             970163821 => Perks::AgersCall,
@@ -288,40 +451,10 @@ impl From<u32> for Perks {
             362132290 => Perks::Tempering,
             593361144 => Perks::DragonShadow,
             1147638875 => Perks::OphidianAspect,
-            1431678320 => Perks::AlloyMag,
-            1047830412 => Perks::FullChoke,
-            3721627275 => Perks::SwapMag,
-            1334978104 => Perks::QuickAccessSling,
-            2788909693 => Perks::BossSpec,
-            984527513 => Perks::MajorSpec,
-            4091000557 => Perks::MinorSpec,
-            3018373291 => Perks::BigOnesSpec,
-            3400784728 => Perks::TripleTap,
-            1354429876 => Perks::FourthTimesTheCharm,
-            1866048759 => Perks::HipFireGrip,
-            706527188 => Perks::QuickDraw,
-            1821614984 => Perks::Slickdraw,
-            957782887 => Perks::Snapshot,
-            3301904089 => Perks::SpikeGrenades,
-            3796465595 => Perks::ImpactCasing,
-            3038247973 => Perks::ExplosivePayload,
-            3365897133 => Perks::ExplosiveHead,
-            1954620775 => Perks::TimedPayload,
-            47981717 => Perks::OpeningShot,
-            280464955 => Perks::FirmlyPlanted,
-            3161816588 => Perks::SlideShot,
-            2039302152 => Perks::SlideWays,
-            1890422124 => Perks::TapTheTrigger,
-            2416023159 => Perks::OffhandStrike,
-            2272927194 => Perks::PerfectFloat,
-            1513326571 => Perks::TakenSpec,
             3469412970 => Perks::Hedrons,
             83039194 => Perks::HeatRises,
             4194622036 => Perks::FlowState,
-            4071163871 => Perks::ThreatDetector,
-            1523832109 => Perks::Reconstruction,
-            222 => Perks::EmpowermentBuffs,
-            333 => Perks::WeakenDebuffs, //also stuff like tractor and div, any non stacking ones
+
             _ => Perks::Ignore,
         }
     }

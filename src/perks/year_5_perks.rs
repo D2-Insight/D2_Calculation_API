@@ -182,6 +182,19 @@ pub fn hmr_slickdraw(
     }
 }
 
+pub(super) fn sbr_slickdraw(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut map = HashMap::new();
+    let handling_boost = if _value > 0 {100} else {0};
+    map.insert(StatHashes::HANDLING.to_u32(), handling_boost);
+    map
+}
+
 pub(super) fn sbr_stats_for_all(
     _input: &CalculationInput,
     _value: u32,
@@ -418,19 +431,63 @@ pub(super) fn rmr_well_rounded(
     }
 }
 
-pub(super) fn ror_veist_stinger(
+pub(super) fn dmr_bait_and_switch(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
-) -> ReloadOverrideResponse {
-    ReloadOverrideResponse {
-        count_as_reload: false,
-        reload_time: 0.0,
-        ammo_to_reload: _input.base_mag as i32,
-        priority: 9,
-        uses_ammo: true,
-        valid: true,
+) -> DamageModifierResponse {
+    DamageModifierResponse {
+        dmg_scale: 1.35,
+        crit_scale: 1.0,
     }
 }
+
+pub(super) fn edr_bait_and_switch(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> ExtraDamageResponse {
+    let time = _input.handling_data.ready_time*2.0 + _input.handling_data.stow_time*2.0;
+    let last_proc = _cached_data.get("bait_and_switch_last_proc").unwrap_or(&0.0);
+    if _input.time_total - last_proc < 10.0 {
+        return ExtraDamageResponse::default();
+    }
+    ExtraDamageResponse {
+        additive_damage: 200.0,
+        combatant_scale: true,
+        crit_scale: true,
+        increment_total_time: true,
+        time_for_additive_damage: time,
+        times_to_hit: 1,
+        weapon_scale: true,
+        hit_at_same_time: true,
+        is_dot: false,
+    }
+}
+
+
+pub(super) fn rsmr_compulsive_reloader(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> ReloadModifierResponse {
+    let reload_add = if _is_enhanced { 55 } else { 50 };
+    if _input.shots_fired_this_mag <= _input.base_mag/2.0 && _value > 0{
+        ReloadModifierResponse {
+            reload_stat_add: reload_add,
+            reload_time_scale: 0.95,
+        }
+    } else {
+        ReloadModifierResponse::default()
+    }
+}
+
+
+
+

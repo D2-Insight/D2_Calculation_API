@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{AmmoType, StatHashes, WeaponType};
+use crate::d2_enums::{AmmoType, StatHashes, WeaponType, DamageType};
 
 use super::{
     clamp,
@@ -504,9 +504,7 @@ pub(super) fn rmr_slide_shot(
     }
     RangeModifierResponse {
         range_stat_add: range,
-        range_all_scale: 1.0,
-        range_hip_scale: 1.0,
-        range_zoom_scale: 1.0,
+        ..Default::default()
     }
 }
 
@@ -539,9 +537,8 @@ pub(super) fn hmr_snapshot(
         ads_mult = 0.8; //its 0.8 from my testing idk
     };
     HandlingModifierResponse {
-        handling_stat_add: 0,
         handling_ads_scale: ads_mult,
-        handling_swap_scale: 1.0,
+        ..Default::default()
     }
 }
 
@@ -599,3 +596,115 @@ pub(super) fn dmr_kill_clip(
         crit_scale: 1.0,
     }
 }
+
+pub(super) fn dmr_backup_plan(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut damage_mult = if _value > 0 { 0.25 } else { 0.0 };
+    let duration = if _is_enhanced { 2.2 } else { 2.0 };
+    if _input.time_total > duration {
+        damage_mult = 0.0;
+    };
+    DamageModifierResponse {
+        dmg_scale: 1.0 + damage_mult,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn fmr_backup_plan(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> FiringModifierResponse {
+    let mut firing_mult = if _value > 0 { 0.7 } else { 1.0 };
+    let duration = if _is_enhanced { 2.2 } else { 2.0 };
+    if _input.time_total > duration {
+        firing_mult = 0.0;
+    };
+    FiringModifierResponse {
+        burst_delay_scale: firing_mult,
+        ..Default::default()
+    }
+}
+
+pub(super) fn hmr_backup_plan(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    let mut handling_add = if _value > 0 { 100 } else { 0 };
+    let duration = if _is_enhanced { 2.2 } else { 2.0 };
+    if _input.time_total > duration {
+        handling_add = 0;
+    };
+    HandlingModifierResponse {
+        handling_stat_add: handling_add,
+        ..Default::default()
+    }
+}
+
+pub(super) fn sbr_backup_plan(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut handling = if _value > 0 { 100 } else { 0 };
+    let duration = if _is_enhanced { 2.2 } else { 2.0 };
+    if _input.time_total > duration {
+        handling = 0;
+    };
+    let mut out = HashMap::new();
+    if _value > 0 {
+        out.insert(StatHashes::HANDLING.to_u32(), handling);
+    }
+    out
+}
+
+pub(super) fn edr_cluster_bomb(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> ExtraDamageResponse {
+    ExtraDamageResponse {
+        additive_damage: _input.base_damage * 0.04,
+        combatant_scale: true,
+        crit_scale: false,
+        increment_total_time: false,
+        time_for_additive_damage: 0.8,
+        times_to_hit: 6,
+        weapon_scale: true,
+        hit_at_same_time: true,
+        is_dot: false,
+    }
+}
+
+pub(super) fn dmr_disruption_break(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut damage_mult = if _value > 0 { 0.5 } else { 0.0 };
+    let duration = if _is_enhanced { 5.0 } else { 4.0 };
+    if _input.time_total > duration || *_input.damage_type != DamageType::KINETIC {
+        damage_mult = 0.0;
+    };
+    DamageModifierResponse {
+        dmg_scale: 1.0 + damage_mult,
+        crit_scale: 1.0,
+    }
+}
+

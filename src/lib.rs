@@ -1,9 +1,10 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
 
+#[cfg(feature = "wasm")]
 extern crate wee_alloc;
-
 // Use `wee_alloc` as the global allocator.
+#[cfg(feature = "wasm")]
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 

@@ -11,7 +11,7 @@ use super::{
     },
 };
 
-pub fn dmr_adagio(
+pub(super) fn dmr_adagio(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -35,7 +35,7 @@ pub fn dmr_adagio(
     }
 }
 
-pub fn fmr_adagio(
+pub(super) fn fmr_adagio(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -55,7 +55,7 @@ pub fn fmr_adagio(
     }
 }
 
-pub fn dmr_adrenaline_junkie(
+pub(super) fn dmr_adrenaline_junkie(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -74,7 +74,7 @@ pub fn dmr_adrenaline_junkie(
     }
 }
 
-pub fn sbr_adrenaline_junkie(
+pub(super) fn sbr_adrenaline_junkie(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -91,7 +91,7 @@ pub fn sbr_adrenaline_junkie(
     out
 }
 
-pub fn hmr_adrenaline_junkie(
+pub(super) fn hmr_adrenaline_junkie(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -106,7 +106,7 @@ pub fn hmr_adrenaline_junkie(
     }
 }
 
-pub fn fmr_cornered(
+pub(super) fn fmr_cornered(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -125,7 +125,7 @@ pub fn fmr_cornered(
     }
 }
 
-pub fn sbr_ensemble(
+pub(super) fn sbr_ensemble(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -144,7 +144,7 @@ pub fn sbr_ensemble(
     }
 }
 
-pub fn hmr_ensemble(
+pub(super) fn hmr_ensemble(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -167,7 +167,7 @@ pub fn hmr_ensemble(
     }
 }
 
-pub fn rsmr_ensemble(
+pub(super) fn rsmr_ensemble(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -188,7 +188,7 @@ pub fn rsmr_ensemble(
     }
 }
 
-pub fn rsmr_frenzy(
+pub(super) fn rsmr_frenzy(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -208,7 +208,7 @@ pub fn rsmr_frenzy(
     }
 }
 
-pub fn hmr_frenzy(
+pub(super) fn hmr_frenzy(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -229,7 +229,7 @@ pub fn hmr_frenzy(
     }
 }
 
-pub fn dmr_frenzy(
+pub(super) fn dmr_frenzy(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -249,7 +249,7 @@ pub fn dmr_frenzy(
     }
 }
 
-pub fn sbr_frenzy(
+pub(super) fn sbr_frenzy(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -272,7 +272,7 @@ pub fn sbr_frenzy(
     out
 }
 
-pub fn rsmr_impulse_amplifier(
+pub(super) fn rsmr_impulse_amplifier(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -287,7 +287,7 @@ pub fn rsmr_impulse_amplifier(
     }
 }
 
-pub fn sbr_perpetual_motion(
+pub(super) fn sbr_perpetual_motion(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -308,7 +308,7 @@ pub fn sbr_perpetual_motion(
     out
 }
 
-pub fn hmr_perpetual_motion(
+pub(super) fn hmr_perpetual_motion(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -329,7 +329,7 @@ pub fn hmr_perpetual_motion(
     }
 }
 
-pub fn rsmr_perpetual_motion(
+pub(super) fn rsmr_perpetual_motion(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -349,7 +349,7 @@ pub fn rsmr_perpetual_motion(
     }
 }
 
-pub fn sbr_perfect_float(
+pub(super) fn sbr_perfect_float(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -363,7 +363,7 @@ pub fn sbr_perfect_float(
     out
 }
 
-pub fn sbr_pugilist(
+pub(super) fn sbr_pugilist(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -377,7 +377,7 @@ pub fn sbr_pugilist(
     out
 }
 
-pub fn hrm_pugilist(
+pub(super) fn hrm_pugilist(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -395,7 +395,7 @@ pub fn hrm_pugilist(
     }
 }
 
-pub fn mmr_reconstruction(
+pub(super) fn mmr_reconstruction(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -408,4 +408,18 @@ pub fn mmr_reconstruction(
         magazine_scale: mag_scale,
         magazine_add: 0.0,
     }
+}
+
+pub(super) fn sbr_danger_zone(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut out = HashMap::new();
+    if _value > 0 {
+        out.insert(StatHashes::BLAST_RADIUS.to_u32(), 100);
+    };
+    out
 }
