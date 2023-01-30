@@ -86,8 +86,9 @@ pub enum Perks {
     PerfectFloat,
     OffhandStrike,
     TakenSpec,
-    OverFlow, // new
-    Reconstruction,
+    OverFlow,
+    Reconstruction,//new
+    TrenchBarrel,
     //class
     Amplified,
     Tempering,
@@ -206,8 +207,8 @@ pub enum Perks {
     Roadborn,
 }
 
-impl Perks {
-    pub fn from_u32(_value: u32) -> Perks {
+impl From<u32> for Perks {
+    fn from(_value: u32) -> Perks {
         match _value {
             0 => Perks::BuiltIn,
             3988215619 => Perks::VeistStinger,
@@ -318,6 +319,7 @@ impl Perks {
             83039194 => Perks::HeatRises,
             4194622036 => Perks::FlowState,
             4071163871 => Perks::ThreatDetector,
+            1523832109 => Perks::Reconstruction,
             222 => Perks::EmpowermentBuffs,
             333 => Perks::WeakenDebuffs, //also stuff like tractor and div, any non stacking ones
             _ => Perks::Ignore,
@@ -350,7 +352,7 @@ fn dyanmic_perk_stats(
     _input_data: &CalculationInput,
     _pvp: bool,
 ) -> HashMap<u32, i32> {
-    let perk_enum = Perks::from_u32(_perk.hash);
+    let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
@@ -424,7 +426,7 @@ pub fn get_dmg_modifier(
     dmg_modifier
 }
 fn get_perk_dmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> DamageModifierResponse {
-    let perk_enum = Perks::from_u32(_perk.hash);
+    let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
@@ -492,7 +494,7 @@ fn get_perk_rsmr(
     _input_data: &CalculationInput,
     _pvp: bool,
 ) -> ReloadModifierResponse {
-    let perk_enum = Perks::from_u32(_perk.hash);
+    let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
@@ -547,7 +549,7 @@ pub fn get_firing_modifier(
     firing_modifier
 }
 fn get_perk_fmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> FiringModifierResponse {
-    let perk_enum = Perks::from_u32(_perk.hash);
+    let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
@@ -583,7 +585,7 @@ fn get_perk_hmr(
     _input_data: &CalculationInput,
     _pvp: bool,
 ) -> HandlingModifierResponse {
-    let perk_enum = Perks::from_u32(_perk.hash);
+    let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
@@ -639,7 +641,7 @@ fn get_perk_mmr(
     _input_data: &CalculationInput,
     _pvp: bool,
 ) -> MagazineModifierResponse {
-    let perk_enum = Perks::from_u32(_perk.hash);
+    let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
@@ -677,7 +679,7 @@ fn get_perk_imr(
     _input_data: &CalculationInput,
     _pvp: bool,
 ) -> InventoryModifierResponse {
-    let perk_enum = Perks::from_u32(_perk.hash);
+    let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
@@ -702,7 +704,7 @@ pub fn get_range_modifier(
     range_modifier
 }
 fn get_perk_rmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> RangeModifierResponse {
-    let perk_enum = Perks::from_u32(_perk.hash);
+    let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
@@ -734,7 +736,7 @@ pub fn get_refund_modifier(
     refund_modifier
 }
 fn get_perk_refund(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> RefundResponse {
-    let perk_enum = Perks::from_u32(_perk.hash);
+    let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
@@ -767,7 +769,7 @@ fn get_perk_edr(
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
 ) -> ExtraDamageResponse {
-    let perk_enum = Perks::from_u32(_perk.hash);
+    let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
@@ -796,7 +798,7 @@ fn get_perk_ror(
     _input_data: &CalculationInput,
     _pvp: bool,
 ) -> ReloadOverrideResponse {
-    let perk_enum = Perks::from_u32(_perk.hash);
+    let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {

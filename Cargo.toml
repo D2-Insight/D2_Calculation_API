@@ -5,7 +5,7 @@ version = "0.1.0"
 rust-version = "1.65"
 
 [features]
-wasm = ["serde-wasm-bindgen", "wasm-bindgen", "console_error_panic_hook"]
+wasm = ["serde-wasm-bindgen", "wasm-bindgen", "console_error_panic_hook", "wee_alloc"]
 python = ["pyo3"]
 
 
@@ -17,8 +17,10 @@ serde = { version = "^1.0", features = ["derive"]}
 serde-wasm-bindgen = { version = "^0.4", optional = true }
 console_error_panic_hook = { version = "0.1.7", optional = true}
 wasm-bindgen = { version = "^0.2", optional = true}
+wee_alloc = { version = "0.4.5", optional = true}
 
 pyo3 = { version = "^0.18", features = ["extension-module"], optional = true}
+
 
 [lib]
 crate-type = ["cdylib"]
@@ -28,7 +30,7 @@ crate-type = ["cdylib"]
 
 [profile.release]
 lto = true
-opt-level = 2 # fast and small wasm
+opt-level = "z"
 
 # Optimize all dependencies even in debug builds:
 [profile.dev.package."*"]

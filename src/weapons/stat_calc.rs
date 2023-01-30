@@ -3,15 +3,15 @@ use crate::{
     d2_enums::{StatHashes, WeaponType},
     perks::{
         get_handling_modifier, get_magazine_modifier, get_range_modifier, get_reload_modifier,
-        get_reserve_modifier,
+        get_reserve_modifier, get_firing_modifier, get_dmg_modifier,
         lib::{
             CalculationInput, HandlingModifierResponse, InventoryModifierResponse,
-            MagazineModifierResponse, RangeModifierResponse, ReloadModifierResponse,
+            MagazineModifierResponse, RangeModifierResponse, ReloadModifierResponse, DamageModifierResponse, FiringModifierResponse,
         },
     },
     types::rs_types::{
         AmmoFormula, AmmoResponse, HandlingFormula, HandlingResponse, RangeFormula, RangeResponse,
-        ReloadFormula, ReloadResponse,
+        ReloadFormula, ReloadResponse, FiringResponse,
     },
 };
 
@@ -255,6 +255,59 @@ impl Weapon {
         if mag_stat == 100 && self.weapon_type == WeaponType::SNIPER {
             out.mag_size = 1;
         }
+        out
+    }
+}
+
+impl Weapon {
+    pub fn calc_firing_data(&self, _calc_input: Option<CalculationInput>) -> FiringResponse {
+        let pve_damage_modifiers: DamageModifierResponse;
+        let pvp_damage_modifiers: DamageModifierResponse;
+        let firing_modifiers: FiringModifierResponse;
+        if _calc_input.is_some() {
+            firing_modifiers = get_firing_modifier(
+                self.list_perks(),
+                &_calc_input.clone().unwrap(),
+                self.is_pvp,
+            );
+            pvp_damage_modifiers = get_dmg_modifier(
+                self.list_perks(),
+                &_calc_input.clone().unwrap(),
+                true,
+            );
+            pve_damage_modifiers = get_dmg_modifier(
+                self.list_perks(),
+                &_calc_input.clone().unwrap(),
+                false,
+            );
+        } else {
+            firing_modifiers = FiringModifierResponse::default();
+            pvp_damage_modifiers = DamageModifierResponse::default();
+            pve_damage_modifiers = DamageModifierResponse::default();
+        };
+        let fd = self.firing_data;
+        let mut out = FiringResponse {
+            pvp_damage: fd.damage * pvp_damage_modifiers.dmg_scale,
+            pvp_crit_mult: fd.crit_mult * pvp_damage_modifiers.crit_scale,
+
+            pve_damage: fd.damage * pve_damage_modifiers.dmg_scale,
+            pve_crit_mult: fd.crit_mult * pve_damage_modifiers.crit_scale,
+
+            burst_delay: (fd.burst_delay + firing_modifiers.burst_delay_add) 
+                        * firing_modifiers.burst_delay_scale,
+            burst_size: fd.burst_size + firing_modifiers.burst_size_add as i32,
+            burst_duration: fd.burst_duration * firing_modifiers.burst_duration_scale,
+
+            rpm: 0.0,
+        };
+        let extra_charge_delay = if self.weapon_type == WeaponType::FUSIONRIFLE {
+            0.45
+        } else if self.weapon_type == WeaponType::LINEARFUSIONRIFLE{
+            0.95
+        } else {
+            0.0
+        };
+        out.set_rpm(extra_charge_delay);
         out
     }
 }

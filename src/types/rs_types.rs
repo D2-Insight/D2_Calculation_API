@@ -130,3 +130,34 @@ impl DpsResponse {
         self.total_damage *= rpl;
     }
 }
+
+#[derive(Debug, Clone, Default)]
+pub struct FiringResponse {
+    pub pvp_damage: f64,
+    pub pvp_crit_mult: f64,
+
+    pub pve_damage: f64,
+    pub pve_crit_mult: f64,
+
+    pub burst_delay: f64,
+    pub burst_duration: f64,
+    pub burst_size: i32,
+
+    pub rpm: f64,
+}
+impl FiringResponse{
+    pub fn set_rpm(&mut self, _extra_charge_delay: f64) {
+        let mut time = 0.0;
+        let mut shots = 0;
+        while time < 100.0 {
+            time += self.burst_delay;
+            shots += self.burst_size;
+            time += self.burst_duration;
+            time += _extra_charge_delay*self.burst_delay;
+        }
+        self.rpm = shots as f64 / time * 60.0;
+    }
+    pub fn apply_pve_bonuses(&mut self, _rpl_mult: f64, _gpl_mult: f64, _pve_mult: f64, _combatant_mult: f64) {
+        self.pve_damage *= _rpl_mult * _gpl_mult * _pve_mult * _combatant_mult;
+    }
+}

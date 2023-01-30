@@ -1,5 +1,12 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
+
+extern crate wee_alloc;
+
+// Use `wee_alloc` as the global allocator.
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
 pub mod abilities;
 pub mod activity;
 pub mod d2_enums;
@@ -21,8 +28,8 @@ use std::panic;
 //JavaScript
 #[cfg(feature = "wasm")]
 use crate::types::js_types::{JsStat, JsRangeResponse, JsHandlingResponse, 
-    JsReloadResponse, JsAmmoResponse, JsTtkResponse, JsDpsResponse, JsDifficultyOptions,
-    JsEnemyType};
+    JsReloadResponse, JsAmmoResponse, JsTtkResponse, JsDpsResponse, JsFiringResponse, 
+    JsDifficultyOptions,JsEnemyType };
 #[cfg(feature = "wasm")]
 use wasm_bindgen::prelude::*;
 
@@ -32,6 +39,7 @@ use crate::types::py_types::{
     PyActivity, PyAmmoFormula, PyDamageModifiers, PyDifficultyOptions, PyDpsResponse, PyEnemy,
     PyEnemyType, PyFiringData, PyHandlingFormula, PyHandlingResponse, PyPerk, PyPlayer,
     PyPlayerClass, PyRangeFormula, PyRangeResponse, PyReloadFormula, PyWeapon, PyWeaponFormula,
+    PyResillienceSummary, PyFiringResponse
 };
 #[cfg(feature = "python")]
 use pyo3::{prelude::*, types::PyDict};
@@ -149,7 +157,7 @@ pub fn set_stats(_stat_hashes: Vec<u32>, _stat_values: Vec<i32>) -> Result<(), J
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "addTrait")]
-pub fn add_perk_complex(_stats: JsValue, _value: u32, _hash: u32) -> Result<(), JsValue> {
+pub fn add_perk(_stats: JsValue, _value: u32, _hash: u32) -> Result<(), JsValue> {
     let perk = Perk {
         stat_buffs: serde_wasm_bindgen::from_value(_stats).unwrap(),
         enhanced: false,
@@ -256,6 +264,26 @@ pub fn get_weapon_dps(_use_rpl: bool) -> Result<JsDpsResponse, JsValue> {
 }
 
 #[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "getWeaponFiringData")]
+pub fn get_weapon_firing_data(_dynamic_traits: bool, _use_rpl: bool) -> Result<JsFiringResponse, JsValue> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    let mut response: types::rs_types::FiringResponse;
+    if _dynamic_traits {
+        response = weapon.calc_firing_data(Some(weapon.static_calc_input()));
+    } else {
+        response = weapon.calc_firing_data(None);
+    };
+    PERS_DATA.with(|perm_data| {
+        response.apply_pve_bonuses(
+            perm_data.borrow().activity.get_rpl_mult(),
+            perm_data.borrow().activity.get_pl_delta(),
+            perm_data.borrow().weapon.damage_mods.pve,
+            perm_data.borrow().weapon.damage_mods.get_mod(&perm_data.borrow().enemy.type_))
+    });
+    Ok(response.into())
+}
+
+#[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "setEncounter")]
 pub fn set_encounter(_rpl: u32, _override_cap: i32, _difficulty: JsDifficultyOptions, _enemy_type: JsEnemyType) -> Result<(), JsValue> {
     PERS_DATA.with(|perm_data| {
@@ -355,6 +383,26 @@ fn get_weapon_handling(_use_traits: bool) -> PyResult<PyHandlingResponse> {
 }
 
 #[cfg(feature = "python")]
+#[pyfunction(name = "get_firing_data")]
+pub fn get_weapon_firing_data(_dynamic_traits: bool, _use_rpl: bool) -> PyResult<PyFiringResponse> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    let mut response: types::rs_types::FiringResponse;
+    if _dynamic_traits {
+        response = weapon.calc_firing_data(Some(weapon.static_calc_input()));
+    } else {
+        response = weapon.calc_firing_data(None);
+    };
+    PERS_DATA.with(|perm_data| {
+        response.apply_pve_bonuses(
+            perm_data.borrow().activity.get_rpl_mult(),
+            perm_data.borrow().activity.get_pl_delta(),
+            perm_data.borrow().weapon.damage_mods.pve,
+            perm_data.borrow().weapon.damage_mods.get_mod(&perm_data.borrow().enemy.type_))
+    });
+    Ok(response.into())
+}
+
+#[cfg(feature = "python")]
 #[pyfunction(name = "get_dps")]
 fn get_weapon_dps(_do_rpl_mult: bool) -> PyResult<PyDpsResponse> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
@@ -370,7 +418,7 @@ fn get_weapon_dps(_do_rpl_mult: bool) -> PyResult<PyDpsResponse> {
 
 #[cfg(feature = "python")]
 #[pyfunction(name = "get_ttk")]
-fn get_weapon_ttk(_overshield: f64) -> PyResult<Vec<types::py_types::PyResillienceSummary>> {
+fn get_weapon_ttk(_overshield: f64) -> PyResult<Vec<PyResillienceSummary>> {
     let rs_resill_array =
         PERS_DATA.with(|perm_data| perm_data.borrow().weapon.calc_ttk(_overshield));
     //call into on every item in the array
@@ -416,6 +464,7 @@ fn register_weapon_interface(py: Python<'_>, parent_module: &PyModule) -> PyResu
     weapon_interface.add_class::<PyRangeResponse>()?;
     weapon_interface.add_class::<PyHandlingResponse>()?;
     weapon_interface.add_class::<PyDpsResponse>()?;
+    weapon_interface.add_class::<PyResillienceSummary>()?;
     parent_module.add_submodule(weapon_interface)?;
     Ok(())
 }

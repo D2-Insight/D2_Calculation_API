@@ -12,7 +12,7 @@ use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 
 use super::rs_types::{
     AmmoFormula, AmmoResponse, DamageMods, DpsResponse, HandlingFormula, HandlingResponse,
-    RangeFormula, RangeResponse, ReloadFormula, ReloadResponse,
+    RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, FiringResponse,
 };
 
 #[derive(Debug, Clone, Copy, Serialize)]
@@ -161,6 +161,36 @@ impl JsTtkResponse {
     #[wasm_bindgen(getter)]
     pub fn data(&self) -> JsValue {
         serde_wasm_bindgen::to_value(&self.data).unwrap()
+    }
+}
+
+#[derive(Debug, Clone, Default, Serialize)]
+#[wasm_bindgen(js_name = "FiringResponse", inspectable)]
+pub struct JsFiringResponse {
+    pub pvp_damage: f64,
+    pub pvp_crit_mult: f64,
+
+    pub pve_damage: f64,
+    pub pve_crit_mult: f64,
+
+    pub burst_delay: f64,
+    pub burst_duration: f64,
+    pub burst_size: i32,
+
+    pub rpm: f64,
+}
+impl From<FiringResponse> for JsFiringResponse {
+    fn from(firing: FiringResponse) -> Self {
+        JsFiringResponse {
+            pvp_damage: firing.pvp_damage,
+            pvp_crit_mult: firing.pvp_crit_mult,
+            pve_damage: firing.pve_damage,
+            pve_crit_mult: firing.pve_crit_mult,
+            burst_delay: firing.burst_delay,
+            burst_duration: firing.burst_duration,
+            burst_size: firing.burst_size,
+            rpm: firing.rpm,
+        }
     }
 }
 

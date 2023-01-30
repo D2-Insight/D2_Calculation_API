@@ -12,7 +12,7 @@ use crate::{
 
 use super::rs_types::{
     AmmoFormula, AmmoResponse, DamageMods, DpsResponse, HandlingFormula, HandlingResponse,
-    RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, StatQuadraticFormula,
+    RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, StatQuadraticFormula, FiringResponse
 };
 
 #[derive(Debug, Clone, Default)]
@@ -694,6 +694,50 @@ impl From<HandlingResponse> for PyHandlingResponse {
 }
 
 #[derive(Debug, Clone, Default)]
+#[pyclass(name = "FiringResponse")]
+pub struct PyFiringResponse {
+    #[pyo3(get)]
+    pub pvp_damage: f64,
+    #[pyo3(get)]
+    pub pvp_crit_mult: f64,
+    #[pyo3(get)]
+    pub pve_damage: f64,
+    #[pyo3(get)]
+    pub pve_crit_mult: f64,
+    #[pyo3(get)]
+    pub burst_delay: f64,
+    #[pyo3(get)]
+    pub burst_duration: f64,
+    #[pyo3(get)]
+    pub burst_size: i32,
+    #[pyo3(get)]
+    pub rpm: f64,
+}
+#[pymethods]
+impl PyFiringResponse {
+    fn __repr__(&self) -> PyResult<String> {
+        Ok(format!(
+            "FiringResponse(pvp_damage={}, pvp_crit_mult={}, pve_damage={}, pve_crit_mult={}, burst_delay={}, burst_duration={}, burst_size={}, rpm={})",
+            self.pvp_damage, self.pvp_crit_mult, self.pve_damage, self.pve_crit_mult, self.burst_delay, self.burst_duration, self.burst_size, self.rpm
+        ))
+    }
+}
+impl From<FiringResponse> for PyFiringResponse {
+    fn from(r: FiringResponse) -> Self {
+        PyFiringResponse {
+            pvp_damage: r.pvp_damage,
+            pvp_crit_mult: r.pvp_crit_mult,
+            pve_damage: r.pve_damage,
+            pve_crit_mult: r.pve_crit_mult,
+            burst_delay: r.burst_delay,
+            burst_duration: r.burst_duration,
+            burst_size: r.burst_size,
+            rpm: r.rpm,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default)]
 #[pyclass(name = "DpsResponse")]
 pub struct PyDpsResponse {
     #[pyo3(get)]
@@ -814,14 +858,14 @@ pub struct PyActivity {
     #[pyo3(get, set)]
     pub difficulty: PyDifficultyOptions,
     #[pyo3(get, set)]
-    pub rpl: f64,
+    pub rpl: u32,
     #[pyo3(get, set)]
-    pub cap: f64,
+    pub cap: i32,
 }
 #[pymethods]
 impl PyActivity {
     #[new]
-    pub fn new(_name: String, _difficulty: PyDifficultyOptions, _rpl: f64, _cap: f64) -> Self {
+    pub fn new(_name: String, _difficulty: PyDifficultyOptions, _rpl: u32, _cap: i32) -> Self {
         PyActivity {
             name: _name,
             difficulty: _difficulty,
