@@ -147,6 +147,7 @@ pub struct FiringResponse {
 }
 impl FiringResponse{
     pub fn set_rpm(&mut self, _extra_charge_delay: f64) {
+        let mut counter = 0;
         let mut time = 0.0;
         let mut shots = 0;
         while time < 100.0 {
@@ -154,6 +155,10 @@ impl FiringResponse{
             shots += self.burst_size;
             time += self.burst_duration;
             time += _extra_charge_delay*self.burst_delay;
+            counter += 1;
+            if counter > 1000 {
+                break;
+            }
         }
         self.rpm = shots as f64 / time * 60.0;
     }

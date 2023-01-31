@@ -286,7 +286,6 @@ pub(super) fn hmr_search_party(
     }
 }
 
-
 pub(super) fn mmr_runneth_over(
     _input: &CalculationInput,
     _value: u32,

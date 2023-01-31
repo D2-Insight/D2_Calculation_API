@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use serde::Serialize;
 
-use super::{Perk, Perks};
+use super::{Perk, Perks, enhanced_handler::enhanced_check};
 
 #[derive(Debug, Clone, Serialize)]
 pub enum PerkValueVariant {
@@ -29,7 +29,7 @@ impl PerkOptionData {
 }
 
 fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
-    let perk: Perks = _hash.into();
+    let perk: Perks = enhanced_check(_hash).0.into();
     match perk {
         //Meta perks
         Perks::BuiltIn => None,
@@ -54,7 +54,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::MajorSpec => Some(PerkOptionData::default()),
         Perks::MinorSpec => Some(PerkOptionData::default()),
         Perks::BigOnesSpec => Some(PerkOptionData::default()),
-        Perks::TakenSpec => Some(PerkOptionData::default()),
+        Perks::TakenSpec => Some(PerkOptionData::toggle()),
 
         //origin | year 5+
         Perks::VeistStinger => Some(PerkOptionData::default()),

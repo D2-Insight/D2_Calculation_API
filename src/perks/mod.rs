@@ -253,7 +253,16 @@ impl From<u32> for Perks {
             902 => Perks::RapidFireFrame,
 
             //armor
-            
+            111111111 => Perks::DexterityMod,
+            222222222 => Perks::ReloadMod,
+            333333333 => Perks::ReserveMod,
+            444444444 => Perks::LoaderMod,
+            555555555 => Perks::TargetingMod,
+            1484685884 => Perks::QuickCharge,
+            593361144 => Perks::DragonShadow,
+            1147638875 => Perks::OphidianAspect,
+
+
             //parts
             3796465595 => Perks::ImpactCasing,
             3721627275 => Perks::SwapMag,
@@ -288,7 +297,8 @@ impl From<u32> for Perks {
             //season 1 | year 1
             1015611457 => Perks::KillClip,
             1168162263 => Perks::Outlaw,
-            1528281896 => Perks::Outlaw, //rose?
+            1528281896 => Perks::Outlaw, //rose
+            3124871000 => Perks::Outlaw,//redrix
             1600092898 => Perks::BackupPlan,
             2869569095 => Perks::FieldPrep,
             3425386926 => Perks::Rampage,
@@ -310,7 +320,6 @@ impl From<u32> for Perks {
             4071163871 => Perks::ThreatDetector,
             3161816588 => Perks::SlideShot,
             3400784728 => Perks::TripleTap,
-            3124871000 => Perks::Outlaw,//redrix only
             1645158859 => Perks::UnderPressure,
 
             //season 2 | year 1
@@ -423,45 +432,41 @@ impl From<u32> for Perks {
             2586829431 => Perks::ShotSwap,
             365154968 => Perks::TargetLock,
 
+            //subclass
+            3066103999 => Perks::OnYourMark,
+            3469412970 => Perks::Hedrons,
+            4194622036 => Perks::FlowState,
+            1727069361 => Perks::Frequency,
+            83039194 => Perks::HeatRises,
+            362132290 => Perks::Tempering,
 
-
-
-            111111111 => Perks::DexterityMod,
-            222222222 => Perks::ReloadMod,
-            333333333 => Perks::ReserveMod,
-            444444444 => Perks::LoaderMod,
-            555555555 => Perks::TargetingMod,
-            1484685884 => Perks::QuickCharge,
+            //kietic exotic
             1301843770 => Perks::CranialSpikeCat,
             970163821 => Perks::AgersCall,
-            2881100038 => Perks::LagragianSight,
             2121086290 => Perks::RatPack,
             4004944400 => Perks::StringofCurses,
-            2812324400 => Perks::WormsHunger,
             3602718766 => Perks::RocketTracers,
             213689231 => Perks::ParacausalShot,
-            4208418110 => Perks::CorruptionSpreads,
             3556949035 => Perks::TimeSlip,
             2724693746 => Perks::ToM,
+            4208418110 => Perks::CorruptionSpreads,
+
+            //energy exotic
+            2881100038 => Perks::LagragianSight,
             961505134 => Perks::IgnitionTrigger,
             2226793914 => Perks::GuidanceRing,
-            656200654 => Perks::ConserveMomentum,
-            2333607307 => Perks::Impetus,
             3174300811 => Perks::LooksCanKill,
-            1000724343 => Perks::PerfectFith,
+            656200654 => Perks::ConserveMomentum,
             407549716 => Perks::Broadside,
+            2333607307 => Perks::Impetus,
             3117514172 => Perks::Stormbringer,
+            1000724343 => Perks::PerfectFith,
             571267712 => Perks::PrismaticInferno,
+
+            //heavy exotic
             4148158229 => Perks::ReignHavoc,
+            2812324400 => Perks::WormsHunger,
             1340292993 => Perks::WhisperCatalyst,
-            3066103999 => Perks::OnYourMark,
-            1727069361 => Perks::Frequency,
-            362132290 => Perks::Tempering,
-            593361144 => Perks::DragonShadow,
-            1147638875 => Perks::OphidianAspect,
-            3469412970 => Perks::Hedrons,
-            83039194 => Perks::HeatRises,
-            4194622036 => Perks::FlowState,
 
             _ => Perks::Ignore,
         }
@@ -624,6 +629,10 @@ fn get_perk_dmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> Dama
         Perks::WeakenDebuffs => {dmr_weaken_debuffs(_input_data, val, enhanced, _pvp, &HashMap::new())}
         Perks::BuiltIn => dmr_built_in(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::BossSpec => dmr_boss_spec(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::MajorSpec => dmr_major_spec(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::MinorSpec => dmr_minor_spec(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::BigOnesSpec => dmr_big_ones_spec(_input_data, val, enhanced, _pvp, &HashMap::new()),
+        Perks::TakenSpec => dmr_taken_spec(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::Rampage => dmr_rampage(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::ToM => dmr_tom(_input_data, val, enhanced, _pvp, &HashMap::new()),
         Perks::KillClip => dmr_kill_clip(_input_data, val, enhanced, _pvp, &HashMap::new()),

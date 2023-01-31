@@ -70,6 +70,7 @@ pub struct FiringConfig {
 pub struct Weapon {
     //ideally entirely interfaced with through funcs when acting mutably
     pub is_pvp: bool,
+    pub explosive_percent: f64,
     pub hash: u32,
 
     pub perks: HashMap<u32, Perk>,
@@ -96,11 +97,7 @@ impl Weapon {
         self.update_stats();
     }
     pub fn list_perk_ids(&self) -> Vec<u32> {
-        let mut perk_list: Vec<u32> = Vec::new();
-        for (key, _perk) in &self.perks {
-            perk_list.push(*key);
-        }
-        perk_list
+        self.perks.keys().cloned().collect()
     }
     pub fn list_perks(&self) -> Vec<Perk> {
         let mut perk_list: Vec<Perk> = Vec::new();
@@ -208,6 +205,7 @@ impl Default for Weapon {
     fn default() -> Weapon {
         Weapon {
             is_pvp: false,
+            explosive_percent: 0.0,
 
             perks: HashMap::new(),
             stats: HashMap::new(),

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{StatHashes, WeaponType, DamageType};
+use crate::{d2_enums::{StatHashes, WeaponType, DamageType}, enemies::EnemyType};
 
 use super::{
     clamp,
@@ -437,16 +437,84 @@ pub(super) fn dmr_boss_spec(
     _pvp: bool,
     _cached_data: &HashMap<String, f64>,
 ) -> DamageModifierResponse {
+    let damage_mult = if *_input.enemy_type == EnemyType::BOSS { 1.077} else { 1.0 };
     DamageModifierResponse {
-        dmg_scale: 1.077,
+        dmg_scale: damage_mult,
         crit_scale: 1.0,
     }
 }
 
+pub(super) fn dmr_major_spec(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let damage_mult;
+    if *_input.enemy_type == EnemyType::MINIBOSS
+        || *_input.enemy_type == EnemyType::ELITE
+        || *_input.enemy_type == EnemyType::CHAMPION
+    {
+        damage_mult = 1.077;
+    } else {
+        damage_mult = 1.0;
+    };
+    DamageModifierResponse {
+        dmg_scale: damage_mult,
+        crit_scale: 1.0,
+    }
+}
 
+pub(super) fn dmr_big_ones_spec(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let damage_mult;
+    if *_input.enemy_type == EnemyType::MINIBOSS
+        || *_input.enemy_type == EnemyType::ELITE
+        || *_input.enemy_type == EnemyType::CHAMPION
+        || *_input.enemy_type == EnemyType::BOSS
+    {
+        damage_mult = 1.077;
+    } else {
+        damage_mult = 1.0;
+    };
+    DamageModifierResponse {
+        dmg_scale: damage_mult,
+        crit_scale: 1.0,
+    }
+}
 
+pub(super) fn dmr_minor_spec(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let damage_mult = if *_input.enemy_type == EnemyType::MINOR { 1.077} else { 1.0 };
+    DamageModifierResponse {
+        dmg_scale: damage_mult,
+        crit_scale: 1.0,
+    }
+}
 
-
-
+pub(super) fn dmr_taken_spec(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let damage_mult = if _value > 0 { 1.1} else { 1.0 };
+    DamageModifierResponse {
+        dmg_scale: damage_mult,
+        crit_scale: 1.0,
+    }
+}
 
 

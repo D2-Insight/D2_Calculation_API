@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::{types::rs_types::{StatQuadraticFormula, RangeFormula, HandlingFormula, ReloadFormula, DamageMods, AmmoFormula}, d2_enums::{DamageType, AmmoType, WeaponType}, perks::Perk};
+use crate::{types::rs_types::{StatQuadraticFormula, RangeFormula, HandlingFormula, ReloadFormula, DamageMods, AmmoFormula}, d2_enums::{DamageType, AmmoType, WeaponType}, perks::{Perk, enhanced_handler::enhanced_check}};
 
 use super::{Weapon, FiringConfig};
 
@@ -70,10 +70,12 @@ impl Weapon {
         let ammo_type = AmmoType::from_u32(_ammo_type_id);
         let damage_type = DamageType::from_u32(_damage_type_id);
 
+        let new_intrinsic_hash = enhanced_check(_intrinsic_hash).0;
         Ok(Weapon {
             is_pvp: false,
+            explosive_percent: 0.0,
             hash: _hash,
-            perks: HashMap::from([(_intrinsic_hash, Perk{stat_buffs:HashMap::new(), enhanced: false, value: 0, hash:_intrinsic_hash})]),
+            perks: HashMap::from([(new_intrinsic_hash, Perk{stat_buffs:HashMap::new(), enhanced: false, value: 0, hash:new_intrinsic_hash})]),
             stats: HashMap::new(),
             damage_mods,
             ammo_formula,

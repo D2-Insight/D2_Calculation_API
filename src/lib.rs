@@ -124,7 +124,7 @@ pub fn get_weapon_hash() -> Result<bool, JsValue> {
 }
 
 #[cfg(feature = "wasm")]
-#[wasm_bindgen(js_name = "getStat")]
+#[wasm_bindgen(js_name = "getStats")]
 pub fn get_stats() -> Result<JsValue, JsValue> {
     let stat_map = PERS_DATA.with(|perm_data| {
         perm_data.borrow().weapon.stats.clone()
@@ -142,16 +142,12 @@ pub fn get_stats() -> Result<JsValue, JsValue> {
 }
 
 #[cfg(feature = "wasm")]
-#[wasm_bindgen(js_name = "setStat")]
-pub fn set_stats(_stat_hashes: Vec<u32>, _stat_values: Vec<i32>) -> Result<(), JsValue> {
-    if _stat_hashes.len() != _stat_values.len() {
-        return Err(JsValue::from_str(
-            "Stat hashes and values must be the same length",
-        ));
-    }
+#[wasm_bindgen(js_name = "setStats")]
+pub fn set_stats(_stats: JsValue) -> Result<(), JsValue> {
+    let in_stats: HashMap<u32, i32> = serde_wasm_bindgen::from_value(_stats).unwrap();
     let mut stats = HashMap::new();
-    for i in 0.._stat_hashes.len() {
-        stats.insert(_stat_hashes[i], Stat::from(_stat_values[i]));
+    for (key, value) in in_stats {
+        stats.insert(key, Stat::from(value));
     }
     PERS_DATA.with(|perm_data| perm_data.borrow_mut().weapon.stats = stats);
     Ok(())
