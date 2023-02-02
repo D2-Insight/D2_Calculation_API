@@ -311,3 +311,7 @@ impl Weapon {
         out
     }
 }
+
+// fn grenade_explosive_ratio(_special: bool, _blast_radius: u32) -> f64 {
+
+// }

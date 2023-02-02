@@ -3,7 +3,6 @@
         "MossyMax": "for all the pve scaling numbers , alot of base dmg numbers and just being the GOAT",
         "subfamilyNotes": [
             "because of how infrequently some values vary they have had been made reliant upon defaualts",
-            "explosive is defaulted to false, if true dmg*critmult is impact. so dmg of 100 and crit mult of 0.3 would be 30 impact",
             "one_ammo is defaulted to false, if the gun shoots multiple bullets in a \"burst\" but only uses one ammo per burst set this to true",
             "charge is defaulted to false, if the gun has a charge time set this to true"
         ],
@@ -223,10 +222,10 @@
             }
         },
         "subFam": {
-            "Rapid-Fire":  {"damage": 27.22, "crit_mult": 1.0, "burst_delay": 0.500, "burst_size": 9, "burst_duration": 0.233,  "one_ammo": true},
-            "High-Impact": {"damage": 66.00, "crit_mult": 1.0, "burst_delay": 0.960, "burst_size": 5, "burst_duration": 0.233,  "one_ammo": true},
-            "Precision":   {"damage": 40.00, "crit_mult": 1.0, "burst_delay": 0.780, "burst_size": 7, "burst_duration": 0.233,  "one_ammo": true},
-            "Adaptive":    {"damage": 38.60, "crit_mult": 1.0, "burst_delay": 0.66 , "burst_size": 7, "burst_duration": 0.233,  "one_ammo": true},
+            "Rapid-Fire":  {"damage": 27.22, "crit_mult": 1.0, "burst_delay": 0.500, "burst_size": 9, "burst_duration": 0.266,  "one_ammo": true},
+            "High-Impact": {"damage": 66.00, "crit_mult": 1.0, "burst_delay": 0.960, "burst_size": 5, "burst_duration": 0.200,  "one_ammo": true},
+            "Precision":   {"damage": 40.00, "crit_mult": 1.0, "burst_delay": 0.780, "burst_size": 7, "burst_duration": 0.200,  "one_ammo": true},
+            "Adaptive":    {"damage": 38.60, "crit_mult": 1.0, "burst_delay": 0.66 , "burst_size": 7, "burst_duration": 0.132,  "one_ammo": true},
             "Aggressive":  {"damage": 38.60, "crit_mult": 1.0, "burst_delay": 0.66 , "burst_size": 7, "burst_duration": 0.000,  "one_ammo": true},
             "Jotunn":      {"damage": 326.0, "crit_mult": 1.0, "burst_delay": 0.767, "burst_size": 1, "burst_duration": 0.000   },
             "Bastion":     {"damage": 25.927, "crit_mult": 1.0, "burst_delay": 0.733, "burst_size": 21,"burst_duration": 0.000, "one_ammo": true},
@@ -297,9 +296,9 @@
             }
         },
         "subFam": {
-            "WaveFrame":    {"damage": 130.0, "crit_mult": 0.2, "burst_delay": 0.667, "burst_size": 1, "burst_duration": 0.0, "explosive": true},
-            "Lightweight":  {"damage": 200.0, "crit_mult": 0.0, "burst_delay": 0.667, "burst_size": 1, "burst_duration": 0.0, "explosive": true},
-            "FightingLion": {"damage": 160.0, "crit_mult": 0.0, "burst_delay": 0.667, "burst_size": 1, "burst_duration": 0.0, "explosive": true}
+            "WaveFrame":    {"damage": 130.0, "crit_mult": 1.0, "burst_delay": 0.667, "burst_size": 1, "burst_duration": 0.0},
+            "Lightweight":  {"damage": 200.0, "crit_mult": 1.0, "burst_delay": 0.667, "burst_size": 1, "burst_duration": 0.0},
+            "FightingLion": {"damage": 160.0, "crit_mult": 1.0, "burst_delay": 0.667, "burst_size": 1, "burst_duration": 0.0}
         },
         "magProf": {
             "rapid": {
@@ -377,12 +376,12 @@
             }
         },
         "subFam": {
-            "Precision":  {"damage":40.0, "crit_mult":1.5, "burst_delay":0.3333, "burst_size":1, "burst_duration":0},
-            "Aggressive": {"damage":50.0, "crit_mult":1.6, "burst_delay":0.5, "burst_size":1, "burst_duration":0},
+            "Precision":  {"damage":40.0, "crit_mult":1.5, "burst_delay":0.3333,  "burst_size":1, "burst_duration":0},
+            "Aggressive": {"damage":50.0, "crit_mult":1.6, "burst_delay":0.5,     "burst_size":1, "burst_duration":0},
             "Adaptive":   {"damage":46.5, "crit_mult":1.5, "burst_delay":0.43321, "burst_size":1, "burst_duration":0},
-            "Lightweight":{"damage":42.0, "crit_mult":1.6, "burst_delay":0.4, "burst_size":1, "burst_duration":0},
+            "Lightweight":{"damage":42.0, "crit_mult":1.6, "burst_delay":0.4,     "burst_size":1, "burst_duration":0},
             "Rapid-Fire": {"damage":38.0, "crit_mult":1.4, "burst_delay":0.26667, "burst_size":1, "burst_duration":0},
-            "Crimson":    {"damage":19.0, "crit_mult":1.6, "burst_delay":0.14458, "burst_size":3, "burst_duration":0.2333},
+            "Crimson":    {"damage":19.0, "crit_mult":1.6, "burst_delay":0.2    , "burst_size":3, "burst_duration":0.2},
             "Eriana":     {"damage":78.0, "crit_mult":1.6, "burst_delay":0.66667, "burst_size":1, "burst_duration":0},
             "LastWord":   {"damage":38.0, "crit_mult":1.8, "burst_delay":0.26667, "burst_size":1, "burst_duration":0}
         },
@@ -406,11 +405,11 @@
         }
     },
     "Linear Fusion Rifle": {
-        "1531126198": {"name": "The Queenbreaker", "cat": "default",  "subFam": "QueenBreaker", "magProf": "default", "pve":1.10},
+        "1531126198": {"name": "The Queenbreaker", "cat": "exotic",   "subFam": "QueenBreaker", "magProf": "default", "pve":1.10},
         "2057203855": {"name": "Precision Frame",  "cat": "default",  "subFam": "Precision",    "magProf": "default", "pve":1.10},
         "2564164194": {"name": "Arbalest",         "cat": "arbalest", "subFam": "Precision",    "magProf": "default", "pve":1.10},
-        "3884127242": {"name": "Sleeper Simulant", "cat": "default",  "subFam": "SleeperSim",   "magProf": "default" },
-        "2881100038": {"name": "Lorentz Driver",   "cat": "special",  "subFam": "Precision",    "magProf": "default", "pve":1.10},
+        "3884127242": {"name": "Sleeper Simulant", "cat": "exotic",   "subFam": "SleeperSim",   "magProf": "default" },
+        "2881100038": {"name": "Lorentz Driver",   "cat": "default",  "subFam": "Precision",    "magProf": "default", "pve":1.10},
 
         "cat": {
             "default": {
@@ -421,9 +420,9 @@
                     "stow": {"vpp": -0.002863515313, "offset": 0.4445712383},
                     "ads":  {"vpp": -0.001693741678, "offset": 0.4112330226}
                 },
-                "combatant_scalars": {"vehicle": 1.81, "boss": 1.81, "champion": 1.92, "miniboss": 1.92, "elite": 1.92, "minor": 2.03}
+                "combatant_scalars": {"vehicle": 1.81, "boss": 1.54, "champion": 1.64, "miniboss": 1.64, "elite": 1.92, "minor": 2.03}
             },
-            "special": {
+            "exotic": {
                 "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
                 "reload":   {"evpp": 0.0000588462, "vpp": -0.0199884, "offset": 2.87206463333},
                 "handling": {
@@ -431,7 +430,7 @@
                     "stow": {"vpp": -0.002863515313, "offset": 0.4445712383},
                     "ads":  {"vpp": -0.001693741678, "offset": 0.4112330226}
                 },
-                "combatant_scalars": {"vehicle": 1.81, "boss": 1.54, "champion": 1.64, "miniboss": 1.64, "elite": 1.92, "minor": 2.03}
+                "combatant_scalars": {"vehicle": 1.81, "boss": 1.81, "champion": 1.92, "miniboss": 1.92, "elite": 1.92, "minor": 2.03}
             },
             "arbalest": {
                 "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
@@ -504,7 +503,7 @@
             "High-Impact": {"damage": 34.0,  "crit_mult": 1.4, "burst_delay": 0.16667, "burst_size": 1, "burst_duration": 0.0},
             "Adaptive":    {"damage": 30.0,  "crit_mult": 1.4, "burst_delay": 0.13333, "burst_size": 1, "burst_duration": 0.0},
             "Rapid-Fire":  {"damage": 18.0,  "crit_mult": 1.3, "burst_delay": 0.06667, "burst_size": 1, "burst_duration": 0.0},
-            "Xenophage":   {"damage": 75.0,  "crit_mult": 1.0, "burst_delay": 0.5000,  "burst_size": 1, "burst_duration": 0.0, "explosive": true},
+            "Xenophage":   {"damage": 150.0,  "crit_mult": 1.0, "burst_delay": 0.5000,  "burst_size": 1, "burst_duration": 0.0},
             "HeirApparent":{"damage": 234.0, "crit_mult": 1.4, "burst_delay": 0.13333, "burst_size": 1, "burst_duration": 0.0}
         },
         "magProf": {
@@ -562,12 +561,12 @@
             }
         },
         "subFam": {
-            "Aggressive":    {"damage": 15.5, "crit_mult": 1.7, "burst_delay": 0.13333, "burst_size": 4, "burst_duration": 0.2333 },
-            "High-Impact":   {"damage": 22.0, "crit_mult": 1.65, "burst_delay": 0.17647, "burst_size": 3, "burst_duration": 0.1667},
-            "Rapid-Fire":    {"damage": 14.0, "crit_mult": 1.7, "burst_delay": 0.11111, "burst_size": 3, "burst_duration": 0.1667 },
-            "Adaptive":      {"damage": 19.0, "crit_mult": 1.7, "burst_delay": 0.15385, "burst_size": 3, "burst_duration": 0.1667 },
-            "Lightweight":   {"damage": 16.0, "crit_mult": 1.65, "burst_delay": 0.11111, "burst_size": 3, "burst_duration": 0.1667},
-            "VigilanceWing": {"damage": 15.7, "crit_mult": 1.46, "burst_delay": 0.11321, "burst_size": 5, "burst_duration": 0.3000},
+            "Aggressive":    {"damage": 15.5, "crit_mult": 1.7,  "burst_delay": 0.13333, "burst_size": 4, "burst_duration": 0.2000 },
+            "High-Impact":   {"damage": 22.0, "crit_mult": 1.65, "burst_delay": 0.17647, "burst_size": 3, "burst_duration": 0.1333},
+            "Rapid-Fire":    {"damage": 14.0, "crit_mult": 1.7,  "burst_delay": 0.11111, "burst_size": 3, "burst_duration": 0.1333 },
+            "Adaptive":      {"damage": 19.0, "crit_mult": 1.7,  "burst_delay": 0.15385, "burst_size": 3, "burst_duration": 0.1333 },
+            "Lightweight":   {"damage": 16.0, "crit_mult": 1.65, "burst_delay": 0.11111, "burst_size": 3, "burst_duration": 0.1333},
+            "VigilanceWing": {"damage": 15.7, "crit_mult": 1.46, "burst_delay": 0.11321, "burst_size": 5, "burst_duration": 2.6777},
             "GravitonLance": {"damage": 23.0, "crit_mult": 1.65, "burst_delay": 0.23346, "burst_size": 5, "burst_duration": 0.1000}
         },
         "magProf": {
@@ -621,12 +620,12 @@
             }
         },
         "subFam": {
-            "High-Impact": {"damage": 270, "crit_mult": 0.28, "burst_delay": 4.0, "burst_size": 1, "burst_duration": 0, "explosive": true},
-            "Aggressive":  {"damage": 330, "crit_mult": 0.28, "burst_delay": 2.4, "burst_size": 1, "burst_duration": 0, "explosive": true},
-            "Precision":   {"damage": 300, "crit_mult": 0.28, "burst_delay": 4.0, "burst_size": 1, "burst_duration": 0, "explosive": true},
-            "Adaptive":    {"damage": 330, "crit_mult": 0.28, "burst_delay": 3.0, "burst_size": 1, "burst_duration": 0, "explosive": true},
-            "Wardcliff":   {"damage": 300, "crit_mult": 0.07, "burst_delay": 1.0, "burst_size": 8, "burst_duration": 0.7, "one_ammo": true, "explosive": true},
-            "TwoTailed":   {"damage": 193, "crit_mult": 1.0,  "burst_delay": 1.0, "burst_size": 2, "burst_duration": 0.3, "one_ammo": true, "explosive": true},
+            "High-Impact": {"damage": 346, "crit_mult": 1.0, "burst_delay": 4.0, "burst_size": 1, "burst_duration": 0},
+            "Aggressive":  {"damage": 422, "crit_mult": 1.0, "burst_delay": 2.4, "burst_size": 1, "burst_duration": 0},
+            "Precision":   {"damage": 384, "crit_mult": 1.0, "burst_delay": 4.0, "burst_size": 1, "burst_duration": 0},
+            "Adaptive":    {"damage": 422, "crit_mult": 1.0, "burst_delay": 3.0, "burst_size": 1, "burst_duration": 0},
+            "Wardcliff":   {"damage": 321, "crit_mult": 1.0, "burst_delay": 1.0, "burst_size": 8, "burst_duration": 0.7, "one_ammo": true},
+            "TwoTailed":   {"damage": 193, "crit_mult": 1.0,  "burst_delay": 1.0, "burst_size": 2, "burst_duration": 0.3, "one_ammo": true},
             "EyesOfTmrw":  {"damage": 200, "crit_mult": 1.0,  "burst_delay": 1.0, "burst_size": 8, "burst_duration": 1.0, "one_ammo": true},
             "DeathBringer":{"damage": 50,  "crit_mult": 1.0,  "burst_delay": 1.0, "burst_size": 7, "burst_duration": 0.0, "one_ammo": true}
         },
@@ -786,7 +785,7 @@
         "1636108362": {"name": "Precision Frame",       "cat": "default"   , "subFam": "Precision",        "magProf": "small"},
         "2121086290": {"name": "Rat King",              "cat": "default"   , "subFam": "Adaptive",         "magProf": "small"},
         "3330548924": {"name": "Aggressive Burst",      "cat": "default"   , "subFam": "Aggressive_Burst", "magProf": "small"},
-        "3449390870": {"name": "Adaptive Frame",        "cat": "default"   , "subFam": "Adaptive",         "magProf": "small"},
+        "3449390870": {"name": "Adaptive Frame",        "cat": "default"   , "subFam": "Adaptive_Burst",   "magProf": "small"},
         "2641107734": {"name": "Trespasser",            "cat": "default"   , "subFam": "Adaptive_Burst",   "magProf": "small"},
         "2984682260": {"name": "Forerunner",            "cat": "Forerunner", "subFam": "Forerunner",       "magProf": "forerunner"},
         "cat": {

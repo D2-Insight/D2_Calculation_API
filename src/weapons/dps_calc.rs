@@ -164,6 +164,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
         while mag > 0 {
             //DMG MODIFIERS////////////////
             let before_shot_input_data = CalculationInput {
+                intrinsic_hash: weapon.intrinsic_hash,
                 curr_firing_data: &firing_settings,
                 base_damage: base_dmg,
                 base_crit_mult: base_crit_mult,
@@ -258,6 +259,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
 
             //COMPLEX CALC PRECURSOR//////
             let after_shot_input_data = CalculationInput {
+                intrinsic_hash: weapon.intrinsic_hash,
                 curr_firing_data: &firing_settings,
                 base_damage: base_dmg,
                 base_crit_mult: base_crit_mult,
@@ -285,7 +287,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                 perks.clone(),
                 &after_shot_input_data,
                 false,
-                &persistent_calc_data,
+                &mut persistent_calc_data,
             );
             let buffs = ExtraDamageBuffInfo {
                 pl_buff: _pl_dmg_mult,
@@ -306,7 +308,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                     perks.clone(),
                     &after_shot_input_data,
                     false,
-                    &persistent_calc_data,
+                    &mut persistent_calc_data,
                 );
                 if reload_override_responses.len() > 0 {
                     let mut final_response = ReloadOverrideResponse::invalid();
@@ -335,7 +337,8 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                         }
                     }
                 }
-            } else {
+            }
+            if mag != 0 {
                 if weapon.weapon_type == WeaponType::FUSIONRIFLE {
                     total_time += shot_burst_delay * 0.45
                 } else if weapon.weapon_type == WeaponType::LINEARFUSIONRIFLE {
@@ -364,9 +367,10 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
 
         //RELOAD///////////////////////
         let reload_input_data = CalculationInput {
+            intrinsic_hash: weapon.intrinsic_hash,
             curr_firing_data: &firing_settings,
             base_damage: base_dmg,
-            base_crit_mult: base_crit_mult,
+            base_crit_mult,
             base_mag: base_mag as f64,
             curr_mag: mag as f64,
             ammo_type: &ammo_type,
@@ -380,7 +384,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
             time_total: total_time,
             time_this_mag: (total_time - start_time),
             damage_type: &weapon.damage_type,
-            handling_data: handling_data,
+            handling_data,
             num_reloads: num_reloads as f64,
             has_overshield: false,
         };

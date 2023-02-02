@@ -16,7 +16,7 @@ pub(super) fn mmr_clown_cartridge(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     MagazineModifierResponse {
         magazine_add: 0.0,
@@ -30,7 +30,7 @@ pub(super) fn sbr_elemental_capacitor(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     if _value == 1 {
@@ -50,7 +50,7 @@ pub(super) fn hmr_elemental_capacitor(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let mut handling = 0;
     if _value == 3 {
@@ -68,7 +68,7 @@ pub(super) fn rsmr_elemental_capacitor(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let mut reload = 0;
     if _value == 2 {
@@ -85,7 +85,7 @@ pub(super) fn sbr_killing_wind(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     if _value > 0 {
@@ -100,7 +100,7 @@ pub(super) fn rmr_killing_wind(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> RangeModifierResponse {
     if _value > 0 {
         RangeModifierResponse {
@@ -124,11 +124,11 @@ pub(super) fn dmr_lasting_impressions(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     DamageModifierResponse {
         dmg_scale: 1.2,
-        crit_scale: 1.0,
+        ..Default::default()
     }
 }
 
@@ -137,7 +137,7 @@ pub(super) fn dmr_vorpal(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut buff = 1.0;
     if *_input.enemy_type == EnemyType::BOSS
@@ -155,6 +155,6 @@ pub(super) fn dmr_vorpal(
     }
     DamageModifierResponse {
         dmg_scale: buff,
-        crit_scale: 1.0,
+        ..Default::default()
     }
 }

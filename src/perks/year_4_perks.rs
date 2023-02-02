@@ -16,7 +16,7 @@ pub(super) fn dmr_adagio(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut duration = 0.0;
     if _value > 1 {
@@ -26,12 +26,12 @@ pub(super) fn dmr_adagio(
     if *_input.weapon_type == WeaponType::BOW || *_input.weapon_type == WeaponType::SHOTGUN {
         dmg_boost = 0.2;
     };
-    if _input.time_total >= duration && _pvp == false {
+    if _input.time_total >= duration {
         dmg_boost = 0.0;
     };
     DamageModifierResponse {
         dmg_scale: 1.0 + dmg_boost,
-        crit_scale: 1.0,
+        ..Default::default()
     }
 }
 
@@ -40,17 +40,17 @@ pub(super) fn fmr_adagio(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     let duration = if _is_enhanced { 8.0 } else { 7.0 };
     let mut firing_slow = 1.2;
-    if _input.time_total >= duration && _pvp == false {
+    if _input.time_total >= duration {
         firing_slow = 1.0;
     };
     FiringModifierResponse {
         burst_delay_scale: firing_slow,
         burst_delay_add: 0.0,
-        burst_duration_scale: 1.0,
+        burst_duration_scale: firing_slow,
         burst_size_add: 0.0,
     }
 }
@@ -60,7 +60,7 @@ pub(super) fn dmr_adrenaline_junkie(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let val = clamp(_value, 0, 5);
     let duration = if _is_enhanced { 6.0 } else { 4.5 };
@@ -70,7 +70,7 @@ pub(super) fn dmr_adrenaline_junkie(
     };
     DamageModifierResponse {
         dmg_scale: 1.0 + dmg_boost,
-        crit_scale: 1.0,
+        ..Default::default()
     }
 }
 
@@ -79,7 +79,7 @@ pub(super) fn sbr_adrenaline_junkie(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let duration = if _is_enhanced { 6.0 } else { 4.5 };
     let mut handling = 0;
@@ -96,7 +96,7 @@ pub(super) fn hmr_adrenaline_junkie(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let handling = if _value > 0 { 20 } else { 0 };
     HandlingModifierResponse {
@@ -111,7 +111,7 @@ pub(super) fn fmr_cornered(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     let mut delay_mult = 1.0;
     if _value > 0 {
@@ -130,7 +130,7 @@ pub(super) fn sbr_ensemble(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let handling = if _is_enhanced { 30 } else { 35 };
     let reload = if _is_enhanced { 40 } else { 45 };
@@ -149,7 +149,7 @@ pub(super) fn hmr_ensemble(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let handling = if _is_enhanced { 30 } else { 35 };
     if _value > 0 {
@@ -172,7 +172,7 @@ pub(super) fn rsmr_ensemble(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let reload = if _is_enhanced { 40 } else { 45 };
     if _value > 0 {
@@ -193,7 +193,7 @@ pub(super) fn rsmr_frenzy(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let mut reload = 0;
     if _value > 0 {
@@ -213,7 +213,7 @@ pub(super) fn hmr_frenzy(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let mut handling = 0;
     if _value > 0 {
@@ -234,7 +234,7 @@ pub(super) fn dmr_frenzy(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut dmg = 0.0;
     if _value > 0 {
@@ -245,7 +245,7 @@ pub(super) fn dmr_frenzy(
     };
     DamageModifierResponse {
         dmg_scale: 1.0 + dmg,
-        crit_scale: 1.0,
+        ..Default::default()
     }
 }
 
@@ -254,7 +254,7 @@ pub(super) fn sbr_frenzy(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut handling = 0;
     let mut reload = 0;
@@ -277,7 +277,7 @@ pub(super) fn rsmr_impulse_amplifier(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let reload = if _is_enhanced { 15 } else { 10 };
     let reload_mult = if _is_enhanced { 0.77 } else { 0.8 };
@@ -292,7 +292,7 @@ pub(super) fn sbr_perpetual_motion(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let val = clamp(_value, 0, 2);
     let mut stat_bump = 0;
@@ -313,7 +313,7 @@ pub(super) fn hmr_perpetual_motion(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let val = clamp(_value, 0, 2);
     let mut stat_bump = 0;
@@ -334,7 +334,7 @@ pub(super) fn rsmr_perpetual_motion(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let val = clamp(_value, 0, 2);
     let mut stat_bump = 0;
@@ -354,7 +354,7 @@ pub(super) fn sbr_perfect_float(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value > 0 {
@@ -368,7 +368,7 @@ pub(super) fn sbr_pugilist(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value > 0 {
@@ -382,7 +382,7 @@ pub(super) fn hrm_pugilist(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let mut handling = 0;
     if _value > 0 {
@@ -400,7 +400,7 @@ pub(super) fn mmr_reconstruction(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     let mag_scale = if _value > 0 { 2.0 } else { 1.0 };
     MagazineModifierResponse {
@@ -415,7 +415,7 @@ pub(super) fn sbr_danger_zone(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value > 0 {
@@ -429,7 +429,7 @@ pub(super) fn dmr_one_for_all(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut dmg = 0.0;
     let duration = if _is_enhanced { 11.0 } else { 10.0 };
@@ -450,7 +450,7 @@ pub(super) fn rsmr_fire_fly(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let duration = if _is_enhanced { 7.0 } else { 6.0 };
     if _value > 0 && _input.time_total < duration {
@@ -468,11 +468,11 @@ pub(super) fn dmr_golden_tricorn(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let val = clamp(_value, 0, 2);
     let mut duration = if val == 2 { 10.0 } else { 7.0 };
-    if _is_enhanced && val == 1{
+    if _is_enhanced && val == 1 {
         duration += 1.0;
     };
     let damage_mult = if val == 2 { 0.5 } else { 0.15 };
@@ -485,4 +485,3 @@ pub(super) fn dmr_golden_tricorn(
         DamageModifierResponse::default()
     }
 }
-

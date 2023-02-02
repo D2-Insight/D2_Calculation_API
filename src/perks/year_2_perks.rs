@@ -5,9 +5,10 @@ use crate::d2_enums::{StatHashes, WeaponType};
 use super::{
     clamp,
     lib::{
-        CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
-        HandlingModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
-        ReloadModifierResponse, ReloadOverrideResponse,
+        CalculationInput, DamageBuffType, DamageModifierResponse, ExplosivePercentResponse,
+        ExtraDamageResponse, FiringModifierResponse, HandlingModifierResponse,
+        MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
+        ReloadOverrideResponse,
     },
 };
 
@@ -16,7 +17,7 @@ pub(super) fn sbr_air_assault(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     let ae_per_stack = if _is_enhanced { 35 } else { 20 };
@@ -30,7 +31,7 @@ pub(super) fn fmr_archers_tempo(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     FiringModifierResponse {
         burst_delay_scale: 0.75,
@@ -45,19 +46,31 @@ pub(super) fn dmr_explosive_head(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     if _pvp {
-        DamageModifierResponse {
-            dmg_scale: 1.0,
-            crit_scale: 1.0,
-        }
+        DamageModifierResponse::default()
     } else {
-        let damage_mult = ((1.0 / _input.base_crit_mult) * 0.15) + 1.0;
+        // let damage_mult = ((1.0 / _input.base_crit_mult) * 0.15) + 1.0;
         DamageModifierResponse {
-            dmg_scale: damage_mult,
-            crit_scale: 1.0,
+            dmg_scale: 0.3,
+            buff_type: DamageBuffType::EXPLOSION,
+            ..Default::default()
         }
+    }
+}
+
+pub(super) fn epr_explosive_head(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> ExplosivePercentResponse {
+    ExplosivePercentResponse {
+        percent: 0.5,
+        delyed: 0.2,
+        retain_base_total: true,
     }
 }
 
@@ -66,7 +79,7 @@ pub(super) fn rsmr_feeding_frenzy(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let val = clamp(_value, 0, 5);
     let duration = 3.5;
@@ -103,7 +116,7 @@ pub(super) fn sbr_feeding_frenzy(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     let val = clamp(_value, 0, 5);
@@ -132,15 +145,15 @@ pub(super) fn dmr_firing_line(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut crit_mult = 1.0;
     if _value > 0 {
         crit_mult = 1.2;
     }
     DamageModifierResponse {
-        dmg_scale: 1.0,
         crit_scale: crit_mult,
+        ..Default::default()
     }
 }
 
@@ -149,7 +162,7 @@ pub(super) fn rr_fourth_times(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> RefundResponse {
     RefundResponse {
         crit: true,
@@ -164,7 +177,7 @@ pub(super) fn dmr_killing_tally(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let val = clamp(_value, 0, 3);
     let mut damage_mult = 0.1 * val as f64;
@@ -176,7 +189,7 @@ pub(super) fn dmr_killing_tally(
     };
     DamageModifierResponse {
         dmg_scale: 1.0 + damage_mult,
-        crit_scale: 1.0,
+        ..Default::default()
     }
 }
 
@@ -185,7 +198,7 @@ pub(super) fn mmr_overflow(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     let mut mag_scale = if _value > 0 { 2.0 } else { 1.0 };
     if _input.total_shots_fired == 0.0 {
@@ -203,7 +216,7 @@ pub(super) fn rsmr_rapid_hit(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let reload_mult;
     let reload;
@@ -233,7 +246,7 @@ pub(super) fn dmr_resevoir_burst(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut damage_mult = 1.0;
     if _input.curr_mag >= _input.base_mag {
@@ -241,7 +254,7 @@ pub(super) fn dmr_resevoir_burst(
     };
     DamageModifierResponse {
         dmg_scale: damage_mult,
-        crit_scale: 1.0,
+        ..Default::default()
     }
 }
 
@@ -250,7 +263,7 @@ pub(super) fn dmr_surrounded(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut damage_mult = 1.0;
     if _value > 0 {
@@ -265,7 +278,7 @@ pub(super) fn dmr_surrounded(
     };
     DamageModifierResponse {
         dmg_scale: damage_mult,
-        crit_scale: 1.0,
+        ..Default::default()
     }
 }
 
@@ -274,7 +287,7 @@ pub(super) fn ror_demolitionist(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadOverrideResponse {
     //todo implement system for cooldown
     let grenade_throw_time = 0.8;
@@ -291,13 +304,12 @@ pub(super) fn ror_demolitionist(
     ReloadOverrideResponse::invalid()
 }
 
-
 pub(super) fn dmr_full_court(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &HashMap<String, f64>,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut damage_mult = 1.0;
     if _value > 0 {
@@ -305,6 +317,6 @@ pub(super) fn dmr_full_court(
     };
     DamageModifierResponse {
         dmg_scale: damage_mult,
-        crit_scale: 1.0,
+        ..Default::default()
     }
 }

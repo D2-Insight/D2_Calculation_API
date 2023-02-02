@@ -72,8 +72,14 @@ impl Weapon {
 
         Ok(Weapon {
             is_pvp: false,
+            intrinsic_hash: _intrinsic_hash,
             hash: _hash,
-            perks: HashMap::from([(_intrinsic_hash, Perk{stat_buffs:HashMap::new(), enhanced: false, value: 0, hash:_intrinsic_hash})]),
+            perks: HashMap::from(
+                [
+                    (_intrinsic_hash, Perk{stat_buffs:HashMap::new(), enhanced: false, value: 0, hash:_intrinsic_hash}),
+                    (0, Perk{stat_buffs:HashMap::new(), enhanced: false, value: 0, hash:0})
+                ]
+            ),
             stats: HashMap::new(),
             damage_mods,
             ammo_formula,

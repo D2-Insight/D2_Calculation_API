@@ -394,7 +394,7 @@ fn get_weapon_handling(_use_traits: bool) -> PyResult<PyHandlingResponse> {
 
 #[cfg(feature = "python")]
 #[pyfunction(name = "get_firing_data")]
-pub fn get_weapon_firing_data(_dynamic_traits: bool, _use_rpl: bool) -> PyResult<PyFiringResponse> {
+pub fn get_firing_data(_dynamic_traits: bool, _use_rpl: bool) -> PyResult<PyFiringResponse> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     let mut response: types::rs_types::FiringResponse;
     if _dynamic_traits {
@@ -467,6 +467,7 @@ fn register_weapon_interface(py: Python<'_>, parent_module: &PyModule) -> PyResu
     weapon_interface.add_function(wrap_pyfunction!(set_weapon, weapon_interface)?)?;
     weapon_interface.add_function(wrap_pyfunction!(get_weapon_ttk, weapon_interface)?)?;
     weapon_interface.add_function(wrap_pyfunction!(set_weapon_stats, weapon_interface)?)?;
+    weapon_interface.add_function(wrap_pyfunction!(get_firing_data, weapon_interface)?)?;
 
     //classes
     weapon_interface.add_class::<PyWeapon>()?;

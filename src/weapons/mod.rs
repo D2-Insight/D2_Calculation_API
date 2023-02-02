@@ -70,8 +70,8 @@ pub struct FiringConfig {
 pub struct Weapon {
     //ideally entirely interfaced with through funcs when acting mutably
     pub is_pvp: bool,
-    pub explosive_percent: f64,
     pub hash: u32,
+    pub intrinsic_hash: u32,
 
     pub perks: HashMap<u32, Perk>,
     pub stats: HashMap<u32, Stat>,
@@ -135,6 +135,7 @@ impl Weapon {
 
     pub fn static_calc_input(&self) -> CalculationInput {
         CalculationInput::construct_static(
+            self.intrinsic_hash,
             &self.firing_data,
             &self.stats,
             &self.weapon_type,
@@ -144,6 +145,7 @@ impl Weapon {
 
     pub fn sparse_calc_input(&self, _total_shots_fired: i32, _total_time: f64) -> CalculationInput {
         CalculationInput::construct_pve_sparse(
+            self.intrinsic_hash,
             &self.firing_data,
             &self.stats,
             &self.weapon_type,
@@ -159,6 +161,7 @@ impl Weapon {
     pub fn pvp_calc_input(&self, _total_shots_fired: f64, _total_shots_hit: f64, _total_time: f64, _overshield: bool) -> CalculationInput {
         let base_mag = self.calc_ammo_sizes(None).mag_size as f64;
         let mut tmp = CalculationInput::construct_pvp(
+            self.intrinsic_hash,
             &self.firing_data, 
             &self.stats, 
             &self.weapon_type, 
@@ -178,6 +181,7 @@ impl Weapon {
     }
     pub fn update_stats(&mut self) {
         let input = CalculationInput::construct_static(
+            self.intrinsic_hash,
             &self.firing_data,
             &self.stats,
             &self.weapon_type,
@@ -205,11 +209,12 @@ impl Default for Weapon {
     fn default() -> Weapon {
         Weapon {
             is_pvp: false,
-            explosive_percent: 0.0,
+
+            intrinsic_hash: 0,
+            hash: 0,
 
             perks: HashMap::new(),
             stats: HashMap::new(),
-            hash: 0,
             damage_mods: DamageMods::default(),
             firing_data: FiringConfig::default(),
 

@@ -147,20 +147,12 @@ pub struct FiringResponse {
 }
 impl FiringResponse{
     pub fn set_rpm(&mut self, _extra_charge_delay: f64) {
-        let mut counter = 0;
         let mut time = 0.0;
-        let mut shots = 0;
-        while time < 100.0 {
-            time += self.burst_delay;
-            shots += self.burst_size;
-            time += self.burst_duration;
-            time += _extra_charge_delay*self.burst_delay;
-            counter += 1;
-            if counter > 1000 {
-                break;
-            }
-        }
-        self.rpm = shots as f64 / time * 60.0;
+        time += self.burst_delay;
+        time += self.burst_duration;
+        // time += _extra_charge_delay*self.burst_delay;
+        let avg_bullet_time = time / self.burst_size as f64;
+        self.rpm = (1.0/avg_bullet_time)*60.0
     }
     pub fn apply_pve_bonuses(&mut self, _rpl_mult: f64, _gpl_mult: f64, _pve_mult: f64, _combatant_mult: f64) {
         self.pve_damage *= _rpl_mult * _gpl_mult * _pve_mult * _combatant_mult;

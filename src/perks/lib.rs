@@ -1,5 +1,5 @@
 use crate::{
-    d2_enums::{AmmoType, StatHashes, WeaponType, DamageType},
+    d2_enums::{AmmoType, DamageType, StatHashes, WeaponType},
     enemies::EnemyType,
     types::rs_types::HandlingResponse,
     weapons::{FiringConfig, Stat},
@@ -8,6 +8,7 @@ use std::{cell::RefCell, collections::HashMap, ops::Mul};
 
 #[derive(Debug, Clone)]
 pub struct CalculationInput<'a> {
+    pub intrinsic_hash: u32,
     pub curr_firing_data: &'a FiringConfig,
     pub base_damage: f64,
     pub base_crit_mult: f64,
@@ -31,6 +32,7 @@ pub struct CalculationInput<'a> {
 impl<'a> CalculationInput<'a> {
     //stuff like mag size can use this, not reload, damage, etc.
     pub fn construct_pve_sparse(
+        _intrinsic_hash: u32,
         _firing_data: &'a FiringConfig,
         _stats: &'a HashMap<u32, Stat>,
         _weapon_type: &'a WeaponType,
@@ -43,6 +45,7 @@ impl<'a> CalculationInput<'a> {
         _total_time: f64,
     ) -> Self {
         Self {
+            intrinsic_hash: _intrinsic_hash,
             curr_firing_data: &_firing_data,
             base_damage: _base_damage,
             base_crit_mult: _base_crit_mult,
@@ -65,6 +68,7 @@ impl<'a> CalculationInput<'a> {
         }
     }
     pub fn construct_pvp(
+        _intrinsic_hash: u32,
         _firing_data: &'a FiringConfig,
         _stats: &'a HashMap<u32, Stat>,
         _weapon_type: &'a WeaponType,
@@ -76,6 +80,7 @@ impl<'a> CalculationInput<'a> {
         _handling_data: HandlingResponse,
     ) -> Self {
         Self {
+            intrinsic_hash: _intrinsic_hash,
             curr_firing_data: _firing_data,
             base_damage: _base_damage,
             base_crit_mult: _base_crit_mult,
@@ -98,12 +103,14 @@ impl<'a> CalculationInput<'a> {
         }
     }
     pub fn construct_static(
+        _intrinsic_hash: u32,
         _firing_data: &'a FiringConfig,
         _stats: &'a HashMap<u32, Stat>,
         _weapon_type: &'a WeaponType,
         _ammo_type: &'a AmmoType,
     ) -> Self {
         Self {
+            intrinsic_hash: _intrinsic_hash,
             curr_firing_data: _firing_data,
             base_damage: 0.0,
             base_crit_mult: 0.0,
@@ -127,16 +134,25 @@ impl<'a> CalculationInput<'a> {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Copy)]
+pub enum DamageBuffType {
+    IMPACT,
+    EXPLOSION,
+    BOTH,
+}
+
 #[derive(Debug, Clone)]
 pub struct DamageModifierResponse {
     pub dmg_scale: f64,
     pub crit_scale: f64,
+    pub buff_type: DamageBuffType,
 }
 impl Default for DamageModifierResponse {
     fn default() -> Self {
         Self {
             dmg_scale: 1.0,
             crit_scale: 1.0,
+            buff_type: DamageBuffType::BOTH,
         }
     }
 }
@@ -314,4 +330,11 @@ impl ReloadOverrideResponse {
             uses_ammo: false,
         }
     }
+}
+
+#[derive(Debug, Clone)]
+pub struct ExplosivePercentResponse {
+    pub percent: f64,
+    pub delyed: f64,
+    pub retain_base_total: bool,
 }
