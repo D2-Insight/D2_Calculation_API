@@ -167,10 +167,12 @@ impl JsTtkResponse {
 #[derive(Debug, Clone, Default, Serialize)]
 #[wasm_bindgen(js_name = "FiringResponse", inspectable)]
 pub struct JsFiringResponse {
-    pub pvp_damage: f64,
+    pub pvp_impact_damage: f64,
+    pub pvp_explosion_damage: f64,
     pub pvp_crit_mult: f64,
 
-    pub pve_damage: f64,
+    pub pve_impact_damage: f64,
+    pub pve_explosion_damage: f64,
     pub pve_crit_mult: f64,
 
     pub burst_delay: f64,
@@ -182,9 +184,11 @@ pub struct JsFiringResponse {
 impl From<FiringResponse> for JsFiringResponse {
     fn from(firing: FiringResponse) -> Self {
         JsFiringResponse {
-            pvp_damage: firing.pvp_damage,
+            pvp_impact_damage: firing.pvp_impact_damage,
+            pvp_explosion_damage: firing.pvp_explosion_damage,
             pvp_crit_mult: firing.pvp_crit_mult,
-            pve_damage: firing.pve_damage,
+            pve_impact_damage: firing.pve_impact_damage,
+            pve_explosion_damage: firing.pve_explosion_damage,
             pve_crit_mult: firing.pve_crit_mult,
             burst_delay: firing.burst_delay,
             burst_duration: firing.burst_duration,

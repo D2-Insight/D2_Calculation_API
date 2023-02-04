@@ -32,7 +32,9 @@ pub struct ExtraDamageResult {
 #[derive(Debug, Clone)]
 pub struct ExtraDamageBuffInfo {
     pub pl_buff: f64,
-    pub weapon_buff: f64,
+    pub pve_buff: f64,
+    pub impact_buff: f64,
+    pub explosive_buff: f64,
     pub crit_buff: f64,
     pub combatant_buff: f64,
 }
@@ -40,7 +42,8 @@ impl ExtraDamageBuffInfo {
     pub fn get_buff_amount(&self, entry: &ExtraDamageResponse) -> f64 {
         let mut buff = self.pl_buff;
         if entry.weapon_scale {
-            buff *= self.weapon_buff
+            buff *= (self.impact_buff + self.explosive_buff)/2.0;
+            buff *= self.pve_buff
         };
         if entry.crit_scale {
             buff *= self.crit_buff
@@ -116,10 +119,14 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
     let stats = weapon.stats.clone();
     let weapon_type = weapon.weapon_type.clone();
     let ammo_type = weapon.ammo_type.clone();
-    let base_dmg = weapon.firing_data.damage;
-    let base_crit_mult = weapon.firing_data.crit_mult;
 
-    let base_mag = weapon.calc_ammo_sizes(None).mag_size;
+    let tmp_dmg_prof = weapon.get_damage_profile();
+    let impact_dmg = tmp_dmg_prof.0;
+    let explosion_dmg = tmp_dmg_prof.1;
+    let crit_mult = tmp_dmg_prof.2;
+    // let damage_delay = tmp_dmg_prof.3;
+
+    let base_mag = weapon.calc_ammo_sizes(None, None).mag_size;
     let maximum_shots = if base_mag * 5 < 15 { 15 } else { base_mag * 5 };
 
     let firing_settings = _weapon.firing_data.clone();
@@ -139,17 +146,20 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
     let mut total_shots_hit = 0_i32;
     let mut num_reloads = 0_i32;
 
+    let mut pers_calc_data: HashMap<String, f64> = HashMap::new();
+
     let mut reserve = weapon
-        .calc_ammo_sizes(Some(weapon.static_calc_input()))
+        .calc_ammo_sizes(Some(weapon.static_calc_input()), Some(&mut pers_calc_data))
         .reserve_size;
 
     #[allow(unused_mut)]
-    let mut persistent_calc_data: HashMap<String, f64> = HashMap::new();
     while reserve > 0 {
         let mut shots_this_mag = 0;
         //MAGAZINE/////////////////////
         let mag_calc_input = weapon.sparse_calc_input(total_shots_fired, total_time);
-        let mut mag = weapon.calc_ammo_sizes(Some(mag_calc_input)).mag_size;
+        let mut mag = weapon
+            .calc_ammo_sizes(Some(mag_calc_input), Some(&mut pers_calc_data))
+            .mag_size;
         if mag > reserve {
             mag = reserve
         }
@@ -158,7 +168,8 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
         //HANDLING/////////////////////
         //This is for stuff like weapon swapping, demo or trench barrel
         let handling_calc_input = weapon.sparse_calc_input(total_shots_fired, total_time);
-        let handling_data = weapon.calc_handling_times(Some(handling_calc_input));
+        let handling_data =
+            weapon.calc_handling_times(Some(handling_calc_input), Some(&mut pers_calc_data));
         ///////////////////////////////
         let mut start_time = total_time.clone();
         while mag > 0 {
@@ -166,8 +177,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
             let before_shot_input_data = CalculationInput {
                 intrinsic_hash: weapon.intrinsic_hash,
                 curr_firing_data: &firing_settings,
-                base_damage: base_dmg,
-                base_crit_mult: base_crit_mult,
+                base_crit_mult: crit_mult,
                 base_mag: base_mag as f64,
                 curr_mag: mag as f64,
                 ammo_type: &ammo_type,
@@ -185,27 +195,30 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                 num_reloads: num_reloads as f64,
                 has_overshield: false,
             };
-            let dmg_mods = get_dmg_modifier(perks.clone(), &before_shot_input_data, false);
+            let dmg_mods = get_dmg_modifier(
+                perks.clone(),
+                &before_shot_input_data,
+                false,
+                &mut pers_calc_data,
+            );
             ///////////////////////////////
 
             //FIRING MODIFIERS/////////////
-            let firing_mods = get_firing_modifier(perks.clone(), &before_shot_input_data, false);
+            let firing_mods = get_firing_modifier(
+                perks.clone(),
+                &before_shot_input_data,
+                false,
+                &mut pers_calc_data,
+            );
             ///////////////////////////////
 
-            let dmg = (base_dmg * dmg_mods.dmg_scale)
-                * (base_crit_mult * dmg_mods.crit_scale)
+            let dmg = {
+                ((impact_dmg * dmg_mods.impact_dmg_scale)
+                    * (crit_mult * dmg_mods.crit_scale)
+                    + (explosion_dmg * dmg_mods.explosive_dmg_scale))
                 * _pl_dmg_mult
                 * weapon.damage_mods.get_mod(&_enemy.type_)
-                * weapon.damage_mods.pve;
-
-            // println!{"({}*{}) * ({}*{}) * {} * {} * {}",
-            //         base_dmg,
-            //         dmg_mods.dmg_scale,
-            //         base_crit_mult,
-            //         dmg_mods.crit_scale,
-            //         _pl_dmg_mult,
-            //         weapon.damage_mods.get_mod(&_enemy.type_),
-            //         weapon.damage_mods.pve};
+                * weapon.damage_mods.pve};
 
             let shot_burst_delay =
                 (burst_delay + firing_mods.burst_delay_add) * firing_mods.burst_delay_scale;
@@ -251,7 +264,12 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
             //REFUNDS//////////////////////
             let mut refund_calc_input = weapon.sparse_calc_input(total_shots_fired, total_time);
             refund_calc_input.shots_fired_this_mag = shots_this_mag as f64;
-            let refunds = get_refund_modifier(perks.clone(), &refund_calc_input, false);
+            let refunds = get_refund_modifier(
+                perks.clone(),
+                &refund_calc_input,
+                false,
+                &mut pers_calc_data,
+            );
             let ammo_to_refund = calc_refund(shots_this_mag, refunds);
             mag += ammo_to_refund.0;
             reserve += ammo_to_refund.1;
@@ -261,8 +279,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
             let after_shot_input_data = CalculationInput {
                 intrinsic_hash: weapon.intrinsic_hash,
                 curr_firing_data: &firing_settings,
-                base_damage: base_dmg,
-                base_crit_mult: base_crit_mult,
+                base_crit_mult: crit_mult,
                 base_mag: base_mag as f64,
                 curr_mag: mag as f64,
                 ammo_type: &ammo_type,
@@ -287,12 +304,14 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                 perks.clone(),
                 &after_shot_input_data,
                 false,
-                &mut persistent_calc_data,
+                &mut pers_calc_data,
             );
             let buffs = ExtraDamageBuffInfo {
                 pl_buff: _pl_dmg_mult,
-                weapon_buff: weapon.damage_mods.pve * dmg_mods.dmg_scale,
-                crit_buff: base_crit_mult * dmg_mods.crit_scale,
+                impact_buff: dmg_mods.impact_dmg_scale,
+                explosive_buff: dmg_mods.explosive_dmg_scale,
+                pve_buff: weapon.damage_mods.pve,
+                crit_buff: crit_mult * dmg_mods.crit_scale,
                 combatant_buff: weapon.damage_mods.get_mod(&_enemy.type_),
             };
             let tmp_out_data = calc_extra_dmg(total_time, extra_dmg_responses, buffs);
@@ -308,7 +327,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                     perks.clone(),
                     &after_shot_input_data,
                     false,
-                    &mut persistent_calc_data,
+                    &mut pers_calc_data,
                 );
                 if reload_override_responses.len() > 0 {
                     let mut final_response = ReloadOverrideResponse::invalid();
@@ -369,8 +388,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
         let reload_input_data = CalculationInput {
             intrinsic_hash: weapon.intrinsic_hash,
             curr_firing_data: &firing_settings,
-            base_damage: base_dmg,
-            base_crit_mult,
+            base_crit_mult: crit_mult,
             base_mag: base_mag as f64,
             curr_mag: mag as f64,
             ammo_type: &ammo_type,
@@ -388,7 +406,8 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
             num_reloads: num_reloads as f64,
             has_overshield: false,
         };
-        let reload_responses = weapon.calc_reload_time(Some(reload_input_data));
+        let reload_responses =
+            weapon.calc_reload_time(Some(reload_input_data), Some(&mut pers_calc_data));
         total_time += reload_responses.reload_time;
         ///////////////////////////////
         num_reloads += 1;

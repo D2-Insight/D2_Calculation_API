@@ -119,6 +119,28 @@ pub(super) fn rmr_killing_wind(
     }
 }
 
+pub(super) fn hmr_killing_wind(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    if _value > 0 {
+        HandlingModifierResponse {
+            handling_stat_add: 40,
+            handling_ads_scale: 1.0,
+            handling_swap_scale: 1.0,
+        }
+    } else {
+        HandlingModifierResponse {
+            handling_stat_add: 0,
+            handling_ads_scale: 1.0,
+            handling_swap_scale: 1.0,
+        }
+    }
+}
+
 pub(super) fn dmr_lasting_impressions(
     _input: &CalculationInput,
     _value: u32,
@@ -127,8 +149,9 @@ pub(super) fn dmr_lasting_impressions(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     DamageModifierResponse {
-        dmg_scale: 1.2,
-        ..Default::default()
+        impact_dmg_scale: 1.0,
+        explosive_dmg_scale: 1.25,
+        crit_scale: 1.0,
     }
 }
 
@@ -154,7 +177,8 @@ pub(super) fn dmr_vorpal(
         }
     }
     DamageModifierResponse {
-        dmg_scale: buff,
-        ..Default::default()
+        impact_dmg_scale: buff,
+        explosive_dmg_scale: buff,
+        crit_scale: 1.0,
     }
 }

@@ -8,7 +8,7 @@ use crate::{
 use super::{
     clamp,
     lib::{
-        CalculationInput, DamageBuffType, DamageModifierResponse, ExplosivePercentResponse,
+        CalculationInput, DamageModifierResponse, ExplosivePercentResponse,
         ExtraDamageResponse, FiringModifierResponse, HandlingModifierResponse,
         InventoryModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
         ReloadModifierResponse,
@@ -36,8 +36,8 @@ pub(super) fn dmr_builtin(
     };
     DamageModifierResponse {
         crit_scale,
-        dmg_scale,
-        ..Default::default()
+        impact_dmg_scale: dmg_scale,
+        explosive_dmg_scale: dmg_scale,
     }
 }
 
@@ -224,8 +224,9 @@ pub(super) fn dmr_empowerment_buffs(
 ) -> DamageModifierResponse {
     let val = clamp(_value, 0, 40) as f64;
     DamageModifierResponse {
-        dmg_scale: 1.0 + (val / 100.0),
-        ..Default::default()
+        impact_dmg_scale: 1.0 + (val / 100.0),
+        explosive_dmg_scale: 1.0 + (val / 100.0),
+        crit_scale: 1.0,
     }
 }
 
@@ -238,7 +239,8 @@ pub(super) fn dmr_weaken_debuffs(
 ) -> DamageModifierResponse {
     let val = clamp(_value, 0, 40) as f64;
     DamageModifierResponse {
-        dmg_scale: 1.0 + (val / 100.0),
-        ..Default::default()
+        impact_dmg_scale: 1.0 + (val / 100.0),
+        explosive_dmg_scale: 1.0 + (val / 100.0),
+        crit_scale: 1.0,
     }
 }

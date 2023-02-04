@@ -86,8 +86,9 @@ pub(super) fn dmr_focused_fury(
         dmg_boost = 1.2;
     }
     DamageModifierResponse {
-        dmg_scale: dmg_boost,
-        ..Default::default()
+        impact_dmg_scale: dmg_boost,
+        explosive_dmg_scale: dmg_boost,
+        crit_scale: 1.0,
     }
 }
 
@@ -135,18 +136,22 @@ pub(super) fn dmr_gutshot_straight(
         WeaponType::HANDCANNON,
         WeaponType::BOW,
     ];
+    let dmg_scale: f64;
+    let mut crit_scale: f64;
     if high_weapons.contains(&_input.weapon_type) {
-        return DamageModifierResponse {
-            dmg_scale: 1.2,
-            crit_scale: _input.base_crit_mult * (1.0 / 1.2),
-            ..Default::default()
-        };
+        dmg_scale = 1.2;
+        crit_scale = 1.0 / 1.2;
     } else {
-        return DamageModifierResponse {
-            dmg_scale: 1.1,
-            crit_scale: _input.base_crit_mult * (1.0 / 1.1),
-            ..Default::default()
-        };
+        dmg_scale = 1.1;
+        crit_scale = 1.0 / 1.;
+    };
+    if _input.base_crit_mult <= 1.0 {
+        crit_scale = 1.0;
+    }
+    DamageModifierResponse {
+        impact_dmg_scale: dmg_scale,
+        explosive_dmg_scale: dmg_scale,
+        crit_scale,
     }
 }
 
@@ -369,8 +374,9 @@ pub(super) fn dmr_target_lock(
         buff *= 1.125;
     }
     DamageModifierResponse {
-        dmg_scale: buff + 1.0,
-        ..Default::default()
+        impact_dmg_scale: buff + 1.0,
+        explosive_dmg_scale: buff + 1.0,
+        crit_scale: 1.0,
     }
 }
 
@@ -389,8 +395,9 @@ pub(super) fn dmr_over_under(
         buff *= 1.05;
     }
     DamageModifierResponse {
-        dmg_scale: buff,
-        ..Default::default()
+        impact_dmg_scale: buff,
+        explosive_dmg_scale: buff,
+        crit_scale: 1.0,
     }
 }
 
@@ -455,9 +462,14 @@ pub(super) fn dmr_bait_and_switch(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    DamageModifierResponse {
-        dmg_scale: 1.35,
-        ..Default::default()
+    if _value > 0 {
+        DamageModifierResponse {
+            impact_dmg_scale: 1.35,
+            explosive_dmg_scale: 1.35,
+            crit_scale: 1.0,
+        }
+    } else {
+        DamageModifierResponse::new()
     }
 }
 

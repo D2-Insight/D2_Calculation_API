@@ -5,7 +5,7 @@ use crate::d2_enums::{StatHashes, WeaponType};
 use super::{
     clamp,
     lib::{
-        CalculationInput, DamageBuffType, DamageModifierResponse, ExplosivePercentResponse,
+        CalculationInput, DamageModifierResponse, ExplosivePercentResponse,
         ExtraDamageResponse, FiringModifierResponse, HandlingModifierResponse,
         MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
         ReloadOverrideResponse,
@@ -49,13 +49,12 @@ pub(super) fn dmr_explosive_head(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     if _pvp {
-        DamageModifierResponse::default()
+        DamageModifierResponse::new()
     } else {
-        // let damage_mult = ((1.0 / _input.base_crit_mult) * 0.15) + 1.0;
         DamageModifierResponse {
-            dmg_scale: 0.3,
-            buff_type: DamageBuffType::EXPLOSION,
-            ..Default::default()
+            impact_dmg_scale: 1.0,
+            explosive_dmg_scale: 1.3,
+            crit_scale: 1.0,
         }
     }
 }
@@ -69,7 +68,7 @@ pub(super) fn epr_explosive_head(
 ) -> ExplosivePercentResponse {
     ExplosivePercentResponse {
         percent: 0.5,
-        delyed: 0.2,
+        delyed: if _pvp { 0.0 } else { 0.2 },
         retain_base_total: true,
     }
 }
@@ -153,7 +152,8 @@ pub(super) fn dmr_firing_line(
     }
     DamageModifierResponse {
         crit_scale: crit_mult,
-        ..Default::default()
+        explosive_dmg_scale: 1.0,
+        impact_dmg_scale: 1.0,
     }
 }
 
@@ -188,8 +188,9 @@ pub(super) fn dmr_killing_tally(
         damage_mult = 0.0;
     };
     DamageModifierResponse {
-        dmg_scale: 1.0 + damage_mult,
-        ..Default::default()
+        impact_dmg_scale: 1.0 + damage_mult,
+        explosive_dmg_scale: 1.0 + damage_mult,
+        crit_scale: 1.0,
     }
 }
 
@@ -218,8 +219,6 @@ pub(super) fn rsmr_rapid_hit(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
-    let reload_mult;
-    let reload;
     let values = vec![
         (0, 1.0),
         (5, 0.99),
@@ -228,16 +227,10 @@ pub(super) fn rsmr_rapid_hit(
         (45, 0.94),
         (60, 0.93),
     ];
-    if _input.shots_fired_this_mag > 5.0 {
-        reload = values[5].0;
-        reload_mult = values[5].1;
-    } else {
-        reload = values[_input.shots_fired_this_mag as usize].0;
-        reload_mult = values[_input.shots_fired_this_mag as usize].1;
-    };
+    let entry_to_get = clamp(_value + _input.shots_fired_this_mag as u32, 0, 5);
     ReloadModifierResponse {
-        reload_stat_add: reload,
-        reload_time_scale: reload_mult,
+        reload_stat_add: values[entry_to_get as usize].0,
+        reload_time_scale: values[entry_to_get as usize].1,
     }
 }
 
@@ -253,8 +246,9 @@ pub(super) fn dmr_resevoir_burst(
         damage_mult = 1.25;
     };
     DamageModifierResponse {
-        dmg_scale: damage_mult,
-        ..Default::default()
+        impact_dmg_scale: damage_mult,
+        explosive_dmg_scale: damage_mult,
+        crit_scale: 1.0,
     }
 }
 
@@ -277,8 +271,9 @@ pub(super) fn dmr_surrounded(
         };
     };
     DamageModifierResponse {
-        dmg_scale: damage_mult,
-        ..Default::default()
+        impact_dmg_scale: damage_mult,
+        explosive_dmg_scale: damage_mult,
+        crit_scale: 1.0,
     }
 }
 
@@ -313,10 +308,31 @@ pub(super) fn dmr_full_court(
 ) -> DamageModifierResponse {
     let mut damage_mult = 1.0;
     if _value > 0 {
-        damage_mult = 1.2;
+        damage_mult = 1.25;
     };
     DamageModifierResponse {
-        dmg_scale: damage_mult,
-        ..Default::default()
+        impact_dmg_scale: 1.0,
+        explosive_dmg_scale: damage_mult,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn dmr_swash_buckler(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let val = clamp(_value, 0, 5);
+    let duration = if _is_enhanced { 6.0 } else { 4.5 };
+    let mut dmg_boost = 0.067 * val as f64;
+    if _input.time_total > duration {
+        dmg_boost = 0.0;
+    };
+    DamageModifierResponse {
+        impact_dmg_scale: 1.0 + dmg_boost,
+        explosive_dmg_scale: 1.0 + dmg_boost,
+        crit_scale: 1.0,
     }
 }

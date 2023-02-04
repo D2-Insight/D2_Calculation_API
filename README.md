@@ -12,7 +12,7 @@ Credit goes first and foremost as this would not have been possible without the 
 
 Python:
   * A `.pyi` is included which contains the methods and class available in the py module
-  * Unlike java pybindings use diff sub modules for different types of actions
+  * Unlike javascript, pybindings use different sub modules to sort functions better
 
 JavaScript:
   * fml

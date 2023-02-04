@@ -30,8 +30,9 @@ pub(super) fn dmr_adagio(
         dmg_boost = 0.0;
     };
     DamageModifierResponse {
-        dmg_scale: 1.0 + dmg_boost,
-        ..Default::default()
+        impact_dmg_scale: 1.0 + dmg_boost,
+        explosive_dmg_scale: 1.0 + dmg_boost,
+        crit_scale: 1.0,
     }
 }
 
@@ -69,8 +70,9 @@ pub(super) fn dmr_adrenaline_junkie(
         dmg_boost = 0.0;
     };
     DamageModifierResponse {
-        dmg_scale: 1.0 + dmg_boost,
-        ..Default::default()
+        impact_dmg_scale: 1.0 + dmg_boost,
+        explosive_dmg_scale: 1.0 + dmg_boost,
+        crit_scale: 1.0,
     }
 }
 
@@ -244,8 +246,9 @@ pub(super) fn dmr_frenzy(
         dmg = 0.15;
     };
     DamageModifierResponse {
-        dmg_scale: 1.0 + dmg,
-        ..Default::default()
+        impact_dmg_scale: 1.0 + dmg,
+        explosive_dmg_scale: 1.0 + dmg,
+        crit_scale: 1.0,
     }
 }
 
@@ -440,8 +443,9 @@ pub(super) fn dmr_one_for_all(
         dmg = 0.0;
     };
     DamageModifierResponse {
-        dmg_scale: 1.0 + dmg,
-        ..Default::default()
+        impact_dmg_scale: 1.0 + dmg,
+        explosive_dmg_scale: 1.0 + dmg,
+        crit_scale: 1.0,
     }
 }
 
@@ -478,10 +482,59 @@ pub(super) fn dmr_golden_tricorn(
     let damage_mult = if val == 2 { 0.5 } else { 0.15 };
     if _value > 0 && _input.time_total < duration {
         DamageModifierResponse {
-            dmg_scale: 1.0 + damage_mult,
-            ..Default::default()
+            impact_dmg_scale: 1.0 + damage_mult,
+            explosive_dmg_scale: 1.0 + damage_mult,
+            crit_scale: 1.0,
         }
     } else {
-        DamageModifierResponse::default()
+        DamageModifierResponse::new()
     }
+}
+
+pub(super) fn dmr_harmony(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut damage_mult = if _value > 0 { 0.25 } else { 0.0 };
+    let duration = if _is_enhanced { 8.0 } else { 7.0 };
+    if _input.time_total > duration {
+        damage_mult = 0.0;
+    };
+    DamageModifierResponse {
+        impact_dmg_scale: 1.0 + damage_mult,
+        explosive_dmg_scale: 1.0 + damage_mult,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn hmr_harmony(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    let handling = if _value > 0 { 15 } else { 0 };
+    HandlingModifierResponse {
+        handling_stat_add: handling,
+        handling_swap_scale: 1.0,
+        handling_ads_scale: 1.0,
+    }
+}
+
+pub(super) fn sbr_harmony(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut out = HashMap::new();
+    if _value > 0 {
+        out.insert(StatHashes::HANDLING.to_u32(), 15);
+    }
+    out
 }

@@ -268,8 +268,9 @@ pub(super) fn dmr_boss_spec(
         1.0
     };
     DamageModifierResponse {
-        dmg_scale: damage_mult,
-        ..Default::default()
+        impact_dmg_scale: damage_mult,
+        explosive_dmg_scale: damage_mult,
+        crit_scale: 1.0,
     }
 }
 
@@ -290,8 +291,9 @@ pub(super) fn dmr_major_spec(
         damage_mult = 1.0;
     };
     DamageModifierResponse {
-        dmg_scale: damage_mult,
-        ..Default::default()
+        impact_dmg_scale: damage_mult,
+        explosive_dmg_scale: damage_mult,
+        crit_scale: 1.0,
     }
 }
 
@@ -313,8 +315,9 @@ pub(super) fn dmr_big_ones_spec(
         damage_mult = 1.0;
     };
     DamageModifierResponse {
-        dmg_scale: damage_mult,
-        ..Default::default()
+        impact_dmg_scale: damage_mult,
+        explosive_dmg_scale: damage_mult,
+        crit_scale: 1.0,
     }
 }
 
@@ -331,8 +334,9 @@ pub(super) fn dmr_minor_spec(
         1.0
     };
     DamageModifierResponse {
-        dmg_scale: damage_mult,
-        ..Default::default()
+        impact_dmg_scale: damage_mult,
+        explosive_dmg_scale: damage_mult,
+        crit_scale: 1.0,
     }
 }
 
@@ -343,10 +347,25 @@ pub(super) fn dmr_taken_spec(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    let damage_mult = if _value > 0 { 1.1 } else { 1.0 };
+    let damage_mult = if _value > 0 && !_pvp { 1.1 } else { 1.0 };
     DamageModifierResponse {
-        dmg_scale: damage_mult,
-        ..Default::default()
+        impact_dmg_scale: damage_mult,
+        explosive_dmg_scale: damage_mult,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn dmr_spike_grenades(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    DamageModifierResponse {
+        impact_dmg_scale: 1.5,
+        explosive_dmg_scale: 1.0,
+        crit_scale: 1.0,
     }
 }
 
@@ -384,8 +403,9 @@ pub(super) fn dmr_liquid_coils(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     DamageModifierResponse {
-        dmg_scale: 1.02,
-        ..Default::default()
+        impact_dmg_scale: 1.02,
+        explosive_dmg_scale: 1.02,
+        crit_scale: 1.0,
     }
 }
 
@@ -397,8 +417,9 @@ pub(super) fn dmr_accelerated_coils(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     DamageModifierResponse {
-        dmg_scale: 0.982,
-        ..Default::default()
+        impact_dmg_scale: 0.982,
+        explosive_dmg_scale: 0.982,
+        crit_scale: 1.0,
     }
 }
 

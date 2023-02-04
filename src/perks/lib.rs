@@ -10,7 +10,6 @@ use std::{cell::RefCell, collections::HashMap, ops::Mul};
 pub struct CalculationInput<'a> {
     pub intrinsic_hash: u32,
     pub curr_firing_data: &'a FiringConfig,
-    pub base_damage: f64,
     pub base_crit_mult: f64,
     pub shots_fired_this_mag: f64,
     pub total_shots_fired: f64,
@@ -47,7 +46,6 @@ impl<'a> CalculationInput<'a> {
         Self {
             intrinsic_hash: _intrinsic_hash,
             curr_firing_data: &_firing_data,
-            base_damage: _base_damage,
             base_crit_mult: _base_crit_mult,
             shots_fired_this_mag: 0.0,
             total_shots_fired: _total_shots_hit as f64,
@@ -82,7 +80,6 @@ impl<'a> CalculationInput<'a> {
         Self {
             intrinsic_hash: _intrinsic_hash,
             curr_firing_data: _firing_data,
-            base_damage: _base_damage,
             base_crit_mult: _base_crit_mult,
             shots_fired_this_mag: 0.0,
             total_shots_fired: 0.0,
@@ -112,7 +109,6 @@ impl<'a> CalculationInput<'a> {
         Self {
             intrinsic_hash: _intrinsic_hash,
             curr_firing_data: _firing_data,
-            base_damage: 0.0,
             base_crit_mult: 0.0,
             shots_fired_this_mag: 0.0,
             total_shots_fired: 0.0,
@@ -134,25 +130,18 @@ impl<'a> CalculationInput<'a> {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Copy)]
-pub enum DamageBuffType {
-    IMPACT,
-    EXPLOSION,
-    BOTH,
-}
-
 #[derive(Debug, Clone)]
 pub struct DamageModifierResponse {
-    pub dmg_scale: f64,
+    pub impact_dmg_scale: f64,
+    pub explosive_dmg_scale: f64,
     pub crit_scale: f64,
-    pub buff_type: DamageBuffType,
 }
-impl Default for DamageModifierResponse {
-    fn default() -> Self {
+impl DamageModifierResponse {
+    pub fn new() -> Self {
         Self {
-            dmg_scale: 1.0,
+            impact_dmg_scale: 1.0,
+            explosive_dmg_scale: 1.0,
             crit_scale: 1.0,
-            buff_type: DamageBuffType::BOTH,
         }
     }
 }
@@ -337,4 +326,13 @@ pub struct ExplosivePercentResponse {
     pub percent: f64,
     pub delyed: f64,
     pub retain_base_total: bool,
+}
+impl Default for ExplosivePercentResponse {
+    fn default() -> Self {
+        Self {
+            percent: 0.0,
+            delyed: 0.0,
+            retain_base_total: false,
+        }
+    }
 }

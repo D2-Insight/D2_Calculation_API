@@ -24,7 +24,7 @@ use self::{
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
         HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
-        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse,
+        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse, ExplosivePercentResponse,
     },
     meta_perks::*,
     origin_perks::*,
@@ -476,11 +476,12 @@ pub fn get_perk_stats(
     _perks: Vec<Perk>,
     _input_data: CalculationInput,
     _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> [HashMap<u32, i32>; 2] {
     let mut dynamic_stats: HashMap<u32, i32> = HashMap::new();
     let mut static_stats: HashMap<u32, i32> = HashMap::new();
     for perk in _perks {
-        let perk_stats = dyanmic_perk_stats(&perk, &_input_data, _pvp);
+        let perk_stats = dyanmic_perk_stats(&perk, &_input_data, _pvp, _cached_data);
         for (key, value) in perk_stats {
             let entry = dynamic_stats.entry(key).or_insert(0);
             *entry += value;
@@ -496,77 +497,67 @@ fn dyanmic_perk_stats(
     _perk: &Perk,
     _input_data: &CalculationInput,
     _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
-        Perks::Roadborn => sbr_roadborn(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::Roadborn => sbr_roadborn(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::OphidianAspect => {
-            sbr_ophidian_aspects(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            sbr_ophidian_aspects(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::DragonShadow => sbr_dragon_shadow(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Amplified => sbr_amplified(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Tempering => sbr_tempering(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::OnYourMark => sbr_on_your_mark(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::HeatRises => sbr_heat_rises(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Hedrons => sbr_hedrons(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::DragonShadow => sbr_dragon_shadow(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Amplified => sbr_amplified(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Tempering => sbr_tempering(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::OnYourMark => sbr_on_your_mark(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::HeatRises => sbr_heat_rises(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Hedrons => sbr_hedrons(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ThreatDetector => {
-            sbr_threat_detector(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            sbr_threat_detector(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::FieldPrep => sbr_field_prep(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::FirmlyPlanted => {
-            sbr_firmly_planted(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::HipFireGrip => sbr_hip_fire_grip(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::MovingTarget => sbr_moving_target(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::OpeningShot => sbr_opening_shot(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Outlaw => sbr_outlaw(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::SlideShot => sbr_slide_shot(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::SlideWays => sbr_slide_ways(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::TapTheTrigger => {
-            sbr_tap_the_trigger(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::AirAssault => sbr_air_assault(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::FeedingFrenzy => {
-            sbr_feeding_frenzy(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
+        Perks::FieldPrep => sbr_field_prep(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FirmlyPlanted => sbr_firmly_planted(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::HipFireGrip => sbr_hip_fire_grip(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::MovingTarget => sbr_moving_target(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::OpeningShot => sbr_opening_shot(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Outlaw => sbr_outlaw(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SlideShot => sbr_slide_shot(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SlideWays => sbr_slide_ways(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::TapTheTrigger => sbr_tap_the_trigger(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::AirAssault => sbr_air_assault(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FeedingFrenzy => sbr_feeding_frenzy(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ElementalCapacitor => {
-            sbr_elemental_capacitor(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            sbr_elemental_capacitor(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::KillingWind => sbr_killing_wind(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::KillingWind => sbr_killing_wind(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::AdrenalineJunkie => {
-            sbr_adrenaline_junkie(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            sbr_adrenaline_junkie(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::Ensemble => sbr_ensemble(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Frenzy => sbr_frenzy(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::Ensemble => sbr_ensemble(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Frenzy => sbr_frenzy(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::PerpetualMotion => {
-            sbr_perpetual_motion(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            sbr_perpetual_motion(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::PerfectFloat => sbr_perfect_float(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Pugilist => sbr_pugilist(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Encore => sbr_encore(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::FragileFocus => sbr_fragile_focus(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::OffhandStrike => {
-            sbr_offhand_strike(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::StatsForAll => sbr_stats_for_all(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::SteadyHands => sbr_steady_hands(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::WellRounded => sbr_well_rounded(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Alacrity => sbr_alacrity(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Ambush => sbr_ambush(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::FluidDynamics => {
-            sbr_fluid_dynamics(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::QuietMoment => sbr_quiet_moment(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::BitterSpite => sbr_bitter_spite(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::RightHook => sbr_right_hook(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::BackupPlan => sbr_backup_plan(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::DangerZone => sbr_danger_zone(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::SleightOfHand => {
-            sbr_sleight_of_hand(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::Slickdraw => sbr_slickdraw(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::PerfectFloat => sbr_perfect_float(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Pugilist => sbr_pugilist(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Encore => sbr_encore(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FragileFocus => sbr_fragile_focus(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::OffhandStrike => sbr_offhand_strike(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::StatsForAll => sbr_stats_for_all(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SteadyHands => sbr_steady_hands(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::WellRounded => sbr_well_rounded(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Alacrity => sbr_alacrity(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Ambush => sbr_ambush(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FluidDynamics => sbr_fluid_dynamics(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::QuietMoment => sbr_quiet_moment(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::BitterSpite => sbr_bitter_spite(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RightHook => sbr_right_hook(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::BackupPlan => sbr_backup_plan(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::DangerZone => sbr_danger_zone(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SleightOfHand => sbr_sleight_of_hand(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Slickdraw => sbr_slickdraw(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Harmony => sbr_harmony(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
 }
@@ -575,83 +566,82 @@ pub fn get_dmg_modifier(
     _perks: Vec<Perk>,
     _input_data: &CalculationInput,
     _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    let mut dmg_modifier = DamageModifierResponse::default();
+    let mut dmg_modifier = DamageModifierResponse::new();
     for perk in _perks {
-        let tmp = get_perk_dmr(perk.clone(), _input_data, _pvp);
-        dmg_modifier.dmg_scale *= tmp.dmg_scale;
+        let tmp = get_perk_dmr(perk.clone(), _input_data, _pvp, _cached_data);
+        dmg_modifier.impact_dmg_scale *= tmp.impact_dmg_scale;
+        dmg_modifier.explosive_dmg_scale *= tmp.explosive_dmg_scale;
         dmg_modifier.crit_scale *= tmp.crit_scale;
     }
     dmg_modifier
 }
-fn get_perk_dmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> DamageModifierResponse {
+fn get_perk_dmr(
+    _perk: Perk,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
     let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
         Perks::HighImpactReserves => {
-            dmr_high_impact_reserves(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            dmr_high_impact_reserves(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::BoxBreathing => dmr_box_breathing(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::BoxBreathing => dmr_box_breathing(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ExplosivePayload => {
-            dmr_explosive_payload(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            dmr_explosive_payload(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::TimedPayload => dmr_timed_payload(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::ImpactCasing => dmr_impact_casing(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::ExplosiveHead => {
-            dmr_explosive_head(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::FiringLine => dmr_firing_line(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::KillingTally => dmr_killing_tally(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::ResevoirBurst => {
-            dmr_resevoir_burst(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::Surrounded => dmr_surrounded(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::TimedPayload => dmr_timed_payload(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ImpactCasing => dmr_impact_casing(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ExplosiveHead => dmr_explosive_head(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FiringLine => dmr_firing_line(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::KillingTally => dmr_killing_tally(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ResevoirBurst => dmr_resevoir_burst(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Surrounded => dmr_surrounded(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::LastingImpression => {
-            dmr_lasting_impressions(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            dmr_lasting_impressions(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::Vorpal => dmr_vorpal(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Adagio => dmr_adagio(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::Vorpal => dmr_vorpal(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Adagio => dmr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::AdrenalineJunkie => {
-            dmr_adrenaline_junkie(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            dmr_adrenaline_junkie(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::Frenzy => dmr_frenzy(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::FocusedFury => dmr_focused_fury(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::GutShot => dmr_gutshot_straight(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::TargetLock => dmr_target_lock(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::OverUnder => dmr_over_under(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::WormsHunger => dmr_worms_hunger(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::Frenzy => dmr_frenzy(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FocusedFury => dmr_focused_fury(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::GutShot => dmr_gutshot_straight(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::TargetLock => dmr_target_lock(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::OverUnder => dmr_over_under(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::WormsHunger => dmr_worms_hunger(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::LagragianSight => {
-            dmr_lagragian_sight(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            dmr_lagragian_sight(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::EmpowermentBuffs => {
-            dmr_empowerment_buffs(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            dmr_empowerment_buffs(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::WeakenDebuffs => {
-            dmr_weaken_debuffs(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::BuiltIn => dmr_builtin(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::BossSpec => dmr_boss_spec(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::MajorSpec => dmr_major_spec(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::MinorSpec => dmr_minor_spec(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::BigOnesSpec => dmr_big_ones_spec(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::TakenSpec => dmr_taken_spec(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Rampage => dmr_rampage(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::ToM => dmr_tom(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::KillClip => dmr_kill_clip(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::BackupPlan => dmr_backup_plan(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::WeakenDebuffs => dmr_weaken_debuffs(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::BuiltIn => dmr_builtin(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::BossSpec => dmr_boss_spec(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::MajorSpec => dmr_major_spec(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::MinorSpec => dmr_minor_spec(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::BigOnesSpec => dmr_big_ones_spec(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::TakenSpec => dmr_taken_spec(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Rampage => dmr_rampage(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ToM => dmr_tom(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::KillClip => dmr_kill_clip(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::BackupPlan => dmr_backup_plan(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::DisruptionBreak => {
-            dmr_disruption_break(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            dmr_disruption_break(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::FullCourt => dmr_full_court(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::OneForAll => dmr_one_for_all(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::GoldenTricorn => {
-            dmr_golden_tricorn(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::BaitAndSwitch => {
-            dmr_bait_and_switch(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        _ => DamageModifierResponse::default(),
+        Perks::FullCourt => dmr_full_court(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::OneForAll => dmr_one_for_all(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::GoldenTricorn => dmr_golden_tricorn(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::BaitAndSwitch => dmr_bait_and_switch(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Swashbuckler => dmr_swash_buckler(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Harmony => dmr_harmony(_input_data, val, enhanced, _pvp, _cached_data),
+        _ => DamageModifierResponse::new(),
     }
 }
 
@@ -659,10 +649,11 @@ pub fn get_reload_modifier(
     _perks: Vec<Perk>,
     _input_data: &CalculationInput,
     _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let mut reload_modifier = ReloadModifierResponse::default();
     for perk in _perks {
-        let tmp = get_perk_rsmr(perk, _input_data, _pvp);
+        let tmp = get_perk_rsmr(perk, _input_data, _pvp, _cached_data);
         reload_modifier.reload_stat_add += tmp.reload_stat_add;
         reload_modifier.reload_time_scale *= tmp.reload_time_scale;
     }
@@ -672,54 +663,49 @@ fn get_perk_rsmr(
     _perk: Perk,
     _input_data: &CalculationInput,
     _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
-        Perks::RapidFireFrame => rsmr_alloy_mag(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::AlloyMagazine => rsmr_alloy_mag(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Roadborn => rsmr_roadborn(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::RapidFireFrame => rsmr_alloy_mag(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::AlloyMagazine => rsmr_alloy_mag(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Roadborn => rsmr_roadborn(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::OphidianAspect => {
-            rsmr_ophidian_aspects(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            rsmr_ophidian_aspects(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::DragonShadow => {
-            rsmr_dragon_shadow(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::Frequency => rsmr_frequency(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::FlowState => rsmr_flow_state(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::OnYourMark => rsmr_on_your_mark(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::DragonShadow => rsmr_dragon_shadow(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Frequency => rsmr_frequency(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FlowState => rsmr_flow_state(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::OnYourMark => rsmr_on_your_mark(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ThreatDetector => {
-            rsmr_threat_detector(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            rsmr_threat_detector(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::FieldPrep => rsmr_field_prep(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::FeedingFrenzy => {
-            rsmr_feeding_frenzy(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::RapidHit => rsmr_rapid_hit(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::FieldPrep => rsmr_field_prep(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FeedingFrenzy => rsmr_feeding_frenzy(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RapidHit => rsmr_rapid_hit(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ElementalCapacitor => {
-            rsmr_elemental_capacitor(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            rsmr_elemental_capacitor(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::Ensemble => rsmr_ensemble(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Frenzy => rsmr_frenzy(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::Ensemble => rsmr_ensemble(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Frenzy => rsmr_frenzy(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ImpulseAmplifier => {
-            rsmr_impulse_amplifier(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            rsmr_impulse_amplifier(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::PerpetualMotion => {
-            rsmr_perpetual_motion(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            rsmr_perpetual_motion(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::StatsForAll => rsmr_stats_for_all(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Alacrity => rsmr_alacrity(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::FluidDynamics => {
-            rsmr_fluid_dynamics(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::QuietMoment => rsmr_quiet_moment(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::BitterSpite => rsmr_bitter_spite(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::LoaderMod => rsmr_loader_mods(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Outlaw => rsmr_outlaw(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::FireFly => rsmr_fire_fly(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::StatsForAll => rsmr_stats_for_all(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Alacrity => rsmr_alacrity(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FluidDynamics => rsmr_fluid_dynamics(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::QuietMoment => rsmr_quiet_moment(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::BitterSpite => rsmr_bitter_spite(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::LoaderMod => rsmr_loader_mods(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Outlaw => rsmr_outlaw(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FireFly => rsmr_fire_fly(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::CompulsiveReloader => {
-            rsmr_compulsive_reloader(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            rsmr_compulsive_reloader(_input_data, val, enhanced, _pvp, _cached_data)
         }
         _ => ReloadModifierResponse::default(),
     }
@@ -729,31 +715,37 @@ pub fn get_firing_modifier(
     _perks: Vec<Perk>,
     _input_data: &CalculationInput,
     _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     let mut firing_modifier = FiringModifierResponse::default();
     for perk in _perks {
-        let tmp = get_perk_fmr(perk, _input_data, _pvp);
+        let tmp = get_perk_fmr(perk, _input_data, _pvp, _cached_data);
         firing_modifier.burst_delay_scale *= tmp.burst_delay_scale;
         firing_modifier.burst_duration_scale *= tmp.burst_duration_scale;
         firing_modifier.burst_size_add += tmp.burst_size_add;
     }
     firing_modifier
 }
-fn get_perk_fmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> FiringModifierResponse {
+fn get_perk_fmr(
+    _perk: Perk,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> FiringModifierResponse {
     let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
-        Perks::Roadborn => fmr_roadborn(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::Roadborn => fmr_roadborn(_input_data, val, enhanced, _pvp, _cached_data),
         // Perks::RatPack => fmr_rat_pack(_input_data, val, enhanced, _pvp),
         // Perks::RideTheBull
-        Perks::Desperado => fmr_desperado(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::ArchersTempo => fmr_archers_tempo(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Adagio => fmr_adagio(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Cornered => fmr_cornered(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::CascadePoint => fmr_cascade_point(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::ReignHavoc => fmr_reign_havoc(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::BackupPlan => fmr_backup_plan(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::Desperado => fmr_desperado(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ArchersTempo => fmr_archers_tempo(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Adagio => fmr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Cornered => fmr_cornered(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::CascadePoint => fmr_cascade_point(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ReignHavoc => fmr_reign_havoc(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::BackupPlan => fmr_backup_plan(_input_data, val, enhanced, _pvp, _cached_data),
         _ => FiringModifierResponse::default(),
     }
 }
@@ -762,10 +754,11 @@ pub fn get_handling_modifier(
     _perks: Vec<Perk>,
     _input_data: &CalculationInput,
     _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let mut handling_modifier = HandlingModifierResponse::default();
     for perk in _perks {
-        let tmp = get_perk_hmr(perk, _input_data, _pvp);
+        let tmp = get_perk_hmr(perk, _input_data, _pvp, _cached_data);
         handling_modifier.handling_stat_add += tmp.handling_stat_add;
         handling_modifier.handling_swap_scale *= tmp.handling_swap_scale;
         handling_modifier.handling_ads_scale *= tmp.handling_ads_scale;
@@ -776,52 +769,50 @@ fn get_perk_hmr(
     _perk: Perk,
     _input_data: &CalculationInput,
     _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
-        Perks::SwapMag => hmr_swap_mag(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::KillingWind => hmr_killing_wind(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SwapMag => hmr_swap_mag(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::QuickAccessSling => {
+            hmr_swap_mag(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         Perks::OphidianAspect => {
-            hmr_ophidian_aspects(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            hmr_ophidian_aspects(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::DragonShadow => hmr_dragon_shadow(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Amplified => hmr_amplified(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::OnYourMark => hmr_on_your_mark(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::DragonShadow => hmr_dragon_shadow(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Amplified => hmr_amplified(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::OnYourMark => hmr_on_your_mark(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ThreatDetector => {
-            hmr_threat_detector(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            hmr_threat_detector(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::FirmlyPlanted => {
-            hmr_firmly_planted(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::Snapshot => hmr_snapshot(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::FirmlyPlanted => hmr_firmly_planted(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Snapshot => hmr_snapshot(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ElementalCapacitor => {
-            hmr_elemental_capacitor(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            hmr_elemental_capacitor(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::AdrenalineJunkie => {
-            hmr_adrenaline_junkie(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            hmr_adrenaline_junkie(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::Ensemble => hmr_ensemble(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Frenzy => hmr_frenzy(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::Ensemble => hmr_ensemble(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Frenzy => hmr_frenzy(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::PerpetualMotion => {
-            hmr_perpetual_motion(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            hmr_perpetual_motion(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::Slickdraw => hmr_slickdraw(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::StatsForAll => hmr_stats_for_all(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::SteadyHands => hmr_steady_hands(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::WellRounded => hmr_well_rounded(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::HotSwap => hmr_hot_swap(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::SearchParty => hmr_search_party(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::DexterityMod => {
-            hmr_dexterity_mods(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::TargetingMod => {
-            hmr_targeting_mods(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::BackupPlan => hmr_backup_plan(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::SleightOfHand => {
-            hmr_sleight_of_hand(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
+        Perks::Slickdraw => hmr_slickdraw(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::StatsForAll => hmr_stats_for_all(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SteadyHands => hmr_steady_hands(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::WellRounded => hmr_well_rounded(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::HotSwap => hmr_hot_swap(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SearchParty => hmr_search_party(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::DexterityMod => hmr_dexterity_mods(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::TargetingMod => hmr_targeting_mods(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::BackupPlan => hmr_backup_plan(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SleightOfHand => hmr_sleight_of_hand(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Harmony => hmr_harmony(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HandlingModifierResponse::default(),
     }
 }
@@ -830,10 +821,11 @@ pub fn get_magazine_modifier(
     _perks: Vec<Perk>,
     _input_data: &CalculationInput,
     _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     let mut magazine_modifier = MagazineModifierResponse::default();
     for perk in _perks {
-        let tmp = get_perk_mmr(perk, _input_data, _pvp);
+        let tmp = get_perk_mmr(perk, _input_data, _pvp, _cached_data);
         magazine_modifier.magazine_stat_add += tmp.magazine_stat_add;
         magazine_modifier.magazine_add += tmp.magazine_add;
         magazine_modifier.magazine_scale *= tmp.magazine_scale;
@@ -844,23 +836,22 @@ fn get_perk_mmr(
     _perk: Perk,
     _input_data: &CalculationInput,
     _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
-        Perks::AgersCall => mmr_agers_call(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::AgersCall => mmr_agers_call(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::AmbitiousAssassin => {
-            mmr_abitious_assassin(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            mmr_abitious_assassin(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::OverFlow => mmr_overflow(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::OverFlow => mmr_overflow(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ClownCartridge => {
-            mmr_clown_cartridge(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            mmr_clown_cartridge(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::Reconstruction => {
-            mmr_reconstruction(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::RunnethOver => mmr_runneth_over(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::Reconstruction => mmr_reconstruction(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RunnethOver => mmr_runneth_over(_input_data, val, enhanced, _pvp, _cached_data),
         _ => MagazineModifierResponse::default(),
     }
 }
@@ -869,10 +860,11 @@ pub fn get_reserve_modifier(
     _perks: Vec<Perk>,
     _input_data: &CalculationInput,
     _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> InventoryModifierResponse {
     let mut reserve_modifier = InventoryModifierResponse::default();
     for perk in _perks {
-        let tmp = get_perk_imr(perk, _input_data, _pvp);
+        let tmp = get_perk_imr(perk, _input_data, _pvp, _cached_data);
         reserve_modifier.inv_stat_add += tmp.inv_stat_add;
         reserve_modifier.inv_add += tmp.inv_add;
         reserve_modifier.inv_scale *= tmp.inv_scale;
@@ -883,13 +875,14 @@ fn get_perk_imr(
     _perk: Perk,
     _input_data: &CalculationInput,
     _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> InventoryModifierResponse {
     let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
-        Perks::FieldPrep => imr_field_prep(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::ReserveMod => imr_reserve_mods(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::FieldPrep => imr_field_prep(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ReserveMod => imr_reserve_mods(_input_data, val, enhanced, _pvp, _cached_data),
         _ => InventoryModifierResponse::default(),
     }
 }
@@ -898,10 +891,11 @@ pub fn get_range_modifier(
     _perks: Vec<Perk>,
     _input_data: &CalculationInput,
     _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> RangeModifierResponse {
     let mut range_modifier = RangeModifierResponse::default();
     for perk in _perks {
-        let tmp = get_perk_rmr(perk, _input_data, _pvp);
+        let tmp = get_perk_rmr(perk, _input_data, _pvp, _cached_data);
         range_modifier.range_stat_add += tmp.range_stat_add;
         range_modifier.range_all_scale *= tmp.range_all_scale;
         range_modifier.range_hip_scale *= tmp.range_hip_scale;
@@ -909,28 +903,29 @@ pub fn get_range_modifier(
     }
     range_modifier
 }
-fn get_perk_rmr(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> RangeModifierResponse {
+fn get_perk_rmr(
+    _perk: Perk,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> RangeModifierResponse {
     let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
-        Perks::HipFireGrip => rmr_hip_fire_grip(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::OpeningShot => rmr_opening_shot(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::RangeFinder => rmr_range_finder(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::SlideShot => rmr_slide_shot(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::KillingWind => rmr_killing_wind(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::FragileFocus => rmr_fragile_focus(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::OffhandStrike => {
-            rmr_offhand_strike(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::StatsForAll => rmr_stats_for_all(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::WellRounded => rmr_well_rounded(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Alacrity => rmr_alacrity(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::RightHook => rmr_right_hook(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::SleightOfHand => {
-            rmr_sleight_of_hand(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::Encore => rmr_encore(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::HipFireGrip => rmr_hip_fire_grip(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::OpeningShot => rmr_opening_shot(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RangeFinder => rmr_range_finder(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SlideShot => rmr_slide_shot(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::KillingWind => rmr_killing_wind(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FragileFocus => rmr_fragile_focus(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::OffhandStrike => rmr_offhand_strike(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::StatsForAll => rmr_stats_for_all(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::WellRounded => rmr_well_rounded(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Alacrity => rmr_alacrity(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RightHook => rmr_right_hook(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SleightOfHand => rmr_sleight_of_hand(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Encore => rmr_encore(_input_data, val, enhanced, _pvp, _cached_data),
         _ => RangeModifierResponse::default(),
     }
 }
@@ -939,24 +934,30 @@ pub fn get_refund_modifier(
     _perks: Vec<Perk>,
     _input_data: &CalculationInput,
     _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
 ) -> Vec<RefundResponse> {
     let mut refund_modifier = vec![];
     for perk in _perks {
-        let tmp = get_perk_refund(perk, _input_data, _pvp);
+        let tmp = get_perk_refund(perk, _input_data, _pvp, _cached_data);
         if tmp.requirement > 0 {
             refund_modifier.push(tmp);
         }
     }
     refund_modifier
 }
-fn get_perk_refund(_perk: Perk, _input_data: &CalculationInput, _pvp: bool) -> RefundResponse {
+fn get_perk_refund(
+    _perk: Perk,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> RefundResponse {
     let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
-        Perks::TripleTap => rr_triple_tap(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::TripleTap => rr_triple_tap(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::FourthTimesTheCharm => {
-            rr_fourth_times(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+            rr_fourth_times(_input_data, val, enhanced, _pvp, _cached_data)
         }
         _ => RefundResponse::default(),
     }
@@ -989,9 +990,7 @@ fn get_perk_edr(
     match perk_enum {
         Perks::ReignHavoc => edr_reign_havoc(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ClusterBomb => edr_cluster_bomb(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::BaitAndSwitch => {
-            edr_bait_and_switch(_input_data, val, enhanced, _pvp, _cached_data)
-        }
+        Perks::BaitAndSwitch => edr_bait_and_switch(_input_data, val, enhanced, _pvp, _cached_data),
         _ => ExtraDamageResponse::default(),
     }
 }
@@ -1011,15 +1010,50 @@ pub fn get_reload_overrides(
     }
     reload_overrides
 }
-fn get_perk_ror(_perk: Perk, _input_data: &CalculationInput, _pvp: bool, _cached_data: &mut HashMap<String, f64>,) -> ReloadOverrideResponse {
+fn get_perk_ror(
+    _perk: Perk,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> ReloadOverrideResponse {
     let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
-        Perks::Demolitionist => {
-            ror_demolitionist(_input_data, val, enhanced, _pvp, _cached_data)
-        }
+        Perks::Demolitionist => ror_demolitionist(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::VeistStinger => ror_veist_stinger(_input_data, val, enhanced, _pvp, _cached_data),
         _ => ReloadOverrideResponse::invalid(),
+    }
+}
+
+pub fn get_explosion_data(
+    _perks: Vec<Perk>,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+) -> ExplosivePercentResponse {
+    let mut highest_so_far = ExplosivePercentResponse::default();
+    for perk in _perks {
+        let tmp = get_perk_epr(perk, _input_data, _pvp);
+        if tmp.percent > highest_so_far.percent {
+            highest_so_far = tmp;
+        }
+    }
+    highest_so_far
+}
+
+fn get_perk_epr(
+    _perk: Perk,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+) -> ExplosivePercentResponse {
+    let perk_enum = _perk.hash.into();
+    let val = _perk.value;
+    let enhanced = _perk.enhanced;
+    match perk_enum {
+        Perks::ExplosivePayload => epr_explosive_payload(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::ExplosiveHead => epr_explosive_head(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::TimedPayload => epr_timed_payload(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::BuiltIn => epr_builtin(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        _ => ExplosivePercentResponse::default(),
     }
 }

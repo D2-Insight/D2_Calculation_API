@@ -55,8 +55,9 @@ pub(super) fn dmr_paracausal_shot(
         damage_buff = bufflist[num_of_crits as usize];
     };
     DamageModifierResponse {
-        dmg_scale: damage_buff,
-        ..Default::default()
+        impact_dmg_scale: damage_buff,
+        explosive_dmg_scale: damage_buff,
+        crit_scale: 1.0,
     }
 }
 
@@ -72,8 +73,9 @@ pub(super) fn dmr_momento_mori(
         damage_buff = if _pvp { 1.5 } else { 1.285 };
     };
     DamageModifierResponse {
-        dmg_scale: damage_buff,
-        ..Default::default()
+        impact_dmg_scale: damage_buff,
+        explosive_dmg_scale: damage_buff,
+        crit_scale: 1.0,
     }
 }
 
@@ -89,8 +91,9 @@ pub(super) fn dmr_agers_call(
         damage_buff = 1.8;
     };
     DamageModifierResponse {
-        dmg_scale: damage_buff,
-        ..Default::default()
+        impact_dmg_scale: damage_buff,
+        explosive_dmg_scale: damage_buff,
+        crit_scale: 1.0,
     }
 }
 
@@ -107,23 +110,6 @@ pub(super) fn mmr_agers_call(
     };
     MagazineModifierResponse {
         magazine_scale: mag_buff,
-        ..Default::default()
-    }
-}
-
-pub(super) fn dmr_arbys(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let mut damage_buff = 1.0;
-    if *_input.enemy_type == EnemyType::CHAMPION {
-        damage_buff = 0.75;
-    };
-    DamageModifierResponse {
-        dmg_scale: damage_buff,
         ..Default::default()
     }
 }
@@ -156,7 +142,8 @@ pub(super) fn dmr_roadborn(
     };
     DamageModifierResponse {
         crit_scale: crit_mult,
-        ..Default::default()
+        explosive_dmg_scale: 1.0,
+        impact_dmg_scale: 1.0,
     }
 }
 
@@ -279,8 +266,9 @@ pub(super) fn dmr_worms_hunger(
 ) -> DamageModifierResponse {
     let val = clamp(_value, 0, 20);
     DamageModifierResponse {
-        dmg_scale: 1.0 + (val as f64) * 0.1,
-        ..Default::default()
+        impact_dmg_scale: 1.0 + (val as f64) * 0.1,
+        explosive_dmg_scale: 1.0 + (val as f64) * 0.1,
+        crit_scale: 1.0,
     }
 }
 
@@ -296,8 +284,9 @@ pub(super) fn dmr_lagragian_sight(
         damage_buff = 1.4;
     };
     DamageModifierResponse {
-        dmg_scale: damage_buff,
-        ..Default::default()
+        impact_dmg_scale: damage_buff,
+        explosive_dmg_scale: damage_buff,
+        crit_scale: 1.0,
     }
 }
 
@@ -313,8 +302,9 @@ pub(super) fn dmr_tom(
         damage_buff = 2.0;
     };
     DamageModifierResponse {
-        dmg_scale: damage_buff,
-        ..Default::default()
+        impact_dmg_scale: damage_buff,
+        explosive_dmg_scale: damage_buff,
+        crit_scale: 1.0,
     }
 }
 
@@ -341,13 +331,10 @@ pub(super) fn edr_rocket_tracers(
     _cached_data: &mut HashMap<String, f64>,
 ) -> ExtraDamageResponse {
     let mut dmg = if _pvp {
-        _input.base_damage * 1.8
+        24.0
     } else {
-        _input.base_damage * 8.0
-    } - _input.base_damage * _input.base_crit_mult;
-    if dmg < 0.0 {
-        dmg = 0.0
-    }
+        105.0
+    };
     ExtraDamageResponse {
         additive_damage: dmg,
         times_to_hit: 1,
@@ -361,55 +348,55 @@ pub(super) fn edr_rocket_tracers(
     }
 }
 
-pub(super) fn edr_guidance_ring(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> ExtraDamageResponse {
-    ExtraDamageResponse {
-        additive_damage: if _value > 0 {
-            _input.base_damage * _input.base_crit_mult
-        } else {
-            0.0
-        },
-        times_to_hit: 2,
-        increment_total_time: false,
-        time_for_additive_damage: 0.1,
-        hit_at_same_time: true,
-        is_dot: false,
-        weapon_scale: true,
-        crit_scale: false,
-        combatant_scale: true,
-    }
-}
+// pub(super) fn edr_guidance_ring(
+//     _input: &CalculationInput,
+//     _value: u32,
+//     _is_enhanced: bool,
+//     _pvp: bool,
+//     _cached_data: &mut HashMap<String, f64>,
+// ) -> ExtraDamageResponse {
+//     ExtraDamageResponse {
+//         additive_damage: if _value > 0 {
+//             _input.base_damage * _input.base_crit_mult
+//         } else {
+//             0.0
+//         },
+//         times_to_hit: 2,
+//         increment_total_time: false,
+//         time_for_additive_damage: 0.1,
+//         hit_at_same_time: true,
+//         is_dot: false,
+//         weapon_scale: true,
+//         crit_scale: false,
+//         combatant_scale: true,
+//     }
+// }
 
-pub(super) fn edr_poison_arrows(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> ExtraDamageResponse {
-    let last_proc = _cached_data.get("poison_arrows").unwrap_or(&0.0);
-    let time_diff = _input.time_total - last_proc;
-    return ExtraDamageResponse {
-        additive_damage: if _value > 0 {
-            _input.base_damage * _input.base_crit_mult
-        } else {
-            0.0
-        },
-        times_to_hit: (time_diff / 0.5).ceil() as i32,
-        increment_total_time: false,
-        time_for_additive_damage: 0.5,
-        hit_at_same_time: false,
-        is_dot: true,
-        weapon_scale: true,
-        crit_scale: false,
-        combatant_scale: true,
-    };
-}
+// pub(super) fn edr_poison_arrows(
+//     _input: &CalculationInput,
+//     _value: u32,
+//     _is_enhanced: bool,
+//     _pvp: bool,
+//     _cached_data: &mut HashMap<String, f64>,
+// ) -> ExtraDamageResponse {
+//     let last_proc = _cached_data.get("poison_arrows").unwrap_or(&0.0);
+//     let time_diff = _input.time_total - last_proc;
+//     return ExtraDamageResponse {
+//         additive_damage: if _value > 0 {
+//             _input.base_damage * _input.base_crit_mult
+//         } else {
+//             0.0
+//         },
+//         times_to_hit: (time_diff / 0.5).ceil() as i32,
+//         increment_total_time: false,
+//         time_for_additive_damage: 0.5,
+//         hit_at_same_time: false,
+//         is_dot: true,
+//         weapon_scale: true,
+//         crit_scale: false,
+//         combatant_scale: true,
+//     };
+// }
 
 pub(super) fn rsmr_lunafaction(
     _input: &CalculationInput,

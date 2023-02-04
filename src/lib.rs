@@ -206,10 +206,10 @@ pub fn get_weapon_range(_dynamic_traits: bool) -> Result<JsRangeResponse, JsValu
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     if _dynamic_traits {
         Ok(weapon
-            .calc_range_falloff(Some(weapon.static_calc_input()))
+            .calc_range_falloff(Some(weapon.static_calc_input()), None)
             .into())
     } else {
-        Ok(weapon.calc_range_falloff(None).into())
+        Ok(weapon.calc_range_falloff(None, None).into())
     }
 }
 
@@ -219,10 +219,10 @@ pub fn get_weapon_handling(_dynamic_traits: bool) -> Result<JsHandlingResponse, 
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     if _dynamic_traits {
         Ok(weapon
-            .calc_handling_times(Some(weapon.static_calc_input()))
+            .calc_handling_times(Some(weapon.static_calc_input()), None)
             .into())
     } else {
-        Ok(weapon.calc_handling_times(None).into())
+        Ok(weapon.calc_handling_times(None, None).into())
     }
 }
 
@@ -232,10 +232,10 @@ pub fn get_weapon_reload(_dynamic_traits: bool) -> Result<JsReloadResponse, JsVa
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     if _dynamic_traits {
         Ok(weapon
-            .calc_reload_time(Some(weapon.static_calc_input()))
+            .calc_reload_time(Some(weapon.static_calc_input()), None)
             .into())
     } else {
-        Ok(weapon.calc_reload_time(None).into())
+        Ok(weapon.calc_reload_time(None, None).into())
     }
 }
 
@@ -245,10 +245,10 @@ pub fn get_weapon_ammo(_dynamic_traits: bool) -> Result<JsAmmoResponse, JsValue>
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     if _dynamic_traits {
         Ok(weapon
-            .calc_ammo_sizes(Some(weapon.static_calc_input()))
+            .calc_ammo_sizes(Some(weapon.static_calc_input()), None)
             .into())
     } else {
-        Ok(weapon.calc_ammo_sizes(None).into())
+        Ok(weapon.calc_ammo_sizes(None, None).into())
     }
 }
 
@@ -279,9 +279,9 @@ pub fn get_weapon_firing_data(_dynamic_traits: bool, _use_rpl: bool) -> Result<J
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     let mut response: types::rs_types::FiringResponse;
     if _dynamic_traits {
-        response = weapon.calc_firing_data(Some(weapon.static_calc_input()));
+        response = weapon.calc_firing_data(Some(weapon.static_calc_input()), None);
     } else {
-        response = weapon.calc_firing_data(None);
+        response = weapon.calc_firing_data(None, None);
     };
     PERS_DATA.with(|perm_data| {
         response.apply_pve_bonuses(
@@ -373,10 +373,10 @@ fn get_weapon_range(_use_traits: bool) -> PyResult<PyRangeResponse> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     if _use_traits {
         Ok(weapon
-            .calc_range_falloff(Some(weapon.static_calc_input()))
+            .calc_range_falloff(Some(weapon.static_calc_input()), None)
             .into())
     } else {
-        Ok(weapon.calc_range_falloff(None).into())
+        Ok(weapon.calc_range_falloff(None, None).into())
     }
 }
 #[cfg(feature = "python")]
@@ -385,22 +385,22 @@ fn get_weapon_handling(_use_traits: bool) -> PyResult<PyHandlingResponse> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     if _use_traits {
         Ok(weapon
-            .calc_handling_times(Some(weapon.static_calc_input()))
+            .calc_handling_times(Some(weapon.static_calc_input()), None)
             .into())
     } else {
-        Ok(weapon.calc_handling_times(None).into())
+        Ok(weapon.calc_handling_times(None, None).into())
     }
 }
 
 #[cfg(feature = "python")]
 #[pyfunction(name = "get_firing_data")]
-pub fn get_firing_data(_dynamic_traits: bool, _use_rpl: bool) -> PyResult<PyFiringResponse> {
+fn get_firing_data(_dynamic_traits: bool, _use_rpl: bool) -> PyResult<PyFiringResponse> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     let mut response: types::rs_types::FiringResponse;
     if _dynamic_traits {
-        response = weapon.calc_firing_data(Some(weapon.static_calc_input()));
+        response = weapon.calc_firing_data(Some(weapon.static_calc_input()), None);
     } else {
-        response = weapon.calc_firing_data(None);
+        response = weapon.calc_firing_data(None, None);
     };
     PERS_DATA.with(|perm_data| {
         response.apply_pve_bonuses(

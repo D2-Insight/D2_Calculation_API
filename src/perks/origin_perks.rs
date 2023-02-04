@@ -26,13 +26,13 @@ pub(super) fn ror_veist_stinger(
         last_proc = *data.unwrap();
     };
     let time_since_last_proc = _input.time_total - last_proc;
-    if time_since_last_proc >= 4.0 && _value < 99{
+    if time_since_last_proc >= 4.0 && _value < 99 {
         println!("{:?}", _cached_data);
         _cached_data.insert("veist_stinger".to_string(), _input.time_total);
         ReloadOverrideResponse {
             count_as_reload: false,
             reload_time: 0.0,
-            ammo_to_reload: (_input.base_mag/4.0).ceil() as i32,
+            ammo_to_reload: (_input.base_mag / 4.0).ceil() as i32,
             priority: 9,
             uses_ammo: true,
             valid: true,
@@ -60,8 +60,9 @@ pub(super) fn dmr_hakke_breache(
 ) -> DamageModifierResponse {
     let damage_mult = if _value > 0 { 0.3 } else { 0.0 };
     DamageModifierResponse {
-        dmg_scale: 1.0 + damage_mult,
-        ..Default::default()
+        impact_dmg_scale: 1.0 + damage_mult,
+        explosive_dmg_scale: 1.0 + damage_mult,
+        crit_scale: 1.0,
     }
 }
 
@@ -138,8 +139,9 @@ pub(super) fn dmr_ambush(
 ) -> DamageModifierResponse {
     let damage_mult = if _value > 0 { 0.095 } else { 0.0 };
     DamageModifierResponse {
-        dmg_scale: 1.0 + damage_mult,
-        ..Default::default()
+        impact_dmg_scale: 1.0 + damage_mult,
+        explosive_dmg_scale: 1.0 + damage_mult,
+        crit_scale: 1.0,
     }
 }
 

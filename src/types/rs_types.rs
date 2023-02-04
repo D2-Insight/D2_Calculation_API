@@ -133,10 +133,12 @@ impl DpsResponse {
 
 #[derive(Debug, Clone, Default)]
 pub struct FiringResponse {
-    pub pvp_damage: f64,
+    pub pvp_impact_damage: f64,
+    pub pvp_explosion_damage: f64,
     pub pvp_crit_mult: f64,
 
-    pub pve_damage: f64,
+    pub pve_impact_damage: f64,
+    pub pve_explosion_damage: f64,
     pub pve_crit_mult: f64,
 
     pub burst_delay: f64,
@@ -155,6 +157,7 @@ impl FiringResponse{
         self.rpm = (1.0/avg_bullet_time)*60.0
     }
     pub fn apply_pve_bonuses(&mut self, _rpl_mult: f64, _gpl_mult: f64, _pve_mult: f64, _combatant_mult: f64) {
-        self.pve_damage *= _rpl_mult * _gpl_mult * _pve_mult * _combatant_mult;
+        self.pve_impact_damage *= _rpl_mult * _gpl_mult * _pve_mult * _combatant_mult;
+        self.pve_explosion_damage *= _rpl_mult * _gpl_mult * _pve_mult * _combatant_mult;
     }
 }

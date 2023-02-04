@@ -5,7 +5,7 @@ use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponType};
 use super::{
     clamp,
     lib::{
-        CalculationInput, DamageBuffType, DamageModifierResponse, ExplosivePercentResponse,
+        CalculationInput, DamageModifierResponse, ExplosivePercentResponse,
         ExtraDamageResponse, FiringModifierResponse, HandlingModifierResponse,
         InventoryModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
         ReloadModifierResponse,
@@ -33,8 +33,9 @@ pub(super) fn dmr_high_impact_reserves(
         }
     };
     DamageModifierResponse {
-        dmg_scale: out_dmg_scale,
-        ..Default::default()
+        impact_dmg_scale: out_dmg_scale,
+        explosive_dmg_scale: out_dmg_scale,
+        crit_scale: 1.0,
     }
 }
 
@@ -123,23 +124,6 @@ pub(super) fn mmr_abitious_assassin(
     }
 }
 
-pub(super) fn dmr_assasins_blade(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let mut out_dmg_scale = 1.0;
-    let duration = if _is_enhanced { 6.0 } else { 5.0 };
-    if _input.time_total < duration {
-        out_dmg_scale = 1.15;
-    };
-    DamageModifierResponse {
-        dmg_scale: out_dmg_scale,
-        ..Default::default()
-    }
-}
 pub(super) fn dmr_box_breathing(
     _input: &CalculationInput,
     _value: u32,
@@ -155,15 +139,12 @@ pub(super) fn dmr_box_breathing(
             1.0
         };
         return DamageModifierResponse {
-            dmg_scale: dmg_mult,
+            impact_dmg_scale: dmg_mult,
+            explosive_dmg_scale: dmg_mult,
             crit_scale: crit_mult,
-            ..Default::default()
         };
     };
-    DamageModifierResponse {
-        dmg_scale: 1.0,
-        ..Default::default()
-    }
+    DamageModifierResponse::new()
 }
 
 pub(super) fn fmr_desperado(
@@ -194,13 +175,12 @@ pub(super) fn dmr_explosive_payload(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     if _pvp {
-        DamageModifierResponse::default()
+        DamageModifierResponse::new()
     } else {
-        // let damage_mult = ((1.0 / _input.base_crit_mult) * 0.15) + 1.0;
         DamageModifierResponse {
-            dmg_scale: 0.3,
-            buff_type: DamageBuffType::EXPLOSION,
-            ..Default::default()
+            impact_dmg_scale: 1.0,
+            explosive_dmg_scale: 1.3,
+            crit_scale: 1.0,
         }
     }
 }
@@ -227,13 +207,13 @@ pub(super) fn dmr_timed_payload(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     if _pvp {
-        DamageModifierResponse::default()
+        DamageModifierResponse::new()
     } else {
         // let damage_mult = ((1.0 / _input.base_crit_mult) * 0.15) + 1.0;
         DamageModifierResponse {
-            dmg_scale: 0.3,
-            buff_type: DamageBuffType::EXPLOSION,
-            ..Default::default()
+            impact_dmg_scale: 1.0,
+            explosive_dmg_scale: 1.3,
+            crit_scale: 1.0,
         }
     }
 }
@@ -420,8 +400,9 @@ pub(super) fn dmr_impact_casing(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     DamageModifierResponse {
-        dmg_scale: 0.025,
-        ..Default::default()
+        impact_dmg_scale: 1.1,
+        explosive_dmg_scale: 1.0,
+        crit_scale: 1.0,
     }
 }
 
@@ -621,8 +602,9 @@ pub(super) fn dmr_rampage(
         damage_mult = 0.0;
     };
     DamageModifierResponse {
-        dmg_scale: 1.0 + damage_mult,
-        ..Default::default()
+        impact_dmg_scale: 1.0 + damage_mult,
+        explosive_dmg_scale: 1.0 + damage_mult,
+        crit_scale: 1.0,
     }
 }
 
@@ -639,8 +621,9 @@ pub(super) fn dmr_kill_clip(
         damage_mult = 0.0;
     };
     DamageModifierResponse {
-        dmg_scale: 1.0 + damage_mult,
-        ..Default::default()
+        impact_dmg_scale: 1.0 + damage_mult,
+        explosive_dmg_scale: 1.0 + damage_mult,
+        crit_scale: 1.0,
     }
 }
 
@@ -657,8 +640,9 @@ pub(super) fn dmr_backup_plan(
         damage_mult = 0.0;
     };
     DamageModifierResponse {
-        dmg_scale: 1.0 + damage_mult,
-        ..Default::default()
+        impact_dmg_scale: 1.0 + damage_mult,
+        explosive_dmg_scale: 1.0 + damage_mult,
+        crit_scale: 1.0,
     }
 }
 
@@ -725,7 +709,7 @@ pub(super) fn edr_cluster_bomb(
     _cached_data: &mut HashMap<String, f64>,
 ) -> ExtraDamageResponse {
     ExtraDamageResponse {
-        additive_damage: _input.base_damage * 0.04,
+        additive_damage: 350.0 * 0.04,
         combatant_scale: true,
         crit_scale: false,
         increment_total_time: false,
@@ -750,7 +734,8 @@ pub(super) fn dmr_disruption_break(
         damage_mult = 0.0;
     };
     DamageModifierResponse {
-        dmg_scale: 1.0 + damage_mult,
-        ..Default::default()
+        impact_dmg_scale: 1.0 + damage_mult,
+        explosive_dmg_scale: 1.0 + damage_mult,
+        crit_scale: 1.0,
     }
 }

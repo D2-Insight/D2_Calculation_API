@@ -697,11 +697,15 @@ impl From<HandlingResponse> for PyHandlingResponse {
 #[pyclass(name = "FiringResponse")]
 pub struct PyFiringResponse {
     #[pyo3(get)]
-    pub pvp_damage: f64,
+    pub pvp_impact_damage: f64,
+    #[pyo3(get)]
+    pub pvp_explosion_damage: f64,
     #[pyo3(get)]
     pub pvp_crit_mult: f64,
     #[pyo3(get)]
-    pub pve_damage: f64,
+    pub pve_impact_damage: f64,
+    #[pyo3(get)]
+    pub pve_explosion_damage: f64,
     #[pyo3(get)]
     pub pve_crit_mult: f64,
     #[pyo3(get)]
@@ -717,17 +721,19 @@ pub struct PyFiringResponse {
 impl PyFiringResponse {
     fn __repr__(&self) -> PyResult<String> {
         Ok(format!(
-            "FiringResponse(pvp_damage={}, pvp_crit_mult={}, pve_damage={}, pve_crit_mult={}, burst_delay={}, burst_duration={}, burst_size={}, rpm={})",
-            self.pvp_damage, self.pvp_crit_mult, self.pve_damage, self.pve_crit_mult, self.burst_delay, self.burst_duration, self.burst_size, self.rpm
+            "FiringResponse(pvp_impact_damage={}, pvp_explosion_damage={}, pvp_crit_mult={}, pve_impact_damage={}, pve_explosion_damage={}, pve_crit_mult={}, burst_delay={}, burst_duration={}, burst_size={}, rpm={})",
+            self.pvp_impact_damage, self.pvp_explosion_damage, self.pvp_crit_mult, self.pve_impact_damage, self.pve_explosion_damage, self.pve_crit_mult, self.burst_delay, self.burst_duration, self.burst_size, self.rpm
         ))
     }
 }
 impl From<FiringResponse> for PyFiringResponse {
     fn from(r: FiringResponse) -> Self {
         PyFiringResponse {
-            pvp_damage: r.pvp_damage,
+            pvp_impact_damage: r.pvp_impact_damage,
+            pvp_explosion_damage: r.pvp_explosion_damage,
             pvp_crit_mult: r.pvp_crit_mult,
-            pve_damage: r.pve_damage,
+            pve_impact_damage: r.pve_impact_damage,
+            pve_explosion_damage: r.pve_explosion_damage,
             pve_crit_mult: r.pve_crit_mult,
             burst_delay: r.burst_delay,
             burst_duration: r.burst_duration,

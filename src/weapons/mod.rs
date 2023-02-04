@@ -153,13 +153,13 @@ impl Weapon {
             &self.damage_type,
             self.firing_data.damage,
             self.firing_data.crit_mult,
-            self.calc_ammo_sizes(None).mag_size,
+            self.calc_ammo_sizes(None, None).mag_size,
             _total_shots_fired,
             _total_time,
         )
     }
     pub fn pvp_calc_input(&self, _total_shots_fired: f64, _total_shots_hit: f64, _total_time: f64, _overshield: bool) -> CalculationInput {
-        let base_mag = self.calc_ammo_sizes(None).mag_size as f64;
+        let base_mag = self.calc_ammo_sizes(None, None).mag_size as f64;
         let mut tmp = CalculationInput::construct_pvp(
             self.intrinsic_hash,
             &self.firing_data, 
@@ -170,7 +170,7 @@ impl Weapon {
             self.firing_data.crit_mult,
             base_mag, 
             _overshield, 
-            self.calc_handling_times(None)
+            self.calc_handling_times(None, None)
         );
         tmp.time_this_mag = _total_time; 
         tmp.time_total = _total_time;
@@ -187,7 +187,7 @@ impl Weapon {
             &self.weapon_type,
             &self.ammo_type,
         );
-        let inter_var = get_perk_stats(self.list_perks(), input, false);
+        let inter_var = get_perk_stats(self.list_perks(), input, false, &mut HashMap::new());
         let dynamic_stats = &inter_var[0];
         let static_stats = &inter_var[1];
         for (key, stat) in &mut self.stats {
