@@ -38,9 +38,9 @@ use wasm_bindgen::prelude::*;
 //python
 #[cfg(feature = "python")]
 use crate::types::py_types::{
-    PyActivity, PyAmmoFormula, PyDamageModifiers, PyDifficultyOptions, PyDpsResponse, PyEnemy,
-    PyEnemyType, PyFiringData, PyHandlingFormula, PyHandlingResponse, PyPerk, PyPlayer,
-    PyPlayerClass, PyRangeFormula, PyRangeResponse, PyReloadFormula, PyWeapon, PyWeaponFormula,
+    PyActivity, PyDifficultyOptions, PyDpsResponse, PyEnemy,
+    PyEnemyType, PyHandlingResponse, PyPerk, PyPlayer,
+    PyPlayerClass, PyRangeResponse,
     PyResillienceSummary, PyFiringResponse
 };
 #[cfg(feature = "python")]
@@ -84,6 +84,13 @@ pub fn start() {
 pub fn weapon_as_string() -> Result<String, JsValue> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     Ok(format!("{:?}", weapon))
+}
+
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "weaponJSON")]
+pub fn weapon_as_json() -> Result<JsValue, JsValue> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    Ok(serde_wasm_bindgen::to_value(&weapon).unwrap())
 }
 
 #[cfg(feature = "wasm")]
@@ -469,8 +476,7 @@ fn register_weapon_interface(py: Python<'_>, parent_module: &PyModule) -> PyResu
     weapon_interface.add_function(wrap_pyfunction!(set_weapon_stats, weapon_interface)?)?;
     weapon_interface.add_function(wrap_pyfunction!(get_firing_data, weapon_interface)?)?;
 
-    //classes
-    weapon_interface.add_class::<PyWeapon>()?;
+    //classes;
     weapon_interface.add_class::<PyPerk>()?;
     weapon_interface.add_class::<PyRangeResponse>()?;
     weapon_interface.add_class::<PyHandlingResponse>()?;

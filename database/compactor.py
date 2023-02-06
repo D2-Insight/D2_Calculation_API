@@ -137,15 +137,13 @@ def verify_firing_data(_firing_data: dict) -> dict:
     if "damage" not in _firing_data:
         _firing_data["damage"] = 1.0
     if "crit_mult" not in _firing_data:
-        _firing_data["crit_mult"] = 1.0
+        _firing_data["crit_mult"] = 0.0
     if "burst_delay" not in _firing_data:
         _firing_data["burst_delay"] = 0.0
     if "burst_size" not in _firing_data:
         _firing_data["burst_size"] = 0
-    if "burst_duration" not in _firing_data:
-        _firing_data["burst_duration"] = 0.0
-    if "is_explosive" not in _firing_data:
-        _firing_data["explosive"] = False
+    if "inner_burst_delay" not in _firing_data:
+        _firing_data["inner_burst_delay"] = 0.0
     if "is_charge" not in _firing_data:
         _firing_data["charge"] = False
     if "one_ammo_burst" not in _firing_data:
@@ -153,11 +151,13 @@ def verify_firing_data(_firing_data: dict) -> dict:
     if len(_firing_data) > 8:
         raise Exception("Bad entries in firing data")
     _firing_data["damage"] = float(_firing_data["damage"])
-    _firing_data["crit_mult"] = float(_firing_data["crit_mult"])
-    _firing_data["burst_delay"] = float(_firing_data["burst_delay"])
+    if _firing_data["crit_mult"] % 1 == 0 or _firing_data["crit_mult"] == -25.5:
+        _firing_data["crit_mult"] = float((1.5 + _firing_data["crit_mult"]/51))
+    if _firing_data["burst_delay"] % 0.5 == 0:
+        _firing_data["burst_delay"] = float(_firing_data["burst_delay"]/30)
     _firing_data["burst_size"] = int(_firing_data["burst_size"])
-    _firing_data["burst_duration"] = float(_firing_data["burst_duration"])
-    _firing_data["explosive"] = bool(_firing_data["explosive"])
+    if _firing_data["inner_burst_delay"] % 0.5 == 0:
+        _firing_data["inner_burst_delay"] = float(_firing_data["inner_burst_delay"]/30)
     _firing_data["charge"] = bool(_firing_data["charge"])
     _firing_data["one_ammo"] = bool(_firing_data["one_ammo"])
     return _firing_data
@@ -212,7 +212,7 @@ def rustify_scalar_string(_in: str) -> str:
     return out
 
 def rustify_firing_string(_in: str) -> str:
-    out = _in.replace("\'{", "FiringConfig{").replace("}\'", "}").replace("\"", "")
+    out = _in.replace("\'{", "FiringData{").replace("}\'", "}").replace("\"", "")
     return out
 
 def rustify_ammo_string(_in: str) -> str:
@@ -265,7 +265,6 @@ for weapon_id in new_jdata:
     if weapon_id == "18":
         continue
     inner_values = new_jdata[weapon_id]
-    print()
     updated_weapon_defs = {}
     for weapon_hash in inner_values:
         data = {}

@@ -54,19 +54,18 @@ impl From<i32> for Stat {
     }
 }
 
-#[derive(Debug, Clone, Default, Copy, Deserialize)]
-pub struct FiringConfig {
+#[derive(Debug, Clone, Default, Copy, Serialize)]
+pub struct FiringData {
     pub damage: f64,
     pub crit_mult: f64,
     pub burst_delay: f64,
-    pub burst_duration: f64,
+    pub inner_burst_delay: f64,
     pub burst_size: i32,
     pub one_ammo: bool,
     pub charge: bool,
-    pub explosive: bool,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Weapon {
     //ideally entirely interfaced with through funcs when acting mutably
     pub is_pvp: bool,
@@ -77,7 +76,7 @@ pub struct Weapon {
     pub stats: HashMap<u32, Stat>,
 
     pub damage_mods: DamageMods,
-    pub firing_data: FiringConfig,
+    pub firing_data: FiringData,
     pub range_formula: RangeFormula,
     pub ammo_formula: AmmoFormula,
     pub handling_formula: HandlingFormula,
@@ -126,7 +125,7 @@ impl Weapon {
         self.stats = HashMap::new();
         self.hash = 0;
         self.damage_mods = DamageMods::default();
-        self.firing_data = FiringConfig::default();
+        self.firing_data = FiringData::default();
         self.range_formula = RangeFormula::default();
         self.ammo_formula = AmmoFormula::default();
         self.handling_formula = HandlingFormula::default();
@@ -158,21 +157,27 @@ impl Weapon {
             _total_time,
         )
     }
-    pub fn pvp_calc_input(&self, _total_shots_fired: f64, _total_shots_hit: f64, _total_time: f64, _overshield: bool) -> CalculationInput {
+    pub fn pvp_calc_input(
+        &self,
+        _total_shots_fired: f64,
+        _total_shots_hit: f64,
+        _total_time: f64,
+        _overshield: bool,
+    ) -> CalculationInput {
         let base_mag = self.calc_ammo_sizes(None, None).mag_size as f64;
         let mut tmp = CalculationInput::construct_pvp(
             self.intrinsic_hash,
-            &self.firing_data, 
-            &self.stats, 
-            &self.weapon_type, 
-            &self.ammo_type, 
-            self.firing_data.damage, 
+            &self.firing_data,
+            &self.stats,
+            &self.weapon_type,
+            &self.ammo_type,
+            self.firing_data.damage,
             self.firing_data.crit_mult,
-            base_mag, 
-            _overshield, 
-            self.calc_handling_times(None, None)
+            base_mag,
+            _overshield,
+            self.calc_handling_times(None, None),
         );
-        tmp.time_this_mag = _total_time; 
+        tmp.time_this_mag = _total_time;
         tmp.time_total = _total_time;
         tmp.shots_fired_this_mag = _total_shots_fired;
         tmp.total_shots_fired = _total_shots_fired;
@@ -216,7 +221,7 @@ impl Default for Weapon {
             perks: HashMap::new(),
             stats: HashMap::new(),
             damage_mods: DamageMods::default(),
-            firing_data: FiringConfig::default(),
+            firing_data: FiringData::default(),
 
             range_formula: RangeFormula::default(),
             ammo_formula: AmmoFormula::default(),

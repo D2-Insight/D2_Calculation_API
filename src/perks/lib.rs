@@ -2,14 +2,14 @@ use crate::{
     d2_enums::{AmmoType, DamageType, StatHashes, WeaponType},
     enemies::EnemyType,
     types::rs_types::HandlingResponse,
-    weapons::{FiringConfig, Stat},
+    weapons::{FiringData, Stat},
 };
 use std::{cell::RefCell, collections::HashMap, ops::Mul};
 
 #[derive(Debug, Clone)]
 pub struct CalculationInput<'a> {
     pub intrinsic_hash: u32,
-    pub curr_firing_data: &'a FiringConfig,
+    pub curr_firing_data: &'a FiringData,
     pub base_crit_mult: f64,
     pub shots_fired_this_mag: f64,
     pub total_shots_fired: f64,
@@ -32,7 +32,7 @@ impl<'a> CalculationInput<'a> {
     //stuff like mag size can use this, not reload, damage, etc.
     pub fn construct_pve_sparse(
         _intrinsic_hash: u32,
-        _firing_data: &'a FiringConfig,
+        _firing_data: &'a FiringData,
         _stats: &'a HashMap<u32, Stat>,
         _weapon_type: &'a WeaponType,
         _ammo_type: &'a AmmoType,
@@ -67,7 +67,7 @@ impl<'a> CalculationInput<'a> {
     }
     pub fn construct_pvp(
         _intrinsic_hash: u32,
-        _firing_data: &'a FiringConfig,
+        _firing_data: &'a FiringData,
         _stats: &'a HashMap<u32, Stat>,
         _weapon_type: &'a WeaponType,
         _ammo_type: &'a AmmoType,
@@ -101,7 +101,7 @@ impl<'a> CalculationInput<'a> {
     }
     pub fn construct_static(
         _intrinsic_hash: u32,
-        _firing_data: &'a FiringConfig,
+        _firing_data: &'a FiringData,
         _stats: &'a HashMap<u32, Stat>,
         _weapon_type: &'a WeaponType,
         _ammo_type: &'a AmmoType,
@@ -199,7 +199,7 @@ impl Default for ReloadModifierResponse {
 pub struct FiringModifierResponse {
     pub burst_delay_scale: f64,
     pub burst_delay_add: f64,
-    pub burst_duration_scale: f64,
+    pub inner_burst_scale: f64,
     pub burst_size_add: f64,
 }
 impl Default for FiringModifierResponse {
@@ -207,7 +207,7 @@ impl Default for FiringModifierResponse {
         Self {
             burst_delay_scale: 1.0,
             burst_delay_add: 0.0,
-            burst_duration_scale: 1.0,
+            inner_burst_scale: 1.0,
             burst_size_add: 0.0,
         }
     }

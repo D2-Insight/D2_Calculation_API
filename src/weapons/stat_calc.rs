@@ -4,13 +4,13 @@ use super::{reserve_calc::calc_reserves, Stat, Weapon};
 use crate::{
     d2_enums::{StatHashes, WeaponType},
     perks::{
-        get_dmg_modifier, get_firing_modifier, get_handling_modifier, get_magazine_modifier,
-        get_range_modifier, get_reload_modifier, get_reserve_modifier,
+        get_dmg_modifier, get_explosion_data, get_firing_modifier, get_handling_modifier,
+        get_magazine_modifier, get_range_modifier, get_reload_modifier, get_reserve_modifier,
         lib::{
             CalculationInput, DamageModifierResponse, FiringModifierResponse,
             HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
             RangeModifierResponse, ReloadModifierResponse,
-        }, get_explosion_data,
+        },
     },
     types::rs_types::{
         AmmoFormula, AmmoResponse, FiringResponse, HandlingFormula, HandlingResponse, RangeFormula,
@@ -341,22 +341,6 @@ impl Weapon {
         let crit_mult = tmp_dmg_prof.2;
 
         let fd = self.firing_data;
-        let mut out = FiringResponse {
-            pvp_impact_damage: impact_dmg * pvp_damage_modifiers.impact_dmg_scale, 
-            pvp_explosion_damage: explosion_dmg * pvp_damage_modifiers.explosive_dmg_scale,
-            pvp_crit_mult: crit_mult * pvp_damage_modifiers.crit_scale,
-
-            pve_impact_damage: impact_dmg * pve_damage_modifiers.impact_dmg_scale,
-            pve_explosion_damage: explosion_dmg * pve_damage_modifiers.explosive_dmg_scale,
-            pve_crit_mult: crit_mult * pve_damage_modifiers.crit_scale,
-
-            burst_delay: (fd.burst_delay + firing_modifiers.burst_delay_add)
-                * firing_modifiers.burst_delay_scale,
-            burst_size: fd.burst_size + firing_modifiers.burst_size_add as i32,
-            burst_duration: fd.burst_duration * firing_modifiers.burst_duration_scale,
-
-            rpm: 0.0,
-        };
         let extra_charge_delay = if self.weapon_type == WeaponType::FUSIONRIFLE {
             0.45
         } else if self.weapon_type == WeaponType::LINEARFUSIONRIFLE {
@@ -364,25 +348,36 @@ impl Weapon {
         } else {
             0.0
         };
-        out.set_rpm(extra_charge_delay);
+        let burst_delay = (fd.burst_delay + firing_modifiers.burst_delay_add)* firing_modifiers.burst_delay_scale;
+        let burst_size = fd.burst_size + firing_modifiers.burst_size_add as i32;
+        let inner_burst_delay = fd.inner_burst_delay * firing_modifiers.inner_burst_scale;
+        let out = FiringResponse {
+            pvp_impact_damage: impact_dmg * pvp_damage_modifiers.impact_dmg_scale,
+            pvp_explosion_damage: explosion_dmg * pvp_damage_modifiers.explosive_dmg_scale,
+            pvp_crit_mult: crit_mult * pvp_damage_modifiers.crit_scale,
+
+            pve_impact_damage: impact_dmg * pve_damage_modifiers.impact_dmg_scale,
+            pve_explosion_damage: explosion_dmg * pve_damage_modifiers.explosive_dmg_scale,
+            pve_crit_mult: crit_mult * pve_damage_modifiers.crit_scale,
+
+            burst_delay,
+            burst_size,
+            inner_burst_delay,
+
+            rpm: 60.0 / ((burst_delay+(inner_burst_delay*(burst_size as f64-1.0))+extra_charge_delay)/burst_size as f64),
+        };
         out
     }
 }
 
 impl Weapon {
-    pub fn get_damage_profile(
-        &self,
-    ) -> (f64, f64, f64, f64) {
+    pub fn get_damage_profile(&self) -> (f64, f64, f64, f64) {
         let impact;
         let mut explosion = 0.0_f64;
         let mut crit = 1.0_f64;
         let delay;
 
-        let epr = get_explosion_data(
-            self.list_perks(),
-            &self.static_calc_input(),
-            self.is_pvp,
-        );
+        let epr = get_explosion_data(self.list_perks(), &self.static_calc_input(), self.is_pvp);
         if epr.percent <= 0.0 {
             impact = self.firing_data.damage;
             crit = self.firing_data.crit_mult;
@@ -390,7 +385,7 @@ impl Weapon {
         } else {
             impact = self.firing_data.damage * (1.0 - epr.percent);
             explosion = self.firing_data.damage * epr.percent;
-            if epr.retain_base_total && self.firing_data.crit_mult > 1.0{
+            if epr.retain_base_total && self.firing_data.crit_mult > 1.0 {
                 crit = (self.firing_data.crit_mult - 1.0) / (1.0 - epr.percent) + 1.0
             }
             delay = epr.delyed;

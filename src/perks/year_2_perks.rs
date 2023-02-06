@@ -5,10 +5,9 @@ use crate::d2_enums::{StatHashes, WeaponType};
 use super::{
     clamp,
     lib::{
-        CalculationInput, DamageModifierResponse, ExplosivePercentResponse,
-        ExtraDamageResponse, FiringModifierResponse, HandlingModifierResponse,
-        MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
-        ReloadOverrideResponse,
+        CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
+        FiringModifierResponse, HandlingModifierResponse, MagazineModifierResponse,
+        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse,
     },
 };
 
@@ -36,7 +35,7 @@ pub(super) fn fmr_archers_tempo(
     FiringModifierResponse {
         burst_delay_scale: 0.75,
         burst_delay_add: 0.0,
-        burst_duration_scale: 1.0,
+        inner_burst_scale: 1.0,
         burst_size_add: 0.0,
     }
 }

@@ -2,9 +2,12 @@ use std::collections::HashMap;
 
 use serde::Serialize;
 
-use crate::{perks::{get_dmg_modifier, get_firing_modifier, lib::CalculationInput}, d2_enums::WeaponType};
+use crate::{
+    d2_enums::WeaponType,
+    perks::{get_dmg_modifier, get_firing_modifier, lib::CalculationInput},
+};
 
-use super::{FiringConfig, Weapon};
+use super::{FiringData, Weapon};
 
 //just to make code cleaner for now
 fn ceil(x: f64) -> f64 {
@@ -48,10 +51,7 @@ pub struct ResillienceSummary {
     pub optimal_ttk: OptimalKillData,
 }
 
-pub fn calc_ttk(
-    _weapon: &Weapon,
-    _overshield: f64
-) -> Vec<ResillienceSummary> {
+pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
     let mut ttk_data: Vec<ResillienceSummary> = Vec::new();
     let mut perssistent_data: HashMap<String, f64> = HashMap::new();
 
@@ -108,21 +108,24 @@ pub fn calc_ttk(
             }
             ///////////////////////////////
 
-            let body_damage = (impact_dmg * dmg_mods.impact_dmg_scale) + (explosion_dmg * dmg_mods.explosive_dmg_scale);
+            let body_damage = (impact_dmg * dmg_mods.impact_dmg_scale)
+                + (explosion_dmg * dmg_mods.explosive_dmg_scale);
             let critical_multiplier = crit_mult * dmg_mods.crit_scale;
-            let head_diff = ((impact_dmg * dmg_mods.impact_dmg_scale) * critical_multiplier) - (impact_dmg * dmg_mods.impact_dmg_scale);
+            let head_diff = ((impact_dmg * dmg_mods.impact_dmg_scale) * critical_multiplier)
+                - (impact_dmg * dmg_mods.impact_dmg_scale);
 
             let shot_burst_delay = (_weapon.firing_data.burst_delay + firing_mods.burst_delay_add)
                 * firing_mods.burst_delay_scale;
-            let shot_burst_duration =
-                _weapon.firing_data.burst_duration * firing_mods.burst_duration_scale;
-                let shot_burst_size =
+            let shot_inner_burst_delay =
+                _weapon.firing_data.inner_burst_delay * firing_mods.inner_burst_scale;
+            let shot_burst_size =
                 _weapon.firing_data.burst_size as f64 + firing_mods.burst_size_add;
-            let shot_inner_burst_delay = shot_burst_duration / (shot_burst_size - 1.0);
 
-            let shot_delay = if opt_bullets_hit % shot_burst_size > 0.0 {
+            let shot_delay = if opt_bullets_hit % shot_burst_size > 0.0 && opt_bullets_hit > 0.0 {
                 shot_inner_burst_delay
-            } else {
+            } else if opt_bullets_hit == 0.0{
+                0.0
+            }  else {
                 shot_burst_delay
             };
 
@@ -132,6 +135,8 @@ pub fn calc_ttk(
             } else {
                 opt_bullets_hit += 1.0;
             };
+
+            opt_time_taken += shot_delay;
 
             if (opt_damage_dealt + body_damage) > health {
                 opt_bodyshots += 1;
@@ -145,7 +150,6 @@ pub fn calc_ttk(
                 opt_headshots += 1;
                 opt_damage_dealt += body_damage + head_diff;
             }
-            opt_time_taken += shot_delay;
         }
         let expolsive_percent = explosion_dmg / (impact_dmg + explosion_dmg);
         if expolsive_percent >= 0.9 {
@@ -195,29 +199,31 @@ pub fn calc_ttk(
             );
             ///////////////////////////////
 
-
             let tmp_dmg_prof = _weapon.get_damage_profile();
             let impact_dmg = tmp_dmg_prof.0;
             let explosion_dmg = tmp_dmg_prof.1;
             // let mut crit_mult = tmp_dmg_prof.2;
             // let damage_delay = tmp_dmg_prof.3;
 
-            let body_damage = (impact_dmg * dmg_mods.impact_dmg_scale) + (explosion_dmg * dmg_mods.explosive_dmg_scale);
+            let body_damage = (impact_dmg * dmg_mods.impact_dmg_scale)
+                + (explosion_dmg * dmg_mods.explosive_dmg_scale);
 
             let shot_burst_delay = (_weapon.firing_data.burst_delay + firing_mods.burst_delay_add)
                 * firing_mods.burst_delay_scale;
-            let shot_burst_duration =
-                _weapon.firing_data.burst_duration * firing_mods.burst_duration_scale;
+            let shot_inner_burst_delay =
+                _weapon.firing_data.inner_burst_delay * firing_mods.inner_burst_scale;
             let shot_burst_size =
                 _weapon.firing_data.burst_size as f64 + firing_mods.burst_size_add;
-            let shot_inner_burst_delay = shot_burst_duration / (shot_burst_size - 1.0);
 
-            let shot_delay = if bdy_bullets_hit % shot_burst_size > 0.0 {
+            let shot_delay = if bdy_bullets_hit % shot_burst_size > 0.0 && bdy_bullets_hit > 0.0{
                 shot_inner_burst_delay
+            } else if bdy_bullets_hit == 0.0{
+                0.0
             } else {
                 shot_burst_delay
             };
 
+            bdy_time_taken += shot_delay;
             if bdy_bullets_hit % shot_burst_size == 0.0 {
                 bdy_bullets_fired += 1.0;
                 bdy_bullets_hit += 1.0;
@@ -230,7 +236,6 @@ pub fn calc_ttk(
             } else {
                 bdy_damage_dealt += body_damage;
             }
-            bdy_time_taken += shot_delay;
         }
         let body_ttk = BodyKillData {
             time_taken: bdy_time_taken,

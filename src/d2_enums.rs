@@ -1,6 +1,8 @@
 #![allow(dead_code)]
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+use serde::Serialize;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
 pub enum AmmoType {
     PRIMARY = 1,
     SPECIAL = 2,
@@ -26,7 +28,7 @@ impl AmmoType {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
 pub enum WeaponType {
     AUTORIFLE = 6,
     BOW = 31,
@@ -238,7 +240,7 @@ impl StatHashes {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
 pub enum DamageType {
     ARC,
     VOID,

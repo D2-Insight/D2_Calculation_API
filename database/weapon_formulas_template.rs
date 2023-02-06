@@ -2,13 +2,13 @@ use std::collections::HashMap;
 
 use crate::{types::rs_types::{StatQuadraticFormula, RangeFormula, HandlingFormula, ReloadFormula, DamageMods, AmmoFormula}, d2_enums::{DamageType, AmmoType, WeaponType}, perks::Perk};
 
-use super::{Weapon, FiringConfig};
+use super::{Weapon, FiringData};
 
 const HANDLING_DATA: [HandlingFormula; {HANDLING_REPLACE_POINT_len}] = {HANDLING_REPLACE_POINT};
 const RANGE_DATA:    [RangeFormula; {RANGE_REPLACE_POINT_len}] = {RANGE_REPLACE_POINT};
 const RELOAD_DATA:   [ReloadFormula; {RELOAD_REPLACE_POINT_len}] = {RELOAD_REPLACE_POINT};
 const SCALAR_DATA:   [DamageMods; {SCALAR_REPLACE_POINT_len}] = {SCALAR_REPLACE_POINT};
-const FIRING_DATA:   [FiringConfig; {FIRING_REPLACE_POINT_len}] = {FIRING_REPLACE_POINT};
+const FIRING_DATA:   [FiringData; {FIRING_REPLACE_POINT_len}] = {FIRING_REPLACE_POINT};
 const AMMO_DATA:     [AmmoFormula; {AMMO_REPLACE_POINT_len}] = {AMMO_REPLACE_POINT};
 
 const META_POINTERS: [(u8, usize); {META_REPLACE_POINT_len}] = {META_REPLACE_POINT};
@@ -62,7 +62,7 @@ impl Weapon {
 
         let damage_mods: DamageMods = SCALAR_DATA[data_pointer.s].clone();
 
-        let firing_data: FiringConfig = FIRING_DATA[data_pointer.f].clone();
+        let firing_data: FiringData = FIRING_DATA[data_pointer.f].clone();
 
         let ammo_formula: AmmoFormula = AMMO_DATA[data_pointer.a].clone();
 

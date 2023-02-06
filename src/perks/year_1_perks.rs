@@ -5,10 +5,9 @@ use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponType};
 use super::{
     clamp,
     lib::{
-        CalculationInput, DamageModifierResponse, ExplosivePercentResponse,
-        ExtraDamageResponse, FiringModifierResponse, HandlingModifierResponse,
-        InventoryModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
-        ReloadModifierResponse,
+        CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
+        FiringModifierResponse, HandlingModifierResponse, InventoryModifierResponse,
+        MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
     },
 };
 
@@ -162,7 +161,7 @@ pub(super) fn fmr_desperado(
     FiringModifierResponse {
         burst_delay_scale: delay_mult,
         burst_delay_add: 0.0,
-        burst_duration_scale: 1.0,
+        inner_burst_scale: 1.0,
         burst_size_add: 0.0,
     }
 }
@@ -336,7 +335,7 @@ pub(super) fn frm_full_auto_trigger(
     FiringModifierResponse {
         burst_delay_scale: delay_mult,
         burst_delay_add: 0.0,
-        burst_duration_scale: 1.0,
+        inner_burst_scale: 1.0,
         burst_size_add: 0.0,
     }
 }

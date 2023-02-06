@@ -3,16 +3,19 @@
 use std::collections::HashMap;
 
 use crate::{
+    activity::damage_calc::DifficultyOptions,
+    enemies::EnemyType,
+    perks::Perk,
     types::rs_types::StatQuadraticFormula,
-    weapons::{FiringConfig, Stat, ttk_calc::ResillienceSummary}, perks::Perk, activity::damage_calc::DifficultyOptions, enemies::EnemyType,
+    weapons::{ttk_calc::ResillienceSummary, FiringData, Stat},
 };
 use serde::{Deserialize, Serialize};
 // use tsify::Tsify;
 use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 
 use super::rs_types::{
-    AmmoFormula, AmmoResponse, DamageMods, DpsResponse, HandlingFormula, HandlingResponse,
-    RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, FiringResponse,
+    AmmoFormula, AmmoResponse, DamageMods, DpsResponse, FiringResponse, HandlingFormula,
+    HandlingResponse, RangeFormula, RangeResponse, ReloadFormula, ReloadResponse,
 };
 
 #[derive(Debug, Clone, Copy, Serialize)]
@@ -117,7 +120,10 @@ impl JsDpsResponse {
     }
     #[wasm_bindgen(js_name = toJSON)]
     pub fn to_json(self) -> String {
-        serde_wasm_bindgen::to_value(&self).unwrap().as_string().unwrap()
+        serde_wasm_bindgen::to_value(&self)
+            .unwrap()
+            .as_string()
+            .unwrap()
     }
     ///Returns a list of tuples of time and damage
     #[wasm_bindgen(getter)]
@@ -156,7 +162,10 @@ impl JsTtkResponse {
     }
     #[wasm_bindgen(js_name = toJSON)]
     pub fn to_json(self) -> String {
-        serde_wasm_bindgen::to_value(&self).unwrap().as_string().unwrap()
+        serde_wasm_bindgen::to_value(&self)
+            .unwrap()
+            .as_string()
+            .unwrap()
     }
     #[wasm_bindgen(getter)]
     pub fn data(&self) -> JsValue {
@@ -176,7 +185,7 @@ pub struct JsFiringResponse {
     pub pve_crit_mult: f64,
 
     pub burst_delay: f64,
-    pub burst_duration: f64,
+    pub inner_burst_delay: f64,
     pub burst_size: i32,
 
     pub rpm: f64,
@@ -191,7 +200,7 @@ impl From<FiringResponse> for JsFiringResponse {
             pve_explosion_damage: firing.pve_explosion_damage,
             pve_crit_mult: firing.pve_crit_mult,
             burst_delay: firing.burst_delay,
-            burst_duration: firing.burst_duration,
+            inner_burst_delay: firing.inner_burst_delay,
             burst_size: firing.burst_size,
             rpm: firing.rpm,
         }
@@ -247,7 +256,6 @@ impl Into<DifficultyOptions> for JsDifficultyOptions {
     }
 }
 
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[wasm_bindgen(js_name = "EnemyType")]
 pub enum JsEnemyType {
@@ -258,7 +266,7 @@ pub enum JsEnemyType {
     VEHICLE,
     ENCLAVE,
     PLAYER,
-    CHAMPION
+    CHAMPION,
 }
 impl Into<EnemyType> for JsEnemyType {
     fn into(self) -> EnemyType {
@@ -274,4 +282,3 @@ impl Into<EnemyType> for JsEnemyType {
         }
     }
 }
-

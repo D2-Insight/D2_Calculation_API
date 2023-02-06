@@ -32,7 +32,7 @@ pub(super) fn fmr_cascade_point(
     FiringModifierResponse {
         burst_delay_scale: delay_mult,
         burst_delay_add: 0.0,
-        burst_duration_scale: 1.0,
+        inner_burst_scale: 1.0,
         burst_size_add: 0.0,
     }
 }
@@ -82,7 +82,7 @@ pub(super) fn dmr_focused_fury(
     } else {
         shots_needed = (_input.base_mag * (_input.curr_firing_data.burst_size as f64)) / 2.0;
     }
-    if _input.total_shots_fired >= shots_needed {
+    if _input.total_shots_fired >= shots_needed || _value > 0{
         dmg_boost = 1.2;
     }
     DamageModifierResponse {
@@ -137,17 +137,17 @@ pub(super) fn dmr_gutshot_straight(
         WeaponType::BOW,
     ];
     let dmg_scale: f64;
-    let mut crit_scale: f64;
+    let crit_scale: f64;
     if high_weapons.contains(&_input.weapon_type) {
         dmg_scale = 1.2;
         crit_scale = 1.0 / 1.2;
     } else {
         dmg_scale = 1.1;
-        crit_scale = 1.0 / 1.;
+        crit_scale = 1.0 / 1.1;
     };
-    if _input.base_crit_mult <= 1.0 {
-        crit_scale = 1.0;
-    }
+    // if _input.base_crit_mult <= 1.0 {
+    //     crit_scale = 1.0;
+    // }
     DamageModifierResponse {
         impact_dmg_scale: dmg_scale,
         explosive_dmg_scale: dmg_scale,
@@ -516,6 +516,21 @@ pub(super) fn rsmr_compulsive_reloader(
     } else {
         ReloadModifierResponse::default()
     }
+}
+
+pub(super) fn sbr_compulsive_reloader(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let reload_add = if _is_enhanced { 55 } else { 50 };
+    let mut map = HashMap::new();
+    if _input.shots_fired_this_mag <= _input.base_mag / 2.0 && _value > 0 {
+        map.insert(StatHashes::RELOAD.to_u32(), reload_add);
+    }
+    map
 }
 
 pub(super) fn sbr_sleight_of_hand(

@@ -22,9 +22,10 @@ use crate::d2_enums::StatHashes;
 use self::{
     exotic_perks::*,
     lib::{
-        CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
-        HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
-        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse, ExplosivePercentResponse,
+        CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
+        FiringModifierResponse, HandlingModifierResponse, InventoryModifierResponse,
+        MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
+        ReloadOverrideResponse,
     },
     meta_perks::*,
     origin_perks::*,
@@ -46,7 +47,7 @@ pub fn clamp<T: PartialOrd>(n: T, min: T, max: T) -> T {
     }
 }
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug, Default, Serialize)]
 pub struct Perk {
     pub stat_buffs: HashMap<u32, i32>,
     pub enhanced: bool,
@@ -558,6 +559,9 @@ fn dyanmic_perk_stats(
         Perks::SleightOfHand => sbr_sleight_of_hand(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Slickdraw => sbr_slickdraw(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Harmony => sbr_harmony(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::CompulsiveReloader => {
+            sbr_compulsive_reloader(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => HashMap::new(),
     }
 }
@@ -721,7 +725,7 @@ pub fn get_firing_modifier(
     for perk in _perks {
         let tmp = get_perk_fmr(perk, _input_data, _pvp, _cached_data);
         firing_modifier.burst_delay_scale *= tmp.burst_delay_scale;
-        firing_modifier.burst_duration_scale *= tmp.burst_duration_scale;
+        firing_modifier.inner_burst_scale *= tmp.inner_burst_scale;
         firing_modifier.burst_size_add += tmp.burst_size_add;
     }
     firing_modifier
@@ -777,9 +781,7 @@ fn get_perk_hmr(
     match perk_enum {
         Perks::KillingWind => hmr_killing_wind(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::SwapMag => hmr_swap_mag(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::QuickAccessSling => {
-            hmr_swap_mag(_input_data, val, enhanced, _pvp, _cached_data)
-        }
+        Perks::QuickAccessSling => hmr_swap_mag(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::OphidianAspect => {
             hmr_ophidian_aspects(_input_data, val, enhanced, _pvp, _cached_data)
         }
@@ -1050,9 +1052,15 @@ fn get_perk_epr(
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
-        Perks::ExplosivePayload => epr_explosive_payload(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::ExplosiveHead => epr_explosive_head(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::TimedPayload => epr_timed_payload(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::ExplosivePayload => {
+            epr_explosive_payload(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+        }
+        Perks::ExplosiveHead => {
+            epr_explosive_head(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+        }
+        Perks::TimedPayload => {
+            epr_timed_payload(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+        }
         Perks::BuiltIn => epr_builtin(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
         _ => ExplosivePercentResponse::default(),
     }

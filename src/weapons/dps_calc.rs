@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::{cell::RefCell, rc::Rc};
 
-use super::{FiringConfig, Weapon};
+use super::{FiringData, Weapon};
 use crate::d2_enums::{AmmoType, WeaponType};
 use crate::enemies::Enemy;
 use crate::perks::lib::{
@@ -42,7 +42,7 @@ impl ExtraDamageBuffInfo {
     pub fn get_buff_amount(&self, entry: &ExtraDamageResponse) -> f64 {
         let mut buff = self.pl_buff;
         if entry.weapon_scale {
-            buff *= (self.impact_buff + self.explosive_buff)/2.0;
+            buff *= (self.impact_buff + self.explosive_buff) / 2.0;
             buff *= self.pve_buff
         };
         if entry.crit_scale {
@@ -134,7 +134,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
 
     let burst_size = firing_settings.burst_size as f64;
     let burst_delay = firing_settings.burst_delay;
-    let burst_duration = firing_settings.burst_duration;
+    let inner_burst_delay = firing_settings.inner_burst_delay;
 
     let mut total_damage = 0.0_f64;
     let mut total_time = 0.0_f64;
@@ -213,18 +213,17 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
             ///////////////////////////////
 
             let dmg = {
-                ((impact_dmg * dmg_mods.impact_dmg_scale)
-                    * (crit_mult * dmg_mods.crit_scale)
+                ((impact_dmg * dmg_mods.impact_dmg_scale) * (crit_mult * dmg_mods.crit_scale)
                     + (explosion_dmg * dmg_mods.explosive_dmg_scale))
-                * _pl_dmg_mult
-                * weapon.damage_mods.get_mod(&_enemy.type_)
-                * weapon.damage_mods.pve};
+                    * _pl_dmg_mult
+                    * weapon.damage_mods.get_mod(&_enemy.type_)
+                    * weapon.damage_mods.pve
+            };
 
             let shot_burst_delay =
                 (burst_delay + firing_mods.burst_delay_add) * firing_mods.burst_delay_scale;
-            let shot_burst_duration = burst_duration * firing_mods.burst_duration_scale;
+            let shot_inner_burst_delay = inner_burst_delay * firing_mods.inner_burst_scale;
             let shot_burst_size = burst_size + firing_mods.burst_size_add;
-            let shot_inner_burst_delay = shot_burst_duration / (shot_burst_size - 1.0);
 
             // if total_shots_fired == 0 && firing_settings.is_charge {
             //     total_time += shot_burst_delay*0.5;
@@ -238,7 +237,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                 for i in 0..shot_burst_size as i32 {
                     time_damage_data.push((total_time + shot_inner_burst_delay * i as f64, dmg));
                 }
-                total_time += shot_burst_duration
+                total_time += inner_burst_delay * (shot_burst_size - 1.0);
             } else {
                 let spec_delay = if shots_this_mag % burst_size as i32 == 0 {
                     shot_burst_delay
@@ -248,7 +247,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                 total_shots_fired += 1;
                 shots_this_mag += 1;
                 total_shots_hit += 1;
-                if burst_duration == 0.0 {
+                if inner_burst_delay == 0.0 {
                     total_damage += dmg * burst_size;
                     time_damage_data.push((total_time, dmg * burst_size));
                 } else {

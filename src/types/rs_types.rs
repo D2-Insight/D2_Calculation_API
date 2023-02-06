@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::enemies::EnemyType;
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct DamageMods {
     pub pve: f64,
     pub minor: f64,
@@ -42,7 +42,7 @@ impl DamageMods {
     }
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize)]
 pub struct RangeFormula {
     pub start: StatQuadraticFormula,
     pub end: StatQuadraticFormula,
@@ -51,7 +51,7 @@ pub struct RangeFormula {
 }
 
 //even if just linear use this
-#[derive(Debug, Clone, Default, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize)]
 pub struct StatQuadraticFormula {
     pub evpp: f64,
     pub vpp: f64,
@@ -63,20 +63,20 @@ impl StatQuadraticFormula {
     }
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize)]
 pub struct ReloadFormula {
     pub reload_data: StatQuadraticFormula,
     pub ammo_percent: f64,
 }
 
-#[derive(Debug, Clone, Default, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize)]
 pub struct HandlingFormula {
     pub ready: StatQuadraticFormula,
     pub stow: StatQuadraticFormula,
     pub ads: StatQuadraticFormula,
 }
 
-#[derive(Debug, Clone, Default, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize)]
 pub struct AmmoFormula {
     pub mag: StatQuadraticFormula,
     pub round_to: i32,
@@ -142,20 +142,12 @@ pub struct FiringResponse {
     pub pve_crit_mult: f64,
 
     pub burst_delay: f64,
-    pub burst_duration: f64,
+    pub inner_burst_delay: f64,
     pub burst_size: i32,
 
     pub rpm: f64,
 }
 impl FiringResponse{
-    pub fn set_rpm(&mut self, _extra_charge_delay: f64) {
-        let mut time = 0.0;
-        time += self.burst_delay;
-        time += self.burst_duration;
-        // time += _extra_charge_delay*self.burst_delay;
-        let avg_bullet_time = time / self.burst_size as f64;
-        self.rpm = (1.0/avg_bullet_time)*60.0
-    }
     pub fn apply_pve_bonuses(&mut self, _rpl_mult: f64, _gpl_mult: f64, _pve_mult: f64, _combatant_mult: f64) {
         self.pve_impact_damage *= _rpl_mult * _gpl_mult * _pve_mult * _combatant_mult;
         self.pve_explosion_damage *= _rpl_mult * _gpl_mult * _pve_mult * _combatant_mult;

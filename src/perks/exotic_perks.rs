@@ -161,7 +161,7 @@ pub(super) fn fmr_roadborn(
     FiringModifierResponse {
         burst_delay_scale: delay_mult,
         burst_delay_add: 0.0,
-        burst_duration_scale: 1.0,
+        inner_burst_scale: 1.0,
         burst_size_add: 0.0,
     }
 }
@@ -231,7 +231,7 @@ pub(super) fn fmr_reign_havoc(
     FiringModifierResponse {
         burst_delay_scale: delay_mult,
         burst_delay_add: 0.0,
-        burst_duration_scale: 1.0,
+        inner_burst_scale: 1.0,
         burst_size_add: 0.0,
     }
 }
@@ -330,11 +330,7 @@ pub(super) fn edr_rocket_tracers(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> ExtraDamageResponse {
-    let mut dmg = if _pvp {
-        24.0
-    } else {
-        105.0
-    };
+    let dmg = if _pvp { 24.0 } else { 105.0 };
     ExtraDamageResponse {
         additive_damage: dmg,
         times_to_hit: 1,
