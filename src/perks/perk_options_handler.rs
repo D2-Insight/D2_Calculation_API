@@ -79,7 +79,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::Rampage => Some(PerkOptionData::stacking(3)),
         Perks::OpeningShot => Some(PerkOptionData::toggle()),
         Perks::MovingTarget => Some(PerkOptionData::default()),
-        Perks::AmbitiousAssassin => Some(PerkOptionData::toggle()),
+        Perks::AmbitiousAssassin => Some(PerkOptionData::stacking(15)),
         Perks::ClusterBomb => Some(PerkOptionData::default()),
         Perks::ExplosivePayload => Some(PerkOptionData::default()),
         Perks::FirmlyPlanted => Some(PerkOptionData::toggle()),
@@ -139,13 +139,13 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
 
         //season 7 | year 2
         Perks::UnderDog => Some(PerkOptionData::toggle()),
-        Perks::ExplosiveLight => Some(PerkOptionData::stacking(6)),
+        Perks::ExplosiveLight => Some(PerkOptionData::toggle()),
 
         //season 8 | year 3
         //TODO
 
         //season 9 | year 3
-        Perks::ClownCartridge => Some(PerkOptionData::toggle()),
+        Perks::ClownCartridge => Some(PerkOptionData::default()),
         Perks::ElementalCapacitor => Some(PerkOptionData(
             4,
             [
@@ -169,7 +169,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         //season 12 | year 4
         Perks::DualLoader => Some(PerkOptionData::toggle()),
         Perks::OneForAll => Some(PerkOptionData::toggle()),
-        Perks::Recombination => Some(PerkOptionData::stacking(10)),
+        Perks::Recombination => Some(PerkOptionData::toggle()),
         Perks::Reconstruction => Some(PerkOptionData::toggle()),
         Perks::Surplus => Some(PerkOptionData::stacking(3)),
 

@@ -73,7 +73,7 @@ pub(super) fn rmr_alacrity(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> RangeModifierResponse {
-    let range_add = if _value > 0 { 20 } else { 0 };
+    let range_add = if _value > 0 { 10 } else { 0 };
     RangeModifierResponse {
         range_stat_add: range_add,
         ..Default::default()
@@ -102,7 +102,7 @@ pub(super) fn sbr_alacrity(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
-    let range = if _value > 0 { 20 } else { 0 };
+    let range = if _value > 0 { 10 } else { 0 };
     let reload = if _value > 0 { 50 } else { 0 };
     let stability = if _value > 0 { 20 } else { 0 };
     let aim_assit = if _value > 0 { 10 } else { 0 };

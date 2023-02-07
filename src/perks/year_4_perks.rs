@@ -85,7 +85,7 @@ pub(super) fn sbr_adrenaline_junkie(
 ) -> HashMap<u32, i32> {
     let duration = if _is_enhanced { 6.0 } else { 4.5 };
     let mut handling = 0;
-    if _input.time_total <= duration {
+    if _input.time_total <= duration && _value > 0 {
         handling = 20;
     };
     let mut out = HashMap::new();

@@ -64,7 +64,7 @@ pub(super) fn epr_builtin(
             };
         } else if _input.ammo_type == &AmmoType::HEAVY {
             return ExplosivePercentResponse {
-                percent: 0.5 + 0.00175 * blast_radius as f64,
+                percent: 0.7 + 0.00175 * blast_radius as f64,
                 delyed: 0.0,
                 retain_base_total: true,
             };

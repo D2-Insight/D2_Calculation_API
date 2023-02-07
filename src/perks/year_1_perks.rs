@@ -95,14 +95,14 @@ pub(super) fn sbr_threat_detector(
     out
 }
 
-pub(super) fn mmr_abitious_assassin(
+pub(super) fn mmr_ambitious_assassin(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> MagazineModifierResponse {
-    let val = _value as f64;
+    let val = clamp(_value, 0, 15) as f64;
     if _input.total_shots_fired == 0.0 {
         let mut mag_mult = 1.0;
         if *_input.ammo_type == AmmoType::PRIMARY {
@@ -130,16 +130,14 @@ pub(super) fn dmr_box_breathing(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    if _input.total_shots_fired == 0.0 {
-        let crit_mult = (_input.base_crit_mult + 1.0) / _input.base_crit_mult;
-        let dmg_mult = if *_input.weapon_type == WeaponType::SCOUTRIFLE {
-            0.95
-        } else {
-            1.0
-        };
+    if _input.total_shots_fired == 0.0 && _value > 0 {
+        let mut crit_mult = (_input.base_crit_mult + 1.0) / _input.base_crit_mult;
+        if *_input.weapon_type == WeaponType::SCOUTRIFLE {
+            crit_mult *= 0.95;
+        }
         return DamageModifierResponse {
-            impact_dmg_scale: dmg_mult,
-            explosive_dmg_scale: dmg_mult,
+            impact_dmg_scale: 1.0,
+            explosive_dmg_scale: 1.0,
             crit_scale: crit_mult,
         };
     };
@@ -155,14 +153,12 @@ pub(super) fn fmr_desperado(
 ) -> FiringModifierResponse {
     let mut delay_mult = 1.0;
     let duration = if _is_enhanced { 7.0 } else { 6.0 };
-    if _input.time_total < duration {
+    if _input.time_total < duration && _value > 0{
         delay_mult = 0.7;
     };
     FiringModifierResponse {
         burst_delay_scale: delay_mult,
-        burst_delay_add: 0.0,
-        inner_burst_scale: 1.0,
-        burst_size_add: 0.0,
+        ..Default::default()
     }
 }
 
@@ -279,8 +275,7 @@ pub(super) fn imr_field_prep(
 ) -> InventoryModifierResponse {
     InventoryModifierResponse {
         inv_stat_add: if _is_enhanced { 40 } else { 30 },
-        inv_add: 0.,
-        inv_scale: 1.0,
+        ..Default::default()
     }
 }
 
@@ -443,7 +438,7 @@ pub(super) fn rmr_opening_shot(
     _cached_data: &mut HashMap<String, f64>,
 ) -> RangeModifierResponse {
     let mut range = if _is_enhanced { 30 } else { 25 };
-    if _input.total_shots_fired != 0.0 {
+    if _input.total_shots_fired != 0.0 || _value == 0 {
         range = 0;
     };
     RangeModifierResponse {
@@ -552,6 +547,20 @@ pub(super) fn sbr_slide_ways(
     out
 }
 
+pub(super) fn hmr_slide_ways(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    let handling = if _value>0 {20} else {0};
+    HandlingModifierResponse {
+        handling_stat_add: handling,
+        ..Default::default()
+    }
+}
+
 pub(super) fn hmr_snapshot(
     _input: &CalculationInput,
     _value: u32,
@@ -595,14 +604,14 @@ pub(super) fn dmr_rampage(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let val = clamp(_value, 0, 3);
-    let mut damage_mult = 0.1 * val as f64;
+    let mut damage_mult = 1.1_f64.powi(val as i32);
     let duration = if _is_enhanced { 5.0 } else { 4.0 };
     if _input.time_total > duration {
         damage_mult = 0.0;
     };
     DamageModifierResponse {
-        impact_dmg_scale: 1.0 + damage_mult,
-        explosive_dmg_scale: 1.0 + damage_mult,
+        impact_dmg_scale: damage_mult,
+        explosive_dmg_scale: damage_mult,
         crit_scale: 1.0,
     }
 }

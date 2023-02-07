@@ -351,6 +351,13 @@ impl Weapon {
         let burst_delay = (fd.burst_delay + firing_modifiers.burst_delay_add)* firing_modifiers.burst_delay_scale;
         let burst_size = fd.burst_size + firing_modifiers.burst_size_add as i32;
         let inner_burst_delay = fd.inner_burst_delay * firing_modifiers.inner_burst_scale;
+        let raw_rpm = 60.0 / ((burst_delay+(inner_burst_delay*(burst_size as f64-1.0))+extra_charge_delay)/burst_size as f64);
+        let rpm: f64;
+        if self.firing_data.one_ammo {
+            rpm = raw_rpm/burst_size as f64
+        } else {
+            rpm = raw_rpm
+        };
         let out = FiringResponse {
             pvp_impact_damage: impact_dmg * pvp_damage_modifiers.impact_dmg_scale,
             pvp_explosion_damage: explosion_dmg * pvp_damage_modifiers.explosive_dmg_scale,
@@ -364,7 +371,7 @@ impl Weapon {
             burst_size,
             inner_burst_delay,
 
-            rpm: 60.0 / ((burst_delay+(inner_burst_delay*(burst_size as f64-1.0))+extra_charge_delay)/burst_size as f64),
+            rpm,
         };
         out
     }

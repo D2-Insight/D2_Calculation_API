@@ -146,20 +146,18 @@ def verify_firing_data(_firing_data: dict) -> dict:
         _firing_data["inner_burst_delay"] = 0.0
     if "is_charge" not in _firing_data:
         _firing_data["charge"] = False
-    if "one_ammo_burst" not in _firing_data:
+    if "one_ammo" not in _firing_data:
         _firing_data["one_ammo"] = False
     if len(_firing_data) > 8:
         raise Exception("Bad entries in firing data")
-    _firing_data["damage"] = float(_firing_data["damage"])
-    if _firing_data["crit_mult"] % 1 == 0 or _firing_data["crit_mult"] == -25.5:
+    if (_firing_data["crit_mult"] % 1 == 0 and type(_firing_data["crit_mult"]) == int) or _firing_data["crit_mult"] == -25.5:
+        _firing_data["damage"] = float(_firing_data["damage"])
         _firing_data["crit_mult"] = float((1.5 + _firing_data["crit_mult"]/51))
-    if _firing_data["burst_delay"] % 0.5 == 0:
         _firing_data["burst_delay"] = float(_firing_data["burst_delay"]/30)
-    _firing_data["burst_size"] = int(_firing_data["burst_size"])
-    if _firing_data["inner_burst_delay"] % 0.5 == 0:
+        _firing_data["burst_size"] = int(_firing_data["burst_size"])
         _firing_data["inner_burst_delay"] = float(_firing_data["inner_burst_delay"]/30)
-    _firing_data["charge"] = bool(_firing_data["charge"])
-    _firing_data["one_ammo"] = bool(_firing_data["one_ammo"])
+        _firing_data["charge"] = bool(_firing_data["charge"])
+        _firing_data["one_ammo"] = bool(_firing_data["one_ammo"])
     return _firing_data
 
 def verify_ammo_data(_ammo_data: dict) -> dict:

@@ -410,3 +410,32 @@ pub(super) fn rsmr_lunafaction(
         ReloadModifierResponse::default()
     }
 }
+
+
+pub(super) fn fmr_hakke_heavy_burst(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> FiringModifierResponse {
+    FiringModifierResponse {
+        burst_size_add: -2.0,
+        burst_delay_add: -1.0/30.0,
+        ..Default::default()
+    }
+}
+
+pub(super) fn dmr_hakke_heavy_burst(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    DamageModifierResponse {
+        explosive_dmg_scale: 1.48,
+        impact_dmg_scale: 1.48,
+        crit_scale: 0.941,
+    }
+}

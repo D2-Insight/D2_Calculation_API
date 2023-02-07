@@ -20,7 +20,7 @@ pub(super) fn fmr_cascade_point(
 ) -> FiringModifierResponse {
     let duration = if _is_enhanced { 3.0 } else { 2.5 };
     let mut delay_mult = 1.0;
-    if _input.time_total < duration {
+    if _input.time_total < duration && _value > 0 {
         if *_input.weapon_type == WeaponType::MACHINEGUN
             || *_input.weapon_type == WeaponType::SUBMACHINEGUN
         {
@@ -212,8 +212,7 @@ pub(super) fn sbr_slickdraw(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
-    let handling_boost = if _value > 0 { 100 } else { 0 };
-    map.insert(StatHashes::HANDLING.to_u32(), handling_boost);
+    map.insert(StatHashes::HANDLING.to_u32(), 100);
     map
 }
 
@@ -566,18 +565,18 @@ pub(super) fn hmr_sleight_of_hand(
     }
 }
 
-pub(super) fn rmr_sleight_of_hand(
+pub(super) fn rsmr_sleight_of_hand(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> RangeModifierResponse {
+) -> ReloadModifierResponse {
     let val = clamp(_value, 0, 3) as i32;
     let stat_base = 10;
-    let range = stat_base * val;
-    RangeModifierResponse {
-        range_stat_add: range,
+    let reload = stat_base * val;
+    ReloadModifierResponse {
+        reload_stat_add: reload,
         ..Default::default()
     }
 }

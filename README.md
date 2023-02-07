@@ -8,13 +8,4 @@ Credit goes first and foremost as this would not have been possible without the 
   * Kat the creater of d2foundry.gg for assisting me with JS bug testing and helping me coping with the language
 
 
-  # Usage
-
-Python:
-  * A `.pyi` is included which contains the methods and class available in the py module
-  * Unlike javascript, pybindings use different sub modules to sort functions better
-
-JavaScript:
-  * fml
-
-this project is not meant to be "run" and is still in beta so i not have fully written up compile instructions. If you want a wasm binary with JavaScript bindings install wasm-pack and run with '--features wasm'. If you desire python run a cargo build with '--features python' and take the .dll compiled and rename it to a .pyd for windows or a .so for mac I believe. Look at pyo3 documentation if you need more help with python. 
+Check the wiki section for more details on the API and how to use it.

@@ -175,6 +175,7 @@ pub enum Perks {
     TimedPayload,
     ExplosiveHead,
     SpikeGrenades,
+    DisorientingGrenades,
     AlloyMag,
     RapidFireFrame,
     SwapMag,
@@ -199,6 +200,10 @@ pub enum Perks {
     HeadSeeker,
     DualLoader,
     SearchParty,
+    AcceleratedCoils,
+    LiquidCoils,
+    ChargetimeMW,
+    AdeptChargeTime,
 
     //armor
     QuickCharge,
@@ -241,6 +246,7 @@ pub enum Perks {
     ReignHavoc,
     WhisperCatalyst,
     Roadborn,
+    HakkeHeavyBurst,
 }
 
 impl From<u32> for Perks {
@@ -271,6 +277,10 @@ impl From<u32> for Perks {
             1047830412 => Perks::FullChoke,
             3301904089 => Perks::SpikeGrenades,
             1431678320 => Perks::AlloyMag,
+            1687452232 => Perks::LiquidCoils,
+            689005463 => Perks::AcceleratedCoils,
+            3128594062 => Perks::ChargetimeMW,
+            3032599245 => Perks::DisorientingGrenades,
 
             //mods
             1334978104 => Perks::QuickAccessSling,
@@ -279,6 +289,7 @@ impl From<u32> for Perks {
             4091000557 => Perks::MinorSpec,
             3018373291 => Perks::BigOnesSpec,
             1513326571 => Perks::TakenSpec,
+            744770875 => Perks::AdeptChargeTime,
 
             //origin | year 5+
             3988215619 => Perks::VeistStinger,
@@ -300,6 +311,7 @@ impl From<u32> for Perks {
             1168162263 => Perks::Outlaw,
             1528281896 => Perks::Outlaw, //rose
             3124871000 => Perks::Outlaw, //redrix
+            1266037487 => Perks::Outlaw, //R0
             1600092898 => Perks::BackupPlan,
             2869569095 => Perks::FieldPrep,
             3425386926 => Perks::Rampage,
@@ -339,7 +351,9 @@ impl From<u32> for Perks {
             201365942 => Perks::ArchersTempo,
             3365897133 => Perks::ExplosiveHead,
             2779035018 => Perks::FeedingFrenzy,
+            1266037485 => Perks::FeedingFrenzy, //R0
             1354429876 => Perks::FourthTimesTheCharm,
+            1266037486 => Perks::FourthTimesTheCharm, //R0
             247725512 => Perks::RapidHit,
 
             //season 5 | year 2
@@ -450,6 +464,7 @@ impl From<u32> for Perks {
             3556949035 => Perks::TimeSlip,
             2724693746 => Perks::ToM,
             4208418110 => Perks::CorruptionSpreads,
+            2206869417 => Perks::HakkeHeavyBurst,
 
             //energy exotic
             2881100038 => Perks::LagragianSight,
@@ -562,6 +577,8 @@ fn dyanmic_perk_stats(
         Perks::CompulsiveReloader => {
             sbr_compulsive_reloader(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::RapidHit => sbr_rapid_hit(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ExplosiveLight => sbr_explosive_light(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
 }
@@ -645,6 +662,22 @@ fn get_perk_dmr(
         Perks::BaitAndSwitch => dmr_bait_and_switch(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Swashbuckler => dmr_swash_buckler(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Harmony => dmr_harmony(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::AcceleratedCoils => {
+            dmr_accelerated_coils(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::ChargetimeMW => {
+            dmr_accelerated_coils(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::LiquidCoils => dmr_liquid_coils(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::HakkeHeavyBurst => {
+            dmr_hakke_heavy_burst(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::MultikillClip => dmr_multi_kill_clip(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SpikeGrenades => dmr_spike_grenades(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ExplosiveLight => dmr_explosive_light(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::DisorientingGrenades => {
+            dmr_disorienting_grenades(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => DamageModifierResponse::new(),
     }
 }
@@ -711,6 +744,9 @@ fn get_perk_rsmr(
         Perks::CompulsiveReloader => {
             rsmr_compulsive_reloader(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::SleightOfHand => {
+            rsmr_sleight_of_hand(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => ReloadModifierResponse::default(),
     }
 }
@@ -725,6 +761,7 @@ pub fn get_firing_modifier(
     for perk in _perks {
         let tmp = get_perk_fmr(perk, _input_data, _pvp, _cached_data);
         firing_modifier.burst_delay_scale *= tmp.burst_delay_scale;
+        firing_modifier.burst_delay_add += tmp.burst_delay_add;
         firing_modifier.inner_burst_scale *= tmp.inner_burst_scale;
         firing_modifier.burst_size_add += tmp.burst_size_add;
     }
@@ -750,6 +787,19 @@ fn get_perk_fmr(
         Perks::CascadePoint => fmr_cascade_point(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ReignHavoc => fmr_reign_havoc(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::BackupPlan => fmr_backup_plan(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::AcceleratedCoils => {
+            fmr_accelerated_coils(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::ChargetimeMW => {
+            fmr_accelerated_coils(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::LiquidCoils => fmr_liquid_coils(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::HakkeHeavyBurst => {
+            fmr_hakke_heavy_burst(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::AdeptChargeTime => {
+            fmr_accelerated_coils(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => FiringModifierResponse::default(),
     }
 }
@@ -815,6 +865,7 @@ fn get_perk_hmr(
         Perks::BackupPlan => hmr_backup_plan(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::SleightOfHand => hmr_sleight_of_hand(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Harmony => hmr_harmony(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SlideWays => hmr_slide_ways(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HandlingModifierResponse::default(),
     }
 }
@@ -846,7 +897,7 @@ fn get_perk_mmr(
     match perk_enum {
         Perks::AgersCall => mmr_agers_call(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::AmbitiousAssassin => {
-            mmr_abitious_assassin(_input_data, val, enhanced, _pvp, _cached_data)
+            mmr_ambitious_assassin(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::OverFlow => mmr_overflow(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ClownCartridge => {
@@ -926,7 +977,6 @@ fn get_perk_rmr(
         Perks::WellRounded => rmr_well_rounded(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Alacrity => rmr_alacrity(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::RightHook => rmr_right_hook(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::SleightOfHand => rmr_sleight_of_hand(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Encore => rmr_encore(_input_data, val, enhanced, _pvp, _cached_data),
         _ => RangeModifierResponse::default(),
     }

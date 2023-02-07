@@ -220,14 +220,6 @@ impl JsStat {
     pub fn to_string(self) -> String {
         format!("{:?}", self)
     }
-    #[wasm_bindgen(constructor)]
-    pub fn new(base_value: i32, part_value: i32, trait_value: i32) -> Self {
-        JsStat {
-            base_value,
-            part_value,
-            trait_value,
-        }
-    }
 }
 impl From<Stat> for JsStat {
     fn from(stat: Stat) -> Self {

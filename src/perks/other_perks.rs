@@ -369,6 +369,38 @@ pub(super) fn dmr_spike_grenades(
     }
 }
 
+pub(super) fn dmr_disorienting_grenades(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    DamageModifierResponse {
+        impact_dmg_scale: 0.75,
+        explosive_dmg_scale: 0.75,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn dmr_full_choke(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    if _input.weapon_type == &WeaponType::SHOTGUN && _input.base_crit_mult < 1.15 {
+        DamageModifierResponse {
+            impact_dmg_scale: 1.0,
+            explosive_dmg_scale: 1.0,
+            crit_scale: 0.92,
+        }
+    } else {
+        DamageModifierResponse::new()
+    }
+}
+
 pub(super) fn fmr_accelerated_coils(
     _input: &CalculationInput,
     _value: u32,

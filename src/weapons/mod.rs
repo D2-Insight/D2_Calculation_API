@@ -139,6 +139,7 @@ impl Weapon {
             &self.stats,
             &self.weapon_type,
             &self.ammo_type,
+            self.firing_data.crit_mult,
         )
     }
 
@@ -191,6 +192,7 @@ impl Weapon {
             &self.stats,
             &self.weapon_type,
             &self.ammo_type,
+            self.firing_data.crit_mult,
         );
         let inter_var = get_perk_stats(self.list_perks(), input, false, &mut HashMap::new());
         let dynamic_stats = &inter_var[0];

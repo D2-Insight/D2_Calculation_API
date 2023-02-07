@@ -105,11 +105,12 @@ impl<'a> CalculationInput<'a> {
         _stats: &'a HashMap<u32, Stat>,
         _weapon_type: &'a WeaponType,
         _ammo_type: &'a AmmoType,
+        _crit_mult: f64,
     ) -> Self {
         Self {
             intrinsic_hash: _intrinsic_hash,
             curr_firing_data: _firing_data,
-            base_crit_mult: 0.0,
+            base_crit_mult: _crit_mult,
             shots_fired_this_mag: 0.0,
             total_shots_fired: 0.0,
             total_shots_hit: 0.0,
