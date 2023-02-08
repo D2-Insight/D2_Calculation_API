@@ -876,7 +876,7 @@
         "228577175":  {"name": "The Manticore",     "cat": "default", "subFam": "Lightweight", "magProf": "large"},
         "cat": {
             "default": {
-                "range":    {"vpp_start": 0.093,"offset_start": 7.8,"vpp_end": 0.0,"offset_end": 23.71, "floor_percent": 0.5},
+                "range":    {"vpp_start": 0.093,"offset_start": 8.8,"vpp_end": 0.0,"offset_end": 23.71, "floor_percent": 0.5},
                 "reload":   {"evpp": 0.0000608642, "vpp": -0.0191345, "offset": 2.62769},
                 "handling": {
                     "ready":{"vpp": -0.002376970528, "offset": 0.4710178204},

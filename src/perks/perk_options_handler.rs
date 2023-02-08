@@ -26,6 +26,13 @@ impl PerkOptionData {
     pub fn stacking(_stacks: u32) -> PerkOptionData {
         PerkOptionData(_stacks, vec![], PerkValueVariant::SLIDER)
     }
+    pub fn options(_options: Vec<&str>) -> PerkOptionData {
+        let mut options = vec!["None".to_string()];
+        for option in _options {
+            options.push(option.to_string());
+        }
+        PerkOptionData(options.len() as u32 - 1, options, PerkValueVariant::OPTIONS)
+    }
 }
 
 fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
@@ -123,16 +130,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::FiringLine => Some(PerkOptionData::toggle()),
         Perks::FullCourt => Some(PerkOptionData::toggle()),
         Perks::KillingTally => Some(PerkOptionData::stacking(3)),
-        Perks::Demolitionist => Some(PerkOptionData(
-            2,
-            [
-                "Disable".to_owned(),
-                "Once".to_owned(),
-                "every 3s".to_owned(),
-            ]
-            .to_vec(),
-            PerkValueVariant::OPTIONS,
-        )),
+        Perks::Demolitionist => Some(PerkOptionData::options(vec!["Once", "Every 3s"])),
         Perks::MultikillClip => Some(PerkOptionData::stacking(3)),
         Perks::Swashbuckler => Some(PerkOptionData::stacking(5)),
         Perks::OverFlow => Some(PerkOptionData::toggle()),
@@ -146,18 +144,8 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
 
         //season 9 | year 3
         Perks::ClownCartridge => Some(PerkOptionData::default()),
-        Perks::ElementalCapacitor => Some(PerkOptionData(
-            4,
-            [
-                "None".to_owned(),
-                "Void".to_owned(),
-                "Solar".to_owned(),
-                "Arc".to_owned(),
-                "Stasis".to_owned(),
-            ]
-            .to_vec(),
-            PerkValueVariant::OPTIONS,
-        )),
+        Perks::ElementalCapacitor => Some(PerkOptionData::options(
+            ["Void","Solar","Arc","Stasis",].to_vec())),
         Perks::Vorpal => Some(PerkOptionData::default()),
 
         //season 10 | year 3
@@ -223,42 +211,71 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::PerfectFloat => Some(PerkOptionData::toggle()),
         Perks::ShotSwap => Some(PerkOptionData::stacking(8)),
         Perks::TargetLock => Some(PerkOptionData::default()),
-        // Perks::DexterityMod,
-        // Perks::ReloadMod,
-        // Perks::ReserveMod,
-        // Perks::LoaderMod,
-        // Perks::TargetingMod,
-        // Perks::QuickCharge,
-        // Perks::CranialSpikeCat,
-        // Perks::AgersCall,
-        // Perks::LagragianSight,
-        // Perks::RatPack,
-        // Perks::StringofCurses,
-        // Perks::WormsHunger,
-        // Perks::RocketTracers,
-        // Perks::ParacausalShot,
-        // Perks::CorruptionSpreads,
-        // Perks::TimeSlip,
-        // Perks::ToM,
-        // Perks::IgnitionTrigger,
-        // Perks::GuidanceRing,
-        // Perks::ConserveMomentum,
-        // Perks::Impetus,
-        // Perks::LooksCanKill,
-        // Perks::PerfectFith,
-        // Perks::Broadside,
-        // Perks::Stormbringer,
-        // Perks::PrismaticInferno,
-        // Perks::ReignHavoc,
-        // Perks::WhisperCatalyst,
-        // Perks::OnYourMark,
-        // Perks::Frequency,
-        // Perks::Tempering,
-        // Perks::DragonShadow,
-        // Perks::OphidianAspect,
-        // Perks::Hedrons,
-        // Perks::HeatRises,
-        // Perks::FlowState,
+
+        //exotics
+        Perks::CranialSpike => Some(PerkOptionData::stacking(5)),
+        Perks::AgersCall => Some(PerkOptionData::toggle()),
+        Perks::LagragianSight => Some(PerkOptionData::toggle()),
+        Perks::RatPack => Some(PerkOptionData::stacking(5)),
+        Perks::StringofCurses => Some(PerkOptionData::stacking(5)),
+        Perks::WormsHunger => Some(PerkOptionData::stacking(20)),
+        Perks::RocketTracers => Some(PerkOptionData::default()),
+        Perks::ParacausalShot => Some(PerkOptionData::stacking(6)),
+        Perks::CorruptionSpreads => Some(PerkOptionData::default()),
+        Perks::TimeSlip => Some(PerkOptionData::toggle()),
+        Perks::ToM => Some(PerkOptionData::toggle()),
+        Perks::IgnitionTrigger => Some(PerkOptionData::toggle()),
+        Perks::GuidanceRing => Some(PerkOptionData::toggle()),
+        Perks::ConserveMomentum => Some(PerkOptionData::stacking(15)),
+        Perks::Impetus => Some(PerkOptionData::toggle()),
+        Perks::LooksCanKill => Some(PerkOptionData::toggle()),
+        Perks::PerfectFith => Some(PerkOptionData::default()),
+        Perks::Broadside => Some(PerkOptionData::stacking(4)),
+        Perks::Stormbringer => Some(PerkOptionData::default()),
+        Perks::PrismaticInferno => Some(PerkOptionData::default()),
+        Perks::ReignHavoc => Some(PerkOptionData::toggle()),
+        Perks::WhisperCatalyst => Some(PerkOptionData::toggle()),
+        Perks::Roadborn => Some(PerkOptionData::toggle()),
+        Perks::SwoopingTalons => Some(PerkOptionData::toggle()),
+        Perks::CalculatedBalance => Some(PerkOptionData::toggle()),
+        Perks::RavenousBeast => Some(PerkOptionData::toggle()),
+        Perks::LordOfWolvesCatalyst => Some(PerkOptionData::options(
+            ["Normla buff","RtL buff"].to_vec())),
+        Perks::ReleaseTheWolves => Some(PerkOptionData::toggle()),
+        Perks::Fundamentals => Some(PerkOptionData::options(
+            ["Void","Solar","Arc"].to_vec())),
+        Perks::ThinTheHerd => Some(PerkOptionData::toggle()),
+        Perks::Chimera => Some(PerkOptionData::toggle()),
+        Perks::FirstGlance => Some(PerkOptionData::toggle()),
+        Perks::FateOfAllFools => Some(PerkOptionData::stacking(3)),
+        Perks::HonedEdge => Some(PerkOptionData::options(
+            ["2x","3x","4x","4x+cat"].to_vec())),
+        Perks::TakenPredator => Some(PerkOptionData::options(
+            ["Taken","Witherhoard","Both"].to_vec())),
+        Perks::MarkovChain => Some(PerkOptionData::stacking(5)),
+        Perks::StormAndStress => Some(PerkOptionData::toggle()),
+        Perks::DualSpeedReceiver => Some(PerkOptionData::toggle()),
+        Perks::ExplosiveShadow => Some(PerkOptionData::default()),
+        Perks::SurosLegacy => Some(PerkOptionData::default()),
+        Perks::SpinningUp => Some(PerkOptionData::stacking(2)),
+        Perks::DarkDescent => Some(PerkOptionData::toggle()),
+        Perks::SleeperCatalyst => Some(PerkOptionData::default()),
+        Perks::TargetAquired => Some(PerkOptionData::toggle()),
+
+
+        Perks::DexterityMod => Some(PerkOptionData::stacking(2)),
+        Perks::ReserveMod => Some(PerkOptionData::stacking(2)),
+        Perks::LoaderMod => Some(PerkOptionData::stacking(2)),
+        Perks::TargetingMod => Some(PerkOptionData::stacking(2)),
+        Perks::QuickCharge => Some(PerkOptionData::toggle()),
+        Perks::OnYourMark => Some(PerkOptionData::stacking(3)),
+        Perks::Frequency => Some(PerkOptionData::toggle()),
+        Perks::Tempering => Some(PerkOptionData::toggle()),
+        Perks::DragonShadow => Some(PerkOptionData::toggle()),
+        Perks::OphidianAspect => Some(PerkOptionData::toggle()),
+        Perks::Hedrons => Some(PerkOptionData::toggle()),
+        Perks::HeatRises => Some(PerkOptionData::toggle()),
+        Perks::FlowState => Some(PerkOptionData::toggle()),
         _ => None,
     }
 }

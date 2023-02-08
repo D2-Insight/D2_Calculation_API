@@ -226,6 +226,7 @@ impl AmmoFormula {
 
         let mut mag_size =
             (((self.mag.evpp * (mag_stat.powi(2))) + (self.mag.vpp * mag_stat) + self.mag.offset)
+                .ceil()
                 * _mag_modifiers.magazine_scale
                 + _mag_modifiers.magazine_add)
                 .ceil() as i32;
@@ -233,7 +234,7 @@ impl AmmoFormula {
             mag_size = 1;
         }
 
-        let mut reserve_size = 0;
+        let mut reserve_size = 1;
         if _calc_inv {
             reserve_size = calc_reserves(raw_mag_size, _mag_stat as i32, inv_stat as i32, _inv_id);
         }
@@ -293,8 +294,8 @@ impl Weapon {
                 self.ammo_formula.reserve_id,
             );
         }
-        if mag_stat == 100 && self.weapon_type == WeaponType::SNIPER {
-            out.mag_size = 1;
+        if mag_stat > 90 && self.weapon_type == WeaponType::SNIPER {
+            out.mag_size += 1;
         }
         out
     }

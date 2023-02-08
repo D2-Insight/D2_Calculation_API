@@ -1,7 +1,7 @@
 //This also includes intrinsic perks, not just exotic
 use std::collections::HashMap;
 
-use crate::{d2_enums::StatHashes, enemies::EnemyType};
+use crate::{d2_enums::StatHashes, enemies::EnemyType, weapons::Stat};
 
 use super::{
     clamp,
@@ -411,7 +411,6 @@ pub(super) fn rsmr_lunafaction(
     }
 }
 
-
 pub(super) fn fmr_hakke_heavy_burst(
     _input: &CalculationInput,
     _value: u32,
@@ -421,7 +420,7 @@ pub(super) fn fmr_hakke_heavy_burst(
 ) -> FiringModifierResponse {
     FiringModifierResponse {
         burst_size_add: -2.0,
-        burst_delay_add: -1.0/30.0,
+        burst_delay_add: -1.0 / 30.0,
         ..Default::default()
     }
 }
@@ -439,3 +438,474 @@ pub(super) fn dmr_hakke_heavy_burst(
         crit_scale: 0.941,
     }
 }
+
+pub(super) fn dmr_swooping_talons(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut dmg_mult = 1.0;
+    if _value > 0 {
+        dmg_mult = 1.4;
+    }
+    dmg_mult += _input.total_shots_fired * 0.04;
+    dmg_mult = clamp(dmg_mult, 1.0, 1.4);
+    DamageModifierResponse {
+        impact_dmg_scale: dmg_mult,
+        explosive_dmg_scale: dmg_mult,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn dmr_ignition_trigger(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut dmg_mult = 1.0;
+    if _value > 0 || _input.total_shots_fired > 20.0 {
+        dmg_mult = if _pvp { 1.55 } else { 1.99 };
+    }
+    DamageModifierResponse {
+        impact_dmg_scale: dmg_mult,
+        explosive_dmg_scale: dmg_mult,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn dmr_vex_catalyst(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut damage_mult = if _value > 0 { 0.2 } else { 0.0 };
+    let duration = 5.0;
+    if _input.time_total > duration {
+        damage_mult = 0.0;
+    };
+    DamageModifierResponse {
+        impact_dmg_scale: 1.0 + damage_mult,
+        explosive_dmg_scale: 1.0 + damage_mult,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn fmr_ravenous_beast(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> FiringModifierResponse {
+    if _value > 0 {
+        FiringModifierResponse {
+            burst_delay_scale: 0.8,
+            ..Default::default()
+        }
+    } else {
+        FiringModifierResponse::default()
+    }
+}
+
+pub(super) fn dmr_ravenous_beast(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut damage_mult = 1.0;
+    let mut crit_mult = 1.0;
+    if _value > 0 {
+        damage_mult = 2.87;
+        crit_mult = 1.99 / 2.87;
+    }
+    DamageModifierResponse {
+        impact_dmg_scale: damage_mult,
+        explosive_dmg_scale: damage_mult,
+        crit_scale: crit_mult,
+    }
+}
+
+pub(super) fn sbr_low_catalyst(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut out = HashMap::new();
+    if _value == 1 {
+        out.insert(StatHashes::STABILITY.to_u32(), 40);
+    }
+    if _value == 2 {
+        out.insert(StatHashes::RELOAD.to_u32(), 100);
+    }
+    out
+}
+
+pub(super) fn rsmr_low_catalyst(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> ReloadModifierResponse {
+    if _value == 1 {
+        ReloadModifierResponse {
+            reload_stat_add: 100,
+            reload_time_scale: 0.85,
+        }
+    } else {
+        ReloadModifierResponse::default()
+    }
+}
+
+pub(super) fn fmr_release_the_wolves(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> FiringModifierResponse {
+    if _value > 0 {
+        FiringModifierResponse {
+            burst_delay_scale: 0.4,
+            ..Default::default()
+        }
+    } else {
+        FiringModifierResponse::default()
+    }
+}
+
+pub(super) fn dmr_release_the_wolves(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let damage_mult = if _value > 0 { 1.4 } else { 1.0 };
+    DamageModifierResponse {
+        impact_dmg_scale: damage_mult,
+        explosive_dmg_scale: damage_mult,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn sbr_fundamentals(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut stats = HashMap::new();
+    if _value == 1 {
+        stats.insert(StatHashes::STABILITY.to_u32(), 20);
+        stats.insert(StatHashes::AIM_ASSIST.to_u32(), 10);
+    } else if _value == 2 {
+        stats.insert(StatHashes::AIRBORNE.to_u32(), 20);
+        stats.insert(StatHashes::RELOAD.to_u32(), 35);
+    } else if _value == 3 {
+        stats.insert(StatHashes::RANGE.to_u32(), 5);
+        stats.insert(StatHashes::HANDLING.to_u32(), 25);
+    };
+    stats
+}
+
+pub(super) fn hmr_fundamentals(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    let mut handling = 0;
+    if _value == 3 {
+        handling = 25;
+    }
+    HandlingModifierResponse {
+        handling_stat_add: handling,
+        ..Default::default()
+    }
+}
+
+pub(super) fn rsmr_fundamentals(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> ReloadModifierResponse {
+    let mut reload = 0;
+    if _value == 2 {
+        reload = 35;
+    }
+    ReloadModifierResponse {
+        reload_stat_add: reload,
+        ..Default::default()
+    }
+}
+
+pub(super) fn rmr_fundamentals(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> RangeModifierResponse {
+    let mut range = 0;
+    if _value == 3 {
+        range = 5;
+    }
+    RangeModifierResponse {
+        range_stat_add: range,
+        ..Default::default()
+    }
+}
+
+pub(super) fn sbr_thin_the_herd(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut out = HashMap::new();
+    if _value > 0 {
+        out.insert(StatHashes::RELOAD.to_u32(), 70);
+    }
+    out
+}
+
+pub(super) fn rsmr_thin_the_herd(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> ReloadModifierResponse {
+    if _value > 0 {
+        ReloadModifierResponse {
+            reload_stat_add: 70,
+            ..Default::default()
+        }
+    } else {
+        ReloadModifierResponse::default()
+    }
+}
+
+pub(super) fn hmr_chimera(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    if _value > 0 {
+        HandlingModifierResponse {
+            handling_stat_add: 100,
+            ..Default::default()
+        }
+    } else {
+        HandlingModifierResponse::default()
+    }
+}
+
+pub(super) fn sbr_chimera(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut out = HashMap::new();
+    if _value > 0 {
+        out.insert(StatHashes::RELOAD.to_u32(), 100);
+    }
+    out
+}
+
+pub(super) fn dmr_first_glance(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut damage_mult = 1.0;
+    let mut crit_mult = 1.0;
+    if _value > 0 {
+        if _input.total_shots_fired == 0.0 {
+            damage_mult = 1.33;
+        } else {
+            crit_mult = 1.33;
+        };
+    };
+    DamageModifierResponse {
+        explosive_dmg_scale: damage_mult,
+        impact_dmg_scale: damage_mult,
+        crit_scale: crit_mult,
+    }
+}
+
+pub(super) fn dmr_fate_of_all_fools(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut damage_mult = 1.0;
+    let mut crit_mult = 1.0;
+    if _value as f64 > _input.total_shots_fired {
+        let cc = _input.base_crit_mult;
+        damage_mult = cc;
+        crit_mult = 1.0 / cc;
+    };
+    DamageModifierResponse {
+        explosive_dmg_scale: damage_mult,
+        impact_dmg_scale: damage_mult,
+        crit_scale: crit_mult,
+    }
+}
+
+pub(super) fn dmr_honed_edge(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut damage_mult = 1.0;
+    if _value == 1 {
+        damage_mult = if _pvp { 1.183 } else { 2.0 };
+    } else if _value == 2 {
+        damage_mult = if _pvp { 1.412 } else { 3.0 };
+    } else if _value == 3 {
+        damage_mult = if _pvp { 1.504 } else { 4.0 };
+    } else if _value == 4 {
+        damage_mult = if _pvp { 1.504 * 1.2 } else { 4.0 * 1.2 };
+    };
+    DamageModifierResponse {
+        explosive_dmg_scale: damage_mult,
+        impact_dmg_scale: damage_mult,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn dmr_taken_predator(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut damage_mult = 1.0;
+    if _value == 1 || _value == 2 {
+        damage_mult = 1.25;
+    } else if _value == 3 {
+        damage_mult = 1.25 * 1.25;
+    };
+    DamageModifierResponse {
+        explosive_dmg_scale: damage_mult,
+        impact_dmg_scale: damage_mult,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn dmr_markov_chain(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let val = clamp(_value, 0, 5);
+    let damage_mult = (1.0 / 15.0) * val as f64;
+    DamageModifierResponse {
+        explosive_dmg_scale: 1.0 + damage_mult,
+        impact_dmg_scale: 1.0 + damage_mult,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn dmr_storm_and_stress(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut damage_mult = 1.0;
+    if _value > 0 {
+        damage_mult = if _pvp { 3.62 } else { 1.8 };
+    };
+    DamageModifierResponse {
+        explosive_dmg_scale: damage_mult,
+        impact_dmg_scale: damage_mult,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn rmr_dual_speed_receiver(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> RangeModifierResponse {
+    let zoom_stat = _input
+        .stats
+        .get(&StatHashes::ZOOM.to_u32())
+        .unwrap_or(&Stat::new())
+        .val() as f64;
+    let zoom_mult = (zoom_stat + 3.0) / zoom_stat;
+    if _value > 0 {
+        RangeModifierResponse {
+            range_stat_add: 30,
+            range_zoom_scale: zoom_mult,
+            ..Default::default()
+        }
+    } else {
+        RangeModifierResponse::default()
+    }
+}
+
+pub(super) fn sbr_dual_speed_receiver(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut out = HashMap::new();
+    if _value > 0 {
+        out.insert(StatHashes::ZOOM.to_u32(), 3);
+        out.insert(StatHashes::RANGE.to_u32(), 30);
+    }
+    out
+}
+
+// pub(super) fn fmr_spinning_up(
+//     _input: &CalculationInput,
+//     _value: u32,
+//     _is_enhanced: bool,
+//     _pvp: bool,
+//     _cached_data: &mut HashMap<String, f64>,
+// ) -> FiringModifierResponse {
+//     let mut fire_rate_mult = 1.0;
+//     if _input.total_shots_fired == 0.0 {
+//         if
+//     };
+//     FiringModifierResponse {
+//         burst_delay_scale: fire_rate_mult,
+//     }
+// }

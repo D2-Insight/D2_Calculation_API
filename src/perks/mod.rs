@@ -216,7 +216,7 @@ pub enum Perks {
     WeakenDebuffs,
     ////////EXOTIC////////
     ////TOGGLE////
-    CranialSpikeCat,
+    CranialSpike,
     AgersCall,
     LagragianSight,
     OphidianAspect,
@@ -247,6 +247,29 @@ pub enum Perks {
     WhisperCatalyst,
     Roadborn,
     HakkeHeavyBurst,
+
+    //too lazy to sort
+    SwoopingTalons,
+    CalculatedBalance,
+    RavenousBeast,
+    LordOfWolvesCatalyst,
+    ReleaseTheWolves,
+    Fundamentals,
+    ThinTheHerd,
+    Chimera,
+    FirstGlance,
+    FateOfAllFools,
+    HonedEdge,
+    TakenPredator,
+    MarkovChain,
+    StormAndStress,
+    DualSpeedReceiver,
+    ExplosiveShadow,
+    SurosLegacy,
+    SpinningUp,
+    DarkDescent,
+    SleeperCatalyst,
+    TargetAquired,
 }
 
 impl From<u32> for Perks {
@@ -262,10 +285,9 @@ impl From<u32> for Perks {
 
             //armor
             111111111 => Perks::DexterityMod,
-            222222222 => Perks::ReloadMod,
+            222222222 => Perks::TargetingMod,
             333333333 => Perks::ReserveMod,
             444444444 => Perks::LoaderMod,
-            555555555 => Perks::TargetingMod,
             1484685884 => Perks::QuickCharge,
             593361144 => Perks::DragonShadow,
             1147638875 => Perks::OphidianAspect,
@@ -455,7 +477,7 @@ impl From<u32> for Perks {
             362132290 => Perks::Tempering,
 
             //kietic exotic
-            1301843770 => Perks::CranialSpikeCat,
+            1301843770 => Perks::CranialSpike,
             970163821 => Perks::AgersCall,
             2121086290 => Perks::RatPack,
             4004944400 => Perks::StringofCurses,
@@ -464,7 +486,14 @@ impl From<u32> for Perks {
             3556949035 => Perks::TimeSlip,
             2724693746 => Perks::ToM,
             4208418110 => Perks::CorruptionSpreads,
+            1070100196 => Perks::HonedEdge,
             2206869417 => Perks::HakkeHeavyBurst,
+            3668782036 => Perks::FateOfAllFools,
+            1791592647 => Perks::ExplosiveShadow,
+            2130042297 => Perks::TakenPredator,
+            944506345 => Perks::SurosLegacy,
+            1378047685 => Perks::SpinningUp,
+            4012962526 => Perks::DualSpeedReceiver,
 
             //energy exotic
             2881100038 => Perks::LagragianSight,
@@ -477,11 +506,20 @@ impl From<u32> for Perks {
             3117514172 => Perks::Stormbringer,
             1000724343 => Perks::PerfectFith,
             571267712 => Perks::PrismaticInferno,
+            838219733 => Perks::CalculatedBalance,
+            924149234 => Perks::Chimera,
+            2003108620 => Perks::ThinTheHerd,
+            2540536653 => Perks::RavenousBeast,
+            431220296 => Perks::LordOfWolvesCatalyst,
+            299272945 => Perks::ReleaseTheWolves,
+            2656694271 => Perks::SwoopingTalons,
 
             //heavy exotic
             4148158229 => Perks::ReignHavoc,
             2812324400 => Perks::WormsHunger,
             1340292993 => Perks::WhisperCatalyst,
+            3333994164 => Perks::DarkDescent,
+            939227542 => Perks::TargetAquired,
 
             _ => Perks::Ignore,
         }
@@ -578,7 +616,18 @@ fn dyanmic_perk_stats(
             sbr_compulsive_reloader(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::RapidHit => sbr_rapid_hit(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::ExplosiveLight => sbr_explosive_light(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ExplosiveLight => {
+            sbr_explosive_light(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::LordOfWolvesCatalyst => {
+            sbr_low_catalyst(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::Fundamentals => sbr_fundamentals(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ThinTheHerd => sbr_thin_the_herd(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Chimera => sbr_chimera(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::DualSpeedReceiver => {
+            sbr_dual_speed_receiver(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => HashMap::new(),
     }
 }
@@ -674,9 +723,34 @@ fn get_perk_dmr(
         }
         Perks::MultikillClip => dmr_multi_kill_clip(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::SpikeGrenades => dmr_spike_grenades(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::ExplosiveLight => dmr_explosive_light(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ExplosiveLight => {
+            dmr_explosive_light(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         Perks::DisorientingGrenades => {
             dmr_disorienting_grenades(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::SwoopingTalons => {
+            dmr_swooping_talons(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::IgnitionTrigger => {
+            dmr_ignition_trigger(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::CalculatedBalance => {
+            dmr_vex_catalyst(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::RavenousBeast => dmr_ravenous_beast(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ReleaseTheWolves => {
+            dmr_release_the_wolves(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::FirstGlance => dmr_first_glance(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FateOfAllFools => {
+            dmr_fate_of_all_fools(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::HonedEdge => dmr_honed_edge(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::TakenPredator => dmr_taken_predator(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::MarkovChain => dmr_markov_chain(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::StormAndStress => {
+            dmr_storm_and_stress(_input_data, val, enhanced, _pvp, _cached_data)
         }
         _ => DamageModifierResponse::new(),
     }
@@ -747,6 +821,11 @@ fn get_perk_rsmr(
         Perks::SleightOfHand => {
             rsmr_sleight_of_hand(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::LordOfWolvesCatalyst => {
+            rsmr_low_catalyst(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::Fundamentals => rsmr_fundamentals(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ThinTheHerd => rsmr_thin_the_herd(_input_data, val, enhanced, _pvp, _cached_data),
         _ => ReloadModifierResponse::default(),
     }
 }
@@ -799,6 +878,10 @@ fn get_perk_fmr(
         }
         Perks::AdeptChargeTime => {
             fmr_accelerated_coils(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::RavenousBeast => fmr_ravenous_beast(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ReleaseTheWolves => {
+            fmr_release_the_wolves(_input_data, val, enhanced, _pvp, _cached_data)
         }
         _ => FiringModifierResponse::default(),
     }
@@ -866,6 +949,8 @@ fn get_perk_hmr(
         Perks::SleightOfHand => hmr_sleight_of_hand(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Harmony => hmr_harmony(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::SlideWays => hmr_slide_ways(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Fundamentals => hmr_fundamentals(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Chimera => hmr_chimera(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HandlingModifierResponse::default(),
     }
 }
@@ -978,6 +1063,10 @@ fn get_perk_rmr(
         Perks::Alacrity => rmr_alacrity(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::RightHook => rmr_right_hook(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Encore => rmr_encore(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Fundamentals => rmr_fundamentals(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::DualSpeedReceiver => {
+            rmr_dual_speed_receiver(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => RangeModifierResponse::default(),
     }
 }
