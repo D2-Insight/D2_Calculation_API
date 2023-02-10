@@ -249,7 +249,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::FirstGlance => Some(PerkOptionData::toggle()),
         Perks::FateOfAllFools => Some(PerkOptionData::stacking(3)),
         Perks::HonedEdge => Some(PerkOptionData::options(
-            ["2x","3x","4x","4x+cat"].to_vec())),
+            ["2x","3x","4x"].to_vec())),
         Perks::TakenPredator => Some(PerkOptionData::options(
             ["Taken","Witherhoard","Both"].to_vec())),
         Perks::MarkovChain => Some(PerkOptionData::stacking(5)),

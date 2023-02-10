@@ -876,7 +876,7 @@
         "228577175":  {"name": "The Manticore",     "cat": "default", "subFam": "Lightweight", "magProf": "large"},
         "cat": {
             "default": {
-                "range":    {"vpp_start": 0.093,"offset_start": 8.8,"vpp_end": 0.0,"offset_end": 23.71, "floor_percent": 0.5},
+                "range":    {"vpp_start": 0.07,"offset_start": 10,"vpp_end": 0.0,"offset_end": 23.35, "floor_percent": 0.5},
                 "reload":   {"evpp": 0.0000608642, "vpp": -0.0191345, "offset": 2.62769},
                 "handling": {
                     "ready":{"vpp": -0.002376970528, "offset": 0.4710178204},
@@ -977,8 +977,9 @@
                 "range":    {"vpp_start": 0.1017,"offset_start": 14.756,"vpp_end": 0.0,"offset_end": 35.9, "floor_percent": 0.4},
                 "reload":   {},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.00279338, "offset": 0.51985381},
+                    "stow": {"vpp": -0.00268436, "offset": 0.48414822},
+                    "ads":  {"vpp": -0.001875,   "offset": 0.38975   }
                 },
                 "combatant_scalars": {"vehicle": 1.4, "boss": 1.5, "champion": 1.7, "miniboss": 1.7, "elite": 1.7, "minor": 1.9}
             }

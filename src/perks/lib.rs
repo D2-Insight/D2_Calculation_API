@@ -26,6 +26,7 @@ pub struct CalculationInput<'a> {
     pub handling_data: HandlingResponse,
     pub num_reloads: f64,
     pub enemy_type: &'a EnemyType,
+    pub perk_value_map: &'a HashMap<u32, u32>,
     pub has_overshield: bool,
 }
 impl<'a> CalculationInput<'a> {
@@ -34,6 +35,7 @@ impl<'a> CalculationInput<'a> {
         _intrinsic_hash: u32,
         _firing_data: &'a FiringData,
         _stats: &'a HashMap<u32, Stat>,
+        _perk_value_map: &'a HashMap<u32, u32>,
         _weapon_type: &'a WeaponType,
         _ammo_type: &'a AmmoType,
         _damage_type: &'a DamageType,
@@ -62,6 +64,7 @@ impl<'a> CalculationInput<'a> {
             handling_data: HandlingResponse::default(),
             num_reloads: 0.0,
             enemy_type: &EnemyType::BOSS,
+            perk_value_map: _perk_value_map,
             has_overshield: false,
         }
     }
@@ -69,6 +72,7 @@ impl<'a> CalculationInput<'a> {
         _intrinsic_hash: u32,
         _firing_data: &'a FiringData,
         _stats: &'a HashMap<u32, Stat>,
+        _perk_value_map: &'a HashMap<u32, u32>,
         _weapon_type: &'a WeaponType,
         _ammo_type: &'a AmmoType,
         _base_damage: f64,
@@ -96,6 +100,7 @@ impl<'a> CalculationInput<'a> {
             handling_data: _handling_data,
             num_reloads: 0.0,
             enemy_type: &EnemyType::PLAYER,
+            perk_value_map: _perk_value_map,
             has_overshield: _has_overshield,
         }
     }
@@ -103,6 +108,7 @@ impl<'a> CalculationInput<'a> {
         _intrinsic_hash: u32,
         _firing_data: &'a FiringData,
         _stats: &'a HashMap<u32, Stat>,
+        _perk_value_map: &'a HashMap<u32, u32>,
         _weapon_type: &'a WeaponType,
         _ammo_type: &'a AmmoType,
         _crit_mult: f64,
@@ -126,6 +132,7 @@ impl<'a> CalculationInput<'a> {
             handling_data: HandlingResponse::default(),
             num_reloads: 0.0,
             enemy_type: &EnemyType::ENCLAVE,
+            perk_value_map: _perk_value_map,
             has_overshield: false,
         }
     }

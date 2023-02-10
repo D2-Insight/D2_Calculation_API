@@ -9,21 +9,13 @@ pub enum AmmoType {
     HEAVY = 3,
     UNKNOWN = 0,
 }
-impl AmmoType {
-    pub fn from_u32(_value: u32) -> AmmoType {
+impl From<u32> for AmmoType {
+    fn from(_value: u32) -> AmmoType {
         match _value {
             1 => AmmoType::PRIMARY,
             2 => AmmoType::SPECIAL,
             3 => AmmoType::HEAVY,
             _ => AmmoType::UNKNOWN,
-        }
-    }
-    pub fn to_string(&self) -> String {
-        match self {
-            AmmoType::PRIMARY => "Primary".to_string(),
-            AmmoType::SPECIAL => "Special".to_string(),
-            AmmoType::HEAVY => "Heavy".to_string(),
-            _ => "Unknown".to_string(),
         }
     }
 }
@@ -49,8 +41,8 @@ pub enum WeaponType {
     TRACERIFLE = 25,
     UNKNOWN = 0,
 }
-impl WeaponType {
-    pub fn from_u32(_value: u32) -> WeaponType {
+impl From<u32> for WeaponType {
+    fn from(_value: u32) -> WeaponType {
         match _value {
             6 => WeaponType::AUTORIFLE,
             31 => WeaponType::BOW,
@@ -72,30 +64,7 @@ impl WeaponType {
             _ => WeaponType::UNKNOWN,
         }
     }
-    pub fn to_string(&self) -> String {
-        match self {
-            WeaponType::AUTORIFLE => "Auto Rifle".to_string(),
-            WeaponType::BOW => "Bow".to_string(),
-            WeaponType::FUSIONRIFLE => "Fusion Rifle".to_string(),
-            WeaponType::GLAIVE => "Glaive".to_string(),
-            WeaponType::GRENADELAUNCHER => "Grenade Launcher".to_string(),
-            WeaponType::HANDCANNON => "Hand Cannon".to_string(),
-            WeaponType::LINEARFUSIONRIFLE => "Linear Fusion Rifle".to_string(),
-            WeaponType::MACHINEGUN => "Machine Gun".to_string(),
-            WeaponType::PULSERIFLE => "Pulse Rifle".to_string(),
-            WeaponType::ROCKET => "Rocket Launcher".to_string(),
-            WeaponType::SCOUTRIFLE => "Scout Rifle".to_string(),
-            WeaponType::SHOTGUN => "Shotgun".to_string(),
-            WeaponType::SIDEARM => "Sidearm".to_string(),
-            WeaponType::SNIPER => "Sniper Rifle".to_string(),
-            WeaponType::SUBMACHINEGUN => "Submachine Gun".to_string(),
-            WeaponType::SWORD => "Sword".to_string(),
-            WeaponType::TRACERIFLE => "Trace Rifle".to_string(),
-            _ => "Unknown".to_string(),
-        }
-    }
 }
-
 
 #[allow(non_snake_case, non_camel_case_types)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -134,8 +103,8 @@ pub enum StatHashes {
     ZOOM,
     UNKNOWN,
 }
-impl StatHashes {
-    pub fn from_u32(_value: u32) -> StatHashes {
+impl From<u32> for StatHashes {
+    fn from(_value: u32) -> StatHashes {
         match _value {
             1591432999 => StatHashes::ACCURACY,
             1345609583 => StatHashes::AIM_ASSIST,
@@ -172,7 +141,9 @@ impl StatHashes {
             _ => StatHashes::UNKNOWN,
         }
     }
-    pub fn to_u32(&self) -> u32{
+}
+impl Into<u32> for StatHashes {
+    fn into(self) -> u32 {
         match self {
             StatHashes::ACCURACY => 1591432999,
             StatHashes::AIM_ASSIST => 1345609583,
@@ -209,6 +180,8 @@ impl StatHashes {
             StatHashes::UNKNOWN => 0,
         }
     }
+}
+impl StatHashes {
     pub fn is_weapon_stat(&self) -> bool {
         match self {
             StatHashes::ACCURACY => true,
@@ -244,13 +217,13 @@ impl StatHashes {
 pub enum DamageType {
     ARC,
     VOID,
-    SOLAR ,
+    SOLAR,
     STASIS,
     KINETIC,
     UNKNOWN,
 }
-impl DamageType {
-    pub fn from_u32(_value: u32) -> DamageType {
+impl From<u32> for DamageType {
+    fn from(_value: u32) -> DamageType {
         match _value {
             2303181850 => DamageType::ARC,
             3454344768 => DamageType::VOID,

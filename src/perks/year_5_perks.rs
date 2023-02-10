@@ -48,8 +48,8 @@ pub(super) fn sbr_encore(
     let val = clamp(_value, 0, 4) as i32;
     let stability_boost = 8 * val;
     let range_boost = 5 * val;
-    map.insert(StatHashes::RANGE.to_u32(), range_boost);
-    map.insert(StatHashes::STABILITY.to_u32(), stability_boost);
+    map.insert(StatHashes::RANGE.into(), range_boost);
+    map.insert(StatHashes::STABILITY.into(), stability_boost);
     map
 }
 
@@ -82,7 +82,7 @@ pub(super) fn dmr_focused_fury(
     } else {
         shots_needed = (_input.base_mag * (_input.curr_firing_data.burst_size as f64)) / 2.0;
     }
-    if _input.total_shots_fired >= shots_needed || _value > 0{
+    if _input.total_shots_fired >= shots_needed || _value > 0 {
         dmg_boost = 1.2;
     }
     DamageModifierResponse {
@@ -120,7 +120,7 @@ pub(super) fn sbr_fragile_focus(
     if _value > 0 {
         range_bonus = 20;
     };
-    map.insert(StatHashes::RANGE.to_u32(), range_bonus);
+    map.insert(StatHashes::RANGE.into(), range_bonus);
     map
 }
 
@@ -167,7 +167,7 @@ pub(super) fn sbr_offhand_strike(
     if _value > 0 {
         stability_boost = 30;
     };
-    map.insert(StatHashes::STABILITY.to_u32(), stability_boost);
+    map.insert(StatHashes::STABILITY.into(), stability_boost);
     map
 }
 
@@ -212,7 +212,7 @@ pub(super) fn sbr_slickdraw(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
-    map.insert(StatHashes::HANDLING.to_u32(), 100);
+    map.insert(StatHashes::HANDLING.into(), 100);
     map
 }
 
@@ -234,10 +234,10 @@ pub(super) fn sbr_stats_for_all(
         reload_boost = 35;
         handling_boost = 35;
     };
-    out.insert(StatHashes::STABILITY.to_u32(), stability_boost);
-    out.insert(StatHashes::RANGE.to_u32(), range_boost);
-    out.insert(StatHashes::RELOAD.to_u32(), reload_boost);
-    out.insert(StatHashes::HANDLING.to_u32(), handling_boost);
+    out.insert(StatHashes::STABILITY.into(), stability_boost);
+    out.insert(StatHashes::RANGE.into(), range_boost);
+    out.insert(StatHashes::RELOAD.into(), reload_boost);
+    out.insert(StatHashes::HANDLING.into(), handling_boost);
     out
 }
 
@@ -313,7 +313,7 @@ pub(super) fn sbr_steady_hands(
     if _value > 0 {
         handling = 100;
     };
-    map.insert(StatHashes::HANDLING.to_u32(), handling);
+    map.insert(StatHashes::HANDLING.into(), handling);
     map
 }
 
@@ -411,9 +411,9 @@ pub(super) fn sbr_well_rounded(
     let mut map = HashMap::new();
     let stat_base = if _is_enhanced { 12 } else { 10 };
     let stat_bump = stat_base * val;
-    map.insert(StatHashes::STABILITY.to_u32(), stat_bump);
-    map.insert(StatHashes::RANGE.to_u32(), stat_bump);
-    map.insert(StatHashes::HANDLING.to_u32(), stat_bump);
+    map.insert(StatHashes::STABILITY.into(), stat_bump);
+    map.insert(StatHashes::RANGE.into(), stat_bump);
+    map.insert(StatHashes::HANDLING.into(), stat_bump);
     map
 }
 
@@ -527,7 +527,7 @@ pub(super) fn sbr_compulsive_reloader(
     let reload_add = if _is_enhanced { 55 } else { 50 };
     let mut map = HashMap::new();
     if _input.shots_fired_this_mag <= _input.base_mag / 2.0 && _value > 0 {
-        map.insert(StatHashes::RELOAD.to_u32(), reload_add);
+        map.insert(StatHashes::RELOAD.into(), reload_add);
     }
     map
 }
@@ -543,9 +543,9 @@ pub(super) fn sbr_sleight_of_hand(
     let mut map = HashMap::new();
     let stat_base = 10;
     let stat_bump = stat_base * val;
-    map.insert(StatHashes::STABILITY.to_u32(), stat_bump);
-    map.insert(StatHashes::RANGE.to_u32(), stat_bump);
-    map.insert(StatHashes::HANDLING.to_u32(), stat_bump);
+    map.insert(StatHashes::STABILITY.into(), stat_bump);
+    map.insert(StatHashes::RANGE.into(), stat_bump);
+    map.insert(StatHashes::HANDLING.into(), stat_bump);
     map
 }
 

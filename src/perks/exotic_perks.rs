@@ -33,7 +33,6 @@ pub(super) fn hmr_swap_mag(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
-    //also works for quick access sling
     HandlingModifierResponse {
         handling_stat_add: 0,
         handling_ads_scale: 1.0,
@@ -123,8 +122,8 @@ pub(super) fn sbr_roadborn(
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value > 0 {
-        out.insert(StatHashes::HANDLING.to_u32(), 20);
-        out.insert(StatHashes::RELOAD.to_u32(), 40);
+        out.insert(StatHashes::HANDLING.into(), 20);
+        out.insert(StatHashes::RELOAD.into(), 40);
     };
     out
 }
@@ -542,10 +541,10 @@ pub(super) fn sbr_low_catalyst(
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value == 1 {
-        out.insert(StatHashes::STABILITY.to_u32(), 40);
+        out.insert(StatHashes::STABILITY.into(), 40);
     }
     if _value == 2 {
-        out.insert(StatHashes::RELOAD.to_u32(), 100);
+        out.insert(StatHashes::RELOAD.into(), 100);
     }
     out
 }
@@ -608,14 +607,14 @@ pub(super) fn sbr_fundamentals(
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     if _value == 1 {
-        stats.insert(StatHashes::STABILITY.to_u32(), 20);
-        stats.insert(StatHashes::AIM_ASSIST.to_u32(), 10);
+        stats.insert(StatHashes::STABILITY.into(), 20);
+        stats.insert(StatHashes::AIM_ASSIST.into(), 10);
     } else if _value == 2 {
-        stats.insert(StatHashes::AIRBORNE.to_u32(), 20);
-        stats.insert(StatHashes::RELOAD.to_u32(), 35);
+        stats.insert(StatHashes::AIRBORNE.into(), 20);
+        stats.insert(StatHashes::RELOAD.into(), 35);
     } else if _value == 3 {
-        stats.insert(StatHashes::RANGE.to_u32(), 5);
-        stats.insert(StatHashes::HANDLING.to_u32(), 25);
+        stats.insert(StatHashes::RANGE.into(), 5);
+        stats.insert(StatHashes::HANDLING.into(), 25);
     };
     stats
 }
@@ -680,7 +679,7 @@ pub(super) fn sbr_thin_the_herd(
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value > 0 {
-        out.insert(StatHashes::RELOAD.to_u32(), 70);
+        out.insert(StatHashes::RELOAD.into(), 70);
     }
     out
 }
@@ -728,7 +727,7 @@ pub(super) fn sbr_chimera(
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value > 0 {
-        out.insert(StatHashes::RELOAD.to_u32(), 100);
+        out.insert(StatHashes::RELOAD.into(), 100);
     }
     out
 }
@@ -864,7 +863,7 @@ pub(super) fn rmr_dual_speed_receiver(
 ) -> RangeModifierResponse {
     let zoom_stat = _input
         .stats
-        .get(&StatHashes::ZOOM.to_u32())
+        .get(&StatHashes::ZOOM.into())
         .unwrap_or(&Stat::new())
         .val() as f64;
     let zoom_mult = (zoom_stat + 3.0) / zoom_stat;
@@ -888,8 +887,8 @@ pub(super) fn sbr_dual_speed_receiver(
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value > 0 {
-        out.insert(StatHashes::ZOOM.to_u32(), 3);
-        out.insert(StatHashes::RANGE.to_u32(), 30);
+        out.insert(StatHashes::ZOOM.into(), 3);
+        out.insert(StatHashes::RANGE.into(), 30);
     }
     out
 }

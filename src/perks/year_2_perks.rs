@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{StatHashes, WeaponType, AmmoType};
+use crate::d2_enums::{AmmoType, StatHashes, WeaponType};
 
 use super::{
     clamp,
@@ -21,7 +21,7 @@ pub(super) fn sbr_air_assault(
     let mut stats = HashMap::new();
     let ae_per_stack = if _is_enhanced { 35 } else { 20 };
     let ae = ae_per_stack * _value as i32;
-    stats.insert(StatHashes::AIRBORNE.to_u32(), ae);
+    stats.insert(StatHashes::AIRBORNE.into(), ae);
     stats
 }
 
@@ -134,7 +134,7 @@ pub(super) fn sbr_feeding_frenzy(
     if _input.time_total > duration {
         reload = 0;
     };
-    stats.insert(StatHashes::RELOAD.to_u32(), reload);
+    stats.insert(StatHashes::RELOAD.into(), reload);
     stats
 }
 
@@ -240,10 +240,10 @@ pub(super) fn sbr_rapid_hit(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
-    let values = vec![0,5,30,35,45,60,];
+    let values = vec![0, 5, 30, 35, 45, 60];
     let entry_to_get = clamp(_value + _input.shots_fired_this_mag as u32, 0, 5);
     let mut stats = HashMap::new();
-    stats.insert(StatHashes::RELOAD.to_u32(), values[entry_to_get as usize]);
+    stats.insert(StatHashes::RELOAD.into(), values[entry_to_get as usize]);
     stats
 }
 
@@ -358,7 +358,7 @@ pub(super) fn dmr_multi_kill_clip(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let val = clamp(_value, 0, 5);
-    let mut damage_mult = (1.0/6.0) * val as f64;
+    let mut damage_mult = (1.0 / 6.0) * val as f64;
     if _input.num_reloads > 0.0 {
         damage_mult = 0.0;
     };
@@ -382,7 +382,7 @@ pub(super) fn dmr_explosive_light(
         return DamageModifierResponse::new();
     };
     if _input.weapon_type == &WeaponType::GRENADELAUNCHER {
-        let blast_radius_struct = _input.stats.get(&StatHashes::BLAST_RADIUS.to_u32());
+        let blast_radius_struct = _input.stats.get(&StatHashes::BLAST_RADIUS.into());
         let blast_radius;
         if blast_radius_struct.is_none() {
             blast_radius = 0;
@@ -392,8 +392,8 @@ pub(super) fn dmr_explosive_light(
         if _input.ammo_type == &AmmoType::HEAVY {
             let expl_percent = 0.7 + 0.00175 * blast_radius as f64;
             let impt_percent = 1.0 - expl_percent;
-            let expl_mult = 0.875/expl_percent * 1.6;
-            let impt_mult = 0.125/impt_percent;
+            let expl_mult = 0.875 / expl_percent * 1.6;
+            let impt_mult = 0.125 / impt_percent;
             return DamageModifierResponse {
                 impact_dmg_scale: impt_mult,
                 explosive_dmg_scale: expl_mult,
@@ -403,8 +403,8 @@ pub(super) fn dmr_explosive_light(
         if _input.ammo_type == &AmmoType::SPECIAL {
             let expl_percent = 0.5 + 0.0025 * blast_radius as f64;
             let impt_percent = 1.0 - expl_percent;
-            let expl_mult = 0.75/expl_percent * 1.6;
-            let impt_mult = 0.25/impt_percent;
+            let expl_mult = 0.75 / expl_percent * 1.6;
+            let impt_mult = 0.25 / impt_percent;
             return DamageModifierResponse {
                 impact_dmg_scale: impt_mult,
                 explosive_dmg_scale: expl_mult,
@@ -412,7 +412,7 @@ pub(super) fn dmr_explosive_light(
             };
         }
     };
-    DamageModifierResponse{
+    DamageModifierResponse {
         explosive_dmg_scale: 1.25,
         impact_dmg_scale: 1.25,
         crit_scale: 1.0,
@@ -426,10 +426,9 @@ pub(super) fn sbr_explosive_light(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
-    let shots_left = _value as f64 - _input.total_shots_fired;
     let mut out = HashMap::new();
-    if shots_left <= 0.0 {
-        out.insert(StatHashes::BLAST_RADIUS.to_u32(), 100);
+    if _value > 0 {
+        out.insert(StatHashes::BLAST_RADIUS.into(), 100);
     };
     out
 }

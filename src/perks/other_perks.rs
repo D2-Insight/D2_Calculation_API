@@ -49,9 +49,9 @@ pub(super) fn sbr_ophidian_aspects(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
-    stats.insert(StatHashes::HANDLING.to_u32(), 35);
-    stats.insert(StatHashes::RELOAD.to_u32(), 35);
-    stats.insert(StatHashes::AIRBORNE.to_u32(), 10);
+    stats.insert(StatHashes::HANDLING.into(), 35);
+    stats.insert(StatHashes::RELOAD.into(), 35);
+    stats.insert(StatHashes::AIRBORNE.into(), 10);
     stats
 }
 
@@ -63,8 +63,8 @@ pub(super) fn sbr_dragon_shadow(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
-    stats.insert(StatHashes::HANDLING.to_u32(), 100);
-    stats.insert(StatHashes::RELOAD.to_u32(), 100);
+    stats.insert(StatHashes::HANDLING.into(), 100);
+    stats.insert(StatHashes::RELOAD.into(), 100);
     stats
 }
 
@@ -103,7 +103,7 @@ pub(super) fn sbr_amplified(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
-    stats.insert(StatHashes::HANDLING.to_u32(), 40);
+    stats.insert(StatHashes::HANDLING.into(), 40);
     stats
 }
 
@@ -158,7 +158,7 @@ pub(super) fn sbr_tempering(
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     if _value > 0 {
-        stats.insert(StatHashes::AIRBORNE.to_u32(), 20);
+        stats.insert(StatHashes::AIRBORNE.into(), 20);
     };
     stats
 }
@@ -173,8 +173,8 @@ pub(super) fn sbr_on_your_mark(
     let mut stats = HashMap::new();
     let val = clamp(_value, 0, 3) as i32;
     if _value > 0 {
-        stats.insert(StatHashes::HANDLING.to_u32(), 20 * val);
-        stats.insert(StatHashes::RELOAD.to_u32(), 20 * val);
+        stats.insert(StatHashes::HANDLING.into(), 20 * val);
+        stats.insert(StatHashes::RELOAD.into(), 20 * val);
     };
     stats
 }
@@ -217,7 +217,7 @@ pub(super) fn sbr_heat_rises(
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     if _value > 0 {
-        stats.insert(StatHashes::AIRBORNE.to_u32(), 70);
+        stats.insert(StatHashes::AIRBORNE.into(), 70);
     };
     stats
 }
@@ -231,9 +231,9 @@ pub(super) fn sbr_hedrons(
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     if _value > 0 {
-        stats.insert(StatHashes::AIRBORNE.to_u32(), 20);
-        stats.insert(StatHashes::AIM_ASSIST.to_u32(), 15);
-        stats.insert(StatHashes::STABILITY.to_u32(), 30);
+        stats.insert(StatHashes::AIRBORNE.into(), 20);
+        stats.insert(StatHashes::AIM_ASSIST.into(), 15);
+        stats.insert(StatHashes::STABILITY.into(), 30);
     };
     stats
 }
@@ -250,7 +250,7 @@ pub(super) fn sbr_quick_charge(
         || *_input.weapon_type == WeaponType::SHOTGUN
         || *_input.weapon_type == WeaponType::SIDEARM
     {
-        stats.insert(StatHashes::HANDLING.to_u32(), 25);
+        stats.insert(StatHashes::HANDLING.into(), 25);
     };
     stats
 }

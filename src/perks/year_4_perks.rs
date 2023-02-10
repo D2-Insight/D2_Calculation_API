@@ -89,7 +89,7 @@ pub(super) fn sbr_adrenaline_junkie(
         handling = 20;
     };
     let mut out = HashMap::new();
-    out.insert(StatHashes::HANDLING.to_u32(), handling);
+    out.insert(StatHashes::HANDLING.into(), handling);
     out
 }
 
@@ -138,8 +138,8 @@ pub(super) fn sbr_ensemble(
     let reload = if _is_enhanced { 40 } else { 45 };
     if _value > 0 {
         let mut out = HashMap::new();
-        out.insert(StatHashes::HANDLING.to_u32(), handling);
-        out.insert(StatHashes::RELOAD.to_u32(), reload);
+        out.insert(StatHashes::HANDLING.into(), handling);
+        out.insert(StatHashes::RELOAD.into(), reload);
         out
     } else {
         HashMap::new()
@@ -270,8 +270,8 @@ pub(super) fn sbr_frenzy(
         reload = 50;
     };
     let mut out = HashMap::new();
-    out.insert(StatHashes::HANDLING.to_u32(), handling);
-    out.insert(StatHashes::RELOAD.to_u32(), reload);
+    out.insert(StatHashes::HANDLING.into(), handling);
+    out.insert(StatHashes::RELOAD.into(), reload);
     out
 }
 
@@ -305,9 +305,9 @@ pub(super) fn sbr_perpetual_motion(
         stat_bump = 15;
     };
     let mut out = HashMap::new();
-    out.insert(StatHashes::RELOAD.to_u32(), stat_bump);
-    out.insert(StatHashes::HANDLING.to_u32(), stat_bump);
-    out.insert(StatHashes::STABILITY.to_u32(), stat_bump);
+    out.insert(StatHashes::RELOAD.into(), stat_bump);
+    out.insert(StatHashes::HANDLING.into(), stat_bump);
+    out.insert(StatHashes::STABILITY.into(), stat_bump);
     out
 }
 
@@ -361,7 +361,7 @@ pub(super) fn sbr_perfect_float(
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value > 0 {
-        out.insert(StatHashes::AIRBORNE.to_u32(), 30);
+        out.insert(StatHashes::AIRBORNE.into(), 30);
     };
     out
 }
@@ -375,7 +375,7 @@ pub(super) fn sbr_pugilist(
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value > 0 {
-        out.insert(StatHashes::HANDLING.to_u32(), 30);
+        out.insert(StatHashes::HANDLING.into(), 30);
     };
     out
 }
@@ -422,7 +422,7 @@ pub(super) fn sbr_danger_zone(
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value > 0 {
-        out.insert(StatHashes::BLAST_RADIUS.to_u32(), 100);
+        out.insert(StatHashes::BLAST_RADIUS.into(), 100);
     };
     out
 }
@@ -534,7 +534,76 @@ pub(super) fn sbr_harmony(
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value > 0 {
-        out.insert(StatHashes::HANDLING.to_u32(), 15);
+        out.insert(StatHashes::HANDLING.into(), 15);
     }
     out
+}
+
+pub(super) fn sbr_surplus(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut out = HashMap::new();
+    if _value == 1 {
+        out.insert(StatHashes::HANDLING.into(), 10);
+        out.insert(StatHashes::RELOAD.into(), 5);
+        out.insert(StatHashes::STABILITY.into(), 5);
+    } else if _value == 2 {
+        out.insert(StatHashes::HANDLING.into(), 25);
+        out.insert(StatHashes::RELOAD.into(), 25);
+        out.insert(StatHashes::STABILITY.into(), 15);
+    } else if _value == 3 {
+        out.insert(StatHashes::HANDLING.into(), 50);
+        out.insert(StatHashes::RELOAD.into(), 50);
+        out.insert(StatHashes::STABILITY.into(), 25);
+    }
+    out
+}
+
+pub(super) fn hmr_surplus(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    let handling = if _value == 1 {
+        10
+    } else if _value == 2 {
+        25
+    } else if _value == 3 {
+        50
+    } else {
+        0
+    };
+    HandlingModifierResponse {
+        handling_stat_add: handling,
+        handling_swap_scale: 1.0,
+        handling_ads_scale: 1.0,
+    }
+}
+
+pub(super) fn rsmr_surplus(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> ReloadModifierResponse {
+    let reload = if _value == 1 {
+        5
+    } else if _value == 2 {
+        25
+    } else if _value == 3 {
+        50
+    } else {
+        0
+    };
+    ReloadModifierResponse {
+        reload_stat_add: reload,
+        reload_time_scale: 1.0,
+    }
 }

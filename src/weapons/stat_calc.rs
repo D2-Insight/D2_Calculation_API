@@ -44,7 +44,7 @@ impl Weapon {
     ) -> ReloadResponse {
         let reload_stat = self
             .stats
-            .get(&StatHashes::RELOAD.to_u32())
+            .get(&StatHashes::RELOAD.into())
             .unwrap_or(&Stat::new())
             .val();
         let mut default_chd_dt = HashMap::new();
@@ -112,12 +112,12 @@ impl Weapon {
     ) -> RangeResponse {
         let range_stat = self
             .stats
-            .get(&StatHashes::RANGE.to_u32())
+            .get(&StatHashes::RANGE.into())
             .unwrap_or(&Stat::new())
             .val();
         let zoom_stat = self
             .stats
-            .get(&StatHashes::ZOOM.to_u32())
+            .get(&StatHashes::ZOOM.into())
             .unwrap_or(&Stat::new())
             .val();
         let mut default_chd_dt = HashMap::new();
@@ -178,7 +178,7 @@ impl Weapon {
     ) -> HandlingResponse {
         let handling_stat = self
             .stats
-            .get(&StatHashes::HANDLING.to_u32())
+            .get(&StatHashes::HANDLING.into())
             .unwrap_or(&Stat::new())
             .val();
         let mut default_chd_dt = HashMap::new();
@@ -252,12 +252,12 @@ impl Weapon {
     ) -> AmmoResponse {
         let mag_stat = self
             .stats
-            .get(&StatHashes::MAGAZINE.to_u32())
+            .get(&StatHashes::MAGAZINE.into())
             .unwrap_or(&Stat::new())
             .val();
         let inv_stat = self
             .stats
-            .get(&StatHashes::INVENTORY_SIZE.to_u32())
+            .get(&StatHashes::INVENTORY_SIZE.into())
             .unwrap_or(&Stat::new())
             .val();
         let mut out;
@@ -349,13 +349,18 @@ impl Weapon {
         } else {
             0.0
         };
-        let burst_delay = (fd.burst_delay + firing_modifiers.burst_delay_add)* firing_modifiers.burst_delay_scale;
+        let burst_delay = (fd.burst_delay + firing_modifiers.burst_delay_add)
+            * firing_modifiers.burst_delay_scale;
         let burst_size = fd.burst_size + firing_modifiers.burst_size_add as i32;
         let inner_burst_delay = fd.inner_burst_delay * firing_modifiers.inner_burst_scale;
-        let raw_rpm = 60.0 / ((burst_delay+(inner_burst_delay*(burst_size as f64-1.0))+extra_charge_delay)/burst_size as f64);
+        let raw_rpm = 60.0
+            / ((burst_delay
+                + (inner_burst_delay * (burst_size as f64 - 1.0))
+                + extra_charge_delay)
+                / burst_size as f64);
         let rpm: f64;
         if self.firing_data.one_ammo {
-            rpm = raw_rpm/burst_size as f64
+            rpm = raw_rpm / burst_size as f64
         } else {
             rpm = raw_rpm
         };

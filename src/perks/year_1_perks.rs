@@ -90,8 +90,8 @@ pub(super) fn sbr_threat_detector(
         reload = 55;
     };
     let mut out = HashMap::new();
-    out.insert(StatHashes::STABILITY.to_u32(), stability);
-    out.insert(StatHashes::RELOAD.to_u32(), reload);
+    out.insert(StatHashes::STABILITY.into(), stability);
+    out.insert(StatHashes::RELOAD.into(), reload);
     out
 }
 
@@ -153,7 +153,7 @@ pub(super) fn fmr_desperado(
 ) -> FiringModifierResponse {
     let mut delay_mult = 1.0;
     let duration = if _is_enhanced { 7.0 } else { 6.0 };
-    if _input.time_total < duration && _value > 0{
+    if _input.time_total < duration && _value > 0 {
         delay_mult = 0.7;
     };
     FiringModifierResponse {
@@ -237,13 +237,13 @@ pub(super) fn sbr_field_prep(
     let mut out = HashMap::new();
     if _value > 0 {
         let reload = if _is_enhanced { 55 } else { 50 };
-        out.insert(StatHashes::RELOAD.to_u32(), reload);
+        out.insert(StatHashes::RELOAD.into(), reload);
     };
     let mut reserves = if _is_enhanced { 40 } else { 30 };
     if *_input.weapon_type == WeaponType::GRENADELAUNCHER {
         reserves -= 10;
     };
-    out.insert(StatHashes::INVENTORY_SIZE.to_u32(), reserves);
+    out.insert(StatHashes::INVENTORY_SIZE.into(), reserves);
     out
 }
 
@@ -293,8 +293,8 @@ pub(super) fn sbr_firmly_planted(
         stabiltiy = stabiltiy / 2;
     };
     let mut out = HashMap::new();
-    out.insert(StatHashes::HANDLING.to_u32(), handling);
-    out.insert(StatHashes::STABILITY.to_u32(), stabiltiy);
+    out.insert(StatHashes::HANDLING.into(), handling);
+    out.insert(StatHashes::STABILITY.into(), stabiltiy);
     out
 }
 
@@ -358,8 +358,8 @@ pub(super) fn sbr_hip_fire_grip(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
-    out.insert(StatHashes::AIM_ASSIST.to_u32(), 15);
-    out.insert(StatHashes::STABILITY.to_u32(), 25);
+    out.insert(StatHashes::AIM_ASSIST.into(), 15);
+    out.insert(StatHashes::STABILITY.into(), 25);
     out
 }
 
@@ -409,7 +409,7 @@ pub(super) fn sbr_moving_target(
 ) -> HashMap<u32, i32> {
     let aim_assist = if _is_enhanced { 11 } else { 10 };
     let mut out = HashMap::new();
-    out.insert(StatHashes::AIM_ASSIST.to_u32(), aim_assist);
+    out.insert(StatHashes::AIM_ASSIST.into(), aim_assist);
     out
 }
 
@@ -424,8 +424,8 @@ pub(super) fn sbr_opening_shot(
     let range = if _is_enhanced { 30 } else { 25 };
     let mut out = HashMap::new();
     if _value > 0 {
-        out.insert(StatHashes::AIM_ASSIST.to_u32(), aim_assist);
-        out.insert(StatHashes::RANGE.to_u32(), range);
+        out.insert(StatHashes::AIM_ASSIST.into(), aim_assist);
+        out.insert(StatHashes::RANGE.into(), range);
     }
     out
 }
@@ -458,7 +458,7 @@ pub(super) fn sbr_outlaw(
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     if _value > 0 {
-        out.insert(StatHashes::RELOAD.to_u32(), 70);
+        out.insert(StatHashes::RELOAD.into(), 70);
     }
     out
 }
@@ -507,8 +507,8 @@ pub(super) fn sbr_slide_shot(
     let range = if _is_enhanced { 25 } else { 20 };
     let mut out = HashMap::new();
     if _value > 0 {
-        out.insert(StatHashes::STABILITY.to_u32(), stability);
-        out.insert(StatHashes::RANGE.to_u32(), range);
+        out.insert(StatHashes::STABILITY.into(), stability);
+        out.insert(StatHashes::RANGE.into(), range);
     }
     out
 }
@@ -541,8 +541,8 @@ pub(super) fn sbr_slide_ways(
     let handling = if _is_enhanced { 25 } else { 20 };
     let mut out = HashMap::new();
     if _value > 0 {
-        out.insert(StatHashes::STABILITY.to_u32(), stability);
-        out.insert(StatHashes::HANDLING.to_u32(), handling);
+        out.insert(StatHashes::STABILITY.into(), stability);
+        out.insert(StatHashes::HANDLING.into(), handling);
     }
     out
 }
@@ -554,7 +554,7 @@ pub(super) fn hmr_slide_ways(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
-    let handling = if _value>0 {20} else {0};
+    let handling = if _value > 0 { 20 } else { 0 };
     HandlingModifierResponse {
         handling_stat_add: handling,
         ..Default::default()
@@ -591,7 +591,7 @@ pub(super) fn sbr_tap_the_trigger(
     }
     let mut out = HashMap::new();
     if _value > 0 {
-        out.insert(StatHashes::RANGE.to_u32(), stability);
+        out.insert(StatHashes::STABILITY.into(), stability);
     }
     out
 }
@@ -704,7 +704,7 @@ pub(super) fn sbr_backup_plan(
     };
     let mut out = HashMap::new();
     if _value > 0 {
-        out.insert(StatHashes::HANDLING.to_u32(), handling);
+        out.insert(StatHashes::HANDLING.into(), handling);
     }
     out
 }
@@ -746,4 +746,29 @@ pub(super) fn dmr_disruption_break(
         explosive_dmg_scale: 1.0 + damage_mult,
         crit_scale: 1.0,
     }
+}
+
+pub(super) fn hmr_quickdraw(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    HandlingModifierResponse {
+        handling_stat_add: 100,
+        ..Default::default()
+    }
+}
+
+pub(super) fn sbr_quickdraw(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut map = HashMap::new();
+    map.insert(StatHashes::HANDLING.into(), 100);
+    map
 }

@@ -187,7 +187,6 @@ pub enum Perks {
     QuickDraw,
     ImpactCasing,
     FullChoke,
-    AlloyMagazine,
     ResevoirBurst,
     OverUnder,
     ArchersTempo,
@@ -355,6 +354,7 @@ impl From<u32> for Perks {
             4071163871 => Perks::ThreatDetector,
             3161816588 => Perks::SlideShot,
             3400784728 => Perks::TripleTap,
+            1409312565 => Perks::TripleTap, //cloudstrike
             1645158859 => Perks::UnderPressure,
 
             //season 2 | year 1
@@ -382,6 +382,7 @@ impl From<u32> for Perks {
             1427256713 => Perks::ResevoirBurst,
             3708227201 => Perks::Surrounded,
             3722653512 => Perks::AirAssault,
+            3643424744 => Perks::OverFlow,
 
             //season 6 | year 2
             1771339417 => Perks::FiringLine,
@@ -416,6 +417,7 @@ impl From<u32> for Perks {
             469285294 => Perks::Recombination,
             1523832109 => Perks::Reconstruction,
             3436462433 => Perks::Surplus,
+            3967134106 => Perks::Surplus, // travelers chosen
 
             //season 13 | year 4
             951095735 => Perks::ImpulseAmplifier,
@@ -434,6 +436,7 @@ impl From<u32> for Perks {
             //season 15 | year 4
             1195158366 => Perks::Encore,
             2621346526 => Perks::Ensemble,
+            615063267 => Perks::Ensemble, //V-wing
             2610012052 => Perks::GoldenTricorn,
             438098033 => Perks::Harmony,
             1428297954 => Perks::PerpetualMotion,
@@ -628,6 +631,8 @@ fn dyanmic_perk_stats(
         Perks::DualSpeedReceiver => {
             sbr_dual_speed_receiver(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::Surplus => sbr_surplus(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::QuickDraw => sbr_quickdraw(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
 }
@@ -717,6 +722,7 @@ fn get_perk_dmr(
         Perks::ChargetimeMW => {
             dmr_accelerated_coils(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::FullChoke => dmr_full_choke(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::LiquidCoils => dmr_liquid_coils(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HakkeHeavyBurst => {
             dmr_hakke_heavy_burst(_input_data, val, enhanced, _pvp, _cached_data)
@@ -781,7 +787,7 @@ fn get_perk_rsmr(
     let enhanced = _perk.enhanced;
     match perk_enum {
         Perks::RapidFireFrame => rsmr_alloy_mag(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::AlloyMagazine => rsmr_alloy_mag(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::AlloyMag => rsmr_alloy_mag(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Roadborn => rsmr_roadborn(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::OphidianAspect => {
             rsmr_ophidian_aspects(_input_data, val, enhanced, _pvp, _cached_data)
@@ -826,6 +832,7 @@ fn get_perk_rsmr(
         }
         Perks::Fundamentals => rsmr_fundamentals(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ThinTheHerd => rsmr_thin_the_herd(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Surplus => rsmr_surplus(_input_data, val, enhanced, _pvp, _cached_data),
         _ => ReloadModifierResponse::default(),
     }
 }
@@ -951,6 +958,8 @@ fn get_perk_hmr(
         Perks::SlideWays => hmr_slide_ways(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Fundamentals => hmr_fundamentals(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Chimera => hmr_chimera(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Surplus => hmr_surplus(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::QuickDraw => hmr_quickdraw(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HandlingModifierResponse::default(),
     }
 }
@@ -1162,7 +1171,6 @@ fn get_perk_ror(
     let enhanced = _perk.enhanced;
     match perk_enum {
         Perks::Demolitionist => ror_demolitionist(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::VeistStinger => ror_veist_stinger(_input_data, val, enhanced, _pvp, _cached_data),
         _ => ReloadOverrideResponse::invalid(),
     }
 }

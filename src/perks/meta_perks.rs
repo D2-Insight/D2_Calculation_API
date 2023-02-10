@@ -8,10 +8,9 @@ use crate::{
 use super::{
     clamp,
     lib::{
-        CalculationInput, DamageModifierResponse, ExplosivePercentResponse,
-        ExtraDamageResponse, FiringModifierResponse, HandlingModifierResponse,
-        InventoryModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
-        ReloadModifierResponse,
+        CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
+        FiringModifierResponse, HandlingModifierResponse, InventoryModifierResponse,
+        MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
     },
 };
 
@@ -49,7 +48,7 @@ pub(super) fn epr_builtin(
     _cached_data: &mut HashMap<String, f64>,
 ) -> ExplosivePercentResponse {
     if *_input.weapon_type == WeaponType::GRENADELAUNCHER {
-        let blast_radius_struct = _input.stats.get(&StatHashes::BLAST_RADIUS.to_u32());
+        let blast_radius_struct = _input.stats.get(&StatHashes::BLAST_RADIUS.into());
         let blast_radius;
         if blast_radius_struct.is_none() {
             blast_radius = 0;
@@ -123,9 +122,9 @@ pub(super) fn sbr_targeting_mods(
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     if _value == 1 {
-        stats.insert(StatHashes::AIM_ASSIST.to_u32(), 10);
+        stats.insert(StatHashes::AIM_ASSIST.into(), 10);
     } else if _value > 1 {
-        stats.insert(StatHashes::AIM_ASSIST.to_u32(), 15);
+        stats.insert(StatHashes::AIM_ASSIST.into(), 15);
     };
     stats
 }
@@ -172,7 +171,7 @@ pub(super) fn sbr_reserve_mods(
         inv_buff = 0;
     };
     let mut stats = HashMap::new();
-    stats.insert(StatHashes::INVENTORY_SIZE.to_u32(), inv_buff);
+    stats.insert(StatHashes::INVENTORY_SIZE.into(), inv_buff);
     stats
 }
 
@@ -210,7 +209,7 @@ pub(super) fn sbr_loader_mods(
         if _value > 1 {
             reload_stat_buff += 5;
         };
-        stats.insert(StatHashes::RELOAD.to_u32(), reload_stat_buff);
+        stats.insert(StatHashes::RELOAD.into(), reload_stat_buff);
     };
     stats
 }

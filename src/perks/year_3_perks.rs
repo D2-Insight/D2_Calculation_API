@@ -34,13 +34,13 @@ pub(super) fn sbr_elemental_capacitor(
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     if _value == 1 {
-        stats.insert(StatHashes::STABILITY.to_u32(), 20);
+        stats.insert(StatHashes::STABILITY.into(), 20);
     } else if _value == 2 {
-        stats.insert(StatHashes::RELOAD.to_u32(), 50);
+        stats.insert(StatHashes::RELOAD.into(), 50);
     } else if _value == 3 {
-        stats.insert(StatHashes::HANDLING.to_u32(), 50);
+        stats.insert(StatHashes::HANDLING.into(), 50);
     } else if _value == 4 {
-        stats.insert(StatHashes::RECOIL_DIR.to_u32(), 20);
+        stats.insert(StatHashes::RECOIL_DIR.into(), 20);
     };
     stats
 }
@@ -89,8 +89,8 @@ pub(super) fn sbr_killing_wind(
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     if _value > 0 {
-        stats.insert(StatHashes::HANDLING.to_u32(), 40);
-        stats.insert(StatHashes::RANGE.to_u32(), 20);
+        stats.insert(StatHashes::HANDLING.into(), 40);
+        stats.insert(StatHashes::RANGE.into(), 20);
     };
     stats
 }

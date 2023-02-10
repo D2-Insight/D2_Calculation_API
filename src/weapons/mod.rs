@@ -74,6 +74,8 @@ pub struct Weapon {
 
     pub perks: HashMap<u32, Perk>,
     pub stats: HashMap<u32, Stat>,
+    #[serde(skip)]
+    pub perk_value_map: HashMap<u32, u32>,
 
     pub damage_mods: DamageMods,
     pub firing_data: FiringData,
@@ -104,6 +106,13 @@ impl Weapon {
             perk_list.push(perk.clone());
         }
         perk_list
+    }
+    pub fn perk_value_map_update(&self) -> HashMap<u32, u32> {
+        let mut perk_map: HashMap<u32, u32> = HashMap::new();
+        for (_key, perk) in &self.perks {
+            perk_map.insert(perk.hash, perk.value);
+        }
+        perk_map
     }
     pub fn change_perk_val(&mut self, _perk_hash: u32, _val: u32) {
         let perk_opt = self.perks.get_mut(&_perk_hash);
@@ -137,6 +146,7 @@ impl Weapon {
             self.intrinsic_hash,
             &self.firing_data,
             &self.stats,
+            &self.perk_value_map,
             &self.weapon_type,
             &self.ammo_type,
             self.firing_data.crit_mult,
@@ -148,6 +158,7 @@ impl Weapon {
             self.intrinsic_hash,
             &self.firing_data,
             &self.stats,
+            &self.perk_value_map,
             &self.weapon_type,
             &self.ammo_type,
             &self.damage_type,
@@ -170,6 +181,7 @@ impl Weapon {
             self.intrinsic_hash,
             &self.firing_data,
             &self.stats,
+            &self.perk_value_map,
             &self.weapon_type,
             &self.ammo_type,
             self.firing_data.damage,
@@ -186,10 +198,12 @@ impl Weapon {
         tmp
     }
     pub fn update_stats(&mut self) {
+        self.perk_value_map = self.perk_value_map_update();
         let input = CalculationInput::construct_static(
             self.intrinsic_hash,
             &self.firing_data,
             &self.stats,
+            &self.perk_value_map,
             &self.weapon_type,
             &self.ammo_type,
             self.firing_data.crit_mult,
@@ -222,6 +236,8 @@ impl Default for Weapon {
 
             perks: HashMap::new(),
             stats: HashMap::new(),
+            perk_value_map: HashMap::new(),
+
             damage_mods: DamageMods::default(),
             firing_data: FiringData::default(),
 

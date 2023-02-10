@@ -11,7 +11,7 @@ use super::{
     },
 };
 
-pub(super) fn ror_veist_stinger(
+pub(super) fn rr_veist_stinger(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
@@ -106,10 +106,10 @@ pub(super) fn sbr_alacrity(
     let reload = if _value > 0 { 50 } else { 0 };
     let stability = if _value > 0 { 20 } else { 0 };
     let aim_assit = if _value > 0 { 10 } else { 0 };
-    map.insert(StatHashes::RANGE.to_u32(), range);
-    map.insert(StatHashes::RELOAD.to_u32(), reload);
-    map.insert(StatHashes::STABILITY.to_u32(), stability);
-    map.insert(StatHashes::AIM_ASSIST.to_u32(), aim_assit);
+    map.insert(StatHashes::RANGE.into(), range);
+    map.insert(StatHashes::RELOAD.into(), reload);
+    map.insert(StatHashes::STABILITY.into(), stability);
+    map.insert(StatHashes::AIM_ASSIST.into(), aim_assit);
     map
 }
 
@@ -124,8 +124,8 @@ pub(super) fn sbr_ambush(
     let range = if _is_enhanced { 30 } else { 20 };
     let handling = if _is_enhanced { 40 } else { 20 };
     if _input.time_total < 2.0 && _value > 0 {
-        map.insert(StatHashes::RANGE.to_u32(), range);
-        map.insert(StatHashes::HANDLING.to_u32(), handling);
+        map.insert(StatHashes::RANGE.into(), range);
+        map.insert(StatHashes::HANDLING.into(), handling);
     }
     map
 }
@@ -192,8 +192,8 @@ pub(super) fn sbr_fluid_dynamics(
     let reload = if _is_enhanced { 35 } else { 30 };
     let stability = if _is_enhanced { 25 } else { 20 };
     if _input.shots_fired_this_mag <= _input.base_mag / 2.0 && _value > 0 {
-        map.insert(StatHashes::RELOAD.to_u32(), reload);
-        map.insert(StatHashes::STABILITY.to_u32(), stability);
+        map.insert(StatHashes::RELOAD.into(), reload);
+        map.insert(StatHashes::STABILITY.into(), stability);
     }
     map
 }
@@ -224,7 +224,7 @@ pub(super) fn sbr_quiet_moment(
 ) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
     if _value > 0 {
-        map.insert(StatHashes::RELOAD.to_u32(), 40);
+        map.insert(StatHashes::RELOAD.into(), 40);
     }
     map
 }
@@ -252,7 +252,7 @@ pub(super) fn sbr_bitter_spite(
 ) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
     let val = clamp(_value, 0, 5) as i32;
-    map.insert(StatHashes::RELOAD.to_u32(), val * 10);
+    map.insert(StatHashes::RELOAD.into(), val * 10);
     map
 }
 
@@ -284,8 +284,8 @@ pub(super) fn sbr_right_hook(
     let mut map = HashMap::new();
     let stat_bump = if _is_enhanced { 20 } else { 10 };
     if _value > 0 {
-        map.insert(StatHashes::AIM_ASSIST.to_u32(), stat_bump);
-        map.insert(StatHashes::RANGE.to_u32(), stat_bump);
+        map.insert(StatHashes::AIM_ASSIST.into(), stat_bump);
+        map.insert(StatHashes::RANGE.into(), stat_bump);
     }
     map
 }
