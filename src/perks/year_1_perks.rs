@@ -293,9 +293,11 @@ pub(super) fn sbr_firmly_planted(
         stabiltiy = stabiltiy / 2;
     };
     let mut out = HashMap::new();
-    out.insert(StatHashes::HANDLING.into(), handling);
-    out.insert(StatHashes::STABILITY.into(), stabiltiy);
-    out
+    if _value > 0 {
+        out.insert(StatHashes::HANDLING.into(), handling);
+        out.insert(StatHashes::STABILITY.into(), stabiltiy);
+    }
+        out
 }
 
 pub(super) fn hmr_firmly_planted(
@@ -309,10 +311,14 @@ pub(super) fn hmr_firmly_planted(
     if *_input.weapon_type == WeaponType::FUSIONRIFLE {
         handling = handling / 2;
     };
-    HandlingModifierResponse {
-        handling_stat_add: handling,
-        handling_ads_scale: 1.0,
-        handling_swap_scale: 1.0,
+    if _value > 0 {
+        HandlingModifierResponse {
+            handling_stat_add: handling,
+            handling_ads_scale: 1.0,
+            handling_swap_scale: 1.0,
+        }
+    } else {
+        HandlingModifierResponse::default()
     }
 }
 
@@ -358,8 +364,10 @@ pub(super) fn sbr_hip_fire_grip(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
-    out.insert(StatHashes::AIM_ASSIST.into(), 15);
-    out.insert(StatHashes::STABILITY.into(), 25);
+    if _value > 0 {
+        out.insert(StatHashes::AIM_ASSIST.into(), 15);
+        out.insert(StatHashes::STABILITY.into(), 25);
+    };
     out
 }
 
@@ -373,8 +381,7 @@ pub(super) fn rmr_hip_fire_grip(
     let mut hf_range_scale = 1.2;
     if *_input.weapon_type == WeaponType::FUSIONRIFLE
         || *_input.weapon_type == WeaponType::SHOTGUN
-        || _input.intrinsic_hash == 2770223582
-    //last word
+        || _input.intrinsic_hash == 2770223582 //last word
     {
         hf_range_scale = 1.0;
     };
@@ -757,6 +764,7 @@ pub(super) fn hmr_quickdraw(
 ) -> HandlingModifierResponse {
     HandlingModifierResponse {
         handling_stat_add: 100,
+        handling_swap_scale: 0.95,
         ..Default::default()
     }
 }
@@ -771,4 +779,22 @@ pub(super) fn sbr_quickdraw(
     let mut map = HashMap::new();
     map.insert(StatHashes::HANDLING.into(), 100);
     map
+}
+
+pub(super) fn hmr_pulse_monitor(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    if _value > 0 {
+        HandlingModifierResponse {
+            handling_stat_add: 50,
+            handling_swap_scale: 0.95,
+            ..Default::default()
+        }
+    } else {
+        HandlingModifierResponse::default()
+    }
 }

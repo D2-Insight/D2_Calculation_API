@@ -580,3 +580,37 @@ pub(super) fn rsmr_sleight_of_hand(
         ..Default::default()
     }
 }
+
+pub(super) fn hmr_shot_swap(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    let mut handling_mult = 1.0;
+    let mut handling = 0;
+    if _value > 0 {
+        handling_mult = 0.95;
+        handling = 100;
+    };
+    HandlingModifierResponse {
+        handling_stat_add: handling,
+        handling_ads_scale: 1.0,
+        handling_swap_scale: handling_mult,
+    }
+}
+
+pub(super) fn sbr_shot_swap(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut map = HashMap::new();
+    if _value > 0 {
+        map.insert(StatHashes::HANDLING.into(), 100);
+    }
+    map
+}

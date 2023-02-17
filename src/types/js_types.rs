@@ -21,11 +21,11 @@ use super::rs_types::{
 #[derive(Debug, Clone, Copy, Serialize)]
 #[wasm_bindgen(js_name = "HandlingResponse", inspectable)]
 pub struct JsHandlingResponse {
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(js_name = "readyTime", readonly)]
     pub ready_time: f64,
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(js_name = "stowTime", readonly)]
     pub stow_time: f64,
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(js_name = "adsTime", readonly)]
     pub ads_time: f64,
 }
 impl From<HandlingResponse> for JsHandlingResponse {
@@ -41,15 +41,15 @@ impl From<HandlingResponse> for JsHandlingResponse {
 #[derive(Debug, Clone, Copy, Serialize)]
 #[wasm_bindgen(js_name = "RangeResponse", inspectable)]
 pub struct JsRangeResponse {
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(js_name = "hipFalloffStart", readonly)]
     pub hip_falloff_start: f64,
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(js_name = "hipFalloffEnd", readonly)]
     pub hip_falloff_end: f64,
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(js_name = "adsFalloffStart", readonly)]
     pub ads_falloff_start: f64,
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(js_name = "adsFalloffEnd", readonly)]
     pub ads_falloff_end: f64,
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(js_name = "floorPercent", readonly)]
     pub floor_percent: f64,
 }
 impl From<RangeResponse> for JsRangeResponse {
@@ -67,9 +67,9 @@ impl From<RangeResponse> for JsRangeResponse {
 #[derive(Debug, Clone, Copy, Serialize)]
 #[wasm_bindgen(js_name = "ReloadResponse", inspectable)]
 pub struct JsReloadResponse {
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(js_name = "reloadTime", readonly)]
     pub reload_time: f64,
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(js_name = "ammoTime", readonly)]
     pub ammo_time: f64,
 }
 impl From<ReloadResponse> for JsReloadResponse {
@@ -84,9 +84,9 @@ impl From<ReloadResponse> for JsReloadResponse {
 #[derive(Debug, Clone, Copy, Serialize)]
 #[wasm_bindgen(js_name = "AmmoResponse", inspectable)]
 pub struct JsAmmoResponse {
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(js_name = "magSize" ,readonly)]
     pub mag_size: i32,
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(js_name = "reserveSize", readonly)]
     pub reserve_size: i32,
 }
 impl From<AmmoResponse> for JsAmmoResponse {
@@ -105,20 +105,20 @@ pub struct JsDpsResponse {
     pub dps_per_mag: Vec<f64>,
     #[wasm_bindgen(skip)]
     pub time_damage_data: Vec<(f64, f64)>,
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(js_name = "totalDamage", readonly)]
     pub total_damage: f64,
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(js_name = "totalTime", readonly)]
     pub total_time: f64,
-    #[wasm_bindgen(readonly)]
+    #[wasm_bindgen(js_name = "totalShots", readonly)]
     pub total_shots: i32,
 }
 #[wasm_bindgen(js_class = "DpsResponse")]
 impl JsDpsResponse {
-    #[wasm_bindgen(js_name = toString)]
+    #[wasm_bindgen(js_name = "toString")]
     pub fn to_string(self) -> String {
         format!("{:?}", self)
     }
-    #[wasm_bindgen(js_name = toJSON)]
+    #[wasm_bindgen(js_name = "toJSON")]
     pub fn to_json(self) -> String {
         serde_wasm_bindgen::to_value(&self)
             .unwrap()
@@ -126,12 +126,12 @@ impl JsDpsResponse {
             .unwrap()
     }
     ///Returns a list of tuples of time and damage
-    #[wasm_bindgen(getter)]
+    #[wasm_bindgen(getter, js_name = "timeDamageData")]
     pub fn time_damage_data(&self) -> JsValue {
         serde_wasm_bindgen::to_value(&self.time_damage_data).unwrap()
     }
     ///Returns a list of dps values for each magazine
-    #[wasm_bindgen(getter)]
+    #[wasm_bindgen(getter, js_name = "dpsPerMag")]
     pub fn dps_per_mag(&self) -> JsValue {
         serde_wasm_bindgen::to_value(&self.dps_per_mag).unwrap()
     }
@@ -156,11 +156,11 @@ pub struct JsTtkResponse {
 }
 #[wasm_bindgen(js_class = "TtkResponse")]
 impl JsTtkResponse {
-    #[wasm_bindgen(js_name = toString)]
+    #[wasm_bindgen(js_name = "toString")]
     pub fn to_string(self) -> String {
         format!("{:?}", self)
     }
-    #[wasm_bindgen(js_name = toJSON)]
+    #[wasm_bindgen(js_name = "toJSON")]
     pub fn to_json(self) -> String {
         serde_wasm_bindgen::to_value(&self)
             .unwrap()
@@ -176,16 +176,25 @@ impl JsTtkResponse {
 #[derive(Debug, Clone, Default, Serialize)]
 #[wasm_bindgen(js_name = "FiringResponse", inspectable)]
 pub struct JsFiringResponse {
+    #[wasm_bindgen(js_name = "pvpImpactDamage", readonly)]
     pub pvp_impact_damage: f64,
+    #[wasm_bindgen(js_name = "pvpExplosionDamage", readonly)]
     pub pvp_explosion_damage: f64,
+    #[wasm_bindgen(js_name = "pvpCritMult", readonly)]
     pub pvp_crit_mult: f64,
 
+    #[wasm_bindgen(js_name = "pveImpactDamage", readonly)]
     pub pve_impact_damage: f64,
+    #[wasm_bindgen(js_name = "pveExplosionDamage", readonly)]
     pub pve_explosion_damage: f64,
+    #[wasm_bindgen(js_name = "pveCritMult", readonly)]
     pub pve_crit_mult: f64,
 
+    #[wasm_bindgen(js_name = "burstDelay", readonly)]
     pub burst_delay: f64,
+    #[wasm_bindgen(js_name = "innerBurstDelay", readonly)]
     pub inner_burst_delay: f64,
+    #[wasm_bindgen(js_name = "burstSize", readonly)]
     pub burst_size: i32,
 
     pub rpm: f64,
@@ -210,13 +219,16 @@ impl From<FiringResponse> for JsFiringResponse {
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, Default)]
 #[wasm_bindgen(js_name = "Stat")]
 pub struct JsStat {
+    #[wasm_bindgen(js_name = "baseValue")]
     pub base_value: i32,
+    #[wasm_bindgen(js_name = "partValue")]
     pub part_value: i32,
+    #[wasm_bindgen(js_name = "traitValue")]
     pub trait_value: i32,
 }
 #[wasm_bindgen(js_class = "Stat")]
 impl JsStat {
-    #[wasm_bindgen(js_name = toString)]
+    #[wasm_bindgen(js_name = "toString")]
     pub fn to_string(self) -> String {
         format!("{:?}", self)
     }

@@ -532,31 +532,34 @@ pub(super) fn dmr_ravenous_beast(
     }
 }
 
-pub(super) fn sbr_low_catalyst(
+pub(super) fn sbr_release_the_wolves(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
+    let has_cat = _input.perk_value_map.contains_key(&431220296);
     let mut out = HashMap::new();
-    if _value == 1 {
-        out.insert(StatHashes::STABILITY.into(), 40);
-    }
-    if _value == 2 {
-        out.insert(StatHashes::RELOAD.into(), 100);
+    if has_cat {
+        if _value == 0 {
+            out.insert(StatHashes::STABILITY.into(), 40);
+        } else if _value == 1 {
+            out.insert(StatHashes::RELOAD.into(), 100);
+        }
     }
     out
 }
 
-pub(super) fn rsmr_low_catalyst(
+pub(super) fn rsmr_release_the_wolves(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
-    if _value == 1 {
+    let has_cat = _input.perk_value_map.contains_key(&431220296);
+    if _value == 1 && has_cat {
         ReloadModifierResponse {
             reload_stat_add: 100,
             reload_time_scale: 0.85,
@@ -784,14 +787,15 @@ pub(super) fn dmr_honed_edge(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut damage_mult = 1.0;
-    if _value == 1 {
+    let has_cat = _input.perk_value_map.contains_key(&529188544);
+    if _value == 2 {
         damage_mult = if _pvp { 1.183 } else { 2.0 };
-    } else if _value == 2 {
-        damage_mult = if _pvp { 1.412 } else { 3.0 };
     } else if _value == 3 {
-        damage_mult = if _pvp { 1.504 } else { 4.0 };
-    } else if _value == 4 {
+        damage_mult = if _pvp { 1.412 } else { 3.0 };
+    } else if _value == 4 && has_cat {
         damage_mult = if _pvp { 1.504 * 1.2 } else { 4.0 * 1.2 };
+    } else if _value == 4 {
+        damage_mult = if _pvp { 1.504 } else { 4.0 };
     };
     DamageModifierResponse {
         explosive_dmg_scale: damage_mult,

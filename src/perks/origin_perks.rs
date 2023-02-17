@@ -17,7 +17,7 @@ pub(super) fn rr_veist_stinger(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> ReloadOverrideResponse {
+) -> RefundResponse {
     let data = _cached_data.get("veist_stinger");
     let last_proc;
     if data.is_none() {
@@ -26,28 +26,23 @@ pub(super) fn rr_veist_stinger(
         last_proc = *data.unwrap();
     };
     let time_since_last_proc = _input.time_total - last_proc;
-    if time_since_last_proc >= 4.0 && _value < 99 {
-        println!("{:?}", _cached_data);
-        _cached_data.insert("veist_stinger".to_string(), _input.time_total);
-        ReloadOverrideResponse {
-            count_as_reload: false,
-            reload_time: 0.0,
-            ammo_to_reload: (_input.base_mag / 4.0).ceil() as i32,
-            priority: 9,
-            uses_ammo: true,
-            valid: true,
-        }
-    } else if _value >= 99 {
-        ReloadOverrideResponse {
-            count_as_reload: false,
-            reload_time: 0.0,
-            ammo_to_reload: _input.base_mag as i32,
-            priority: 9,
-            uses_ammo: true,
-            valid: true,
+    if time_since_last_proc >= 4.0 && _value > 0 {
+        let max_refund = _input.base_mag-_input.curr_mag;
+        let refund_amount = (_input.base_mag/4.0).ceil() as i32;
+        if max_refund > 0.0 {
+            _cached_data.insert("veist_stinger".to_string(), _input.time_total);
+            let final_refund_ammount = clamp(refund_amount, 0, max_refund as i32);
+            return RefundResponse{
+                requirement: 1,
+                crit: false,
+                refund_mag: refund_amount,
+                refund_reserves: -final_refund_ammount,
+            }
+        } else {
+            RefundResponse::default()
         }
     } else {
-        ReloadOverrideResponse::invalid()
+        RefundResponse::default()
     }
 }
 
@@ -314,5 +309,87 @@ pub(super) fn mmr_runneth_over(
     MagazineModifierResponse {
         magazine_scale: val * 0.1,
         ..Default::default()
+    }
+}
+
+
+pub(super) fn sbr_tex_balanced_stock(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut map = HashMap::new();
+    if _value > 0 {
+        map.insert(StatHashes::HANDLING.into(), 50);
+        map.insert(StatHashes::RELOAD.into(), 75);
+    }
+    map
+}
+
+pub(super) fn hmr_tex_balanced_stock(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    if _value > 0 {
+        HandlingModifierResponse {
+            handling_stat_add: 50,
+            ..Default::default()
+        }
+    } else {
+        HandlingModifierResponse::default()
+    }
+}
+
+pub(super) fn rsmr_tex_balanced_stock(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> ReloadModifierResponse {
+    if _value > 0 {
+        ReloadModifierResponse {
+            reload_stat_add: 75,
+            reload_time_scale: 0.9,
+            ..Default::default()
+        }
+    } else {
+        ReloadModifierResponse::default()
+    }
+}
+
+pub(super) fn sbr_suros_synergy(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut out = HashMap::new();
+    if _value > 0 {
+        out.insert(StatHashes::HANDLING.into(), 40);
+    }
+    out
+}
+
+pub(super) fn hmr_suros_synergy(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    if _value > 0 {
+        HandlingModifierResponse {
+            handling_stat_add: 40,
+            ..Default::default()
+        }
+    } else {
+        HandlingModifierResponse::default()
     }
 }

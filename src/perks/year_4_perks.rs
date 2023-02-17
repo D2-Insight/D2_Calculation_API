@@ -290,6 +290,19 @@ pub(super) fn rsmr_impulse_amplifier(
     }
 }
 
+pub(super) fn sbr_impulse_amplifier(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let reload = if _is_enhanced { 15 } else { 10 };
+    let mut out = HashMap::new();
+    out.insert(StatHashes::RELOAD.into(), reload);
+    out
+}
+
 pub(super) fn sbr_perpetual_motion(
     _input: &CalculationInput,
     _value: u32,
@@ -605,5 +618,50 @@ pub(super) fn rsmr_surplus(
     ReloadModifierResponse {
         reload_stat_add: reload,
         reload_time_scale: 1.0,
+    }
+}
+
+pub(super) fn sbr_heating_up(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let val = clamp(_value, 0, 2) as i32;
+    let mut out  = HashMap::new();
+    out.insert(StatHashes::RECOIL_DIR.into(), 20*val);
+    out.insert(StatHashes::STABILITY.into(), 15*val);
+    out
+}
+
+pub(super) fn sbr_tunnel_vision(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut out = HashMap::new();
+    if _value > 0 {
+        out.insert(StatHashes::AIM_ASSIST.into(), 20);
+    }
+    out
+}
+
+pub(super) fn hmr_tunnel_vision(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    if _value > 0 {
+        HandlingModifierResponse {
+            handling_ads_scale: 0.85,
+            ..Default::default()
+        }
+    } else {
+        HandlingModifierResponse::default()
     }
 }

@@ -46,11 +46,16 @@ fn get_data_pointers(_weapon_type_id: u8, _intrinsic_hash: u32,) -> Result<DataP
 
 
 impl Weapon {
-    pub fn generate_weapon(_hash: u32, _weapon_type_id: u8, _intrinsic_hash: u32, _ammo_type_id: u32, _damage_type_id: u32) -> Result<Weapon, ()> {
-
+    pub fn generate_weapon(
+        _hash: u32,
+        _weapon_type_id: u8,
+        _intrinsic_hash: u32,
+        _ammo_type_id: u32,
+        _damage_type_id: u32,
+    ) -> Result<Weapon, ()> {
         let data_pointer_result = get_data_pointers(_weapon_type_id, _intrinsic_hash);
         if data_pointer_result.is_err() {
-            return Err(())
+            return Err(());
         }
         let data_pointer = data_pointer_result.unwrap();
 
@@ -66,21 +71,45 @@ impl Weapon {
 
         let ammo_formula: AmmoFormula = AMMO_DATA[data_pointer.a].clone();
 
-        let weapon_type = WeaponType::from_u32(_weapon_type_id as u32);
-        let ammo_type = AmmoType::from_u32(_ammo_type_id);
-        let damage_type = DamageType::from_u32(_damage_type_id);
+        let weapon_type = WeaponType::from(_weapon_type_id as u32);
+        let ammo_type = AmmoType::from(_ammo_type_id);
+        let damage_type = DamageType::from(_damage_type_id);
         let intrinsic_alias = enhanced_check(_intrinsic_hash).0;
         Ok(Weapon {
             is_pvp: false,
             intrinsic_hash: _intrinsic_hash,
             hash: _hash,
-            perks: HashMap::from(
-                [
-                    (intrinsic_alias, Perk{stat_buffs:HashMap::new(), enhanced: false, value: 0, hash:intrinsic_alias}),
-                    (0, Perk{stat_buffs:HashMap::new(), enhanced: false, value: 0, hash:0})
-                ]
-            ),
+            perks: HashMap::from([
+                (
+                    intrinsic_alias,
+                    Perk {
+                        stat_buffs: HashMap::new(),
+                        enhanced: false,
+                        value: 0,
+                        hash: intrinsic_alias,
+                    },
+                ),
+                (
+                    0,
+                    Perk {
+                        stat_buffs: HashMap::new(),
+                        enhanced: false,
+                        value: 0,
+                        hash: 0,
+                    },
+                ),
+            ]),
             stats: HashMap::new(),
+            perk_value_map: HashMap::from([
+                (
+                    intrinsic_alias,
+                    0
+                ),
+                (
+                    0,
+                    0
+                ),
+            ]),
             damage_mods,
             ammo_formula,
             firing_data,

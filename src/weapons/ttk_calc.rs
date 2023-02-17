@@ -97,7 +97,7 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 &mut perssistent_data,
             );
             let tmp_range_data =
-                _weapon.calc_range_falloff(Some(calc_input), Some(&mut perssistent_data));
+                _weapon.calc_range_falloff(Some(calc_input.clone()), Some(&mut perssistent_data));
             if tmp_range_data.ads_falloff_start > 998.0 {
                 opt_infnite_range = true;
             } else {
@@ -149,6 +149,9 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
             } else {
                 opt_headshots += 1;
                 opt_damage_dealt += body_damage + head_diff;
+                if _weapon.weapon_type == WeaponType::BOW {
+                    opt_time_taken += _weapon.calc_reload_time(Some(calc_input.clone()), Some(&mut perssistent_data)).reload_time;
+                }
             }
         }
         let expolsive_percent = explosion_dmg / (impact_dmg + explosion_dmg);

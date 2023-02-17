@@ -240,10 +240,12 @@ pub(super) fn sbr_rapid_hit(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
-    let values = vec![0, 5, 30, 35, 45, 60];
+    let rel_values = vec![0, 5, 30, 35, 45, 60];
+    let stab_values = vec![0, 2, 12, 14, 18, 25];
     let entry_to_get = clamp(_value + _input.shots_fired_this_mag as u32, 0, 5);
     let mut stats = HashMap::new();
-    stats.insert(StatHashes::RELOAD.into(), values[entry_to_get as usize]);
+    stats.insert(StatHashes::RELOAD.into(), rel_values[entry_to_get as usize]);
+    stats.insert(StatHashes::STABILITY.into(), stab_values[entry_to_get as usize]);
     stats
 }
 
@@ -431,4 +433,35 @@ pub(super) fn sbr_explosive_light(
         out.insert(StatHashes::BLAST_RADIUS.into(), 100);
     };
     out
+}
+
+pub(super) fn sbr_eye_of_the_storm(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut out = HashMap::new();
+    if _value > 0 {
+        out.insert(StatHashes::HANDLING.into(), 30);
+    };
+    out
+}
+
+pub(super) fn hmr_eye_of_the_storm(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    if _value > 0 {
+        HandlingModifierResponse {
+            handling_stat_add: 30,
+            ..Default::default()
+        }
+    } else {
+        HandlingModifierResponse::default()
+    }
 }

@@ -184,6 +184,7 @@ pub enum Perks {
     MinorSpec,
     MajorSpec,
     BigOnesSpec,
+    AssaultMag,
     QuickDraw,
     ImpactCasing,
     FullChoke,
@@ -269,6 +270,8 @@ pub enum Perks {
     DarkDescent,
     SleeperCatalyst,
     TargetAquired,
+    PulseMonitor,
+    EyeOfTheStorm,
 }
 
 impl From<u32> for Perks {
@@ -356,6 +359,7 @@ impl From<u32> for Perks {
             3400784728 => Perks::TripleTap,
             1409312565 => Perks::TripleTap, //cloudstrike
             1645158859 => Perks::UnderPressure,
+            972757866 => Perks::PulseMonitor,
 
             //season 2 | year 1
             //lmao bozo
@@ -396,6 +400,7 @@ impl From<u32> for Perks {
             //season 7 | year 2
             205890336 => Perks::UnderDog,
             3194351027 => Perks::ExplosiveLight,
+            699525795 => Perks::EyeOfTheStorm,
 
             //season 8 | year 3
             //TODO
@@ -516,6 +521,8 @@ impl From<u32> for Perks {
             431220296 => Perks::LordOfWolvesCatalyst,
             299272945 => Perks::ReleaseTheWolves,
             2656694271 => Perks::SwoopingTalons,
+            2620589274 => Perks::Fundamentals, //others
+            3081173348 => Perks::Fundamentals, //borealis
 
             //heavy exotic
             4148158229 => Perks::ReignHavoc,
@@ -622,8 +629,8 @@ fn dyanmic_perk_stats(
         Perks::ExplosiveLight => {
             sbr_explosive_light(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::LordOfWolvesCatalyst => {
-            sbr_low_catalyst(_input_data, val, enhanced, _pvp, _cached_data)
+        Perks::ReleaseTheWolves => {
+            sbr_release_the_wolves(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::Fundamentals => sbr_fundamentals(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ThinTheHerd => sbr_thin_the_herd(_input_data, val, enhanced, _pvp, _cached_data),
@@ -633,6 +640,19 @@ fn dyanmic_perk_stats(
         }
         Perks::Surplus => sbr_surplus(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::QuickDraw => sbr_quickdraw(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::TexBalancedStock => {
+            sbr_tex_balanced_stock(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::EyeOfTheStorm => {
+            sbr_eye_of_the_storm(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::HeatingUp => sbr_heating_up(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ImpulseAmplifier => {
+            sbr_impulse_amplifier(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::SurosSynergy => sbr_suros_synergy(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::TunnelVision => sbr_tunnel_vision(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ShotSwap => sbr_shot_swap(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
 }
@@ -827,12 +847,15 @@ fn get_perk_rsmr(
         Perks::SleightOfHand => {
             rsmr_sleight_of_hand(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::LordOfWolvesCatalyst => {
-            rsmr_low_catalyst(_input_data, val, enhanced, _pvp, _cached_data)
+        Perks::ReleaseTheWolves => {
+            rsmr_release_the_wolves(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::Fundamentals => rsmr_fundamentals(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ThinTheHerd => rsmr_thin_the_herd(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Surplus => rsmr_surplus(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::TexBalancedStock => {
+            rsmr_tex_balanced_stock(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => ReloadModifierResponse::default(),
     }
 }
@@ -864,8 +887,6 @@ fn get_perk_fmr(
     let enhanced = _perk.enhanced;
     match perk_enum {
         Perks::Roadborn => fmr_roadborn(_input_data, val, enhanced, _pvp, _cached_data),
-        // Perks::RatPack => fmr_rat_pack(_input_data, val, enhanced, _pvp),
-        // Perks::RideTheBull
         Perks::Desperado => fmr_desperado(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ArchersTempo => fmr_archers_tempo(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Adagio => fmr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
@@ -890,6 +911,7 @@ fn get_perk_fmr(
         Perks::ReleaseTheWolves => {
             fmr_release_the_wolves(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::AssaultMag => fmr_assault_mag(_input_data, val, enhanced, _pvp, _cached_data),
         _ => FiringModifierResponse::default(),
     }
 }
@@ -960,6 +982,12 @@ fn get_perk_hmr(
         Perks::Chimera => hmr_chimera(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Surplus => hmr_surplus(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::QuickDraw => hmr_quickdraw(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::TexBalancedStock => hmr_tex_balanced_stock(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::PulseMonitor => hmr_pulse_monitor(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::EyeOfTheStorm => hmr_eye_of_the_storm(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SurosSynergy => hmr_suros_synergy(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::TunnelVision => hmr_tunnel_vision(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ShotSwap => hmr_shot_swap(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HandlingModifierResponse::default(),
     }
 }
@@ -1109,6 +1137,7 @@ fn get_perk_refund(
         Perks::FourthTimesTheCharm => {
             rr_fourth_times(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::VeistStinger => rr_veist_stinger(_input_data, val, enhanced, _pvp, _cached_data),
         _ => RefundResponse::default(),
     }
 }

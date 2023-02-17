@@ -506,3 +506,29 @@ pub(super) fn fmr_slower_string_t2(
         ..Default::default()
     }
 }
+
+pub(super) fn fmr_assault_mag(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> FiringModifierResponse {
+    let hash = _input.intrinsic_hash;
+    let tick = 1.0/30.0;
+    let tick_amount = if hash == 904 {
+        3.0
+    } else if hash == 906 {
+        2.0
+    } else {
+        1.0
+    };
+    if _input.weapon_type == &WeaponType::SHOTGUN {
+        FiringModifierResponse {
+            burst_delay_add: -(tick * tick_amount),
+            ..Default::default()
+        }
+    } else {
+        FiringModifierResponse::default()
+    }
+}

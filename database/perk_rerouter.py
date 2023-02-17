@@ -16,14 +16,13 @@ for i in dct:
 intrinsic_map = {
     901: ["High-Impact Frame"],
     902: ["VEIST Rapid-Fire", "Rapid-Fire Frame"],
-    903: ["Adaptive Frame"],
-    904: ["Aggressive Frame"],
-    905: ["Lightweight Frame"],
+    903: ["Adaptive Frame", "Adaptive Glaive"],
+    904: ["Aggressive Frame", "Aggressive Glaive"],
+    905: ["Lightweight Frame", "MIDA Synergy"],
     906: ["Precision Frame", "Häkke Precision Frame"],
     907: ["Double Fire"],
 
-    911: ["MIDA Synergy"],
-    912: ["Legacy PR-55 Frame"],
+    911: ["Legacy PR-55 Frame"],
 }
 
 manifest = requests.get(API_ROOT + "Manifest/", headers=API_KEY_HEADER).json()

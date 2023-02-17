@@ -88,6 +88,7 @@ pub fn weapon_as_string() -> Result<String, JsValue> {
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "weaponJSON")]
+///Returns the weapon as a JSON structure, snake case fields
 pub fn weapon_as_json() -> Result<JsValue, JsValue> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     Ok(serde_wasm_bindgen::to_value(&weapon).unwrap())
