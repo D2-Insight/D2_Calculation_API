@@ -33,14 +33,17 @@ pub(super) fn sbr_elemental_capacitor(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
+    let ev = if _is_enhanced { 5 } else { 0 };
     if _value == 1 {
-        stats.insert(StatHashes::STABILITY.into(), 20);
+        stats.insert(StatHashes::STABILITY.into(), 20+ev);
     } else if _value == 2 {
-        stats.insert(StatHashes::RELOAD.into(), 50);
+        stats.insert(StatHashes::RELOAD.into(), 50+ev);
     } else if _value == 3 {
-        stats.insert(StatHashes::HANDLING.into(), 50);
+        stats.insert(StatHashes::HANDLING.into(), 50+ev);
     } else if _value == 4 {
-        stats.insert(StatHashes::RECOIL_DIR.into(), 20);
+        stats.insert(StatHashes::RECOIL_DIR.into(), 20+ev);
+    } else if _value == 5 {
+        stats.insert(StatHashes::AIRBORNE.into(), 25+ev);
     };
     stats
 }
@@ -54,12 +57,11 @@ pub(super) fn hmr_elemental_capacitor(
 ) -> HandlingModifierResponse {
     let mut handling = 0;
     if _value == 3 {
-        handling = 50;
+        handling = if _is_enhanced { 55 } else { 50 };
     };
     HandlingModifierResponse {
         handling_stat_add: handling,
-        handling_ads_scale: 1.0,
-        handling_swap_scale: 1.0,
+        ..Default::default()
     }
 }
 
@@ -72,11 +74,11 @@ pub(super) fn rsmr_elemental_capacitor(
 ) -> ReloadModifierResponse {
     let mut reload = 0;
     if _value == 2 {
-        reload = 50;
+        reload = if _is_enhanced { 55 } else { 50 };
     };
     ReloadModifierResponse {
         reload_stat_add: reload,
-        reload_time_scale: 1.0,
+        ..Default::default()
     }
 }
 

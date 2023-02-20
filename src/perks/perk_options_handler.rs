@@ -250,7 +250,6 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::CranialSpike => Some(PerkOptionData::stacking(5)),
         Perks::AgersCall => Some(PerkOptionData::toggle()),
         Perks::LagragianSight => Some(PerkOptionData::toggle()),
-        Perks::RatPack => Some(PerkOptionData::stacking(5)),
         Perks::StringofCurses => Some(PerkOptionData::stacking(5)),
         Perks::WormsHunger => Some(PerkOptionData::stacking(20)),
         Perks::RocketTracers => Some(PerkOptionData::static_()),
@@ -293,6 +292,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::DarkDescent => Some(PerkOptionData::toggle()),
         Perks::SleeperCatalyst => Some(PerkOptionData::static_()),
         Perks::TargetAquired => Some(PerkOptionData::toggle()),
+        Perks::RatPack => Some(PerkOptionData::stacking_min(5,1)),
 
 
         Perks::DexterityMod => Some(PerkOptionData::stacking(2)),
