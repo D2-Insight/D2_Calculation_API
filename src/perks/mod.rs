@@ -912,6 +912,9 @@ fn get_perk_fmr(
             fmr_release_the_wolves(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::AssaultMag => fmr_assault_mag(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FullAutoTrigger => {
+            fmr_full_auto_trigger(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => FiringModifierResponse::default(),
     }
 }

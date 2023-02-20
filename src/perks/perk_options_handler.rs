@@ -272,7 +272,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::SwoopingTalons => Some(PerkOptionData::toggle()),
         Perks::CalculatedBalance => Some(PerkOptionData::toggle()),
         Perks::RavenousBeast => Some(PerkOptionData::toggle()),
-        Perks::LordOfWolvesCatalyst => Some(PerkOptionData::toggle()),
+        Perks::LordOfWolvesCatalyst => Some(PerkOptionData::static_()),
         Perks::ReleaseTheWolves => Some(PerkOptionData::toggle()),
         Perks::Fundamentals => Some(PerkOptionData::options(
             ["Void","Solar","Arc"].to_vec())),

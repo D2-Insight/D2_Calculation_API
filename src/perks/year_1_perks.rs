@@ -322,7 +322,7 @@ pub(super) fn hmr_firmly_planted(
     }
 }
 
-pub(super) fn frm_full_auto_trigger(
+pub(super) fn fmr_full_auto_trigger(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
