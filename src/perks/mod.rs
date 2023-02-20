@@ -661,6 +661,7 @@ fn dyanmic_perk_stats(
         Perks::ShotSwap => sbr_shot_swap(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::UnderDog => sbr_underdog(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::UnderPressure => sbr_under_pressure(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Adagio => sbr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
 }
@@ -1126,6 +1127,7 @@ fn get_perk_rmr(
         Perks::DualSpeedReceiver => {
             rmr_dual_speed_receiver(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::Adagio => rmr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
         _ => RangeModifierResponse::default(),
     }
 }

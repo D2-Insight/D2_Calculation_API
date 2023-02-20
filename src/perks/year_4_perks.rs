@@ -18,15 +18,12 @@ pub(super) fn dmr_adagio(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    let mut duration = 0.0;
-    if _value > 1 {
-        duration = if _is_enhanced { 8.0 } else { 7.0 };
-    }
+    let duration = if _is_enhanced { 8.0 } else { 7.0 };
     let mut dmg_boost = 0.3;
     if *_input.weapon_type == WeaponType::BOW || *_input.weapon_type == WeaponType::SHOTGUN {
         dmg_boost = 0.2;
     };
-    if _input.time_total >= duration {
+    if _input.time_total > duration || _value == 0{
         dmg_boost = 0.0;
     };
     DamageModifierResponse {
@@ -45,7 +42,7 @@ pub(super) fn fmr_adagio(
 ) -> FiringModifierResponse {
     let duration = if _is_enhanced { 8.0 } else { 7.0 };
     let mut firing_slow = 1.2;
-    if _input.time_total >= duration {
+    if _input.time_total > duration || _value == 0 {
         firing_slow = 1.0;
     };
     FiringModifierResponse {
@@ -53,6 +50,40 @@ pub(super) fn fmr_adagio(
         burst_delay_add: 0.0,
         inner_burst_scale: firing_slow,
         burst_size_add: 0.0,
+    }
+}
+
+pub(super) fn sbr_adagio(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut map = HashMap::new();
+    let duration = if _is_enhanced { 8.0 } else { 7.0 };
+    if  _input.time_total < duration || _value > 0 {
+        map.insert(StatHashes::RANGE.into(), 10);
+    }
+    map
+}
+
+pub(super) fn rmr_adagio(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> RangeModifierResponse {
+    let range_boost: i32;
+    if _value > 0 {
+        range_boost = 10;
+    } else {
+        range_boost = 0;
+    };
+    RangeModifierResponse {
+        range_stat_add: range_boost,
+        ..Default::default()
     }
 }
 
