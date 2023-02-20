@@ -272,6 +272,8 @@ pub enum Perks {
     TargetAquired,
     PulseMonitor,
     EyeOfTheStorm,
+    FullStop,
+    RideTheBull,
 }
 
 impl From<u32> for Perks {
@@ -305,6 +307,7 @@ impl From<u32> for Perks {
             689005463 => Perks::AcceleratedCoils,
             3128594062 => Perks::ChargetimeMW,
             3032599245 => Perks::DisorientingGrenades,
+            791862061 => Perks::AssaultMag,
 
             //mods
             1334978104 => Perks::QuickAccessSling,
@@ -339,6 +342,7 @@ impl From<u32> for Perks {
             1600092898 => Perks::BackupPlan,
             2869569095 => Perks::FieldPrep,
             3425386926 => Perks::Rampage,
+            3551326236 => Perks::Rampage, //huckleberry
             47981717 => Perks::OpeningShot,
             588594999 => Perks::MovingTarget,
             2010801679 => Perks::AmbitiousAssassin,
@@ -502,6 +506,8 @@ impl From<u32> for Perks {
             944506345 => Perks::SurosLegacy,
             1378047685 => Perks::SpinningUp,
             4012962526 => Perks::DualSpeedReceiver,
+            2984682260 => Perks::FullStop,
+            630329983 => Perks::RideTheBull,
 
             //energy exotic
             2881100038 => Perks::LagragianSight,
@@ -780,6 +786,10 @@ fn get_perk_dmr(
         Perks::StormAndStress => {
             dmr_storm_and_stress(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::FullStop => dmr_full_stop(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ParacausalShot => {
+            dmr_paracausal_shot(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => DamageModifierResponse::new(),
     }
 }
@@ -918,6 +928,11 @@ fn get_perk_fmr(
         Perks::FullAutoTrigger => {
             fmr_full_auto_trigger(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::RatPack => fmr_rat_pack(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SpinningUp => fmr_spinning_up(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RideTheBull => {
+            fmr_ride_the_bull(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => FiringModifierResponse::default(),
     }
 }
@@ -1033,6 +1048,7 @@ fn get_perk_mmr(
         }
         Perks::Reconstruction => mmr_reconstruction(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::RunnethOver => mmr_runneth_over(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RatPack => mmr_rat_pack(_input_data, val, enhanced, _pvp, _cached_data),
         _ => MagazineModifierResponse::default(),
     }
 }

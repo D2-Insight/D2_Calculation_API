@@ -12,33 +12,6 @@ use super::{
     },
 };
 
-pub(super) fn rsmr_alloy_mag(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> ReloadModifierResponse {
-    //also works for rapid fire frames
-    ReloadModifierResponse {
-        reload_stat_add: 0,
-        reload_time_scale: 0.85,
-    }
-}
-
-pub(super) fn hmr_swap_mag(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HandlingModifierResponse {
-    HandlingModifierResponse {
-        handling_stat_add: 0,
-        handling_ads_scale: 1.0,
-        handling_swap_scale: 0.9,
-    }
-}
 
 pub(super) fn dmr_paracausal_shot(
     _input: &CalculationInput,
@@ -47,10 +20,12 @@ pub(super) fn dmr_paracausal_shot(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    let bufflist = vec![1.0, 2.92, 3.0, 3.4, 4.25, 6.67, 10.71, 17.36];
+    let bufflist_pve = vec![1.0, 3.92, 4.0, 4.4, 5.25, 7.67, 11.71, 18.36];
+    let bufflist_pvp = vec![1.0, 1.01, 1.03, 1.13, 1.41, 1.96, 3.0, 4.73];
     let mut damage_buff = 1.0;
     if _input.curr_mag == 1.0 {
         let num_of_crits = clamp(_input.shots_fired_this_mag as i32, 0, 7);
+        let bufflist = if _pvp { bufflist_pvp } else { bufflist_pve };
         damage_buff = bufflist[num_of_crits as usize];
     };
     DamageModifierResponse {
@@ -897,18 +872,74 @@ pub(super) fn sbr_dual_speed_receiver(
     out
 }
 
-// pub(super) fn fmr_spinning_up(
-//     _input: &CalculationInput,
-//     _value: u32,
-//     _is_enhanced: bool,
-//     _pvp: bool,
-//     _cached_data: &mut HashMap<String, f64>,
-// ) -> FiringModifierResponse {
-//     let mut fire_rate_mult = 1.0;
-//     if _input.total_shots_fired == 0.0 {
-//         if
-//     };
-//     FiringModifierResponse {
-//         burst_delay_scale: fire_rate_mult,
-//     }
-// }
+pub(super) fn dmr_full_stop(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    DamageModifierResponse {
+        explosive_dmg_scale: 1.0,
+        impact_dmg_scale: 1.0,
+        crit_scale: if !_pvp { 2.9 } else { 1.0 },
+    }
+}
+
+pub(super) fn fmr_rat_pack(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> FiringModifierResponse {
+    let val = clamp(_value - 1, 0, 4);
+    FiringModifierResponse{
+        burst_delay_add: val as f64 * -0.625,
+        ..Default::default()
+    }
+}
+
+pub(super) fn mmr_rat_pack(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> MagazineModifierResponse {
+    let val = clamp(_value - 1, 0, 4);
+    MagazineModifierResponse{
+        magazine_add: val as f64 * if val == 4 { 2.25 } else { 2.0 },
+        ..Default::default()
+    }
+}
+
+pub(super) fn fmr_ride_the_bull(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> FiringModifierResponse {
+    let extra_value = _input.shots_fired_this_mag as f64 / 10.0;
+    let val = clamp(_value + extra_value as u32, 0, 2);
+    FiringModifierResponse{
+        burst_delay_add: val as f64 * -0.25,
+        ..Default::default()
+    }
+}
+
+pub(super) fn fmr_spinning_up(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> FiringModifierResponse {
+    let extra_value = _input.shots_fired_this_mag as f64 / 12.0;
+    let val = clamp(_value + extra_value as u32, 0, 2);
+    FiringModifierResponse{
+        burst_delay_add: val as f64 * -0.5,
+        ..Default::default()
+    }
+}

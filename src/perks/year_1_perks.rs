@@ -611,14 +611,18 @@ pub(super) fn dmr_rampage(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let val = clamp(_value, 0, 3);
-    let mut damage_mult = 1.1_f64.powi(val as i32);
+    let mut damage_mult = 1.1_f64.powi(val as i32) - 1.0;
     let duration = if _is_enhanced { 5.0 } else { 4.0 };
     if _input.time_total > duration {
         damage_mult = 0.0;
     };
+    if _input.perk_value_map.contains_key(&630329983) && !_pvp {
+        //huckleberry
+        damage_mult *= 2.0;
+    }
     DamageModifierResponse {
-        impact_dmg_scale: damage_mult,
-        explosive_dmg_scale: damage_mult,
+        impact_dmg_scale: 1.0 + damage_mult,
+        explosive_dmg_scale: 1.0 + damage_mult,
         crit_scale: 1.0,
     }
 }

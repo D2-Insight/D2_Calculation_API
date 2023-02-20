@@ -14,6 +14,35 @@ use super::{
     },
 };
 
+
+pub(super) fn rsmr_alloy_mag(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> ReloadModifierResponse {
+    //also works for rapid fire frames
+    ReloadModifierResponse {
+        reload_stat_add: 0,
+        reload_time_scale: 0.85,
+    }
+}
+
+pub(super) fn hmr_swap_mag(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    HandlingModifierResponse {
+        handling_stat_add: 0,
+        handling_ads_scale: 1.0,
+        handling_swap_scale: 0.9,
+    }
+}
+
 pub(super) fn hmr_ophidian_aspects(
     _input: &CalculationInput,
     _value: u32,
@@ -515,7 +544,6 @@ pub(super) fn fmr_assault_mag(
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     let hash = _input.intrinsic_hash;
-    let tick = 1.0/30.0;
     let tick_amount = if hash == 904 {
         3.0
     } else if hash == 906 {
@@ -525,7 +553,7 @@ pub(super) fn fmr_assault_mag(
     };
     if _input.weapon_type == &WeaponType::SHOTGUN {
         FiringModifierResponse {
-            burst_delay_add: -(tick * tick_amount),
+            burst_delay_add: -(tick_amount/30.0),
             ..Default::default()
         }
     } else {

@@ -792,8 +792,9 @@
                 "range":    {"vpp_start": 0.0295,"offset_start": 11.85,"vpp_end": 0.0287,"offset_end": 22.85, "floor_percent": 0.5},
                 "reload":   {"evpp": 0.0000238311, "vpp": -0.0124553, "offset": 2.14667245000000},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.00264010989, "offset": 0.4232582418},
+                    "stow": {"vpp": -0.00197527473, "offset": 0.4298956044},
+                    "ads":  {"vpp": -0.00222939560, "offset": 0.3435796703}
                 },
                 "combatant_scalars": {"vehicle": 1.4, "boss": 1.55, "champion": 1.55, "miniboss": 1.55, "elite": 1.8, "minor": 1.8}
             },
@@ -801,20 +802,21 @@
                 "range":    {"vpp_start": 0.0,"offset_start": 28.3,"vpp_end": 0.0,"offset_end": 43.2, "floor_percent": 0.5},
                 "reload":   {"evpp": 0.0000238311, "vpp": -0.0124553, "offset": 2.64667245000000},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.00264010989, "offset": 0.4232582418},
+                    "stow": {"vpp": -0.00197527473, "offset": 0.4298956044},
+                    "ads":  {"vpp": -0.00222939560, "offset": 0.3435796703}
                 },
                 "combatant_scalars": {"vehicle": 1.4, "boss": 1.55, "champion": 1.55, "miniboss": 1.55, "elite": 1.8, "minor": 1.8}
             }
         },
         "subFam": {
-            "Rapid-Fire":       {"damage":25, "crit_mult":-5, "burst_delay":4, "burst_size":1, "inner_burst_delay":0},
-            "Precision":        {"damage":40, "crit_mult":-5, "burst_delay":7, "burst_size":1, "inner_burst_delay":0},
-            "Aggressive_Burst": {"damage":32, "crit_mult":-5, "burst_delay":8, "burst_size":2, "inner_burst_delay":3},
-            "Adaptive_Burst":   {"damage":20, "crit_mult":5,  "burst_delay":7, "burst_size":3, "inner_burst_delay":2},
-            "Adaptive":         {"damage":36, "crit_mult":-5, "burst_delay":6, "burst_size":1, "inner_burst_delay":0},
-            "Lightweight":      {"damage":31, "crit_mult":-5, "burst_delay":6, "burst_size":1, "inner_burst_delay":0},
-            "Forerunner":       {"damage":34, "crit_mult":15, "burst_delay":9, "burst_size":1, "inner_burst_delay":0}
+            "Rapid-Fire":       {"damage":25,   "crit_mult":-5, "burst_delay":4, "burst_size":1, "inner_burst_delay":0},
+            "Precision":        {"damage":40,   "crit_mult":-5, "burst_delay":7, "burst_size":1, "inner_burst_delay":0},
+            "Aggressive_Burst": {"damage":32,   "crit_mult":-5, "burst_delay":8, "burst_size":2, "inner_burst_delay":3},
+            "Adaptive_Burst":   {"damage":20,   "crit_mult":5,  "burst_delay":7, "burst_size":3, "inner_burst_delay":2},
+            "Adaptive":         {"damage":36,   "crit_mult":-5, "burst_delay":6, "burst_size":1, "inner_burst_delay":0},
+            "Lightweight":      {"damage":31,   "crit_mult":-5, "burst_delay":6, "burst_size":1, "inner_burst_delay":0},
+            "Forerunner":       {"damage":36.9, "crit_mult":15, "burst_delay":9, "burst_size":1, "inner_burst_delay":0}
         },
         "magProf": {
             "small": {
