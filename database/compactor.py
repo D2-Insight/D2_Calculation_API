@@ -1,4 +1,5 @@
 import json
+import time
 import traceback
 
 id_to_name = {
@@ -337,6 +338,8 @@ template = template.replace("{PATH_REPLACE_POINT_len}", weapon_path_data[-1][1])
 
 template = template.replace("{META_REPLACE_POINT}", weapon_path_data[0][0])
 template = template.replace("{META_REPLACE_POINT_len}", weapon_path_data[0][1])
+
+template = template.replace("{TIMESTAMP_REPLACE_POINT}", str(int(time.time())))
 
 with open("database\\weapon_formulas.rs", "w") as f:
     f.write(template)

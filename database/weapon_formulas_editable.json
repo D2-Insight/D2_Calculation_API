@@ -675,7 +675,7 @@
             "High-Impact": {"damage":40.0, "crit_mult":13, "burst_delay":12, "burst_size":1, "inner_burst_delay":0},
             "Rapid-Fire":  {"damage":27.5, "crit_mult":10, "burst_delay":7,  "burst_size":1, "inner_burst_delay":0},
             "Lightweight": {"damage":31.0, "crit_mult":13, "burst_delay":9,  "burst_size":1, "inner_burst_delay":0},
-            "Precision":   {"damage":30.5, "crit_mult":5,  "burst_delay":10, "burst_size":1, "inner_burst_delay":0},
+            "Precision":   {"damage":38,   "crit_mult":5,  "burst_delay":10, "burst_size":1, "inner_burst_delay":0},
             "Aggressive":  {"damage":54.0, "crit_mult":-1, "burst_delay":15, "burst_size":1, "inner_burst_delay":0}
         },
         "magProf": {
@@ -944,7 +944,7 @@
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.0546,"offset_start": 15.0,"vpp_end": 0.198,"offset_end": 30.33, "floor_percent": 0.33},
-                "reload":   {},
+                "reload":   {"evpp": 0.0, "vpp": -0.0175, "offset": 3.5},
                 "handling": {
                     "ready":{"vpp": -0.199386, "offset": 33.3015},
                     "stow": {"vpp": -0.153306, "offset": 28.8991}
@@ -975,7 +975,7 @@
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.1017,"offset_start": 14.756,"vpp_end": 0.0,"offset_end": 35.9, "floor_percent": 0.4},
-                "reload":   {},
+                "reload":   {"evpp": 0.00005, "vpp": -0.0155, "offset": 2.65},
                 "handling": {
                     "ready":{"vpp": -0.00279338, "offset": 0.51985381},
                     "stow": {"vpp": -0.00268436, "offset": 0.48414822},
@@ -989,7 +989,7 @@
         },
         "magProf": {
             "default": {
-                "mag": {"evpp": 0.0, "vpp": 0.3, "offset": 74.0},
+                "mag": {"evpp": 0.0, "vpp": 0.3, "offset": 73.99},
                 "reserve_id": 251
             }
         }

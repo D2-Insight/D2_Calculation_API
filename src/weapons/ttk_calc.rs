@@ -33,21 +33,26 @@ fn average_range(_range_data: &Vec<(f64, f64)>, _wanted_percent: f64, _dmagae_fl
 pub struct OptimalKillData {
     pub headshots: i32,
     pub bodyshots: i32,
+    #[serde(rename = "timeTaken")]
     pub time_taken: f64,
     //defines how far away this ttk is achievalbe if all hits ar crits
-    pub all_crit_range: f64,
+    #[serde(rename = "achievableRange")]
+    pub achievable_range: f64,
 }
 
 #[derive(Debug, Clone, Serialize)]
 pub struct BodyKillData {
     pub bodyshots: i32,
+    #[serde(rename = "timeTaken")]
     pub time_taken: f64,
 }
 
 #[derive(Debug, Clone, Serialize)]
 pub struct ResillienceSummary {
     pub value: i32,
+    #[serde(rename = "bodyTtk")]
     pub body_ttk: BodyKillData,
+    #[serde(rename = "optimalTtk")]
     pub optimal_ttk: OptimalKillData,
 }
 
@@ -173,7 +178,7 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
             headshots: opt_headshots,
             bodyshots: opt_bodyshots,
             time_taken: opt_time_taken,
-            all_crit_range: range_possible,
+            achievable_range: range_possible,
         };
 
         let mut bdy_bullets_hit = 0.0;

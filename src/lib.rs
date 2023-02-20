@@ -27,11 +27,15 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::panic;
 
+mod built_info {
+    include!(concat!(env!("OUT_DIR"), "/built.rs"));
+}
+
 //JavaScript
 #[cfg(feature = "wasm")]
 use crate::types::js_types::{JsStat, JsRangeResponse, JsHandlingResponse, 
     JsReloadResponse, JsAmmoResponse, JsTtkResponse, JsDpsResponse, JsFiringResponse, 
-    JsDifficultyOptions,JsEnemyType };
+    JsDifficultyOptions, JsEnemyType, JsMetaData};
 #[cfg(feature = "wasm")]
 use wasm_bindgen::prelude::*;
 
@@ -78,6 +82,19 @@ pub fn start() {
 }
 
 //---------------WEAPONS---------------//
+
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "getMetadata")]
+pub fn get_metadata() -> Result<JsMetaData, JsValue> {
+    let metadata = JsMetaData{
+        database_timestamp: 0,
+        api_timestamp: built_info::BUILT_TIME_UTC,
+        api_version: built_info::PKG_VERSION,
+        api_commit: built_info::GIT_COMMIT_HASH.unwrap(),
+        api_branch: built_info::GIT_HEAD_REF.unwrap(),
+    };
+    Ok(metadata)
+}
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "stringifyWeapon")]

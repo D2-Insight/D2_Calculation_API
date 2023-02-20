@@ -220,10 +220,13 @@ impl From<FiringResponse> for JsFiringResponse {
 #[wasm_bindgen(js_name = "Stat")]
 pub struct JsStat {
     #[wasm_bindgen(js_name = "baseValue")]
+    #[serde(rename = "baseValue")]
     pub base_value: i32,
     #[wasm_bindgen(js_name = "partValue")]
+    #[serde(rename = "partValue")]
     pub part_value: i32,
     #[wasm_bindgen(js_name = "traitValue")]
+    #[serde(rename = "traitValue")]
     pub trait_value: i32,
 }
 #[wasm_bindgen(js_class = "Stat")]
@@ -241,6 +244,28 @@ impl From<Stat> for JsStat {
             trait_value: stat.perk_value,
         }
     }
+}
+
+// #[derive(Debug, Clone)]
+// #[wasm_bindgen(js_name = "metaData", inspectable)]
+// pub struct JsMetaData {
+//     database_timestamp: u64,
+//     api_version: String,
+// }
+
+#[derive(Debug, Clone, Default, Serialize)]
+#[wasm_bindgen(js_name = "MetaData")]
+pub struct JsMetaData {
+    #[wasm_bindgen(js_name = "databaseTimestamp", readonly)]
+    pub database_timestamp: u64,
+    #[wasm_bindgen(js_name = "apiVersion", readonly)]
+    pub api_version: &'static str,
+    #[wasm_bindgen(js_name = "apiTimestamp", readonly)]
+    pub api_timestamp: &'static str,
+    #[wasm_bindgen(js_name = "apiGitCommit", readonly)]
+    pub api_commit: &'static str,
+    #[wasm_bindgen(js_name = "apiGitBranch", readonly)]
+    pub api_branch: &'static str,
 }
 
 #[derive(Debug, Clone)]

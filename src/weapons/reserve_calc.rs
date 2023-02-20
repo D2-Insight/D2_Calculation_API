@@ -132,7 +132,6 @@ fn xenophage(_mag_size: f64, _mag_stat:i32 ,_inv_stat: i32) -> i32 {
     (0.01 * (inv_stat*inv_stat) + inv_stat * 0.56 + 25.91).ceil() as i32
 }
 
-
 fn eriana_vow(_mag_size: f64, _mag_stat:i32 ,_inv_stat: i32) -> i32 {
     let inv_stat = _inv_stat as f64;
     (-0.00126 * (inv_stat*inv_stat) + inv_stat * 0.225 + 29.5).ceil() as i32
