@@ -653,6 +653,8 @@ fn dyanmic_perk_stats(
         Perks::SurosSynergy => sbr_suros_synergy(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::TunnelVision => sbr_tunnel_vision(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ShotSwap => sbr_shot_swap(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::UnderDog => sbr_underdog(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::UnderPressure => sbr_under_pressure(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
 }
@@ -856,6 +858,7 @@ fn get_perk_rsmr(
         Perks::TexBalancedStock => {
             rsmr_tex_balanced_stock(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::UnderDog => rsmr_underdog(_input_data, val, enhanced, _pvp, _cached_data),
         _ => ReloadModifierResponse::default(),
     }
 }

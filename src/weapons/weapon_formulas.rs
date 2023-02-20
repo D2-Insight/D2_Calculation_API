@@ -19,7 +19,7 @@ const AMMO_DATA:     [AmmoFormula; 30] = [AmmoFormula{mag: StatQuadraticFormula{
 
 const META_POINTERS: [(u8, usize); 16] = [(6, 0), (31, 1), (11, 2), (23, 3), (9, 4), (22, 5), (8, 6), (13, 7), (10, 8), (14, 9), (7, 10), (12, 11), (24, 12), (33, 13), (25, 14), (17, 15)];
 
-const UPDATE_TIMESTAMP: u64 = 1676856713;
+pub const DATABASE_TIMESTAMP: u64 = 1676856713;
 
 #[derive(Debug, Clone)]
 struct DataPointers {

@@ -33,7 +33,7 @@ pub(super) fn fmr_archers_tempo(
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     FiringModifierResponse {
-        burst_delay_scale: 0.75,
+        burst_delay_scale: if _value > 0 { 0.75 } else { 1.0 },
         burst_delay_add: 0.0,
         inner_burst_scale: 1.0,
         burst_size_add: 0.0,

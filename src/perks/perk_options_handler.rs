@@ -171,6 +171,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         //season 7 | year 2
         Perks::UnderDog => Some(PerkOptionData::toggle()),
         Perks::ExplosiveLight => Some(PerkOptionData::toggle()),
+        Perks::EyeOfTheStorm => Some(PerkOptionData::toggle()),
 
         //season 8 | year 3
         //TODO

@@ -13,7 +13,7 @@ const AMMO_DATA:     [AmmoFormula; {AMMO_REPLACE_POINT_len}] = {AMMO_REPLACE_POI
 
 const META_POINTERS: [(u8, usize); {META_REPLACE_POINT_len}] = {META_REPLACE_POINT};
 
-const UPDATE_TIMESTAMP: u64 = {TIMESTAMP_REPLACE_POINT};
+const DATABASE_TIMESTAMP: u64 = {TIMESTAMP_REPLACE_POINT};
 
 #[derive(Debug, Clone)]
 struct DataPointers {

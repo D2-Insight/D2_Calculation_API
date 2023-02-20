@@ -86,8 +86,9 @@ pub fn start() {
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getMetadata")]
 pub fn get_metadata() -> Result<JsMetaData, JsValue> {
+    use weapons::weapon_formulas::DATABASE_TIMESTAMP;
     let metadata = JsMetaData{
-        database_timestamp: 0,
+        database_timestamp: DATABASE_TIMESTAMP,
         api_timestamp: built_info::BUILT_TIME_UTC,
         api_version: built_info::PKG_VERSION,
         api_commit: built_info::GIT_COMMIT_HASH.unwrap(),

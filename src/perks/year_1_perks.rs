@@ -798,3 +798,50 @@ pub(super) fn hmr_pulse_monitor(
         HandlingModifierResponse::default()
     }
 }
+
+pub(super) fn sbr_underdog(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut map = HashMap::new();
+    if _value > 0 {
+        map.insert(StatHashes::RELOAD.into(), 100);
+    }
+    map
+}
+
+pub(super) fn rsmr_underdog(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> ReloadModifierResponse {
+    if _value > 0 {
+        ReloadModifierResponse {
+            reload_stat_add: 100,
+            reload_time_scale: 0.9,
+            ..Default::default()
+        }
+    } else {
+        ReloadModifierResponse::default()
+    }
+}
+
+pub(super) fn sbr_under_pressure(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut map = HashMap::new();
+    let buff = if _is_enhanced { 35 } else { 30 };
+    if _value > 0 {
+        map.insert(StatHashes::STABILITY.into(), buff);
+    }
+    map
+}

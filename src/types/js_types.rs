@@ -254,7 +254,7 @@ impl From<Stat> for JsStat {
 // }
 
 #[derive(Debug, Clone, Default, Serialize)]
-#[wasm_bindgen(js_name = "MetaData")]
+#[wasm_bindgen(js_name = "MetaData", inspectable)]
 pub struct JsMetaData {
     #[wasm_bindgen(js_name = "databaseTimestamp", readonly)]
     pub database_timestamp: u64,
