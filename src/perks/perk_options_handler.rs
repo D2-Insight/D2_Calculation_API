@@ -163,7 +163,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::FiringLine => Some(PerkOptionData::toggle()),
         Perks::FullCourt => Some(PerkOptionData::toggle()),
         Perks::KillingTally => Some(PerkOptionData::stacking(3)),
-        Perks::Demolitionist => Some(PerkOptionData::options(vec!["Once", "Every 3s"])),
+        // Perks::Demolitionist => Some(PerkOptionData::options(vec!["Once", "Every 3s"])),
         Perks::MultikillClip => Some(PerkOptionData::stacking(3)),
         Perks::Swashbuckler => Some(PerkOptionData::stacking(5)),
         Perks::OverFlow => Some(PerkOptionData::toggle()),
