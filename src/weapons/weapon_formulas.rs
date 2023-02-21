@@ -78,7 +78,7 @@ impl Weapon {
         let intrinsic_alias = enhanced_check(_intrinsic_hash).0;
         Ok(Weapon {
             is_pvp: false,
-            intrinsic_hash: _intrinsic_hash,
+            intrinsic_hash: intrinsic_alias,
             hash: _hash,
             perks: HashMap::from([
                 (

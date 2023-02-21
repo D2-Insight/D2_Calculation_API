@@ -1133,6 +1133,7 @@ fn get_perk_rmr(
             rmr_dual_speed_receiver(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::Adagio => rmr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::HuntersTrance => rmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         _ => RangeModifierResponse::default(),
     }
 }

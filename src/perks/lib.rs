@@ -56,7 +56,7 @@ impl<'a> CalculationInput<'a> {
             curr_mag: _base_mag_size as f64,
             reserves_left: 100.0,
             time_total: _total_time,
-            time_this_mag: 0.0,
+            time_this_mag: -1.0,
             stats: &_stats,
             weapon_type: &_weapon_type,
             damage_type: _damage_type,

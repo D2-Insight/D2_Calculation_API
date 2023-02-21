@@ -25,9 +25,14 @@ pub(super) fn dmr_paracausal_shot(
     let mut damage_buff = 1.0;
     if _input.curr_mag == 1.0 {
         let num_of_crits = clamp(_input.shots_fired_this_mag as i32, 0, 7);
-        let bufflist = if _pvp { bufflist_pvp } else { bufflist_pve };
+        let bufflist = if _pvp { &bufflist_pvp } else { &bufflist_pve };
         damage_buff = bufflist[num_of_crits as usize];
     };
+    if _input.time_this_mag < 0.0 {
+        let num_of_crits = clamp(_value as i32, 0, 7);
+        let bufflist = if _pvp { &bufflist_pvp } else { &bufflist_pve };
+        damage_buff = bufflist[num_of_crits as usize];
+    }
     DamageModifierResponse {
         impact_dmg_scale: damage_buff,
         explosive_dmg_scale: damage_buff,
@@ -956,7 +961,7 @@ pub(super) fn fmr_rat_pack(
 ) -> FiringModifierResponse {
     let val = clamp(_value - 1, 0, 4);
     FiringModifierResponse{
-        burst_delay_add: val as f64 * -0.625,
+        burst_delay_add: val as f64 * (-0.625/30.0),
         ..Default::default()
     }
 }
@@ -985,7 +990,7 @@ pub(super) fn fmr_ride_the_bull(
     let extra_value = _input.shots_fired_this_mag as f64 / 10.0;
     let val = clamp(_value + extra_value as u32, 0, 2);
     FiringModifierResponse{
-        burst_delay_add: val as f64 * -0.25,
+        burst_delay_add: val as f64 * (-0.25/30.0),
         ..Default::default()
     }
 }
@@ -1000,7 +1005,7 @@ pub(super) fn fmr_spinning_up(
     let extra_value = _input.shots_fired_this_mag as f64 / 12.0;
     let val = clamp(_value + extra_value as u32, 0, 2);
     FiringModifierResponse{
-        burst_delay_add: val as f64 * -0.5,
+        burst_delay_add: val as f64 * (-0.5/30.0),
         ..Default::default()
     }
 }

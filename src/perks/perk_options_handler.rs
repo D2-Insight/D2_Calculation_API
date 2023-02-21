@@ -294,6 +294,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::TargetAquired => Some(PerkOptionData::toggle()),
         Perks::RatPack => Some(PerkOptionData::stacking_min(5,1)),
         Perks::HuntersTrance => Some(PerkOptionData::static_()),
+        Perks::RideTheBull => Some(PerkOptionData::stacking(2)),
 
         Perks::DexterityMod => Some(PerkOptionData::stacking(2)),
         Perks::ReserveMod => Some(PerkOptionData::stacking(2)),

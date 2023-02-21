@@ -143,11 +143,11 @@ pub fn set_weapon(
     Ok(())
 }
 
-#[cfg(feature = "wasm")]
-#[wasm_bindgen(js_name = "getWeaponHash")]
-pub fn get_weapon_hash() -> Result<bool, JsValue> {
-    Ok(PERS_DATA.with(|weapon| weapon.borrow().weapon.hash != 0))
-}
+// #[cfg(feature = "wasm")]
+// #[wasm_bindgen(js_name = "getWeaponHash")]
+// pub fn get_weapon_hash() -> Result<bool, JsValue> {
+//     Ok(PERS_DATA.with(|weapon| weapon.borrow().weapon.hash != 0))
+// }
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getStats")]
