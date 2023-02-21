@@ -12,8 +12,7 @@
             "if you are using this in a strongly typed language keep that in mind using the propper abstraction for your language"],
         "nomenclature": [
             "vpp stands for value per point; on the same note evpp stands for exponential value per point",
-            "cat stands for category, subFam stands for sub family, magProf stands for mag profile",
-            "next_bullet_scale acts as a float and bool, you will input a float but if value != 0.0 it will load each bullet 1 by 1"
+            "cat stands for category, subFam stands for sub family, magProf stands for mag profile"
         ]
     },
     "INDEX": {
@@ -123,7 +122,7 @@
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
-                "reload":   {"evpp": 0.00006152, "vpp": -0.00917, "offset": 1.15},
+                "reload":   {"evpp": 0.00006152, "vpp": -0.00125, "offset": 1.1},
                 "handling": {
                     "ready":{"vpp": -0.002909930716, "offset": 0.7364549654},
                     "stow": {"vpp": -0.00179330254,  "offset": 0.5396466513},
@@ -547,6 +546,9 @@
         "4172222323": {"name": "Legacy PR-55 Frame",     "cat": "default",   "subFam": "Lightweight",   "magProf": "default"},
         "3441203855": {"name": "Collective Obligation",  "cat": "default",   "subFam": "Adaptive",      "magProf": "default"},
         "891750160":  {"name": "Revision Zero IV",       "cat": "default",   "subFam": "Aggressive",    "magProf": "default"},
+        "891750167":  {"name": "Revision Zero III",      "cat": "default",   "subFam": "Aggressive",    "magProf": "default"},
+        "891750166":  {"name": "Revision Zero II",       "cat": "default",   "subFam": "Aggressive",    "magProf": "default"},
+        "3834106778": {"name": "Revision Zero I",        "cat": "default",   "subFam": "Aggressive",    "magProf": "default"},
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.07378,"offset_start": 16.329,"vpp_end": 0.0,"offset_end": 40.4, "floor_percent": 0.5},

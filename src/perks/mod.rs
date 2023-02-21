@@ -274,6 +274,7 @@ pub enum Perks {
     EyeOfTheStorm,
     FullStop,
     RideTheBull,
+    HuntersTrance, //hawkmoon catalyst not R0
 }
 
 impl From<u32> for Perks {
@@ -488,7 +489,7 @@ impl From<u32> for Perks {
             83039194 => Perks::HeatRises,
             362132290 => Perks::Tempering,
 
-            //kietic exotic
+            //kinetic exotic
             1301843770 => Perks::CranialSpike,
             970163821 => Perks::AgersCall,
             2121086290 => Perks::RatPack,
@@ -508,6 +509,7 @@ impl From<u32> for Perks {
             4012962526 => Perks::DualSpeedReceiver,
             2984682260 => Perks::FullStop,
             630329983 => Perks::RideTheBull,
+            383825919 => Perks::HuntersTrance,
 
             //energy exotic
             2881100038 => Perks::LagragianSight,

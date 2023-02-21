@@ -33,7 +33,7 @@ pub(super) fn sbr_elemental_capacitor(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
-    let ev = if _is_enhanced { 5 } else { 0 };
+    let mut ev = if _is_enhanced { 5 } else { 0 };
     if _value == 1 {
         stats.insert(StatHashes::STABILITY.into(), 20+ev);
     } else if _value == 2 {
@@ -41,6 +41,7 @@ pub(super) fn sbr_elemental_capacitor(
     } else if _value == 3 {
         stats.insert(StatHashes::HANDLING.into(), 50+ev);
     } else if _value == 4 {
+        if _is_enhanced { ev += -2} //recoil dir is 3 for some reaason?
         stats.insert(StatHashes::RECOIL_DIR.into(), 20+ev);
     } else if _value == 5 {
         stats.insert(StatHashes::AIRBORNE.into(), 25+ev);
