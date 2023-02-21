@@ -664,6 +664,7 @@ fn dyanmic_perk_stats(
         Perks::UnderDog => sbr_underdog(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::UnderPressure => sbr_under_pressure(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Adagio => sbr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::HuntersTrance => sbr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
 }
@@ -872,6 +873,7 @@ fn get_perk_rsmr(
             rsmr_tex_balanced_stock(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::UnderDog => rsmr_underdog(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::HuntersTrance => rsmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         _ => ReloadModifierResponse::default(),
     }
 }
@@ -1012,6 +1014,7 @@ fn get_perk_hmr(
         Perks::SurosSynergy => hmr_suros_synergy(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::TunnelVision => hmr_tunnel_vision(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ShotSwap => hmr_shot_swap(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::HuntersTrance => hmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HandlingModifierResponse::default(),
     }
 }

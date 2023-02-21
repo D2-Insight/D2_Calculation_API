@@ -35,6 +35,67 @@ pub(super) fn dmr_paracausal_shot(
     }
 }
 
+pub(super) fn sbr_hunters_trance(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<u32, i32> {
+    let mut out = HashMap::new();
+    let inter_val = *_input.perk_value_map.get(&213689231).unwrap_or(&0);
+    let buff_val = (clamp(inter_val, 0, 7)*5) as i32;
+    out.insert(StatHashes::RELOAD.into(), buff_val);
+    out.insert(StatHashes::RANGE.into(), buff_val);
+    out.insert(StatHashes::HANDLING.into(), buff_val);
+    out
+}
+
+pub(super) fn rsmr_hunters_trance(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> ReloadModifierResponse {
+    let inter_val = *_input.perk_value_map.get(&213689231).unwrap_or(&0);
+    let buff_val = (clamp(inter_val, 0, 7)*5) as i32;
+    ReloadModifierResponse {
+        reload_stat_add: buff_val,
+        ..Default::default()
+    }
+}
+
+pub(super) fn rmr_hunters_trance(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> RangeModifierResponse {
+    let inter_val = *_input.perk_value_map.get(&213689231).unwrap_or(&0);
+    let buff_val = (clamp(inter_val, 0, 7)*5) as i32;
+    RangeModifierResponse {
+        range_stat_add: buff_val,
+        ..Default::default()
+    }
+}
+
+pub(super) fn hmr_hunters_trance(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    let inter_val = *_input.perk_value_map.get(&213689231).unwrap_or(&0);
+    let buff_val = (clamp(inter_val, 0, 7)*5) as i32;
+    HandlingModifierResponse {
+        handling_stat_add: buff_val,
+        ..Default::default()
+    }
+}
+
 pub(super) fn dmr_momento_mori(
     _input: &CalculationInput,
     _value: u32,

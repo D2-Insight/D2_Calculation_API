@@ -253,7 +253,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::StringofCurses => Some(PerkOptionData::stacking(5)),
         Perks::WormsHunger => Some(PerkOptionData::stacking(20)),
         Perks::RocketTracers => Some(PerkOptionData::static_()),
-        Perks::ParacausalShot => Some(PerkOptionData::stacking(6)),
+        Perks::ParacausalShot => Some(PerkOptionData::stacking(7)),
         Perks::CorruptionSpreads => Some(PerkOptionData::static_()),
         Perks::TimeSlip => Some(PerkOptionData::toggle()),
         Perks::ToM => Some(PerkOptionData::toggle()),
@@ -293,7 +293,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::SleeperCatalyst => Some(PerkOptionData::static_()),
         Perks::TargetAquired => Some(PerkOptionData::toggle()),
         Perks::RatPack => Some(PerkOptionData::stacking_min(5,1)),
-
+        Perks::HuntersTrance => Some(PerkOptionData::static_()),
 
         Perks::DexterityMod => Some(PerkOptionData::stacking(2)),
         Perks::ReserveMod => Some(PerkOptionData::stacking(2)),
