@@ -527,9 +527,13 @@ pub(super) fn rmr_slide_shot(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> RangeModifierResponse {
-    let mut range = if _is_enhanced { 25 } else { 20 };
+    let range;
     if *_input.weapon_type == WeaponType::FUSIONRIFLE {
-        range = 2; //only applies to first proj so like should do alot less
+        range = 0; //only applies to first proj so like should do alot less
+    } else if _value > 0 {
+        range = if _is_enhanced { 25 } else { 20 }
+    } else {
+        range = 0;
     }
     RangeModifierResponse {
         range_stat_add: range,
