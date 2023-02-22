@@ -657,14 +657,14 @@ pub(super) fn dmr_backup_plan(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    let mut damage_mult = if _value > 0 { 0.25 } else { 0.0 };
+    let mut damage_mult = if _value > 0 { 0.2 } else { 0.0 };
     let duration = if _is_enhanced { 2.2 } else { 2.0 };
     if _input.time_total > duration {
         damage_mult = 0.0;
     };
     DamageModifierResponse {
-        impact_dmg_scale: 1.0 + damage_mult,
-        explosive_dmg_scale: 1.0 + damage_mult,
+        impact_dmg_scale: 1.0 - damage_mult,
+        explosive_dmg_scale: 1.0 - damage_mult,
         crit_scale: 1.0,
     }
 }

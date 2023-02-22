@@ -34,7 +34,7 @@ mod built_info {
 //JavaScript
 #[cfg(feature = "wasm")]
 use crate::types::js_types::{JsStat, JsRangeResponse, JsHandlingResponse, 
-    JsReloadResponse, JsAmmoResponse, JsTtkResponse, JsDpsResponse, JsFiringResponse, 
+    JsReloadResponse, JsAmmoResponse, JsDpsResponse, JsFiringResponse, 
     JsDifficultyOptions, JsEnemyType, JsMetaData};
 #[cfg(feature = "wasm")]
 use wasm_bindgen::prelude::*;
@@ -280,9 +280,9 @@ pub fn get_weapon_ammo(_dynamic_traits: bool) -> Result<JsAmmoResponse, JsValue>
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getWeaponTtk")]
-pub fn get_weapon_ttk(_overhsield: f64) -> Result<JsTtkResponse, JsValue> {
+pub fn get_weapon_ttk(_overhsield: f64) -> Result<JsValue, JsValue> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
-    Ok(JsTtkResponse{data: weapon.calc_ttk(_overhsield)})
+    Ok(serde_wasm_bindgen::to_value(&weapon.calc_ttk(_overhsield)).unwrap())
 }
 
 #[cfg(feature = "wasm")]

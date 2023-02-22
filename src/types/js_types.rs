@@ -7,11 +7,11 @@ use crate::{
     enemies::EnemyType,
     perks::Perk,
     types::rs_types::StatQuadraticFormula,
-    weapons::{ttk_calc::ResillienceSummary, FiringData, Stat},
+    weapons::{ttk_calc::{ResillienceSummary, OptimalKillData, BodyKillData}, FiringData, Stat},
 };
 use serde::{Deserialize, Serialize};
 // use tsify::Tsify;
-use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
+use wasm_bindgen::{prelude::wasm_bindgen, JsValue, convert::{IntoWasmAbi, WasmSlice}};
 
 use super::rs_types::{
     AmmoFormula, AmmoResponse, DamageMods, DpsResponse, FiringResponse, HandlingFormula,
@@ -148,28 +148,67 @@ impl From<DpsResponse> for JsDpsResponse {
     }
 }
 
-#[derive(Debug, Clone, Serialize)]
-#[wasm_bindgen(js_name = "TtkResponse")]
-pub struct JsTtkResponse {
-    #[wasm_bindgen(skip)]
-    pub data: Vec<ResillienceSummary>,
+#[derive(Debug, Clone, Copy, Serialize)]
+#[wasm_bindgen(js_name = "OptimalKillData", inspectable)]
+pub struct JsOptimalKillData {
+    pub headshots: i32,
+    pub bodyshots: i32,
+    #[serde(rename = "timeTaken")]
+    #[wasm_bindgen(js_name = "timeTaken")]
+    pub time_taken: f64,
+    //defines how far away this ttk is achievalbe if all hits ar crits
+    #[serde(rename = "achievableRange")]
+    #[wasm_bindgen(js_name = "achievableRange")]
+    pub achievable_range: f64,
 }
-#[wasm_bindgen(js_class = "TtkResponse")]
-impl JsTtkResponse {
-    #[wasm_bindgen(js_name = "toString")]
-    pub fn to_string(self) -> String {
-        format!("{:?}", self)
+impl From<OptimalKillData> for JsOptimalKillData {
+    fn from(optimal: OptimalKillData) -> Self {
+        JsOptimalKillData {
+            headshots: optimal.headshots,
+            bodyshots: optimal.bodyshots,
+            time_taken: optimal.time_taken,
+            achievable_range: optimal.achievable_range,
+        }
     }
-    #[wasm_bindgen(js_name = "toJSON")]
-    pub fn to_json(self) -> String {
-        serde_wasm_bindgen::to_value(&self)
-            .unwrap()
-            .as_string()
-            .unwrap()
+}
+
+#[derive(Debug, Clone, Copy, Serialize)]
+#[wasm_bindgen(js_name = "BodyKillData", inspectable)]
+pub struct JsBodyKillData {
+    pub bodyshots: i32,
+    #[serde(rename = "timeTaken")]
+    #[wasm_bindgen(js_name = "timeTaken")]
+    pub time_taken: f64,
+}
+impl From<BodyKillData> for JsBodyKillData {
+    fn from(body: BodyKillData) -> Self {
+        JsBodyKillData {
+            bodyshots: body.bodyshots,
+            time_taken: body.time_taken,
+        }
     }
-    #[wasm_bindgen(getter)]
-    pub fn data(&self) -> JsValue {
-        serde_wasm_bindgen::to_value(&self.data).unwrap()
+}
+
+#[derive(Debug, Clone, Serialize)]
+#[wasm_bindgen(js_name = "ResillienceSummary", inspectable)]
+pub struct JsResillienceSummary {
+    #[serde(rename = "resillienceValue")]
+    #[wasm_bindgen(js_name = "resillienceValue")]
+    pub value: i32,
+    #[serde(rename = "bodyTtk")]
+    #[wasm_bindgen(js_name = "bodyTtk")]
+    pub body_ttk: JsBodyKillData,
+    #[serde(rename = "optimalTtk")]
+    #[wasm_bindgen(js_name = "optimalTtk")]
+    pub optimal_ttk: JsOptimalKillData,
+}
+impl From<ResillienceSummary> for JsResillienceSummary {
+    fn from(resillience: ResillienceSummary) -> Self {
+        JsResillienceSummary {
+            value: resillience.value,
+            body_ttk: resillience.body_ttk.into(),
+            optimal_ttk: resillience.optimal_ttk.into(),
+        }
     }
 }
 
@@ -246,14 +285,7 @@ impl From<Stat> for JsStat {
     }
 }
 
-// #[derive(Debug, Clone)]
-// #[wasm_bindgen(js_name = "metaData", inspectable)]
-// pub struct JsMetaData {
-//     database_timestamp: u64,
-//     api_version: String,
-// }
-
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 #[wasm_bindgen(js_name = "MetaData", inspectable)]
 pub struct JsMetaData {
     #[wasm_bindgen(js_name = "databaseTimestamp", readonly)]
@@ -267,6 +299,20 @@ pub struct JsMetaData {
     #[wasm_bindgen(js_name = "apiGitBranch", readonly)]
     pub api_branch: &'static str,
 }
+
+// #[derive(Debug, Clone, Serialize)]
+// #[wasm_bindgen(js_name = "TraitSummaries")]
+// pub struct JsTraitStatSummaries {
+//     #[wasm_bindgen(skip)]
+//     pub data: Vec<JsTraitStatSummary>,
+// }
+
+// #[derive(Debug, Clone, Serialize)]
+// #[wasm_bindgen(js_name = "TraitSummaries")]
+// pub struct JsTraitStatSummary {
+//     #[wasm_bindgen(skip)]
+//     pub data: Vec<TraitStatSummary>,
+// }
 
 #[derive(Debug, Clone)]
 #[wasm_bindgen(js_name = "DifficultyOptions")]

@@ -492,7 +492,7 @@ pub(super) fn fmr_faster_string_t2(
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     FiringModifierResponse {
-        burst_delay_add: -0.072,
+        burst_delay_add: -2.0/30.0,
         ..Default::default()
     }
 }
@@ -505,7 +505,7 @@ pub(super) fn fmr_faster_string_t1(
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     FiringModifierResponse {
-        burst_delay_add: -0.036,
+        burst_delay_add: -1.0/30.0,
         ..Default::default()
     }
 }
@@ -518,7 +518,7 @@ pub(super) fn fmr_slower_string_t1(
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     FiringModifierResponse {
-        burst_delay_add: 0.036,
+        burst_delay_add: 1.0/30.0,
         ..Default::default()
     }
 }
@@ -531,7 +531,7 @@ pub(super) fn fmr_slower_string_t2(
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     FiringModifierResponse {
-        burst_delay_add: 0.072,
+        burst_delay_add: 2.0/30.0,
         ..Default::default()
     }
 }

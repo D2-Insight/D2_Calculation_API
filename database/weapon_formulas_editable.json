@@ -245,16 +245,16 @@
         "389268985":  {"name": "Anarchy",           "cat": "anarchy", "subFam": "", "magProf": "adaptive" },
         "425960662":  {"name": "Fighting Lion",     "cat": "special", "subFam": "FightingLion", "magProf": "special", "pve":0.78},
         "474269988":  {"name": "Lightweight Frame", "cat": "special", "subFam": "Lightweight", "magProf": "special", "pve":1.10},
-        "1294026524": {"name": "Adaptive Frame",    "cat": "heavy",   "subFam": "Adaptive", "magProf": "adaptive" },
+        "1294026524": {"name": "Adaptive Frame",    "cat": "heavy",   "subFam": "Adaptive", "magProf": "adaptive", "pve":1.20 },
         "1315870387": {"name": "Salvation's Grip",  "cat": "heavy",   "subFam": "", "magProf": "adaptive" },
         "1395789926": {"name": "Wave Frame",        "cat": "special", "subFam": "WaveFrame", "magProf": "special", "pve":1.50},
         "1458010786": {"name": "Lightweight Frame", "cat": "special", "subFam": "Lightweight", "magProf": "special" },
-        "2353477480": {"name": "Rapid-Fire Frame",  "cat": "heavy",   "subFam": "Rapid-Fire", "magProf": "rapid" },
+        "2353477480": {"name": "Rapid-Fire Frame",  "cat": "heavy",   "subFam": "Rapid-Fire", "magProf": "rapid", "pve":1.20 },
         "2977709078": {"name": "The Prospector",    "cat": "heavy",   "subFam": "", "magProf": "rapid" },
         "3063320916": {"name": "Witherhoard",       "cat": "special", "subFam": "", "magProf": "special" },
         "3913463509": {"name": "The Colony",        "cat": "heavy",   "subFam": "", "magProf": "adaptive" },
-        "4130495068": {"name": "Precision Frame",   "cat": "heavy",   "subFam": "Precision", "magProf": "adaptive" },
-        "1174163613": {"name": "Parasite",          "cat": "parasite","subFam": "", "magProf": "adaptive" },
+        "4130495068": {"name": "Precision Frame",   "cat": "heavy",   "subFam": "Precision", "magProf": "adaptive", "pve":1.20 },
+        "1174163613": {"name": "Parasite",          "cat": "parasite","subFam": "Parasite", "magProf": "adaptive" },
         "1759472859": {"name": "Double Fire",       "cat": "special", "subFam": "", "magProf": "special" },
         "cat": {
             "special": {
@@ -304,7 +304,8 @@
             "FightingLion": {"damage": 160.0, "crit_mult": -25.5, "burst_delay": 20, "burst_size": 1, "inner_burst_delay": 0.0},
             "Adaptive":     {"damage": 285.0, "crit_mult": -25.5, "burst_delay": 15, "burst_size": 1, "inner_burst_delay": 0.0},
             "Rapid-Fire":   {"damage": 226.0, "crit_mult": -25.5, "burst_delay": 12, "burst_size": 1, "inner_burst_delay": 0.0},
-            "Precision":    {"damage": 300.0, "crit_mult": -25.5, "burst_delay": 18, "burst_size": 1, "inner_burst_delay": 0.0}
+            "Precision":    {"damage": 300.0, "crit_mult": -25.5, "burst_delay": 18, "burst_size": 1, "inner_burst_delay": 0.0},
+            "Parasite":     {"damage": 835.0, "crit_mult": -25.5, "burst_delay": 18, "burst_size": 1, "inner_burst_delay": 0.0}
         },
         "magProf": {
             "rapid": {

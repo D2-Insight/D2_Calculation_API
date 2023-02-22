@@ -275,6 +275,10 @@ pub enum Perks {
     FullStop,
     RideTheBull,
     HuntersTrance, //hawkmoon catalyst not R0
+    FasterStringT1,
+    FasterStringT2,
+    SlowerStringT1,
+    SlowerStringT2,
 }
 
 impl From<u32> for Perks {
@@ -309,6 +313,12 @@ impl From<u32> for Perks {
             3128594062 => Perks::ChargetimeMW,
             3032599245 => Perks::DisorientingGrenades,
             791862061 => Perks::AssaultMag,
+            //bow strings
+            3371775011 => Perks::SlowerStringT1,
+            852209214 => Perks::FasterStringT1,
+            4067834857 => Perks::FasterStringT1,
+            2801223209 => Perks::FasterStringT2,
+            
 
             //mods
             1334978104 => Perks::QuickAccessSling,

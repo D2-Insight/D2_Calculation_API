@@ -959,7 +959,12 @@ pub(super) fn fmr_rat_pack(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
-    let val = clamp(_value - 1, 0, 4);
+    let val;
+    if _value > 0 {
+        val = clamp(_value - 1, 0, 4);
+    } else {
+        val = 0;
+    }
     FiringModifierResponse{
         burst_delay_add: val as f64 * (-0.625/30.0),
         ..Default::default()
