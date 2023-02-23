@@ -85,7 +85,17 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::FullChoke => Some(PerkOptionData::static_()),
         Perks::SpikeGrenades => Some(PerkOptionData::static_()),
         Perks::AlloyMag => Some(PerkOptionData::static_()),
+        Perks::LiquidCoils => Some(PerkOptionData::static_()),
+        Perks::AcceleratedCoils => Some(PerkOptionData::static_()),
+        Perks::ChargetimeMW => Some(PerkOptionData::static_()),
+        Perks::DisorientingGrenades => Some(PerkOptionData::static_()),
         Perks::AssaultMag => Some(PerkOptionData::static_()),
+        Perks::AdeptChargeTime => Some(PerkOptionData::static_()),
+        //bow strings
+        Perks::SlowerStringT1 => Some(PerkOptionData::static_()),
+        Perks::SlowerStringT2 => Some(PerkOptionData::static_()),
+        Perks::FasterStringT1 => Some(PerkOptionData::static_()),
+        Perks::FasterStringT2 => Some(PerkOptionData::static_()),
 
         //mods
         Perks::QuickAccessSling => Some(PerkOptionData::static_()),

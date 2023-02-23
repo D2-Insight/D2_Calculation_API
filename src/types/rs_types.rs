@@ -129,6 +129,18 @@ impl DpsResponse {
         }
         self.total_damage *= rpl;
     }
+    pub fn get_dps_over_time(&self) -> Vec<(f64, f64)> {
+        let dps_data = &self.time_damage_data;
+        let mut damage_so_far = dps_data[0].1;
+        let mut dps_lst = Vec::new();
+        for hit in dps_data {
+            if hit.0 != 0.0 {
+                dps_lst.push((hit.0, damage_so_far / hit.0));
+            }
+            damage_so_far += hit.1;
+        }
+        dps_lst
+    }
 }
 
 #[derive(Debug, Clone, Default)]

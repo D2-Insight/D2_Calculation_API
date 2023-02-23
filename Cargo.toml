@@ -7,7 +7,7 @@ repository = "https://github.com/oh-yes-0-fps/D2_Calculation_API"
 build = "build.rs"
 
 [features]
-wasm = ["serde-wasm-bindgen", "wasm-bindgen", "console_error_panic_hook", "wee_alloc"]
+wasm = ["serde-wasm-bindgen", "wasm-bindgen", "console_error_panic_hook"]
 python = ["pyo3", "pyo3-built"]
 
 [build-dependencies]
@@ -20,7 +20,6 @@ built = { version = "0.6", features = ["chrono", "semver"] }
 serde-wasm-bindgen = { version = "^0.4", optional = true }
 console_error_panic_hook = { version = "0.1.7", optional = true}
 wasm-bindgen = { version = "^0.2", optional = true}
-wee_alloc = { version = "0.4.5", optional = true}
 
 pyo3 = { version = "^0.18", features = ["extension-module"], optional = true}
 pyo3-built = { version = "^0.4", optional = true}

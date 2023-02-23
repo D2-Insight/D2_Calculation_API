@@ -318,7 +318,7 @@ impl From<u32> for Perks {
             852209214 => Perks::FasterStringT1,
             4067834857 => Perks::FasterStringT1,
             2801223209 => Perks::FasterStringT2,
-            
+            1885045197 => Perks::FasterStringT1,
 
             //mods
             1334978104 => Perks::QuickAccessSling,
@@ -947,6 +947,18 @@ fn get_perk_fmr(
         Perks::SpinningUp => fmr_spinning_up(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::RideTheBull => {
             fmr_ride_the_bull(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::FasterStringT1 => {
+            fmr_faster_string_t1(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::FasterStringT2 => {
+            fmr_faster_string_t2(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::SlowerStringT1 => {
+            fmr_slower_string_t1(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::SlowerStringT2 => {
+            fmr_slower_string_t2(_input_data, val, enhanced, _pvp, _cached_data)
         }
         _ => FiringModifierResponse::default(),
     }

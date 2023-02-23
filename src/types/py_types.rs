@@ -181,6 +181,8 @@ pub struct PyDpsResponse {
     #[pyo3(get)]
     pub time_damage_data: Vec<(f64, f64)>,
     #[pyo3(get)]
+    pub time_dps_data: Vec<(f64, f64)>,
+    #[pyo3(get)]
     pub total_damage: f64,
     #[pyo3(get)]
     pub total_time: f64,
@@ -208,6 +210,7 @@ impl PyDpsResponse {
 impl From<DpsResponse> for PyDpsResponse {
     fn from(r: DpsResponse) -> Self {
         PyDpsResponse {
+            time_dps_data: r.get_dps_over_time(),
             dps_per_mag: r.dps_per_mag,
             time_damage_data: r.time_damage_data,
             total_damage: r.total_damage,
@@ -224,14 +227,14 @@ pub struct PyOptimalKillData{
     bodyshots: i32,
     time_taken: f64,
     //defines how far away this ttk is achievalbe if all hits ar crits
-    all_crit_range: f64,
+    achievable_range: f64,
 }
 #[pymethods]
 impl PyOptimalKillData {
     fn __repr__(&self) -> PyResult<String> {
         Ok(format!(
             "OptimalKillData(headshots={}, bodyshots={}, time_taken={}, all_crit_range={})",
-            self.headshots, self.bodyshots, self.time_taken, self.all_crit_range
+            self.headshots, self.bodyshots, self.time_taken, self.achievable_range
         ))
     }
 }
@@ -280,7 +283,7 @@ impl From<ResillienceSummary> for PyResillienceSummary {
                 headshots: r.optimal_ttk.headshots,
                 bodyshots: r.optimal_ttk.bodyshots,
                 time_taken: r.optimal_ttk.time_taken,
-                all_crit_range: r.optimal_ttk.all_crit_range,
+                achievable_range: r.optimal_ttk.achievable_range,
             }
         }
     }

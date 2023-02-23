@@ -58,7 +58,7 @@ pub struct ResillienceSummary {
 
 pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
     let mut ttk_data: Vec<ResillienceSummary> = Vec::new();
-    let mut perssistent_data: HashMap<String, f64> = HashMap::new();
+    let mut persistent_data: HashMap<String, f64> = HashMap::new();
 
     let tmp_dmg_prof = _weapon.get_damage_profile();
     let impact_dmg = tmp_dmg_prof.0;
@@ -93,16 +93,16 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 _weapon.list_perks().clone(),
                 &calc_input,
                 true,
-                &mut perssistent_data,
+                &mut persistent_data,
             );
             let firing_mods = get_firing_modifier(
                 _weapon.list_perks().clone(),
                 &calc_input,
                 true,
-                &mut perssistent_data,
+                &mut persistent_data,
             );
             let tmp_range_data =
-                _weapon.calc_range_falloff(Some(calc_input.clone()), Some(&mut perssistent_data));
+                _weapon.calc_range_falloff(Some(calc_input.clone()), Some(&mut persistent_data));
             if tmp_range_data.ads_falloff_start > 998.0 {
                 opt_infnite_range = true;
             } else {
@@ -155,7 +155,7 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 opt_headshots += 1;
                 opt_damage_dealt += body_damage + head_diff;
                 if _weapon.weapon_type == WeaponType::BOW {
-                    opt_time_taken += _weapon.calc_reload_time(Some(calc_input.clone()), Some(&mut perssistent_data)).reload_time;
+                    opt_time_taken += _weapon.calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data)).reload_time;
                 }
             }
         }
@@ -197,21 +197,19 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 _weapon.list_perks().clone(),
                 &calc_input,
                 true,
-                &mut perssistent_data,
+                &mut persistent_data,
             );
             let firing_mods = get_firing_modifier(
                 _weapon.list_perks().clone(),
                 &calc_input,
                 true,
-                &mut perssistent_data,
+                &mut persistent_data,
             );
             ///////////////////////////////
 
             let tmp_dmg_prof = _weapon.get_damage_profile();
             let impact_dmg = tmp_dmg_prof.0;
             let explosion_dmg = tmp_dmg_prof.1;
-            // let mut crit_mult = tmp_dmg_prof.2;
-            // let damage_delay = tmp_dmg_prof.3;
 
             let body_damage = (impact_dmg * dmg_mods.impact_dmg_scale)
                 + (explosion_dmg * dmg_mods.explosive_dmg_scale);

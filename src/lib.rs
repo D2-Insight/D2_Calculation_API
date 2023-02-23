@@ -1,13 +1,6 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
 
-#[cfg(feature = "wasm")]
-extern crate wee_alloc;
-// Use `wee_alloc` as the global allocator.
-#[cfg(feature = "wasm")]
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
-
 use perks::enhanced_handler::enhanced_check;
 pub mod abilities;
 pub mod activity;
@@ -35,7 +28,7 @@ mod built_info {
 #[cfg(feature = "wasm")]
 use crate::types::js_types::{JsStat, JsRangeResponse, JsHandlingResponse, 
     JsReloadResponse, JsAmmoResponse, JsDpsResponse, JsFiringResponse, 
-    JsDifficultyOptions, JsEnemyType, JsMetaData};
+    JsDifficultyOptions, JsEnemyType, JsMetaData, JsResillienceSummary};
 #[cfg(feature = "wasm")]
 use wasm_bindgen::prelude::*;
 
@@ -280,9 +273,11 @@ pub fn get_weapon_ammo(_dynamic_traits: bool) -> Result<JsAmmoResponse, JsValue>
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getWeaponTtk")]
-pub fn get_weapon_ttk(_overhsield: f64) -> Result<JsValue, JsValue> {
+pub fn get_weapon_ttk(_overshield: f64) -> Result<JsValue, JsValue> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
-    Ok(serde_wasm_bindgen::to_value(&weapon.calc_ttk(_overhsield)).unwrap())
+    let ttk_data = weapon.calc_ttk(_overshield);
+    let js_ttk_data: Vec<JsResillienceSummary> = ttk_data.into_iter().map(|r| r.into()).collect();
+    Ok(serde_wasm_bindgen::to_value(&js_ttk_data).unwrap())
 }
 
 #[cfg(feature = "wasm")]

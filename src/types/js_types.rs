@@ -300,20 +300,6 @@ pub struct JsMetaData {
     pub api_branch: &'static str,
 }
 
-// #[derive(Debug, Clone, Serialize)]
-// #[wasm_bindgen(js_name = "TraitSummaries")]
-// pub struct JsTraitStatSummaries {
-//     #[wasm_bindgen(skip)]
-//     pub data: Vec<JsTraitStatSummary>,
-// }
-
-// #[derive(Debug, Clone, Serialize)]
-// #[wasm_bindgen(js_name = "TraitSummaries")]
-// pub struct JsTraitStatSummary {
-//     #[wasm_bindgen(skip)]
-//     pub data: Vec<TraitStatSummary>,
-// }
-
 #[derive(Debug, Clone)]
 #[wasm_bindgen(js_name = "DifficultyOptions")]
 pub enum JsDifficultyOptions {
