@@ -612,6 +612,7 @@ fn dyanmic_perk_stats(
         Perks::ElementalCapacitor => {
             sbr_elemental_capacitor(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::PulseMonitor => sbr_pulse_monitor(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::KillingWind => sbr_killing_wind(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::AdrenalineJunkie => {
             sbr_adrenaline_junkie(_input_data, val, enhanced, _pvp, _cached_data)
