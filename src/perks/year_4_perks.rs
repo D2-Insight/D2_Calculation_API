@@ -62,7 +62,7 @@ pub(super) fn sbr_adagio(
 ) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
     let duration = if _is_enhanced { 8.0 } else { 7.0 };
-    if  _input.time_total < duration || _value > 0 {
+    if  _input.time_total <= duration && _value > 0 {
         map.insert(StatHashes::RANGE.into(), 10);
     }
     map
@@ -344,9 +344,9 @@ pub(super) fn sbr_perpetual_motion(
     let val = clamp(_value, 0, 2);
     let mut stat_bump = 0;
     if val == 1 {
-        stat_bump = 5;
+        stat_bump = 10;
     } else if val == 2 {
-        stat_bump = 15;
+        stat_bump = 20;
     };
     let mut out = HashMap::new();
     out.insert(StatHashes::RELOAD.into(), stat_bump);
@@ -365,9 +365,9 @@ pub(super) fn hmr_perpetual_motion(
     let val = clamp(_value, 0, 2);
     let mut stat_bump = 0;
     if val == 1 {
-        stat_bump = 5;
+        stat_bump = 10;
     } else if val == 2 {
-        stat_bump = 15;
+        stat_bump = 20;
     };
     HandlingModifierResponse {
         handling_stat_add: stat_bump,
@@ -386,9 +386,9 @@ pub(super) fn rsmr_perpetual_motion(
     let val = clamp(_value, 0, 2);
     let mut stat_bump = 0;
     if val == 1 {
-        stat_bump = 5;
+        stat_bump = 10;
     } else if val == 2 {
-        stat_bump = 15;
+        stat_bump = 20;
     };
     ReloadModifierResponse {
         reload_stat_add: stat_bump,
