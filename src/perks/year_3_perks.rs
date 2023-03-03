@@ -44,7 +44,7 @@ pub(super) fn sbr_elemental_capacitor(
         if _is_enhanced { ev += -2} //recoil dir is 3 for some reaason?
         stats.insert(StatHashes::RECOIL_DIR.into(), 20+ev);
     } else if _value == 5 {
-        stats.insert(StatHashes::AIRBORNE.into(), 25+ev);
+        stats.insert(StatHashes::AIRBORNE.into(), 20+ev);
     };
     stats
 }
