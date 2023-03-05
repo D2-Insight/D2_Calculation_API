@@ -542,7 +542,7 @@ pub(super) fn dmr_harmony(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    let mut damage_mult = if _value > 0 { 0.25 } else { 0.0 };
+    let mut damage_mult = if _value > 0 { 0.20 } else { 0.0 };
     let duration = if _is_enhanced { 8.0 } else { 7.0 };
     if _input.time_total > duration {
         damage_mult = 0.0;
