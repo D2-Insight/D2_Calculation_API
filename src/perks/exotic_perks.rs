@@ -563,8 +563,8 @@ pub(super) fn dmr_ravenous_beast(
     let mut damage_mult = 1.0;
     let mut crit_mult = 1.0;
     if _value > 0 {
-        damage_mult = 2.87;
-        crit_mult = 1.99 / 2.87;
+        damage_mult = if _pvp { 2.2 } else { 2.87 };
+        crit_mult = if _pvp { 1.0 / (1.5 + -3.0 / 51.0) } else { 1.99 / 2.87 };
     }
     DamageModifierResponse {
         impact_dmg_scale: damage_mult,
