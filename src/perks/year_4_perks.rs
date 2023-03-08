@@ -230,10 +230,10 @@ pub(super) fn rsmr_frenzy(
 ) -> ReloadModifierResponse {
     let mut reload = 0;
     if _value > 0 {
-        reload = 50;
+        reload = 100;
     };
     if _input.time_total > 12.0 {
-        reload = 50;
+        reload = 100;
     };
     ReloadModifierResponse {
         reload_stat_add: reload,
@@ -250,10 +250,10 @@ pub(super) fn hmr_frenzy(
 ) -> HandlingModifierResponse {
     let mut handling = 0;
     if _value > 0 {
-        handling = 50;
+        handling = 100;
     };
     if _input.time_total > 12.0 {
-        handling = 50;
+        handling = 100;
     };
     HandlingModifierResponse {
         handling_stat_add: handling,
@@ -293,12 +293,12 @@ pub(super) fn sbr_frenzy(
     let mut handling = 0;
     let mut reload = 0;
     if _value > 0 {
-        handling = 50;
-        reload = 50;
+        handling = 100;
+        reload = 100;
     };
     if _input.time_total > 12.0 {
-        handling = 50;
-        reload = 50;
+        handling = 100;
+        reload = 100;
     };
     let mut out = HashMap::new();
     out.insert(StatHashes::HANDLING.into(), handling);
