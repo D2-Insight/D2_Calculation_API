@@ -4,7 +4,7 @@ import requests
 API_ROOT = "https://www.bungie.net/Platform/Destiny2/"
 CONTENT_ROOT = "https://www.bungie.net"
 API_KEY = "89c9db2c0a8b46449bb5e654b6e594d0"  # no yoinky😡
-API_KEY_HEADER = {"X-API-Key": API_KEY}
+API_KEY_HEADER = {"X-API-Key": ""}
 
 json_file = requests.get("https://raw.githubusercontent.com/DestinyItemManager/d2-additional-info/master/output/trait-to-enhanced-trait.json")
 dct = json.loads(json_file.text)
@@ -46,10 +46,8 @@ for key in itemData:
 
 out_str = str(out_lst)
 out_len = len(out_lst)
-with open ("./database/enhanced_handler_template.rs", "r") as f:
+with open ("./database/enhanced_handler_template.rs", "rw") as f:
     template = f.read()
     template = template.replace("{REROUTE_DATA_POINT}", out_str)
     template = template.replace("{REROUTE_DATA_len}", str(out_len))
-
-with open ("./database/enhanced_handler.rs", "w") as f:
     f.write(template)
