@@ -807,6 +807,20 @@ pub(super) fn hmr_pulse_monitor(
     }
 }
 
+pub(super) fn sbr_pulse_monitor(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) ->  HashMap<u32, i32> {
+    let mut map = HashMap::new();
+    if _value > 0 {
+        map.insert(StatHashes::HANDLING.into(), 50);
+    }
+    map
+}
+
 pub(super) fn sbr_underdog(
     _input: &CalculationInput,
     _value: u32,

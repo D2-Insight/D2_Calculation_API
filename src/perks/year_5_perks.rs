@@ -544,7 +544,7 @@ pub(super) fn sbr_sleight_of_hand(
     let stat_base = 10;
     let stat_bump = stat_base * val;
     map.insert(StatHashes::STABILITY.into(), stat_bump);
-    map.insert(StatHashes::RANGE.into(), stat_bump);
+    map.insert(StatHashes::RELOAD.into(), stat_bump);
     map.insert(StatHashes::HANDLING.into(), stat_bump);
     map
 }

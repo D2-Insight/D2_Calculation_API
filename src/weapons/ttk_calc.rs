@@ -15,7 +15,7 @@ fn ceil(x: f64) -> f64 {
 }
 
 const RESILIENCE_VALUES: [f64; 11] = [
-    185.01, 186.01, 187.01, 188.01, 189.01, 190.01, 192.01, 194.01, 196.01, 198.01, 200.01,
+    185.00, 186.00, 187.00, 188.00, 189.00, 190.00, 192.00, 194.00, 196.00, 198.00, 200.00,
 ];
 
 fn average_range(_range_data: &Vec<(f64, f64)>, _wanted_percent: f64, _dmagae_floor: f64) -> f64 {
@@ -78,8 +78,10 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
         let mut opt_bullets_fired = 0.0_f64;
         let mut opt_bullets_hit = 0.0_f64;
         let mut opt_range_data_vec: Vec<(f64, f64)> = Vec::new();
-        let mut opt_bodyshots = 0;
+        let opt_bodyshots = 0;
         let mut opt_headshots = 0;
+        let mut opt_bullet_timeline: Vec<(f64, f64)> = Vec::new();
+        
         //Optimal ttk
         while opt_bullets_hit < 50.0 {
             //PERK CALCULATIONS////////////
@@ -128,9 +130,9 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
 
             let shot_delay = if opt_bullets_hit % shot_burst_size > 0.0 && opt_bullets_hit > 0.0 {
                 shot_inner_burst_delay
-            } else if opt_bullets_hit == 0.0{
+            } else if opt_bullets_hit == 0.0 {
                 0.0
-            }  else {
+            } else {
                 shot_burst_delay
             };
 
@@ -143,11 +145,10 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
 
             opt_time_taken += shot_delay;
 
-            if (opt_damage_dealt + body_damage) > health {
-                opt_bodyshots += 1;
-                opt_damage_dealt += body_damage;
-                break;
-            } else if (opt_damage_dealt + body_damage + head_diff) > health {
+            opt_bullet_timeline.push((body_damage, head_diff));
+
+            // assume all headshots for first pass
+            if (opt_damage_dealt + body_damage + head_diff) >= health {
                 opt_headshots += 1;
                 opt_damage_dealt += body_damage + head_diff;
                 break;
@@ -155,10 +156,31 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 opt_headshots += 1;
                 opt_damage_dealt += body_damage + head_diff;
                 if _weapon.weapon_type == WeaponType::BOW {
-                    opt_time_taken += _weapon.calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data)).reload_time;
+                    opt_time_taken += _weapon
+                        .calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data))
+                        .reload_time;
                 }
             }
         }
+
+        let mut opt_timeline_damage_dealt = opt_damage_dealt;
+        let mut opt_timeline_bodyshots = opt_bodyshots;
+        let mut opt_timeline_headshots = opt_headshots;
+
+        // walk back and turn headshots to bodyshots
+        for timeline_snapshot in opt_bullet_timeline.iter().rev() {
+            let _body_damage = timeline_snapshot.0;
+            let headshot_diff = timeline_snapshot.1;
+
+            if opt_timeline_damage_dealt - headshot_diff >= health {
+                opt_timeline_bodyshots += 1;
+                opt_timeline_headshots -= 1;
+                opt_timeline_damage_dealt -= headshot_diff;
+            } else {
+                break;
+            }
+        }
+
         let expolsive_percent = explosion_dmg / (impact_dmg + explosion_dmg);
         if expolsive_percent >= 0.9 {
             opt_infnite_range = true;
@@ -175,8 +197,8 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
             999.9
         };
         let optimal_ttk = OptimalKillData {
-            headshots: opt_headshots,
-            bodyshots: opt_bodyshots,
+            headshots: opt_timeline_headshots,
+            bodyshots: opt_timeline_bodyshots,
             time_taken: opt_time_taken,
             achievable_range: range_possible,
         };
@@ -221,9 +243,9 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
             let shot_burst_size =
                 _weapon.firing_data.burst_size as f64 + firing_mods.burst_size_add;
 
-            let shot_delay = if bdy_bullets_hit % shot_burst_size > 0.0 && bdy_bullets_hit > 0.0{
+            let shot_delay = if bdy_bullets_hit % shot_burst_size > 0.0 && bdy_bullets_hit > 0.0 {
                 shot_inner_burst_delay
-            } else if bdy_bullets_hit == 0.0{
+            } else if bdy_bullets_hit == 0.0 {
                 0.0
             } else {
                 shot_burst_delay
@@ -237,7 +259,7 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 bdy_bullets_hit += 1.0;
             };
 
-            if (bdy_damage_dealt + body_damage) > health {
+            if (bdy_damage_dealt + body_damage) >= health {
                 break;
             } else {
                 bdy_damage_dealt += body_damage;

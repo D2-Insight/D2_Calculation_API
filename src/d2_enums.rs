@@ -220,8 +220,10 @@ pub enum DamageType {
     SOLAR,
     STASIS,
     KINETIC,
+    STRAND,
     UNKNOWN,
 }
+
 impl From<u32> for DamageType {
     fn from(_value: u32) -> DamageType {
         match _value {
@@ -230,6 +232,7 @@ impl From<u32> for DamageType {
             1847026933 => DamageType::SOLAR,
             151347233 => DamageType::STASIS,
             3373582085 => DamageType::KINETIC,
+            3949783978 => DamageType::STRAND,
             _ => DamageType::UNKNOWN,
         }
     }

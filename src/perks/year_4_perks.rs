@@ -62,7 +62,7 @@ pub(super) fn sbr_adagio(
 ) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
     let duration = if _is_enhanced { 8.0 } else { 7.0 };
-    if  _input.time_total < duration || _value > 0 {
+    if  _input.time_total <= duration && _value > 0 {
         map.insert(StatHashes::RANGE.into(), 10);
     }
     map
@@ -230,10 +230,10 @@ pub(super) fn rsmr_frenzy(
 ) -> ReloadModifierResponse {
     let mut reload = 0;
     if _value > 0 {
-        reload = 50;
+        reload = 100;
     };
     if _input.time_total > 12.0 {
-        reload = 50;
+        reload = 100;
     };
     ReloadModifierResponse {
         reload_stat_add: reload,
@@ -250,10 +250,10 @@ pub(super) fn hmr_frenzy(
 ) -> HandlingModifierResponse {
     let mut handling = 0;
     if _value > 0 {
-        handling = 50;
+        handling = 100;
     };
     if _input.time_total > 12.0 {
-        handling = 50;
+        handling = 100;
     };
     HandlingModifierResponse {
         handling_stat_add: handling,
@@ -293,12 +293,12 @@ pub(super) fn sbr_frenzy(
     let mut handling = 0;
     let mut reload = 0;
     if _value > 0 {
-        handling = 50;
-        reload = 50;
+        handling = 100;
+        reload = 100;
     };
     if _input.time_total > 12.0 {
-        handling = 50;
-        reload = 50;
+        handling = 100;
+        reload = 100;
     };
     let mut out = HashMap::new();
     out.insert(StatHashes::HANDLING.into(), handling);
@@ -344,9 +344,9 @@ pub(super) fn sbr_perpetual_motion(
     let val = clamp(_value, 0, 2);
     let mut stat_bump = 0;
     if val == 1 {
-        stat_bump = 5;
+        stat_bump = 10;
     } else if val == 2 {
-        stat_bump = 15;
+        stat_bump = 20;
     };
     let mut out = HashMap::new();
     out.insert(StatHashes::RELOAD.into(), stat_bump);
@@ -365,9 +365,9 @@ pub(super) fn hmr_perpetual_motion(
     let val = clamp(_value, 0, 2);
     let mut stat_bump = 0;
     if val == 1 {
-        stat_bump = 5;
+        stat_bump = 10;
     } else if val == 2 {
-        stat_bump = 15;
+        stat_bump = 20;
     };
     HandlingModifierResponse {
         handling_stat_add: stat_bump,
@@ -386,9 +386,9 @@ pub(super) fn rsmr_perpetual_motion(
     let val = clamp(_value, 0, 2);
     let mut stat_bump = 0;
     if val == 1 {
-        stat_bump = 5;
+        stat_bump = 10;
     } else if val == 2 {
-        stat_bump = 15;
+        stat_bump = 20;
     };
     ReloadModifierResponse {
         reload_stat_add: stat_bump,
@@ -542,7 +542,7 @@ pub(super) fn dmr_harmony(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    let mut damage_mult = if _value > 0 { 0.25 } else { 0.0 };
+    let mut damage_mult = if _value > 0 { 0.20 } else { 0.0 };
     let duration = if _is_enhanced { 8.0 } else { 7.0 };
     if _input.time_total > duration {
         damage_mult = 0.0;

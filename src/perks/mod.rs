@@ -12,6 +12,7 @@ pub mod year_2_perks;
 pub mod year_3_perks;
 pub mod year_4_perks;
 pub mod year_5_perks;
+pub mod year_6_perks;
 
 use std::collections::HashMap;
 
@@ -35,6 +36,7 @@ use self::{
     year_3_perks::*,
     year_4_perks::*,
     year_5_perks::*,
+    year_6_perks::*,
 };
 
 pub fn clamp<T: PartialOrd>(n: T, min: T, max: T) -> T {
@@ -111,6 +113,7 @@ pub enum Perks {
     UnstoppableForce,
     HotSwap,
     RightHook,
+    KeepAway,
     //class
     Amplified,
     Tempering,
@@ -491,6 +494,9 @@ impl From<u32> for Perks {
             2586829431 => Perks::ShotSwap,
             365154968 => Perks::TargetLock,
 
+            //season 20 | year 6
+            3619207468 => Perks::KeepAway,
+
             //subclass
             3066103999 => Perks::OnYourMark,
             3469412970 => Perks::Hedrons,
@@ -612,6 +618,7 @@ fn dyanmic_perk_stats(
         Perks::ElementalCapacitor => {
             sbr_elemental_capacitor(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::PulseMonitor => sbr_pulse_monitor(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::KillingWind => sbr_killing_wind(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::AdrenalineJunkie => {
             sbr_adrenaline_junkie(_input_data, val, enhanced, _pvp, _cached_data)
@@ -675,6 +682,7 @@ fn dyanmic_perk_stats(
         Perks::UnderPressure => sbr_under_pressure(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Adagio => sbr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => sbr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::KeepAway => sbr_keep_away(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
 }
@@ -884,6 +892,7 @@ fn get_perk_rsmr(
         }
         Perks::UnderDog => rsmr_underdog(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => rsmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::KeepAway => rsmr_keep_away(_input_data, val, enhanced, _pvp, _cached_data),
         _ => ReloadModifierResponse::default(),
     }
 }
@@ -945,9 +954,7 @@ fn get_perk_fmr(
         }
         Perks::RatPack => fmr_rat_pack(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::SpinningUp => fmr_spinning_up(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::RideTheBull => {
-            fmr_ride_the_bull(_input_data, val, enhanced, _pvp, _cached_data)
-        }
+        Perks::RideTheBull => fmr_ride_the_bull(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::FasterStringT1 => {
             fmr_faster_string_t1(_input_data, val, enhanced, _pvp, _cached_data)
         }
@@ -1030,9 +1037,13 @@ fn get_perk_hmr(
         Perks::Chimera => hmr_chimera(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Surplus => hmr_surplus(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::QuickDraw => hmr_quickdraw(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::TexBalancedStock => hmr_tex_balanced_stock(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::TexBalancedStock => {
+            hmr_tex_balanced_stock(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         Perks::PulseMonitor => hmr_pulse_monitor(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::EyeOfTheStorm => hmr_eye_of_the_storm(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::EyeOfTheStorm => {
+            hmr_eye_of_the_storm(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         Perks::SurosSynergy => hmr_suros_synergy(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::TunnelVision => hmr_tunnel_vision(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ShotSwap => hmr_shot_swap(_input_data, val, enhanced, _pvp, _cached_data),
@@ -1148,6 +1159,7 @@ fn get_perk_rmr(
         Perks::StatsForAll => rmr_stats_for_all(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::WellRounded => rmr_well_rounded(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Alacrity => rmr_alacrity(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::KeepAway => rmr_keep_away(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::RightHook => rmr_right_hook(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Encore => rmr_encore(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Fundamentals => rmr_fundamentals(_input_data, val, enhanced, _pvp, _cached_data),
