@@ -282,6 +282,7 @@ pub enum Perks {
     FasterStringT2,
     SlowerStringT1,
     SlowerStringT2,
+    FieldTested,
 }
 
 impl From<u32> for Perks {
@@ -346,6 +347,7 @@ impl From<u32> for Perks {
             192157151 => Perks::Ambush,
             2437618208 => Perks::TexBalancedStock,
             2250679103 => Perks::SearchParty,
+            2120661319 => Perks::FieldTested,
 
             //season 1 | year 1
             1015611457 => Perks::KillClip,
@@ -683,6 +685,7 @@ fn dyanmic_perk_stats(
         Perks::Adagio => sbr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => sbr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::KeepAway => sbr_keep_away(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FieldTested => sbr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
 }
@@ -893,6 +896,7 @@ fn get_perk_rsmr(
         Perks::UnderDog => rsmr_underdog(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => rsmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::KeepAway => rsmr_keep_away(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FieldTested => rsmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
         _ => ReloadModifierResponse::default(),
     }
 }
@@ -1048,6 +1052,7 @@ fn get_perk_hmr(
         Perks::TunnelVision => hmr_tunnel_vision(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ShotSwap => hmr_shot_swap(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => hmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FieldTested => hmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HandlingModifierResponse::default(),
     }
 }
@@ -1168,6 +1173,7 @@ fn get_perk_rmr(
         }
         Perks::Adagio => rmr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => rmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FieldTested => rmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
         _ => RangeModifierResponse::default(),
     }
 }

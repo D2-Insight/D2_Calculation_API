@@ -258,6 +258,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
 
         //season 20 | year 6
         Perks::KeepAway => Some(PerkOptionData::toggle()),
+        Perks::FieldTested => Some(PerkOptionData::stacking(5)),
 
         //exotics
         Perks::CranialSpike => Some(PerkOptionData::stacking(5)),
