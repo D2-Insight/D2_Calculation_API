@@ -25,7 +25,7 @@ struct DataPointers {
     a: usize,
 }
 
-fn get_data_pointers(_weapon_type_id: u8, _intrinsic_hash: u32,) -> Result<DataPointers,()> {
+fn get_data_pointers(_weapon_type_id: u8, _intrinsic_hash: u32,) -> Result<DataPointers, String> {
     let weapon_paths:  [Vec<(u32, DataPointers)>; {META_REPLACE_POINT_len}] = {PATH_REPLACE_POINT};
     let meta_pointer_map = HashMap::from(META_POINTERS);
     let intrinsic_pointer = meta_pointer_map.get(&_weapon_type_id).clone();
@@ -53,10 +53,10 @@ impl Weapon {
         _intrinsic_hash: u32,
         _ammo_type_id: u32,
         _damage_type_id: u32,
-    ) -> Result<Weapon, ()> {
+    ) -> Result<Weapon, String> {
         let data_pointer_result = get_data_pointers(_weapon_type_id, _intrinsic_hash);
         if data_pointer_result.is_err() {
-            return Err(());
+            return Err(data_pointer_result.unwrap_err());
         }
         let data_pointer = data_pointer_result.unwrap();
 
