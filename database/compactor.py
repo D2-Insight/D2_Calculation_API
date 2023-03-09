@@ -1,6 +1,5 @@
 import json
 import time
-import traceback
 
 id_to_name = {
         "6":  "Auto Rifle",

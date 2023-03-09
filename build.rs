@@ -1,26 +1,44 @@
 use std::collections::HashMap;
+use std::fs::File;
+use std::io::Write;
 
-
+fn write_variable(
+    writer: &mut std::fs::File,
+    name: &str,
+    datatype: &str,
+    value: String,
+    doc: &str,
+) {
+    let res = writeln!(
+        writer,
+        "#[doc=r#\"{}\"#]\n#[allow(dead_code)]\npub const {}: {} = {};",
+        doc, name, datatype, value
+    );
+    if res.is_err() {
+        println!("cargo:warning=error writing variable");
+    }
+}
 
 fn main() {
     let mut opts = built::Options::default();
     opts.set_dependencies(true);
 
     let src = std::env::var("CARGO_MANIFEST_DIR").unwrap();
-    let dst = std::path::Path::new(&std::env::var("OUT_DIR").unwrap()).join("built.rs");
+    let built_dst = std::path::Path::new(&std::env::var("OUT_DIR").unwrap()).join("built.rs");
+    let formula_dst = std::path::Path::new(&std::env::var("OUT_DIR").unwrap()).join("formulas.rs");
     println!("cargo:warning=OUT_DIR: {}", &std::env::var("OUT_DIR").unwrap());
-    built::write_built_file_with_opts(&opts, src.as_ref(), &dst)
+    built::write_built_file_with_opts(&opts, src.as_ref(), &built_dst)
         .expect("Failed to acquire build-time information");
-
+    let mut formula_file = std::fs::File::create(formula_dst).unwrap();
     // checking to see if we have internet connection
     let ping = reqwest::blocking::get("https://github.com");
     if ping.is_ok() {
         let status = ping.unwrap().status();
         if status == reqwest::StatusCode::OK {
-            construct_enhance_perk_mapping();
+            construct_enhance_perk_mapping(&mut formula_file);
         }
     }
-    fn construct_enhance_perk_mapping() {
+    fn construct_enhance_perk_mapping(formula_file: &mut File) {
         let mut perk_mappings: Vec<(u32, u32)> = Vec::new();
         let json_file = reqwest::blocking::get("https://raw.githubusercontent.com/DestinyItemManager/d2-additional-info/master/output/trait-to-enhanced-trait.json");
         if json_file.is_ok() {
@@ -79,5 +97,58 @@ fn main() {
                 }
             }
         }
+        write_variable(
+            formula_file,
+            "ENHANCE_PERK_MAPPING",
+            &format!("[(u32, u32); {}]", perk_mappings.len()),
+            format!("{:?}", perk_mappings),
+            "Mapping of enhanced perks and intrinsics to their base perk/intrinsic"
+        );
+    }
+
+
+    fn construct_weapon_formulas() {
+        // id_to_name = {
+        //     "6":  "Auto Rifle",
+        //     "31": "Combat Bow",
+        //     "11": "Fusion Rifle",
+        //     "23": "Grenade Launcher",
+        //     "9":  "Hand Cannon",
+        //     "22": "Linear Fusion Rifle",
+        //     "8":  "Machine Gun",
+        //     "13": "Pulse Rifle",
+        //     "10": "Rocket Launcher",
+        //     "14": "Scout Rifle",
+        //     "7":  "Shotgun",
+        //     "12": "Sniper Rifle",
+        //     "24": "Submachine Gun",
+        //     "18": "Sword",
+        //     "33": "Glaive",
+        //     "25": "Trace Rifle",
+        //     "17": "Sidearm"
+        // }
+        let id_to_name = HashMap::from(
+            [
+                (6, "Auto Rifle"),
+                (31, "Combat Bow"),
+                (11, "Fusion Rifle"),
+                (23, "Grenade Launcher"),
+                (9, "Hand Cannon"),
+                (22, "Linear Fusion Rifle"),
+                (8, "Machine Gun"),
+                (13, "Pulse Rifle"),
+                (10, "Rocket Launcher"),
+                (14, "Scout Rifle"),
+                (7, "Shotgun"),
+                (12, "Sniper Rifle"),
+                (24, "Submachine Gun"),
+                (18, "Sword"),
+                (33, "Glaive"),
+                (25, "Trace Rifle"),
+                (17, "Sidearm"),
+            ]
+        );
+
+        
     }
 }
