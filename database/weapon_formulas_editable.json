@@ -951,8 +951,8 @@
                 "range":    {"vpp_start": 0.0546,"offset_start": 15.0,"vpp_end": 0.198,"offset_end": 30.33, "floor_percent": 0.33},
                 "reload":   {"evpp": 0.0, "vpp": -0.0175, "offset": 3.5},
                 "handling": {
-                    "ready":{"vpp": -0.199386, "offset": 33.3015},
-                    "stow": {"vpp": -0.153306, "offset": 28.8991}
+                    "ready":{"vpp": -0.002139219, "offset": 0.42369},
+                    "stow": {"vpp": -0.002827674, "offset": 0.51470}
                 },
                 "combatant_scalars": {"vehicle": 3.0, "boss": 3.0, "champion": 3.0, "miniboss": 3.0, "elite": 3.0, "minor": 4.5}
             }

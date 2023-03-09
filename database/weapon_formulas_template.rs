@@ -30,18 +30,18 @@ fn get_data_pointers(_weapon_type_id: u8, _intrinsic_hash: u32,) -> Result<DataP
     let meta_pointer_map = HashMap::from(META_POINTERS);
     let intrinsic_pointer = meta_pointer_map.get(&_weapon_type_id).clone();
     if intrinsic_pointer.is_none() {
-        return Err(());
+        return Err("no intrinsic pointer".to_string());
     };
     let intrinsic_vec = &weapon_paths[*intrinsic_pointer.unwrap()];
     let mut intrinsic_map = HashMap::new();
     for (hash, pointer) in intrinsic_vec {
         intrinsic_map.insert(hash, pointer);
     };
-    let intrinsic_pointer = intrinsic_map.get(&_intrinsic_hash);
-    if intrinsic_pointer.is_none() {
-        return Err(());
+    let formula_pointer = intrinsic_map.get(&_intrinsic_hash);
+    if formula_pointer.is_none() {
+        return Err("no formula pointer".to_string());
     };
-    let intrinsic_pointer = intrinsic_pointer.unwrap().clone();
+    let intrinsic_pointer = formula_pointer.unwrap().clone();
     Ok(intrinsic_pointer.clone())
 }
 

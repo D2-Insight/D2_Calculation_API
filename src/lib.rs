@@ -124,9 +124,10 @@ pub fn set_weapon(
         );
         if new_weapon.is_err() {
             console_log!(
-                "Could not find weapon data for type: {}, intrinsic: {}",
+                "Could not find weapon data for type: {}, intrinsic: {}, Err: {:?}",
                 _weapon_type_id,
-                _intrinsic_hash
+                _intrinsic_hash,
+                new_weapon
             );
             perm_data.borrow_mut().weapon = Weapon::default();
         } else {
