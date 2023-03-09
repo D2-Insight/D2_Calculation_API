@@ -126,7 +126,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
     let crit_mult = tmp_dmg_prof.2;
     // let damage_delay = tmp_dmg_prof.3;
 
-    let base_mag = weapon.calc_ammo_sizes(None, None).mag_size;
+    let base_mag = weapon.calc_ammo_sizes(None, None, false).mag_size;
     let maximum_shots = if base_mag * 5 < 15 { 15 } else { base_mag * 5 };
 
     let firing_settings = _weapon.firing_data.clone();
@@ -149,7 +149,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
     let mut pers_calc_data: HashMap<String, f64> = HashMap::new();
 
     let mut reserve = weapon
-        .calc_ammo_sizes(Some(weapon.static_calc_input()), Some(&mut pers_calc_data))
+        .calc_ammo_sizes(Some(weapon.static_calc_input()), Some(&mut pers_calc_data), false)
         .reserve_size;
 
     #[allow(unused_mut)]
@@ -158,7 +158,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
         //MAGAZINE/////////////////////
         let mag_calc_input = weapon.sparse_calc_input(total_shots_fired, total_time);
         let mut mag = weapon
-            .calc_ammo_sizes(Some(mag_calc_input), Some(&mut pers_calc_data))
+            .calc_ammo_sizes(Some(mag_calc_input), Some(&mut pers_calc_data), false)
             .mag_size;
         if mag > reserve {
             mag = reserve
@@ -169,7 +169,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
         //This is for stuff like weapon swapping, demo or trench barrel
         let handling_calc_input = weapon.sparse_calc_input(total_shots_fired, total_time);
         let handling_data =
-            weapon.calc_handling_times(Some(handling_calc_input), Some(&mut pers_calc_data));
+            weapon.calc_handling_times(Some(handling_calc_input), Some(&mut pers_calc_data), false);
         ///////////////////////////////
         let mut start_time = total_time.clone();
         while mag > 0 {
@@ -409,7 +409,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
             has_overshield: false,
         };
         let reload_responses =
-            weapon.calc_reload_time(Some(reload_input_data), Some(&mut pers_calc_data));
+            weapon.calc_reload_time(Some(reload_input_data), Some(&mut pers_calc_data), false);
         total_time += reload_responses.reload_time;
         ///////////////////////////////
         num_reloads += 1;

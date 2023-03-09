@@ -67,8 +67,6 @@ pub struct FiringData {
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Weapon {
-    //ideally entirely interfaced with through funcs when acting mutably
-    pub is_pvp: bool,
     pub hash: u32,
     pub intrinsic_hash: u32,
 
@@ -164,7 +162,7 @@ impl Weapon {
             &self.damage_type,
             self.firing_data.damage,
             self.firing_data.crit_mult,
-            self.calc_ammo_sizes(None, None).mag_size,
+            self.calc_ammo_sizes(None, None, false).mag_size,
             _total_shots_fired,
             _total_time,
         )
@@ -176,7 +174,7 @@ impl Weapon {
         _total_time: f64,
         _overshield: bool,
     ) -> CalculationInput {
-        let base_mag = self.calc_ammo_sizes(None, None).mag_size as f64;
+        let base_mag = self.calc_ammo_sizes(None, None, true).mag_size as f64;
         let mut tmp = CalculationInput::construct_pvp(
             self.intrinsic_hash,
             &self.firing_data,
@@ -188,7 +186,7 @@ impl Weapon {
             self.firing_data.crit_mult,
             base_mag,
             _overshield,
-            self.calc_handling_times(None, None),
+            self.calc_handling_times(None, None, true),
         );
         tmp.time_this_mag = _total_time;
         tmp.time_total = _total_time;
@@ -229,7 +227,6 @@ impl Weapon {
 impl Default for Weapon {
     fn default() -> Weapon {
         Weapon {
-            is_pvp: false,
 
             intrinsic_hash: 0,
             hash: 0,

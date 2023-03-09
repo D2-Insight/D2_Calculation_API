@@ -944,7 +944,7 @@
         "1900919151": {"name": "Edge Of Action",      "cat": "default","subFam": "Adaptive",    "magProf": "default"},
         "3551884421": {"name": "Edge Of Concurrence", "cat": "default","subFam": "Lightweight", "magProf": "default"},
         "3024740338": {"name": "Edge Of Intent",      "cat": "default","subFam": "Aggressive",  "magProf": "default"},
-        "131675355":  {"name": "Adaptive Glaive",     "cat": "default","subFam": "Adaptive",    "magProf": "default"},
+        "1316753551":  {"name": "Adaptive Glaive",     "cat": "default","subFam": "Adaptive",    "magProf": "default"},
         "1986105578": {"name": "Aggressive Glaive",   "cat": "default","subFam": "Aggressive",  "magProf": "default"},
         "cat": {
             "default": {

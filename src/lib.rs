@@ -50,8 +50,14 @@ pub struct PersistentData {
     pub ability: Ability,
     pub enemy: Enemy,
 }
+impl PersistentData {
+    pub fn new() -> PersistentData {
+        Self::default()
+    }
+}
+
 thread_local! {
-    static PERS_DATA: RefCell<PersistentData> = RefCell::new(PersistentData::default());
+    static PERS_DATA: RefCell<PersistentData> = RefCell::new(PersistentData::new());
 }
 
 #[cfg(feature = "wasm")]
@@ -149,7 +155,6 @@ pub fn get_stats() -> Result<JsValue, JsValue> {
     let stat_map = PERS_DATA.with(|perm_data| {
         perm_data.borrow().weapon.stats.clone()
     });
-    //turn stat map into a map of u32 and jsstat
     let mut js_stat_map = HashMap::new();
     for (key, value) in stat_map {
         js_stat_map.insert(key, JsStat::from(value));
@@ -222,53 +227,53 @@ pub fn get_perk_options_js(_perks: Vec<u32>) -> Result<JsValue, JsValue> {
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getWeaponRangeFalloff")]
-pub fn get_weapon_range(_dynamic_traits: bool) -> Result<JsRangeResponse, JsValue> {
+pub fn get_weapon_range(_dynamic_traits: bool, _pvp: bool) -> Result<JsRangeResponse, JsValue> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     if _dynamic_traits {
         Ok(weapon
-            .calc_range_falloff(Some(weapon.static_calc_input()), None)
+            .calc_range_falloff(Some(weapon.static_calc_input()), None, _pvp)
             .into())
     } else {
-        Ok(weapon.calc_range_falloff(None, None).into())
+        Ok(weapon.calc_range_falloff(None, None, _pvp).into())
     }
 }
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getWeaponHandlingTimes")]
-pub fn get_weapon_handling(_dynamic_traits: bool) -> Result<JsHandlingResponse, JsValue> {
+pub fn get_weapon_handling(_dynamic_traits: bool, _pvp: bool) -> Result<JsHandlingResponse, JsValue> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     if _dynamic_traits {
         Ok(weapon
-            .calc_handling_times(Some(weapon.static_calc_input()), None)
+            .calc_handling_times(Some(weapon.static_calc_input()), None, _pvp)
             .into())
     } else {
-        Ok(weapon.calc_handling_times(None, None).into())
+        Ok(weapon.calc_handling_times(None, None, _pvp).into())
     }
 }
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getWeaponReloadTimes")]
-pub fn get_weapon_reload(_dynamic_traits: bool) -> Result<JsReloadResponse, JsValue> {
+pub fn get_weapon_reload(_dynamic_traits: bool, _pvp: bool) -> Result<JsReloadResponse, JsValue> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     if _dynamic_traits {
         Ok(weapon
-            .calc_reload_time(Some(weapon.static_calc_input()), None)
+            .calc_reload_time(Some(weapon.static_calc_input()), None, _pvp)
             .into())
     } else {
-        Ok(weapon.calc_reload_time(None, None).into())
+        Ok(weapon.calc_reload_time(None, None, _pvp).into())
     }
 }
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getWeaponAmmoSizes")]
-pub fn get_weapon_ammo(_dynamic_traits: bool) -> Result<JsAmmoResponse, JsValue> {
+pub fn get_weapon_ammo(_dynamic_traits: bool, _pvp: bool) -> Result<JsAmmoResponse, JsValue> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     if _dynamic_traits {
         Ok(weapon
-            .calc_ammo_sizes(Some(weapon.static_calc_input()), None)
+            .calc_ammo_sizes(Some(weapon.static_calc_input()), None, _pvp)
             .into())
     } else {
-        Ok(weapon.calc_ammo_sizes(None, None).into())
+        Ok(weapon.calc_ammo_sizes(None, None, _pvp).into())
     }
 }
 
@@ -297,13 +302,13 @@ pub fn get_weapon_dps(_use_rpl: bool) -> Result<JsDpsResponse, JsValue> {
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getWeaponFiringData")]
-pub fn get_weapon_firing_data(_dynamic_traits: bool, _use_rpl: bool) -> Result<JsFiringResponse, JsValue> {
+pub fn get_weapon_firing_data(_dynamic_traits: bool, _pvp: bool, _use_rpl: bool) -> Result<JsFiringResponse, JsValue> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     let mut response: types::rs_types::FiringResponse;
     if _dynamic_traits {
-        response = weapon.calc_firing_data(Some(weapon.static_calc_input()), None);
+        response = weapon.calc_firing_data(Some(weapon.static_calc_input()), None, _pvp);
     } else {
-        response = weapon.calc_firing_data(None, None);
+        response = weapon.calc_firing_data(None, None, _pvp);
     };
     PERS_DATA.with(|perm_data| {
         response.apply_pve_bonuses(
@@ -391,38 +396,38 @@ fn weapon_as_string() -> PyResult<String> {
 }
 #[cfg(feature = "python")]
 #[pyfunction(name = "get_range_falloff")]
-fn get_weapon_range(_use_traits: bool) -> PyResult<PyRangeResponse> {
+fn get_weapon_range(_use_traits: bool, _pvp: bool) -> PyResult<PyRangeResponse> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     if _use_traits {
         Ok(weapon
-            .calc_range_falloff(Some(weapon.static_calc_input()), None)
+            .calc_range_falloff(Some(weapon.static_calc_input()), None, _pvp)
             .into())
     } else {
-        Ok(weapon.calc_range_falloff(None, None).into())
+        Ok(weapon.calc_range_falloff(None, None, _pvp).into())
     }
 }
 #[cfg(feature = "python")]
 #[pyfunction(name = "get_handling_times")]
-fn get_weapon_handling(_use_traits: bool) -> PyResult<PyHandlingResponse> {
+fn get_weapon_handling(_use_traits: bool, _pvp: bool) -> PyResult<PyHandlingResponse> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     if _use_traits {
         Ok(weapon
-            .calc_handling_times(Some(weapon.static_calc_input()), None)
+            .calc_handling_times(Some(weapon.static_calc_input()), None, _pvp)
             .into())
     } else {
-        Ok(weapon.calc_handling_times(None, None).into())
+        Ok(weapon.calc_handling_times(None, None, _pvp).into())
     }
 }
 
 #[cfg(feature = "python")]
 #[pyfunction(name = "get_firing_data")]
-fn get_firing_data(_dynamic_traits: bool, _use_rpl: bool) -> PyResult<PyFiringResponse> {
+fn get_firing_data(_dynamic_traits: bool, _pvp: bool, _use_rpl: bool) -> PyResult<PyFiringResponse> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     let mut response: types::rs_types::FiringResponse;
     if _dynamic_traits {
-        response = weapon.calc_firing_data(Some(weapon.static_calc_input()), None);
+        response = weapon.calc_firing_data(Some(weapon.static_calc_input()), None, _pvp);
     } else {
-        response = weapon.calc_firing_data(None, None);
+        response = weapon.calc_firing_data(None, None, _pvp);
     };
     PERS_DATA.with(|perm_data| {
         response.apply_pve_bonuses(

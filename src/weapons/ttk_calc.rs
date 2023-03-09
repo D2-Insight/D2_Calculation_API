@@ -104,7 +104,7 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 &mut persistent_data,
             );
             let tmp_range_data =
-                _weapon.calc_range_falloff(Some(calc_input.clone()), Some(&mut persistent_data));
+                _weapon.calc_range_falloff(Some(calc_input.clone()), Some(&mut persistent_data), true);
             if tmp_range_data.ads_falloff_start > 998.0 {
                 opt_infnite_range = true;
             } else {
@@ -157,7 +157,7 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 opt_damage_dealt += body_damage + head_diff;
                 if _weapon.weapon_type == WeaponType::BOW {
                     opt_time_taken += _weapon
-                        .calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data))
+                        .calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data), true)
                         .reload_time;
                 }
             }

@@ -4,10 +4,10 @@
 *.js
 *.dll
 *.pyc
-*.pyi
 *.old
 *.zip
 *.ts
+!*.d.ts
 database/weapon_formulas.rs
 !database/compactor.py
 !database/perk_rerouter.py

@@ -41,6 +41,7 @@ impl Weapon {
         &self,
         _calc_input: Option<CalculationInput>,
         _cached_data: Option<&mut HashMap<String, f64>>,
+        _pvp: bool,
     ) -> ReloadResponse {
         let reload_stat = self
             .stats
@@ -53,7 +54,7 @@ impl Weapon {
             let modifiers = get_reload_modifier(
                 self.list_perks(),
                 &_calc_input.unwrap(),
-                self.is_pvp,
+                _pvp,
                 cached_data,
             );
             self.reload_formula
@@ -109,6 +110,7 @@ impl Weapon {
         &self,
         _calc_input: Option<CalculationInput>,
         _cached_data: Option<&mut HashMap<String, f64>>,
+        _pvp: bool,
     ) -> RangeResponse {
         let range_stat = self
             .stats
@@ -126,7 +128,7 @@ impl Weapon {
             let modifiers = get_range_modifier(
                 self.list_perks(),
                 &_calc_input.unwrap(),
-                self.is_pvp,
+                _pvp,
                 cached_data,
             );
             self.range_formula.calc_range_falloff_formula(
@@ -175,6 +177,7 @@ impl Weapon {
         &self,
         _calc_input: Option<CalculationInput>,
         _cached_data: Option<&mut HashMap<String, f64>>,
+        _pvp: bool,
     ) -> HandlingResponse {
         let handling_stat = self
             .stats
@@ -187,7 +190,7 @@ impl Weapon {
             let modifiers = get_handling_modifier(
                 self.list_perks(),
                 &_calc_input.unwrap(),
-                self.is_pvp,
+                _pvp,
                 cached_data,
             );
             self.handling_formula
@@ -249,6 +252,7 @@ impl Weapon {
         &self,
         _calc_input: Option<CalculationInput>,
         _cached_data: Option<&mut HashMap<String, f64>>,
+        _pvp: bool,
     ) -> AmmoResponse {
         let mag_stat = self
             .stats
@@ -267,13 +271,13 @@ impl Weapon {
             let mag_modifiers = get_magazine_modifier(
                 self.list_perks(),
                 &_calc_input.clone().unwrap(),
-                self.is_pvp,
+                _pvp,
                 cached_data,
             );
             let inv_modifiers = get_reserve_modifier(
                 self.list_perks(),
                 &_calc_input.clone().unwrap(),
-                self.is_pvp,
+                _pvp,
                 cached_data,
             );
             out = self.ammo_formula.calc_ammo_size_formula(
@@ -306,17 +310,18 @@ impl Weapon {
         &self,
         _calc_input: Option<CalculationInput>,
         _cached_data: Option<&mut HashMap<String, f64>>,
+        _pvp: bool,
     ) -> FiringResponse {
         let pve_damage_modifiers: DamageModifierResponse;
         let pvp_damage_modifiers: DamageModifierResponse;
         let firing_modifiers: FiringModifierResponse;
-        let mut default_chd_dt = HashMap::new();
-        let cached_data = _cached_data.unwrap_or(&mut default_chd_dt);
+        let mut default_cached_data = HashMap::new();
+        let cached_data = _cached_data.unwrap_or(&mut default_cached_data);
         if _calc_input.is_some() {
             firing_modifiers = get_firing_modifier(
                 self.list_perks(),
                 &_calc_input.clone().unwrap(),
-                self.is_pvp,
+                _pvp,
                 cached_data,
             );
             pvp_damage_modifiers = get_dmg_modifier(
@@ -390,7 +395,7 @@ impl Weapon {
         let mut crit = 1.0_f64;
         let delay;
 
-        let epr = get_explosion_data(self.list_perks(), &self.static_calc_input(), self.is_pvp);
+        let epr = get_explosion_data(self.list_perks(), &self.static_calc_input(), false);
         if epr.percent <= 0.0 {
             impact = self.firing_data.damage;
             crit = self.firing_data.crit_mult;
