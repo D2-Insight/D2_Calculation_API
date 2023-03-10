@@ -10,7 +10,7 @@ use super::{
     lib::{
         CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
         FiringModifierResponse, HandlingModifierResponse, InventoryModifierResponse,
-        MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
+        MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse, FlinchModifierResponse,
     },
 };
 
@@ -241,5 +241,25 @@ pub(super) fn dmr_weaken_debuffs(
         impact_dmg_scale: 1.0 + (val / 100.0),
         explosive_dmg_scale: 1.0 + (val / 100.0),
         crit_scale: 1.0,
+    }
+}
+
+pub(super) fn flrm_unflinching_mod(
+_input: &CalculationInput,
+_value: u32,
+_is_enhanced: bool,
+_pvp: bool,
+_cached_data: &mut HashMap<String, f64>,
+) -> FlinchModifierResponse {
+    if _value == 1 {
+        return FlinchModifierResponse {
+            flinch_scale: 0.75
+        };
+    } else if _value > 1 {
+        return FlinchModifierResponse {
+            flinch_scale: 0.7
+        };
+    } else {
+        return FlinchModifierResponse::default();
     }
 }

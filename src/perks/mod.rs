@@ -26,7 +26,7 @@ use self::{
         CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
         FiringModifierResponse, HandlingModifierResponse, InventoryModifierResponse,
         MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
-        ReloadOverrideResponse,
+        ReloadOverrideResponse, FlinchModifierResponse,
     },
     meta_perks::*,
     origin_perks::*,
@@ -114,6 +114,7 @@ pub enum Perks {
     HotSwap,
     RightHook,
     KeepAway,
+    NoDistractions,
     //class
     Amplified,
     Tempering,
@@ -159,6 +160,7 @@ pub enum Perks {
     ReserveMod,
     TargetingMod,
     LoaderMod,
+    Unflinching,
 
     ////STATIC////
     GutShot,
@@ -301,6 +303,7 @@ impl From<u32> for Perks {
             222222222 => Perks::TargetingMod,
             333333333 => Perks::ReserveMod,
             444444444 => Perks::LoaderMod,
+            555555555 => Perks::Unflinching,
             1484685884 => Perks::QuickCharge,
             593361144 => Perks::DragonShadow,
             1147638875 => Perks::OphidianAspect,
@@ -421,6 +424,7 @@ impl From<u32> for Perks {
             205890336 => Perks::UnderDog,
             3194351027 => Perks::ExplosiveLight,
             699525795 => Perks::EyeOfTheStorm,
+            2866798147 => Perks::NoDistractions,
 
             //season 8 | year 3
             //TODO
@@ -1309,5 +1313,35 @@ fn get_perk_epr(
         }
         Perks::BuiltIn => epr_builtin(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
         _ => ExplosivePercentResponse::default(),
+    }
+}
+
+pub fn get_flinch_modifier(
+    _perks: Vec<Perk>,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> FlinchModifierResponse {
+    let mut tmp = FlinchModifierResponse::default();
+    for perk in _perks{
+        tmp.flinch_scale *= get_perk_flmr(perk, _input_data, _pvp).flinch_scale;
+    }
+    tmp
+}
+
+fn get_perk_flmr(
+    _perk: Perk,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+) -> FlinchModifierResponse{
+    let perk_enum = _perk.hash.into();
+    let val = _perk.value;
+    let enhanced = _perk.enhanced;
+    match perk_enum {
+        Perks::SurosSynergy => flrm_suros_synergy(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::NoDistractions => flrm_no_distractions(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::Unflinching => flrm_unflinching_mod(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        //Perks::PerfectFloat => todo!(), //Perfect floats flinch resist value is unknown atm
+        _ => FlinchModifierResponse::default(),
     }
 }
