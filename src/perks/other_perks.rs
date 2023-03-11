@@ -584,7 +584,7 @@ pub(super) fn flmr_tome_of_dawn(
     ) -> FlinchModifierResponse {
         if _value > 0 {
             FlinchModifierResponse {
-                flinch_scale: 0.75
+                flinch_scale: 0.80
             }
          } else {
             FlinchModifierResponse::default()
