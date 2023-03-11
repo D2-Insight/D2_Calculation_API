@@ -178,6 +178,7 @@ version = "1.0.1"
 dependencies = [
  "built",
  "console_error_panic_hook",
+ "json_value_remove",
  "pyo3",
  "pyo3-built",
  "reqwest",
@@ -519,6 +520,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49409df3e3bf0856b916e2ceaca09ee28e6871cf7d9ce97a692cacfdb2a25a47"
 dependencies = [
  "wasm-bindgen",
+]
+
+[[package]]
+name = "json_value_remove"
+version = "1.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "33ab16ad9f3776fb27426db48f849753ec726764e80efe58da46e60ec1073d20"
+dependencies = [
+ "serde_json",
 ]
 
 [[package]]
