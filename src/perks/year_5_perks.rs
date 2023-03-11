@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{StatHashes, WeaponType};
+use crate::{d2_enums::{StatHashes, WeaponType}, StatMap};
 
 use super::{
     clamp,
@@ -43,7 +43,7 @@ pub(super) fn sbr_encore(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     let val = clamp(_value, 0, 4) as i32;
     let stability_boost = 8 * val;
@@ -114,7 +114,7 @@ pub(super) fn sbr_fragile_focus(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     let mut range_bonus = 0;
     if _value > 0 {
@@ -161,7 +161,7 @@ pub(super) fn sbr_offhand_strike(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     let mut stability_boost = 0;
     if _value > 0 {
@@ -210,7 +210,7 @@ pub(super) fn sbr_slickdraw(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     map.insert(StatHashes::HANDLING.into(), 100);
     map
@@ -222,7 +222,7 @@ pub(super) fn sbr_stats_for_all(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut out = HashMap::new();
     let mut stability_boost = 0;
     let mut range_boost = 0;
@@ -307,7 +307,7 @@ pub(super) fn sbr_steady_hands(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     let mut handling = 0;
     if _value > 0 {
@@ -406,7 +406,7 @@ pub(super) fn sbr_well_rounded(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let val = clamp(_value, 0, 2) as i32;
     let mut map = HashMap::new();
     let stat_base = if _is_enhanced { 12 } else { 10 };
@@ -523,7 +523,7 @@ pub(super) fn sbr_compulsive_reloader(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let reload_add = if _is_enhanced { 55 } else { 50 };
     let mut map = HashMap::new();
     if _input.shots_fired_this_mag <= _input.base_mag / 2.0 && _value > 0 {
@@ -538,7 +538,7 @@ pub(super) fn sbr_sleight_of_hand(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let val = clamp(_value, 0, 3) as i32;
     let mut map = HashMap::new();
     let stat_base = 10;
@@ -607,7 +607,7 @@ pub(super) fn sbr_shot_swap(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     if _value > 0 {
         map.insert(StatHashes::HANDLING.into(), 100);

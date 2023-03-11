@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{AmmoType, StatHashes, WeaponType};
+use crate::{d2_enums::{AmmoType, StatHashes, WeaponType}, StatMap};
 
 use super::{
     clamp,
@@ -17,7 +17,7 @@ pub(super) fn sbr_air_assault(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stats = HashMap::new();
     let ae_per_stack = if _is_enhanced { 35 } else { 20 };
     let ae = ae_per_stack * _value as i32;
@@ -115,7 +115,7 @@ pub(super) fn sbr_feeding_frenzy(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stats = HashMap::new();
     let val = clamp(_value, 0, 5);
     let duration = 3.5;
@@ -239,7 +239,7 @@ pub(super) fn sbr_rapid_hit(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let rel_values = vec![0, 5, 30, 35, 45, 60];
     let stab_values = vec![0, 2, 12, 14, 18, 25];
     let entry_to_get = clamp(_value + _input.shots_fired_this_mag as u32, 0, 5);
@@ -427,7 +427,7 @@ pub(super) fn sbr_explosive_light(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut out = HashMap::new();
     if _value > 0 {
         out.insert(StatHashes::BLAST_RADIUS.into(), 100);
@@ -441,7 +441,7 @@ pub(super) fn sbr_eye_of_the_storm(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut out = HashMap::new();
     if _value > 0 {
         out.insert(StatHashes::HANDLING.into(), 30);

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{StatHashes, WeaponType};
+use crate::{d2_enums::{StatHashes, WeaponType}, StatMap};
 
 use super::{
     clamp,
@@ -59,7 +59,7 @@ pub(super) fn sbr_adagio(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     let duration = if _is_enhanced { 8.0 } else { 7.0 };
     if  _input.time_total <= duration && _value > 0 {
@@ -113,7 +113,7 @@ pub(super) fn sbr_adrenaline_junkie(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let duration = if _is_enhanced { 6.0 } else { 4.5 };
     let mut handling = 0;
     if _input.time_total <= duration && _value > 0 {
@@ -164,7 +164,7 @@ pub(super) fn sbr_ensemble(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let handling = if _is_enhanced { 30 } else { 35 };
     let reload = if _is_enhanced { 40 } else { 45 };
     if _value > 0 {
@@ -289,7 +289,7 @@ pub(super) fn sbr_frenzy(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut handling = 0;
     let mut reload = 0;
     if _value > 0 {
@@ -327,7 +327,7 @@ pub(super) fn sbr_impulse_amplifier(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let reload = if _is_enhanced { 15 } else { 10 };
     let mut out = HashMap::new();
     out.insert(StatHashes::RELOAD.into(), reload);
@@ -340,7 +340,7 @@ pub(super) fn sbr_perpetual_motion(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let val = clamp(_value, 0, 2);
     let mut stat_bump = 0;
     if val == 1 {
@@ -402,7 +402,7 @@ pub(super) fn sbr_perfect_float(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut out = HashMap::new();
     if _value > 0 {
         out.insert(StatHashes::AIRBORNE.into(), 30);
@@ -416,7 +416,7 @@ pub(super) fn sbr_pugilist(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut out = HashMap::new();
     if _value > 0 {
         out.insert(StatHashes::HANDLING.into(), 30);
@@ -463,7 +463,7 @@ pub(super) fn sbr_danger_zone(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut out = HashMap::new();
     if _value > 0 {
         out.insert(StatHashes::BLAST_RADIUS.into(), 100);
@@ -575,7 +575,7 @@ pub(super) fn sbr_harmony(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut out = HashMap::new();
     if _value > 0 {
         out.insert(StatHashes::HANDLING.into(), 15);
@@ -589,7 +589,7 @@ pub(super) fn sbr_surplus(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut out = HashMap::new();
     if _value == 1 {
         out.insert(StatHashes::HANDLING.into(), 10);
@@ -658,7 +658,7 @@ pub(super) fn sbr_heating_up(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let val = clamp(_value, 0, 2) as i32;
     let mut out  = HashMap::new();
     out.insert(StatHashes::RECOIL_DIR.into(), 20*val);
@@ -672,7 +672,7 @@ pub(super) fn sbr_tunnel_vision(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut out = HashMap::new();
     if _value > 0 {
         out.insert(StatHashes::AIM_ASSIST.into(), 20);

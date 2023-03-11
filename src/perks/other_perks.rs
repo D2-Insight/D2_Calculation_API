@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use crate::{
     d2_enums::{DamageType, StatHashes, WeaponType},
-    enemies::EnemyType,
+    enemies::EnemyType, StatMap,
 };
 
 use super::{
@@ -76,7 +76,7 @@ pub(super) fn sbr_ophidian_aspects(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stats = HashMap::new();
     stats.insert(StatHashes::HANDLING.into(), 35);
     stats.insert(StatHashes::RELOAD.into(), 35);
@@ -90,7 +90,7 @@ pub(super) fn sbr_dragon_shadow(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stats = HashMap::new();
     stats.insert(StatHashes::HANDLING.into(), 100);
     stats.insert(StatHashes::RELOAD.into(), 100);
@@ -130,7 +130,7 @@ pub(super) fn sbr_amplified(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stats = HashMap::new();
     stats.insert(StatHashes::HANDLING.into(), 40);
     stats
@@ -184,7 +184,7 @@ pub(super) fn sbr_tempering(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stats = HashMap::new();
     if _value > 0 {
         stats.insert(StatHashes::AIRBORNE.into(), 20);
@@ -198,7 +198,7 @@ pub(super) fn sbr_on_your_mark(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stats = HashMap::new();
     let val = clamp(_value, 0, 3) as i32;
     if _value > 0 {
@@ -243,7 +243,7 @@ pub(super) fn sbr_heat_rises(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stats = HashMap::new();
     if _value > 0 {
         stats.insert(StatHashes::AIRBORNE.into(), 70);
@@ -257,7 +257,7 @@ pub(super) fn sbr_hedrons(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stats = HashMap::new();
     if _value > 0 {
         stats.insert(StatHashes::AIRBORNE.into(), 20);
@@ -273,7 +273,7 @@ pub(super) fn sbr_quick_charge(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stats = HashMap::new();
     if *_input.weapon_type == WeaponType::FUSIONRIFLE
         || *_input.weapon_type == WeaponType::SHOTGUN

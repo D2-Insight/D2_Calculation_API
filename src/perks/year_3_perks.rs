@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use crate::{
     d2_enums::{AmmoType, StatHashes},
-    enemies::EnemyType,
+    enemies::EnemyType, StatMap,
 };
 
 use super::lib::{
@@ -31,7 +31,7 @@ pub(super) fn sbr_elemental_capacitor(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stats = HashMap::new();
     let mut ev = if _is_enhanced { 5 } else { 0 };
     if _value == 1 {
@@ -89,7 +89,7 @@ pub(super) fn sbr_killing_wind(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stats = HashMap::new();
     if _value > 0 {
         stats.insert(StatHashes::HANDLING.into(), 40);

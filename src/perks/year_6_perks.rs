@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{StatHashes, WeaponType};
+use crate::{d2_enums::{StatHashes, WeaponType}, StatMap};
 
 use super::{
     clamp,
@@ -17,7 +17,7 @@ pub(super) fn sbr_keep_away(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     let mut range_bonus = 0;
     let mut reload_bonus = 0;
@@ -64,7 +64,7 @@ pub(super) fn sbr_field_tested(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     let val = clamp(_value, 0, 5) as i32;
     map.insert(StatHashes::RANGE.into(), val*5);

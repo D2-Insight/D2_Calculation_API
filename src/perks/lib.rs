@@ -2,13 +2,13 @@ use crate::{
     d2_enums::{AmmoType, DamageType, StatHashes, WeaponType},
     enemies::EnemyType,
     types::rs_types::HandlingResponse,
-    weapons::{FiringData, Stat},
+    weapons::{FiringData, Stat}, HashId,
 };
 use std::{cell::RefCell, collections::HashMap, ops::Mul};
 
 #[derive(Debug, Clone)]
 pub struct CalculationInput<'a> {
-    pub intrinsic_hash: u32,
+    pub intrinsic_hash: HashId,
     pub curr_firing_data: &'a FiringData,
     pub base_crit_mult: f64,
     pub shots_fired_this_mag: f64,
@@ -19,14 +19,14 @@ pub struct CalculationInput<'a> {
     pub reserves_left: f64,
     pub time_total: f64,
     pub time_this_mag: f64,
-    pub stats: &'a HashMap<u32, Stat>,
+    pub stats: &'a HashMap<HashId, Stat>,
     pub weapon_type: &'a WeaponType,
     pub damage_type: &'a DamageType,
     pub ammo_type: &'a AmmoType,
     pub handling_data: HandlingResponse,
     pub num_reloads: f64,
     pub enemy_type: &'a EnemyType,
-    pub perk_value_map: &'a HashMap<u32, u32>,
+    pub perk_value_map: &'a HashMap<HashId, u32>,
     pub has_overshield: bool,
 }
 impl<'a> CalculationInput<'a> {

@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use crate::{
     d2_enums::{AmmoType, DamageType, StatHashes, WeaponType},
-    weapons::Stat,
+    weapons::Stat, StatMap,
 };
 
 use super::{
@@ -119,7 +119,7 @@ pub(super) fn sbr_targeting_mods(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stats = HashMap::new();
     if _value == 1 {
         stats.insert(StatHashes::AIM_ASSIST.into(), 10);
@@ -158,7 +158,7 @@ pub(super) fn sbr_reserve_mods(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut inv_buff = 20;
     if *_input.weapon_type == WeaponType::MACHINEGUN {
         inv_buff = 10;
@@ -202,7 +202,7 @@ pub(super) fn sbr_loader_mods(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stats = HashMap::new();
     if _value > 0 {
         let mut reload_stat_buff = 10;

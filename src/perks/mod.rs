@@ -20,6 +20,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::d2_enums::StatHashes;
 
+use crate::{HashId, StatMap};
+
 use self::{
     exotic_perks::*,
     lib::{
@@ -51,10 +53,10 @@ pub fn clamp<T: PartialOrd>(n: T, min: T, max: T) -> T {
 
 #[derive(Clone, Debug, Default, Serialize)]
 pub struct Perk {
-    pub stat_buffs: HashMap<u32, i32>,
+    pub stat_buffs: StatMap,
     pub enhanced: bool,
     pub value: u32, //used for toggle and stacks
-    pub hash: u32,
+    pub hash: HashId,
 }
 
 // all armor pekrs are for the future but wanted to started to compile them now
@@ -285,8 +287,8 @@ pub enum Perks {
     FieldTested,
 }
 
-impl From<u32> for Perks {
-    fn from(_value: u32) -> Perks {
+impl From<HashId> for Perks {
+    fn from(_value: HashId) -> Perks {
         match _value {
             //Meta perks
             0 => Perks::BuiltIn,
@@ -567,9 +569,9 @@ pub fn get_perk_stats(
     _input_data: CalculationInput,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> [HashMap<u32, i32>; 2] {
-    let mut dynamic_stats: HashMap<u32, i32> = HashMap::new();
-    let mut static_stats: HashMap<u32, i32> = HashMap::new();
+) -> [HashMap<HashId, i32>; 2] {
+    let mut dynamic_stats: HashMap<HashId, i32> = HashMap::new();
+    let mut static_stats: HashMap<HashId, i32> = HashMap::new();
     for perk in _perks {
         let perk_stats = dyanmic_perk_stats(&perk, &_input_data, _pvp, _cached_data);
         for (key, value) in perk_stats {
@@ -588,7 +590,7 @@ fn dyanmic_perk_stats(
     _input_data: &CalculationInput,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;

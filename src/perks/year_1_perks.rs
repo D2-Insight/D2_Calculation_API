@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponType};
+use crate::{d2_enums::{AmmoType, DamageType, StatHashes, WeaponType}, StatMap};
 
 use super::{
     clamp,
@@ -79,7 +79,7 @@ pub(super) fn sbr_threat_detector(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stability = 0;
     let mut reload = 0;
     if _value == 1 {
@@ -233,7 +233,7 @@ pub(super) fn sbr_field_prep(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut out = HashMap::new();
     if _value > 0 {
         let reload = if _is_enhanced { 55 } else { 50 };
@@ -285,7 +285,7 @@ pub(super) fn sbr_firmly_planted(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut handling = if _is_enhanced { 35 } else { 30 };
     let mut stabiltiy = if _is_enhanced { 25 } else { 20 };
     if *_input.weapon_type == WeaponType::FUSIONRIFLE {
@@ -362,7 +362,7 @@ pub(super) fn sbr_hip_fire_grip(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut out = HashMap::new();
     if _value > 0 {
         out.insert(StatHashes::AIM_ASSIST.into(), 15);
@@ -413,7 +413,7 @@ pub(super) fn sbr_moving_target(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let aim_assist = if _is_enhanced { 11 } else { 10 };
     let mut out = HashMap::new();
     out.insert(StatHashes::AIM_ASSIST.into(), aim_assist);
@@ -426,7 +426,7 @@ pub(super) fn sbr_opening_shot(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let aim_assist = if _is_enhanced { 25 } else { 20 };
     let range = if _is_enhanced { 30 } else { 25 };
     let mut out = HashMap::new();
@@ -462,7 +462,7 @@ pub(super) fn sbr_outlaw(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut out = HashMap::new();
     if _value > 0 {
         out.insert(StatHashes::RELOAD.into(), 70);
@@ -509,7 +509,7 @@ pub(super) fn sbr_slide_shot(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let stability = if _is_enhanced { 35 } else { 30 };
     let range = if _is_enhanced { 25 } else { 20 };
     let mut out = HashMap::new();
@@ -547,7 +547,7 @@ pub(super) fn sbr_slide_ways(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let stability = if _is_enhanced { 25 } else { 20 };
     let handling = if _is_enhanced { 25 } else { 20 };
     let mut out = HashMap::new();
@@ -595,7 +595,7 @@ pub(super) fn sbr_tap_the_trigger(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut stability = if _is_enhanced { 44 } else { 40 };
     if *_input.weapon_type == WeaponType::FUSIONRIFLE {
         stability = stability / 4;
@@ -711,7 +711,7 @@ pub(super) fn sbr_backup_plan(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut handling = if _value > 0 { 100 } else { 0 };
     let duration = if _is_enhanced { 2.2 } else { 2.0 };
     if _input.time_total > duration {
@@ -783,7 +783,7 @@ pub(super) fn sbr_quickdraw(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     map.insert(StatHashes::HANDLING.into(), 100);
     map
@@ -813,7 +813,7 @@ pub(super) fn sbr_pulse_monitor(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) ->  HashMap<u32, i32> {
+) ->  StatMap {
     let mut map = HashMap::new();
     if _value > 0 {
         map.insert(StatHashes::HANDLING.into(), 50);
@@ -827,7 +827,7 @@ pub(super) fn sbr_underdog(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     if _value > 0 {
         map.insert(StatHashes::RELOAD.into(), 100);
@@ -859,7 +859,7 @@ pub(super) fn sbr_under_pressure(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     let buff = if _is_enhanced { 35 } else { 30 };
     if _value > 0 {

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{StatHashes, WeaponType};
+use crate::{d2_enums::{StatHashes, WeaponType}, StatMap};
 
 use super::{
     clamp,
@@ -95,7 +95,7 @@ pub(super) fn sbr_alacrity(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     let range = if _value > 0 { 10 } else { 0 };
     let reload = if _value > 0 { 50 } else { 0 };
@@ -114,7 +114,7 @@ pub(super) fn sbr_ambush(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     let range = if _is_enhanced { 30 } else { 20 };
     let handling = if _is_enhanced { 40 } else { 20 };
@@ -182,7 +182,7 @@ pub(super) fn sbr_fluid_dynamics(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     let reload = if _is_enhanced { 35 } else { 30 };
     let stability = if _is_enhanced { 25 } else { 20 };
@@ -216,7 +216,7 @@ pub(super) fn sbr_quiet_moment(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     if _value > 0 {
         map.insert(StatHashes::RELOAD.into(), 40);
@@ -244,7 +244,7 @@ pub(super) fn sbr_bitter_spite(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     let val = clamp(_value, 0, 5) as i32;
     map.insert(StatHashes::RELOAD.into(), val * 10);
@@ -275,7 +275,7 @@ pub(super) fn sbr_right_hook(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     let stat_bump = if _is_enhanced { 20 } else { 10 };
     if _value > 0 {
@@ -319,7 +319,7 @@ pub(super) fn sbr_tex_balanced_stock(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut map = HashMap::new();
     if _value > 0 {
         map.insert(StatHashes::HANDLING.into(), 50);
@@ -369,7 +369,7 @@ pub(super) fn sbr_suros_synergy(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> StatMap {
     let mut out = HashMap::new();
     if _value > 0 {
         out.insert(StatHashes::HANDLING.into(), 40);
