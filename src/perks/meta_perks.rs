@@ -252,16 +252,15 @@ _pvp: bool,
 _cached_data: &mut HashMap<String, f64>,
 ) -> FlinchModifierResponse {
     if _value > 1 {
-        return FlinchModifierResponse {
-            
+        FlinchModifierResponse {   
             flinch_scale: 0.7
-        };
+        }
     } else if _value > 0 {
-        return FlinchModifierResponse {
+        FlinchModifierResponse {
             flinch_scale: 0.75
-        };
+        }
     } else {
-        return FlinchModifierResponse::default();
+        FlinchModifierResponse::default()
     }
 }
 
@@ -288,12 +287,11 @@ pub(super) fn flmr_rally_barricade(
     _cached_data: &mut HashMap<String, f64>,
     ) -> FlinchModifierResponse {
         if _value > 0 {
-            return FlinchModifierResponse {
-                
+            FlinchModifierResponse {
                 flinch_scale: 0.5
-            };
+            }
          } else {
-            return FlinchModifierResponse::default();
+            FlinchModifierResponse::default()
         }
     }
 
@@ -305,13 +303,13 @@ pub(super) fn rsmr_rally_barricade(
     _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     if _value > 0 {
-        return ReloadModifierResponse {
+        ReloadModifierResponse {
             reload_stat_add: 50,
             reload_time_scale: 1.0,
-        };
+        }
     } else {
-        return ReloadModifierResponse::default();
-    };
+        ReloadModifierResponse::default()
+    }
 }
 
 
@@ -333,3 +331,4 @@ pub(super) fn rmr_rally_barricade(
         RangeModifierResponse::default()
     }
 }
+

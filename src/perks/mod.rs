@@ -220,7 +220,6 @@ pub enum Perks {
     EmpowermentBuffs,
     WeakenDebuffs,
     RallyBarricade,
-    TomeOfDawn,
     ////////EXOTIC////////
     ////TOGGLE////
     CranialSpike,
@@ -229,6 +228,7 @@ pub enum Perks {
     OphidianAspect,
     DragonShadow,
     LunaFaction,
+    TomeOfDawn,
 
     ////SLIDER////
     RatPack,
@@ -297,7 +297,6 @@ impl From<u32> for Perks {
             222 => Perks::EmpowermentBuffs,
             333 => Perks::WeakenDebuffs,
             444 => Perks::RallyBarricade,
-            666 => Perks::TomeOfDawn,
 
             //intrinsics
             902 => Perks::RapidFireFrame,
@@ -312,6 +311,7 @@ impl From<u32> for Perks {
             593361144 => Perks::DragonShadow,
             1147638875 => Perks::OphidianAspect,
             3347978672 => Perks::LunaFaction,
+            926349160 => Perks::TomeOfDawn,
 
             //parts
             3796465595 => Perks::ImpactCasing,
@@ -695,6 +695,7 @@ fn dyanmic_perk_stats(
         Perks::KeepAway => sbr_keep_away(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::FieldTested => sbr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::RallyBarricade => sbr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::TomeOfDawn => sbr_tome_of_dawn(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
 }
@@ -1349,6 +1350,7 @@ fn get_perk_flmr(
         Perks::NoDistractions => flmr_no_distractions(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
         Perks::Unflinching => flmr_unflinching_mod(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
         Perks::RallyBarricade => flmr_rally_barricade(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::TomeOfDawn => flmr_tome_of_dawn(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
         //Perks::PerfectFloat => todo!(), //Perfect floats flinch resist value is unknown atm
         _ => FlinchModifierResponse::default(),
     }
