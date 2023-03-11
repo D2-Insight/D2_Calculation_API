@@ -394,7 +394,7 @@ pub(super) fn hmr_suros_synergy(
     }
 }
 
-pub(super) fn flrm_suros_synergy(
+pub(super) fn flmr_suros_synergy(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,

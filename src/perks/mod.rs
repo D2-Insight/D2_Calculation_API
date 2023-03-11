@@ -219,6 +219,8 @@ pub enum Perks {
     BuiltIn,
     EmpowermentBuffs,
     WeakenDebuffs,
+    RallyBarricade,
+    TomeOfDawn,
     ////////EXOTIC////////
     ////TOGGLE////
     CranialSpike,
@@ -294,6 +296,8 @@ impl From<u32> for Perks {
             0 => Perks::BuiltIn,
             222 => Perks::EmpowermentBuffs,
             333 => Perks::WeakenDebuffs,
+            444 => Perks::RallyBarricade,
+            666 => Perks::TomeOfDawn,
 
             //intrinsics
             902 => Perks::RapidFireFrame,
@@ -690,6 +694,7 @@ fn dyanmic_perk_stats(
         Perks::HuntersTrance => sbr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::KeepAway => sbr_keep_away(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::FieldTested => sbr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RallyBarricade => sbr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
 }
@@ -901,6 +906,7 @@ fn get_perk_rsmr(
         Perks::HuntersTrance => rsmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::KeepAway => rsmr_keep_away(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::FieldTested => rsmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RallyBarricade => rsmr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data),
         _ => ReloadModifierResponse::default(),
     }
 }
@@ -1178,6 +1184,7 @@ fn get_perk_rmr(
         Perks::Adagio => rmr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => rmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::FieldTested => rmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RallyBarricade => rmr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data),
         _ => RangeModifierResponse::default(),
     }
 }
@@ -1338,9 +1345,10 @@ fn get_perk_flmr(
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
-        Perks::SurosSynergy => flrm_suros_synergy(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::NoDistractions => flrm_no_distractions(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Unflinching => flrm_unflinching_mod(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::SurosSynergy => flmr_suros_synergy(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::NoDistractions => flmr_no_distractions(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::Unflinching => flmr_unflinching_mod(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::RallyBarricade => flmr_rally_barricade(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
         //Perks::PerfectFloat => todo!(), //Perfect floats flinch resist value is unknown atm
         _ => FlinchModifierResponse::default(),
     }

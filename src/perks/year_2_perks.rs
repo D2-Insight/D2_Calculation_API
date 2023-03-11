@@ -466,7 +466,7 @@ pub(super) fn hmr_eye_of_the_storm(
     }
 }
 
-pub(super) fn flrm_no_distractions(
+pub(super) fn flmr_no_distractions(
     _input: &CalculationInput,
     _value: u32,
     _is_enhanced: bool,
