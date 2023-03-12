@@ -160,7 +160,7 @@ pub enum Perks {
     ReserveMod,
     TargetingMod,
     LoaderMod,
-    Unflinching,
+    UnflinchingMod,
 
     ////STATIC////
     GutShot,
@@ -306,7 +306,7 @@ impl From<u32> for Perks {
             222222222 => Perks::TargetingMod,
             333333333 => Perks::ReserveMod,
             444444444 => Perks::LoaderMod,
-            555555555 => Perks::Unflinching,
+            555555555 => Perks::UnflinchingMod,
             1484685884 => Perks::QuickCharge,
             593361144 => Perks::DragonShadow,
             1147638875 => Perks::OphidianAspect,
@@ -1348,7 +1348,7 @@ fn get_perk_flmr(
     match perk_enum {
         Perks::SurosSynergy => flmr_suros_synergy(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
         Perks::NoDistractions => flmr_no_distractions(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::Unflinching => flmr_unflinching_mod(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::UnflinchingMod => flmr_unflinching_mod(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
         Perks::RallyBarricade => flmr_rally_barricade(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
         Perks::TomeOfDawn => flmr_tome_of_dawn(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
         //Perks::PerfectFloat => todo!(), //Perfect floats flinch resist value is unknown atm
