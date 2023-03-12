@@ -274,7 +274,7 @@ pub(super) fn sbr_rally_barricade(
     let mut stats = HashMap::new();
     if _value > 0 {
         stats.insert(StatHashes::STABILITY.into(), 30);
-        stats.insert(StatHashes::RELOAD.into(), 50);
+        stats.insert(StatHashes::RELOAD.into(), 100);
     }
     stats
 }
@@ -304,8 +304,8 @@ pub(super) fn rsmr_rally_barricade(
 ) -> ReloadModifierResponse {
     if _value > 0 {
         ReloadModifierResponse {
-            reload_stat_add: 50,
-            reload_time_scale: 1.0,
+            reload_stat_add: 100,
+            reload_time_scale: 0.9,
         }
     } else {
         ReloadModifierResponse::default()

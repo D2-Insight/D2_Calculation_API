@@ -414,17 +414,18 @@ impl Weapon {
 
 
 impl Weapon {
+    //Returns the flinch scaler from Resillience, Stability, Perks, and Buffs
+    //flinch resist = 1.0 - flinch scaler 
+    //flinch resist can be negative
     pub fn flmr_calc_flinch(&self,
          _calc_input: Option<CalculationInput>,
-         _resillience: f64,
+         _resillience: i32,
          _pvp: bool,
          _cached_data: Option<&mut HashMap<String, f64>>,
         ) -> f64{
 
         /*
         Todo:
-        Add Rally Barricade
-        Tome of Dawn?
         X3 Unflinching
         Perfect Float
          */
@@ -433,7 +434,8 @@ impl Weapon {
         let mut total_scaler = 1.0;
         
         //resil
-        total_scaler *= 1.0 - _resillience * 0.01;
+        let resillience:f64 = _resillience.clamp(0, 10).into();
+        total_scaler *= 1.0 - resillience * 0.01;
         
         //stability
         let stability_percent = match self.weapon_type {
@@ -452,23 +454,25 @@ impl Weapon {
             WeaponType::GRENADELAUNCHER => 0.1,
             WeaponType::LINEARFUSIONRIFLE => 0.1,
             WeaponType::ROCKET => 0.1,
-            //These don't have a stability stat so 1.0
+            //These don't have a stability stat so 0.0
             WeaponType::GLAIVE => 0.0,
             WeaponType::SWORD => 0.0,
             WeaponType::UNKNOWN =>0.0,
         };
 
         
-        if self.to_owned().get_stats().get(&155624089).is_some() {
-            let stability = self.clone().get_stats().get(&155624089).unwrap().clone(); 
-            let total_stability = stability.base_value + stability.part_value + stability.perk_value;
-            total_scaler *= 1.0 - ((<f64>::from(total_stability)-20.0)/80.0 * stability_percent);
-        }
 
+        let total_stability:f64 = self.stats
+        .get(&StatHashes::STABILITY.into())
+        .unwrap_or(&Stat::new())
+        .perk_val()
+        .clamp(0, 100)
+        .into();
+        total_scaler *= 1.0 - ((total_stability-20.0)/80.0 * stability_percent);
+        
 
         if _calc_input.is_some(){
             total_scaler *= get_flinch_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data).flinch_scale;
-
         }
 
         total_scaler
