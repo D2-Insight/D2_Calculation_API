@@ -21,7 +21,7 @@ impl Default for PerkValueVariant {
 pub struct PerkOptionData{
     stacks: (u32, u32),
     options: Vec<String>,
-    #[serde(rename = "optionType")]
+    #[cfg_attr(feature = "wasm", serde(rename = "optionType"))]
     option_type: PerkValueVariant
 }
 impl PerkOptionData {

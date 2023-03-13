@@ -33,26 +33,26 @@ fn average_range(_range_data: &Vec<(f64, f64)>, _wanted_percent: f64, _dmagae_fl
 pub struct OptimalKillData {
     pub headshots: i32,
     pub bodyshots: i32,
-    #[serde(rename = "timeTaken")]
+    #[cfg_attr(feature = "wasm", serde(rename = "timeTaken"))]
     pub time_taken: f64,
     //defines how far away this ttk is achievalbe if all hits ar crits
-    #[serde(rename = "achievableRange")]
+    #[cfg_attr(feature = "wasm", serde(rename = "achievableRange"))]
     pub achievable_range: f64,
 }
 
 #[derive(Debug, Clone, Serialize)]
 pub struct BodyKillData {
     pub bodyshots: i32,
-    #[serde(rename = "timeTaken")]
+    #[cfg_attr(feature = "wasm", serde(rename = "timeTaken"))]
     pub time_taken: f64,
 }
 
 #[derive(Debug, Clone, Serialize)]
 pub struct ResillienceSummary {
     pub value: i32,
-    #[serde(rename = "bodyTtk")]
+    #[cfg_attr(feature = "wasm", serde(rename = "bodyTtke"))]
     pub body_ttk: BodyKillData,
-    #[serde(rename = "optimalTtk")]
+    #[cfg_attr(feature = "wasm", serde(rename = "optimalTtk"))]
     pub optimal_ttk: OptimalKillData,
 }
 
@@ -81,7 +81,7 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
         let opt_bodyshots = 0;
         let mut opt_headshots = 0;
         let mut opt_bullet_timeline: Vec<(f64, f64)> = Vec::new();
-        
+
         //Optimal ttk
         while opt_bullets_hit < 50.0 {
             //PERK CALCULATIONS////////////

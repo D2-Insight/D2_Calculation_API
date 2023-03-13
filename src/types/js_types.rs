@@ -11,7 +11,7 @@ use crate::{
 };
 use serde::{Deserialize, Serialize};
 // use tsify::Tsify;
-use wasm_bindgen::{prelude::wasm_bindgen, JsValue, convert::{IntoWasmAbi, WasmSlice}};
+use wasm_bindgen::{prelude::wasm_bindgen, JsValue};
 
 use super::rs_types::{
     AmmoFormula, AmmoResponse, DamageMods, DpsResponse, FiringResponse, HandlingFormula,

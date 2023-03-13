@@ -23,6 +23,8 @@ wasm-bindgen = { version = "^0.2", optional = true}
 
 pyo3 = { version = "^0.18", features = ["extension-module"], optional = true}
 pyo3-built = { version = "^0.4", optional = true}
+flexbuffers = "2.0.0"
+dyn-clone = "1.0.11"
 
 
 [lib]

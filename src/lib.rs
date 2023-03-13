@@ -2,6 +2,7 @@
 #![allow(unused_imports)]
 
 use perks::enhanced_handler::enhanced_check;
+use serde::{Deserialize, Serialize};
 pub mod abilities;
 pub mod activity;
 pub mod d2_enums;
@@ -20,6 +21,9 @@ use enemies::Enemy;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::panic;
+
+extern crate flexbuffers;
+extern crate serde;
 
 mod built_info {
     include!(concat!(env!("OUT_DIR"), "/built.rs"));
@@ -48,7 +52,7 @@ use crate::types::py_types::{
 #[cfg(feature = "python")]
 use pyo3::{prelude::*, types::PyDict};
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct PersistentData {
     pub main_weapon: Weapon,
     pub ability: Ability,
@@ -63,6 +67,29 @@ impl PersistentData {
 
 thread_local! {
     static PERS_DATA: RefCell<PersistentData> = RefCell::new(PersistentData::new());
+}
+
+pub fn set_instance_data(input: Vec<u8>) -> Result<(), String> {
+    let r = flexbuffers::Reader::get_root(input.as_slice());
+    if r.is_err() {
+        return Err("Failed to read flexbuffer".to_string());
+    }
+    let loaded_data = PersistentData::deserialize(r.unwrap()).unwrap();
+    PERS_DATA.with(|data| {
+        *data.borrow_mut() = loaded_data;
+    });
+    return Ok(());
+}
+
+pub fn snapshot_instance_data() -> Result<Vec<u8>, String> {
+    let mut buffer = Vec::new();
+    PERS_DATA.with(|pers_data| {
+        let data = pers_data.borrow().to_owned();
+        let mut writer = flexbuffers::FlexbufferSerializer::new();
+        data.serialize(&mut writer).unwrap();
+        buffer = writer.take_buffer();
+    });
+    return Ok(buffer);
 }
 
 #[cfg(feature = "wasm")]
@@ -85,6 +112,8 @@ pub fn start() {
     console_log!("D2 Calculator Loaded");
 }
 
+
+
 //---------------WEAPONS---------------//
 
 #[cfg(feature = "wasm")]
@@ -104,7 +133,7 @@ pub fn get_metadata() -> Result<JsMetaData, JsValue> {
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "stringifyWeapon")]
 pub fn weapon_as_string() -> Result<String, JsValue> {
-    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().main_weapon.clone());
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().main_weapon.to_owned());
     Ok(format!("{:?}", weapon))
 }
 
@@ -112,7 +141,7 @@ pub fn weapon_as_string() -> Result<String, JsValue> {
 #[wasm_bindgen(js_name = "weaponJSON")]
 ///Returns the weapon as a JSON structure, snake case fields
 pub fn weapon_as_json() -> Result<JsValue, JsValue> {
-    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().main_weapon.clone());
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().main_weapon.to_owned());
     Ok(serde_wasm_bindgen::to_value(&weapon).unwrap())
 }
 

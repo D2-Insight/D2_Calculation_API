@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::enemies::EnemyType;
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DamageMods {
     pub pve: f64,
     pub minor: f64,
@@ -42,16 +42,8 @@ impl DamageMods {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
-pub struct RangeFormula {
-    pub start: StatQuadraticFormula,
-    pub end: StatQuadraticFormula,
-    pub floor_percent: f64,
-    pub fusion: bool,
-}
-
 //even if just linear use this
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct StatQuadraticFormula {
     pub evpp: f64,
     pub vpp: f64,
@@ -63,20 +55,28 @@ impl StatQuadraticFormula {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct RangeFormula {
+    pub start: StatQuadraticFormula,
+    pub end: StatQuadraticFormula,
+    pub floor_percent: f64,
+    pub fusion: bool,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ReloadFormula {
     pub reload_data: StatQuadraticFormula,
     pub ammo_percent: f64,
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct HandlingFormula {
     pub ready: StatQuadraticFormula,
     pub stow: StatQuadraticFormula,
     pub ads: StatQuadraticFormula,
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AmmoFormula {
     pub mag: StatQuadraticFormula,
     pub round_to: i32,

@@ -114,7 +114,7 @@ pub fn calc_extra_dmg(
     }
 }
 
-pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> DpsResponse {
+pub fn simple_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> DpsResponse {
     let weapon = Rc::new(_weapon.clone());
     let stats = weapon.stats.clone();
     let weapon_type = weapon.weapon_type.clone();
@@ -149,7 +149,11 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
     let mut pers_calc_data: HashMap<String, f64> = HashMap::new();
 
     let mut reserve = weapon
-        .calc_ammo_sizes(Some(weapon.static_calc_input()), Some(&mut pers_calc_data), false)
+        .calc_ammo_sizes(
+            Some(weapon.static_calc_input()),
+            Some(&mut pers_calc_data),
+            false,
+        )
         .reserve_size;
 
     #[allow(unused_mut)]

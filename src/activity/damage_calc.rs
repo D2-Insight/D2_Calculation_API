@@ -80,7 +80,7 @@ const RAID_TIMES: [f64; 11] = [
 
 const WWEAPON_DELTA_EXPONENT: f64 = 1.006736;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum DifficultyOptions {
     NORMAL = 1,
     RAID = 2,

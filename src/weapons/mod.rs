@@ -13,17 +13,18 @@ use crate::enemies::Enemy;
 use crate::perks::{
     get_magazine_modifier, get_perk_stats, get_reserve_modifier, lib::CalculationInput, Perk,
 };
+use crate::HashId;
 
 use crate::types::rs_types::{
     AmmoFormula, DamageMods, DpsResponse, HandlingFormula, RangeFormula, ReloadFormula,
 };
 
-use self::dps_calc::complex_dps_calc;
+use self::dps_calc::simple_dps_calc;
 
 #[derive(Debug, Clone)]
 pub struct PsuedoWeapon {}
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Stat {
     pub base_value: i32,
     pub part_value: i32,
@@ -54,7 +55,7 @@ impl From<i32> for Stat {
     }
 }
 
-#[derive(Debug, Clone, Default, Copy, Serialize)]
+#[derive(Debug, Clone, Default, Copy, Serialize, Deserialize)]
 pub struct FiringData {
     pub damage: f64,
     pub crit_mult: f64,
@@ -65,25 +66,36 @@ pub struct FiringData {
     pub charge: bool,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Weapon {
-    pub hash: u32,
-    pub intrinsic_hash: u32,
+    pub hash: HashId,
+    //if feature is wasm, serde rename this to intrinsicHash
+    #[cfg_attr(feature = "wasm", serde(rename = "intrinsicHash"))]
+    pub intrinsic_hash: HashId,
 
-    pub perks: HashMap<u32, Perk>,
-    pub stats: HashMap<u32, Stat>,
+    pub perks: HashMap<HashId, Perk>,
+    pub stats: HashMap<HashId, Stat>,
     #[serde(skip)]
-    pub perk_value_map: HashMap<u32, u32>,
+    pub perk_value_map: HashMap<HashId, u32>,
 
+    #[cfg_attr(feature = "wasm", serde(rename = "damageMods"))]
     pub damage_mods: DamageMods,
+    #[cfg_attr(feature = "wasm", serde(rename = "firingData"))]
     pub firing_data: FiringData,
+    #[cfg_attr(feature = "wasm", serde(rename = "rangeFormula"))]
     pub range_formula: RangeFormula,
+    #[cfg_attr(feature = "wasm", serde(rename = "ammoFormula"))]
     pub ammo_formula: AmmoFormula,
+    #[cfg_attr(feature = "wasm", serde(rename = "handlingFormula"))]
     pub handling_formula: HandlingFormula,
+    #[cfg_attr(feature = "wasm", serde(rename = "reloadFormula"))]
     pub reload_formula: ReloadFormula,
 
+    #[cfg_attr(feature = "wasm", serde(rename = "weaponType"))]
     pub weapon_type: WeaponType,
+    #[cfg_attr(feature = "wasm", serde(rename = "damageType"))]
     pub damage_type: DamageType,
+    #[cfg_attr(feature = "wasm", serde(rename = "ammoType"))]
     pub ammo_type: AmmoType,
 }
 impl Weapon {
@@ -221,13 +233,12 @@ impl Weapon {
         }
     }
     pub fn calc_dps(&self, _enemy: Enemy, _pl_dmg_mult: f64) -> DpsResponse {
-        complex_dps_calc(self.clone(), _enemy, _pl_dmg_mult)
+        simple_dps_calc(self.clone(), _enemy, _pl_dmg_mult)
     }
 }
 impl Default for Weapon {
     fn default() -> Weapon {
         Weapon {
-
             intrinsic_hash: 0,
             hash: 0,
 

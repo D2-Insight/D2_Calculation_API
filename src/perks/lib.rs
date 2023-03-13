@@ -32,10 +32,10 @@ pub struct CalculationInput<'a> {
 impl<'a> CalculationInput<'a> {
     //stuff like mag size can use this, not reload, damage, etc.
     pub fn construct_pve_sparse(
-        _intrinsic_hash: u32,
+        _intrinsic_hash: HashId,
         _firing_data: &'a FiringData,
-        _stats: &'a HashMap<u32, Stat>,
-        _perk_value_map: &'a HashMap<u32, u32>,
+        _stats: &'a HashMap<HashId, Stat>,
+        _perk_value_map: &'a HashMap<HashId, u32>,
         _weapon_type: &'a WeaponType,
         _ammo_type: &'a AmmoType,
         _damage_type: &'a DamageType,
@@ -69,10 +69,10 @@ impl<'a> CalculationInput<'a> {
         }
     }
     pub fn construct_pvp(
-        _intrinsic_hash: u32,
+        _intrinsic_hash: HashId,
         _firing_data: &'a FiringData,
-        _stats: &'a HashMap<u32, Stat>,
-        _perk_value_map: &'a HashMap<u32, u32>,
+        _stats: &'a HashMap<HashId, Stat>,
+        _perk_value_map: &'a HashMap<HashId, u32>,
         _weapon_type: &'a WeaponType,
         _ammo_type: &'a AmmoType,
         _base_damage: f64,
@@ -105,10 +105,10 @@ impl<'a> CalculationInput<'a> {
         }
     }
     pub fn construct_static(
-        _intrinsic_hash: u32,
+        _intrinsic_hash: HashId,
         _firing_data: &'a FiringData,
-        _stats: &'a HashMap<u32, Stat>,
-        _perk_value_map: &'a HashMap<u32, u32>,
+        _stats: &'a HashMap<HashId, Stat>,
+        _perk_value_map: &'a HashMap<HashId, u32>,
         _weapon_type: &'a WeaponType,
         _ammo_type: &'a AmmoType,
         _crit_mult: f64,
