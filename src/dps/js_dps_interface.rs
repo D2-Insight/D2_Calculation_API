@@ -51,6 +51,12 @@ impl ScriptRuntime {
     pub fn get_condition(&self, ptr: usize) -> ConditionSupplier {
         self.conditions[ptr].get_condition()
     }
+    pub fn next(&mut self, ptr: usize) {
+        if ptr > self.conditions.len() - 1 || ptr < 0 {
+            return;
+        }
+        self.abstract_script.push(ptr);
+    }
     pub fn reset(&mut self) {
         self.instructions = Vec::new();
         self.conditions = Vec::new();
@@ -690,4 +696,18 @@ impl NoneCondition {
             ptr
         })
     }
+}
+
+
+#[wasm_bindgen]
+pub fn start() {
+    RUNTIME.with(|runtime| {
+        runtime.borrow_mut().reset();
+    });
+}
+
+pub fn next(instruction_ptr: usize) {
+    RUNTIME.with(|runtime| {
+        runtime.borrow_mut().next(instruction_ptr);
+    });
 }
