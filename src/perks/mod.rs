@@ -685,7 +685,7 @@ fn dyanmic_perk_stats(
         Perks::Adagio => sbr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => sbr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::KeepAway => sbr_keep_away(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::FieldTested => sbr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
+        // Perks::FieldTested => sbr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
 }
@@ -896,7 +896,7 @@ fn get_perk_rsmr(
         Perks::UnderDog => rsmr_underdog(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => rsmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::KeepAway => rsmr_keep_away(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::FieldTested => rsmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
+        // Perks::FieldTested => rsmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
         _ => ReloadModifierResponse::default(),
     }
 }
@@ -1052,7 +1052,7 @@ fn get_perk_hmr(
         Perks::TunnelVision => hmr_tunnel_vision(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ShotSwap => hmr_shot_swap(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => hmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::FieldTested => hmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
+        // Perks::FieldTested => hmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HandlingModifierResponse::default(),
     }
 }
@@ -1173,7 +1173,7 @@ fn get_perk_rmr(
         }
         Perks::Adagio => rmr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => rmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::FieldTested => rmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
+        // Perks::FieldTested => rmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
         _ => RangeModifierResponse::default(),
     }
 }
