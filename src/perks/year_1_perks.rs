@@ -50,7 +50,7 @@ pub(super) fn hmr_threat_detector(
     HandlingModifierResponse {
         handling_stat_add: 0,
         handling_swap_scale: time_scale,
-        handling_ads_scale: 1.0,
+        handling_ads_scale: time_scale,
     }
 }
 
