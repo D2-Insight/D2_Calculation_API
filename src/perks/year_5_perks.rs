@@ -614,3 +614,22 @@ pub(super) fn sbr_shot_swap(
     }
     map
 }
+
+pub(super) fn fmr_succesful_warmup(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> FiringModifierResponse {
+    let fire_rate_buff = if _value > 0 { 0.625 } else { 1.0 };
+    let duration = (_value > 0) as u32 * 6_u32 + (if _is_enhanced { 5 } else { 4 }) * clamp(_value-1, 0, 4);
+    if _input.time_total < duration as f64 {
+        FiringModifierResponse {
+            burst_delay_scale: fire_rate_buff,
+            ..Default::default()
+        }
+    } else {
+        FiringModifierResponse::default()
+    }
+}

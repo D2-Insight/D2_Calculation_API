@@ -971,6 +971,9 @@ fn get_perk_fmr(
         Perks::SlowerStringT2 => {
             fmr_slower_string_t2(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::SuccesfulWarmup => {
+            fmr_succesful_warmup(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => FiringModifierResponse::default(),
     }
 }
