@@ -345,33 +345,27 @@ pub(super) fn dmr_target_lock(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    let lerp_table = vec![
-        (0.15, 0.166),
-        (0.37, 0.23),
-        (0.55, 0.28),
-        (0.75, 0.34),
-        (1.05, 0.4),
-    ];
-    let percent_through_mag = _input.shots_fired_this_mag as f64 / _input.base_mag as f64;
-    let mut buff = 0.0_f64;
-    if percent_through_mag > 1.05 {
-        buff = 0.4;
-    } else if percent_through_mag < 0.15 {
+    let buff;
+
+    let enh_increase = if _is_enhanced { 1.125 } else { 1.0 };
+    let low_end_dmg = 0.28/3.0 * enh_increase;
+    let high_end_dmg = 0.40 * enh_increase;
+
+    let formula_start = -0.3505;
+    let formula_end = 1.1395;
+
+    let percent_of_mag = _input.shots_fired_this_mag / _input.base_mag;
+
+    if percent_of_mag < 0.125 {
         buff = 0.0;
+    } else if percent_of_mag > 1.14 {
+        buff = high_end_dmg;
     } else {
-        for i in 0..lerp_table.len() {
-            if percent_through_mag < lerp_table[i].0 {
-                buff = lerp_table[i - 1].1
-                    + ((lerp_table[i].1 - lerp_table[i - 1].1)
-                        * (percent_through_mag - lerp_table[i - 1].0)
-                        / (lerp_table[i].0 - lerp_table[i - 1].0));
-                break;
-            }
-        }
+        let x = (percent_of_mag - formula_start) / (formula_end - formula_start);
+        let smoothstep = 3.0*(x.powf(2.0)) - 2.0*(x.powf(3.0));
+        buff = low_end_dmg + (high_end_dmg - low_end_dmg) * smoothstep;
     }
-    if _is_enhanced {
-        buff *= 1.125;
-    }
+
     DamageModifierResponse {
         impact_dmg_scale: buff + 1.0,
         explosive_dmg_scale: buff + 1.0,
