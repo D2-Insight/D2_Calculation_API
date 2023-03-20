@@ -71,8 +71,8 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
     match perk {
         //Meta perks
         Perks::BuiltIn => None,
-        Perks::EmpowermentBuffs => None,
-        Perks::WeakenDebuffs => None,
+        Perks::Radiant => Some(PerkOptionData::static_()),
+        Perks::Weaken => Some(PerkOptionData::static_()),
 
         //intrinsics
         Perks::RapidFireFrame => Some(PerkOptionData::static_()),
@@ -310,11 +310,10 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::HuntersTrance => Some(PerkOptionData::static_()),
         Perks::RideTheBull => Some(PerkOptionData::stacking(2)),
 
-        Perks::DexterityMod => Some(PerkOptionData::stacking(2)),
-        Perks::ReserveMod => Some(PerkOptionData::stacking(2)),
-        Perks::LoaderMod => Some(PerkOptionData::stacking(2)),
-        Perks::TargetingMod => Some(PerkOptionData::stacking(2)),
-        Perks::QuickCharge => Some(PerkOptionData::toggle()),
+        Perks::DexterityMod => Some(PerkOptionData::stacking(3)),
+        Perks::ReserveMod => Some(PerkOptionData::stacking(3)),
+        Perks::LoaderMod => Some(PerkOptionData::stacking(3)),
+        Perks::TargetingMod => Some(PerkOptionData::stacking(3)),
         Perks::OnYourMark => Some(PerkOptionData::stacking(3)),
         Perks::Frequency => Some(PerkOptionData::toggle()),
         Perks::Tempering => Some(PerkOptionData::toggle()),

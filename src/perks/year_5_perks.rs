@@ -617,7 +617,11 @@ pub(super) fn fmr_succesful_warmup(
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     let fire_rate_buff = if _value > 0 { 0.625 } else { 1.0 };
-    let duration = (_value > 0) as u32 * 6_u32 + (if _is_enhanced { 5 } else { 4 }) * clamp(_value-1, 0, 4);
+    let duration = if _value > 0{
+        6_f64 + (if _is_enhanced { 5_f64 } else { 4_f64 }) * clamp(_value as f64 -1_f64, 0_f64, 4_f64)
+    } else {
+        0.0
+    };
     if _input.time_total < duration as f64 {
         FiringModifierResponse {
             burst_delay_scale: fire_rate_buff,

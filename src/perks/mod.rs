@@ -13,6 +13,7 @@ pub mod year_3_perks;
 pub mod year_4_perks;
 pub mod year_5_perks;
 pub mod year_6_perks;
+pub mod buff_perks;
 
 use std::collections::HashMap;
 
@@ -37,6 +38,7 @@ use self::{
     year_4_perks::*,
     year_5_perks::*,
     year_6_perks::*,
+    buff_perks::*,
 };
 
 pub fn clamp<T: PartialOrd>(n: T, min: T, max: T) -> T {
@@ -60,13 +62,12 @@ pub struct Perk {
 // all armor pekrs are for the future but wanted to started to compile them now
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq)]
 pub enum Perks {
-    ////TOGGLE////
-    VeistStinger, //will give it 100% chance
+    VeistStinger,
     Surrounded,
     Harmony,
-    Frenzy,       //if its disabled will still activate after 12s in dps anyways
-    HakkeBreach,  // can't check if this is a viable option so will always allow it
-    CloseToMelee, //such a stupid name
+    Frenzy,
+    HakkeBreach,
+    CloseToMelee,
     SteadyHands,
     Cornered,
     KillClip,
@@ -78,8 +79,8 @@ pub enum Perks {
     Desperado,
     CascadePoint,
     Outlaw,
-    BackupPlan,   // will apply in dps no matter what
-    BoxBreathing, // will apply in dps no matter what
+    BackupPlan,
+    BoxBreathing,
     Pugilist,
     WellRounded,
     ExplosiveLight,
@@ -114,15 +115,12 @@ pub enum Perks {
     HotSwap,
     RightHook,
     KeepAway,
-    //class
     Amplified,
     Tempering,
     HeatRises,
     Hedrons,
     Frequency,
     FlowState,
-
-    ////SLIDER////
     FeedingFrenzy,
     RunnethOver,
     MultikillClip,
@@ -130,7 +128,7 @@ pub enum Perks {
     SuccesfulWarmup,
     Swashbuckler,
     Surplus,
-    RapidHit, // dps will still start at 0 :)
+    RapidHit,
     PerpetualMotion,
     AdrenalineJunkie,
     Rampage,
@@ -146,21 +144,14 @@ pub enum Perks {
     BitterSpite,
     TexBalancedStock,
     ShotSwap,
-    //class
     OnYourMark,
-    //weird
     Demolitionist,
     ElementalCapacitor,
-
-    //armor
-    //slides between 1 and 2
     DexterityMod,
     ReloadMod,
     ReserveMod,
     TargetingMod,
     LoaderMod,
-
-    ////STATIC////
     GutShot,
     Vorpal,
     ImpulseAmplifier,
@@ -207,31 +198,18 @@ pub enum Perks {
     LiquidCoils,
     ChargetimeMW,
     AdeptChargeTime,
-
-    //armor
-    QuickCharge,
-
-    ////MISC////
     Ignore,
     MasterWork,
     BuiltIn,
-    EmpowermentBuffs,
-    WeakenDebuffs,
-    ////////EXOTIC////////
-    ////TOGGLE////
     CranialSpike,
     AgersCall,
     LagragianSight,
     OphidianAspect,
     DragonShadow,
     LunaFaction,
-
-    ////SLIDER////
     RatPack,
     StringofCurses,
     WormsHunger,
-
-    ////STATIC////
     RocketTracers,
     ParacausalShot,
     CorruptionSpreads,
@@ -250,8 +228,6 @@ pub enum Perks {
     WhisperCatalyst,
     Roadborn,
     HakkeHeavyBurst,
-
-    //too lazy to sort
     SwoopingTalons,
     CalculatedBalance,
     RavenousBeast,
@@ -277,12 +253,14 @@ pub enum Perks {
     EyeOfTheStorm,
     FullStop,
     RideTheBull,
-    HuntersTrance, //hawkmoon catalyst not R0
+    HuntersTrance,
     FasterStringT1,
     FasterStringT2,
     SlowerStringT1,
     SlowerStringT2,
     FieldTested,
+    Radiant,
+    Weaken,
 }
 
 impl From<u32> for Perks {
@@ -290,8 +268,8 @@ impl From<u32> for Perks {
         match _value {
             //Meta perks
             0 => Perks::BuiltIn,
-            222 => Perks::EmpowermentBuffs,
-            333 => Perks::WeakenDebuffs,
+            1380009033 => Perks::Radiant,
+            1464159054 => Perks::Weaken,
 
             //intrinsics
             902 => Perks::RapidFireFrame,
@@ -301,7 +279,6 @@ impl From<u32> for Perks {
             222222222 => Perks::TargetingMod,
             333333333 => Perks::ReserveMod,
             444444444 => Perks::LoaderMod,
-            1484685884 => Perks::QuickCharge,
             593361144 => Perks::DragonShadow,
             1147638875 => Perks::OphidianAspect,
             3347978672 => Perks::LunaFaction,
@@ -323,6 +300,7 @@ impl From<u32> for Perks {
             4067834857 => Perks::FasterStringT1,
             2801223209 => Perks::FasterStringT2,
             1885045197 => Perks::FasterStringT1,
+            1639384016 => Perks::FasterStringT1,
 
             //mods
             1334978104 => Perks::QuickAccessSling,
@@ -746,10 +724,6 @@ fn get_perk_dmr(
         Perks::LagragianSight => {
             dmr_lagragian_sight(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::EmpowermentBuffs => {
-            dmr_empowerment_buffs(_input_data, val, enhanced, _pvp, _cached_data)
-        }
-        Perks::WeakenDebuffs => dmr_weaken_debuffs(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::BuiltIn => dmr_builtin(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::BossSpec => dmr_boss_spec(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::MajorSpec => dmr_major_spec(_input_data, val, enhanced, _pvp, _cached_data),
@@ -815,6 +789,8 @@ fn get_perk_dmr(
         Perks::ParacausalShot => {
             dmr_paracausal_shot(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::Radiant => dmr_radiant(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Weaken => dmr_weaken(_input_data, val, enhanced, _pvp, _cached_data),
         _ => DamageModifierResponse::new(),
     }
 }

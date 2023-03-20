@@ -138,7 +138,7 @@ impl<'a> CalculationInput<'a> {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct DamageModifierResponse {
     pub impact_dmg_scale: f64,
     pub explosive_dmg_scale: f64,
