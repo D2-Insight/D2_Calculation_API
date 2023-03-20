@@ -358,7 +358,7 @@ pub(super) fn dmr_target_lock(
 
     if percent_of_mag < 0.125 {
         buff = 0.0;
-    } else if percent_of_mag > 1.14 {
+    } else if percent_of_mag > formula_end {
         buff = high_end_dmg;
     } else {
         let x = (percent_of_mag - formula_start) / (formula_end - formula_start);
