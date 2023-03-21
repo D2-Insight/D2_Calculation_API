@@ -261,6 +261,28 @@ pub enum Perks {
     FieldTested,
     Radiant,
     Weaken,
+    PathOfTheBurningSteps,
+    WellOfRadiance,
+    Foetracer,
+    MechaneersTricksleeves,
+    Oathkeeper,
+    SealedAhamkaraGrasps,
+    LuckyPants,
+    Stompees,
+    NoBackupPlans,
+    ActiumWarRig,
+    HallowfireHeart,
+    LionRampart,
+    Peacekeepers,
+    PeregrineGreaves,
+    EyeOfAnotherWorld,
+    AstrocyteVerse,
+    NecroticGrips,
+    BootsOfTheAssembler,
+    RainOfFire,
+    SpeedloaderSlacks,
+    ThreadOfAscent,
+
 }
 
 impl From<u32> for Perks {
@@ -270,6 +292,7 @@ impl From<u32> for Perks {
             0 => Perks::BuiltIn,
             1380009033 => Perks::Radiant,
             1464159054 => Perks::Weaken,
+            2274196887 => Perks::WellOfRadiance, //Should this be here?
 
             //intrinsics
             902 => Perks::RapidFireFrame,
@@ -282,6 +305,25 @@ impl From<u32> for Perks {
             593361144 => Perks::DragonShadow,
             1147638875 => Perks::OphidianAspect,
             3347978672 => Perks::LunaFaction,
+            2500502982 => Perks::PathOfTheBurningSteps,
+            2663272109 => Perks::Foetracer,
+            481860151 => Perks::MechaneersTricksleeves,
+            1449897496 => Perks::Oathkeeper,
+            2805134531 => Perks::SealedAhamkaraGrasps,
+            1694242448 => Perks::LuckyPants,
+            1694242450 => Perks::Stompees,
+            569260333 => Perks::NoBackupPlans,
+            1667892711 => Perks::ActiumWarRig,
+            1667892708 => Perks::HallowfireHeart,
+            3241194940 => Perks::LionRampart,
+            3241194941 => Perks::Peacekeepers,
+            235075862 => Perks::PeregrineGreaves,
+            3927963100 => Perks::EyeOfAnotherWorld,
+            3295796664 => Perks::AstrocyteVerse,
+            3824622015 => Perks::NecroticGrips,
+            902934539 => Perks::BootsOfTheAssembler,
+            4222205045 => Perks::RainOfFire,
+            858592012 => Perks::SpeedloaderSlacks,
 
             //parts
             3796465595 => Perks::ImpactCasing,
@@ -484,6 +526,7 @@ impl From<u32> for Perks {
             1727069361 => Perks::Frequency,
             83039194 => Perks::HeatRises,
             362132290 => Perks::Tempering,
+            4208512216 => Perks::ThreadOfAscent,
 
             //kinetic exotic
             1301843770 => Perks::CranialSpike,
