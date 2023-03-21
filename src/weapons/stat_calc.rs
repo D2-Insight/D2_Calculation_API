@@ -474,7 +474,7 @@ impl Weapon{
         let mut velocity = match self.weapon_type {
             WeaponType::GLAIVE => f64::from(self.stats.get(&StatHashes::RANGE.into()).unwrap_or(&Stat::new()).perk_val().clamp(0,100)) * 0.4 + 60.0,
             WeaponType::GRENADELAUNCHER => f64::from(self.stats.get(&StatHashes::VELOCITY.into()).unwrap_or(&Stat::new()).perk_val().clamp(0,100)) * 0.384 + 29.6,
-            //WeaponType::ROCKET => self.stats.get(&StatHashes::VELOCITY.into()).unwrap_or(&Stat::new()).perk_val().clamp(0,100).into(),
+            WeaponType::ROCKET => f64::from(self.stats.get(&StatHashes::VELOCITY.into()).unwrap_or(&Stat::new()).perk_val().clamp(0,100)) * 0.1342 + 28.045, //Tested by me with a R2 value of 0.9568
             _ => 0.0,
         };
 
