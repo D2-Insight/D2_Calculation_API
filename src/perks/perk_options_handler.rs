@@ -71,9 +71,8 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
     match perk {
         //Meta perks
         Perks::BuiltIn => None,
-        Perks::EmpowermentBuffs => None,
-        Perks::WeakenDebuffs => None,
-        
+        Perks::Radiant => Some(PerkOptionData::static_()),
+        Perks::Weaken => Some(PerkOptionData::static_()),
 
         //intrinsics
         Perks::RapidFireFrame => Some(PerkOptionData::static_()),
@@ -260,7 +259,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
 
         //season 20 | year 6
         Perks::KeepAway => Some(PerkOptionData::toggle()),
-        Perks::FieldTested => Some(PerkOptionData::stacking(5)),
+        // Perks::FieldTested => Some(PerkOptionData::stacking(5)),
 
         //exotics
         Perks::CranialSpike => Some(PerkOptionData::stacking(5)),
@@ -312,12 +311,12 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::HuntersTrance => Some(PerkOptionData::static_()),
         Perks::RideTheBull => Some(PerkOptionData::stacking(2)),
 
-        Perks::DexterityMod => Some(PerkOptionData::stacking(2)),
-        Perks::ReserveMod => Some(PerkOptionData::stacking(2)),
-        Perks::LoaderMod => Some(PerkOptionData::stacking(2)),
-        Perks::TargetingMod => Some(PerkOptionData::stacking(2)),
-        Perks::UnflinchingMod => Some(PerkOptionData::stacking(2)),
-        Perks::QuickCharge => Some(PerkOptionData::toggle()),
+
+        Perks::DexterityMod => Some(PerkOptionData::stacking(3)),
+        Perks::ReserveMod => Some(PerkOptionData::stacking(3)),
+        Perks::LoaderMod => Some(PerkOptionData::stacking(3)),
+        Perks::TargetingMod => Some(PerkOptionData::stacking(3)),
+        Perks::UnflinchingMod => Some(PerkOptionData::stacking(3)),
         Perks::OnYourMark => Some(PerkOptionData::stacking(3)),
         Perks::Frequency => Some(PerkOptionData::toggle()),
         Perks::Tempering => Some(PerkOptionData::toggle()),
@@ -332,9 +331,19 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
     }
 }
 
+pub fn enh_hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
+    let perk: Perks = enhanced_check(_hash).0.into();
+    match perk {
+        Perks::Recombination => Some(PerkOptionData::stacking(8)),
+        Perks::ExplosiveLight => Some(PerkOptionData::stacking(7)),
+        _ => hash_to_perk_option_data(_hash)
+    }
+}
+
 pub fn get_perk_options(_perks: Vec<u32>) -> HashMap<u32, PerkOptionData> {
     let mut options = HashMap::new();
     for perk in _perks {
+        // let data = if _is_enhanced {enh_hash_to_perk_option_data(perk)} else {hash_to_perk_option_data(perk)};
         let data = hash_to_perk_option_data(perk);
         if data.is_some() {
             options.insert(perk, data.unwrap());

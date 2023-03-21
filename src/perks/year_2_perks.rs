@@ -201,7 +201,10 @@ pub(super) fn mmr_overflow(
     _cached_data: &mut HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     let mut mag_scale = if _value > 0 { 2.0 } else { 1.0 };
-    if _input.total_shots_fired == 0.0 {
+    if _is_enhanced && _value > 0{
+        mag_scale *= 1.1;
+    };
+    if _input.total_shots_fired > 0.0 {
         mag_scale = 1.0;
     };
     MagazineModifierResponse {
