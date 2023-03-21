@@ -265,6 +265,31 @@ pub enum Perks {
     FieldTested,
     Radiant,
     Weaken,
+    PathOfTheBurningSteps,
+    WellOfRadiance,
+    Foetracer,
+    MechaneersTricksleeves,
+    Oathkeeper,
+    SealedAhamkaraGrasps,
+    LuckyPants,
+    Stompees,
+    NoBackupPlans,
+    ActiumWarRig,
+    HallowfireHeart,
+    LionRampart,
+    Peacekeepers,
+    PeregrineGreaves,
+    EyeOfAnotherWorld,
+    AstrocyteVerse,
+    NecroticGrips,
+    BootsOfTheAssembler,
+    RainOfFire,
+    SpeedloaderSlacks,
+    ThreadOfAscent,
+    MantleOfBattleHarmony,
+    MaskOfBakris,
+    BallindorseWrathweavers,
+    NobleRounds,
 }
 
 impl From<u32> for Perks {
@@ -277,6 +302,7 @@ impl From<u32> for Perks {
 
             1380009033 => Perks::Radiant,
             1464159054 => Perks::Weaken,
+            2274196887 => Perks::WellOfRadiance, //Should this be here? -- No clue
 
 
             //intrinsics
@@ -292,6 +318,28 @@ impl From<u32> for Perks {
             1147638875 => Perks::OphidianAspect,
             3347978672 => Perks::LunaFaction,
             926349160 => Perks::TomeOfDawn,
+            2500502982 => Perks::PathOfTheBurningSteps,
+            2663272109 => Perks::Foetracer,
+            481860151 => Perks::MechaneersTricksleeves,
+            1449897496 => Perks::Oathkeeper,
+            2805134531 => Perks::SealedAhamkaraGrasps,
+            1694242448 => Perks::LuckyPants,
+            1694242450 => Perks::Stompees,
+            569260333 => Perks::NoBackupPlans,
+            1667892711 => Perks::ActiumWarRig,
+            1667892708 => Perks::HallowfireHeart,
+            3241194940 => Perks::LionRampart,
+            3241194941 => Perks::Peacekeepers,
+            235075862 => Perks::PeregrineGreaves,
+            3927963100 => Perks::EyeOfAnotherWorld,
+            3295796664 => Perks::AstrocyteVerse,
+            3824622015 => Perks::NecroticGrips,
+            902934539 => Perks::BootsOfTheAssembler,
+            4222205045 => Perks::RainOfFire,
+            858592012 => Perks::SpeedloaderSlacks,
+            2618534366 => Perks::MantleOfBattleHarmony,
+            692285813 => Perks::MaskOfBakris,
+            2894608781 => Perks::BallindorseWrathweavers,
 
             //parts
             3796465595 => Perks::ImpactCasing,
@@ -495,6 +543,7 @@ impl From<u32> for Perks {
             1727069361 => Perks::Frequency,
             83039194 => Perks::HeatRises,
             362132290 => Perks::Tempering,
+            4208512216 => Perks::ThreadOfAscent,
 
             //kinetic exotic
             1301843770 => Perks::CranialSpike,
@@ -517,6 +566,7 @@ impl From<u32> for Perks {
             2984682260 => Perks::FullStop,
             630329983 => Perks::RideTheBull,
             383825919 => Perks::HuntersTrance,
+            2144092201 => Perks::NobleRounds,
 
             //energy exotic
             2881100038 => Perks::LagragianSight,
@@ -804,6 +854,25 @@ fn get_perk_dmr(
         }
         Perks::Radiant => dmr_radiant(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Weaken => dmr_weaken(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::PathOfTheBurningSteps => {
+            dmr_path_of_burning_steps(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::WellOfRadiance => {
+            dmr_well_of_radiance(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::MantleOfBattleHarmony => {
+            dmr_mantle_of_battle_harmony(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::MaskOfBakris => {
+            dmr_bakris(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::BallindorseWrathweavers => {
+            dmr_cold_balls(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::BootsOfTheAssembler => {
+            dmr_blessing_of_the_sky(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+
         _ => DamageModifierResponse::new(),
     }
 }

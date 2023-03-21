@@ -71,8 +71,6 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
     match perk {
         //Meta perks
         Perks::BuiltIn => None,
-        Perks::Radiant => Some(PerkOptionData::static_()),
-        Perks::Weaken => Some(PerkOptionData::static_()),
 
         //intrinsics
         Perks::RapidFireFrame => Some(PerkOptionData::static_()),
@@ -310,6 +308,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::RatPack => Some(PerkOptionData::stacking_min(5,1)),
         Perks::HuntersTrance => Some(PerkOptionData::static_()),
         Perks::RideTheBull => Some(PerkOptionData::stacking(2)),
+        Perks::NobleRounds => Some(PerkOptionData::toggle()),
 
 
         Perks::DexterityMod => Some(PerkOptionData::stacking(3)),
@@ -327,6 +326,15 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::RallyBarricade => Some(PerkOptionData::toggle()),
         Perks::FlowState => Some(PerkOptionData::toggle()),
         Perks::TomeOfDawn => Some(PerkOptionData::toggle()),
+        Perks::ThreadOfAscent => Some(PerkOptionData::toggle()),
+
+        Perks::Radiant => Some(PerkOptionData::static_()),
+        Perks::Weaken => Some(PerkOptionData::static_()),
+        Perks::PathOfTheBurningSteps => Some(PerkOptionData::stacking_min(4, 1)),
+        Perks::MantleOfBattleHarmony => Some(PerkOptionData::static_()),
+        Perks::MaskOfBakris => Some(PerkOptionData::options(
+            ["one buff", "both buffs"].to_vec())),
+        Perks::BallindorseWrathweavers => Some(PerkOptionData::static_()),
         _ => None,
     }
 }

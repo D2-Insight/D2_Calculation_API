@@ -9,7 +9,7 @@ use super::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
         HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
         RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse,
-    },
+    }, buff_perks::dmr_blessing_of_the_sky,
 };
 
 
@@ -1012,5 +1012,19 @@ pub(super) fn fmr_spinning_up(
     FiringModifierResponse{
         burst_delay_add: val as f64 * (-0.5/30.0),
         ..Default::default()
+    }
+}
+
+pub(super) fn dmr_noble_rounds(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    if _value > 0 {
+        dmr_blessing_of_the_sky(_input, 0, false, _pvp, _cached_data)
+    } else {
+        DamageModifierResponse::default()
     }
 }
