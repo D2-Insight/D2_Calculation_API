@@ -365,7 +365,7 @@ pub fn get_weapon_firing_data(
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getWeaponFlinch")]
 pub fn get_weapon_flinch(_dynamic_traits: bool, _pvp: bool, _resilience: u8) -> Result<f64, JsValue> {
-    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().main_weapon.clone());
     if _dynamic_traits {
         Ok(weapon
             .calc_flinch_resist(Some(weapon.static_calc_input()), _resilience as i32, _pvp, None))
