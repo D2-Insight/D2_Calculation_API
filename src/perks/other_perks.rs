@@ -439,6 +439,12 @@ pub(super) fn fmr_accelerated_coils(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
+    if _input.weapon_type == &WeaponType::LINEARFUSIONRIFLE {
+        return FiringModifierResponse {
+            burst_delay_add: -0.033,
+            ..Default::default()
+        };
+    }
     FiringModifierResponse {
         burst_delay_add: -0.040,
         ..Default::default()
@@ -452,6 +458,12 @@ pub(super) fn fmr_liquid_coils(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
+    if _input.weapon_type == &WeaponType::LINEARFUSIONRIFLE {
+        return FiringModifierResponse {
+            burst_delay_add: 0.033,
+            ..Default::default()
+        };
+    }
     FiringModifierResponse {
         burst_delay_add: 0.040,
         ..Default::default()
