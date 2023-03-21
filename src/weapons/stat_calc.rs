@@ -71,12 +71,8 @@ impl RangeFormula {
         _modifiers: RangeModifierResponse,
         _floor: f64,
     ) -> RangeResponse {
-        let range_stat = if (_range_stat + _modifiers.range_stat_add) > 100 {
-            100
-        } else {
-            _range_stat + _modifiers.range_stat_add
-        } as f64;
-        let zoom_stat = _zoom_stat as f64 * _modifiers.range_zoom_scale;
+        let range_stat = (_range_stat + _modifiers.range_stat_add).clamp(0, 100) as f64;
+        let zoom_stat = _zoom_stat as f64;
 
         let zoom_mult = if self.fusion {
             1.0 + 0.02 * zoom_stat
@@ -87,8 +83,8 @@ impl RangeFormula {
         let mut hip_falloff_start = self.start.solve_at(range_stat) * _modifiers.range_all_scale;
         let mut hip_falloff_end = self.end.solve_at(range_stat) * _modifiers.range_all_scale;
 
-        let ads_falloff_start = hip_falloff_start * zoom_mult;
-        let ads_falloff_end = hip_falloff_end * zoom_mult;
+        let ads_falloff_start = hip_falloff_start * zoom_mult * _modifiers.range_zoom_scale;
+        let ads_falloff_end = hip_falloff_end * zoom_mult * _modifiers.range_zoom_scale;
 
         hip_falloff_start *= _modifiers.range_hip_scale;
         hip_falloff_end *= _modifiers.range_hip_scale;
