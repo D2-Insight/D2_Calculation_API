@@ -316,6 +316,7 @@ impl Default for FlinchModifierResponse{
         }
     }
 }
+
 #[derive(Debug, Clone)]
 pub struct ReloadOverrideResponse {
     pub valid: bool,

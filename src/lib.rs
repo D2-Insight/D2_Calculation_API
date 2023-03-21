@@ -332,8 +332,6 @@ pub fn get_weapon_flinch(_dynamic_traits: bool, _pvp: bool, _resilience: u8) -> 
     }
 }
 
-
-
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "setEncounter")]
 pub fn set_encounter(_rpl: u32, _override_cap: i32, _difficulty: JsDifficultyOptions, _enemy_type: JsEnemyType) -> Result<(), JsValue> {

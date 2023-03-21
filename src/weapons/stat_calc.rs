@@ -413,8 +413,8 @@ impl Weapon {
         X3 Unflinching
         Perfect Float
          */
-        let mut default_chd_dt = HashMap::new();
-        let cached_data = _cached_data.unwrap_or(&mut default_chd_dt);
+        let mut default_cached_data = HashMap::new();
+        let cached_data = _cached_data.unwrap_or(&mut default_cached_data);
         let mut total_scaler = 1.0;
 
         //resil
