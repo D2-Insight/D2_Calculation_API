@@ -245,9 +245,11 @@ pub(super) fn sbr_heat_rises(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
+    let mut buff = 20;
     if _value > 0 {
-        stats.insert(StatHashes::AIRBORNE.into(), 70);
+        buff += 50;
     };
+    stats.insert(StatHashes::AIRBORNE.into(), buff);
     stats
 }
 

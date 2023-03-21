@@ -282,7 +282,10 @@ pub enum Perks {
     RainOfFire,
     SpeedloaderSlacks,
     ThreadOfAscent,
-
+    MantleOfBattleHarmony,
+    MaskOfBakris,
+    BallindorseWrathweavers,
+    NobleRounds,
 }
 
 impl From<u32> for Perks {
@@ -292,7 +295,7 @@ impl From<u32> for Perks {
             0 => Perks::BuiltIn,
             1380009033 => Perks::Radiant,
             1464159054 => Perks::Weaken,
-            2274196887 => Perks::WellOfRadiance, //Should this be here?
+            2274196887 => Perks::WellOfRadiance, //Should this be here? -- No clue
 
             //intrinsics
             902 => Perks::RapidFireFrame,
@@ -324,6 +327,9 @@ impl From<u32> for Perks {
             902934539 => Perks::BootsOfTheAssembler,
             4222205045 => Perks::RainOfFire,
             858592012 => Perks::SpeedloaderSlacks,
+            2618534366 => Perks::MantleOfBattleHarmony,
+            692285813 => Perks::MaskOfBakris,
+            2894608781 => Perks::BallindorseWrathweavers,
 
             //parts
             3796465595 => Perks::ImpactCasing,
@@ -549,6 +555,7 @@ impl From<u32> for Perks {
             2984682260 => Perks::FullStop,
             630329983 => Perks::RideTheBull,
             383825919 => Perks::HuntersTrance,
+            2144092201 => Perks::NobleRounds,
 
             //energy exotic
             2881100038 => Perks::LagragianSight,
@@ -834,6 +841,25 @@ fn get_perk_dmr(
         }
         Perks::Radiant => dmr_radiant(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Weaken => dmr_weaken(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::PathOfTheBurningSteps => {
+            dmr_path_of_burning_steps(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::WellOfRadiance => {
+            dmr_well_of_radiance(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::MantleOfBattleHarmony => {
+            dmr_mantle_of_battle_harmony(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::MaskOfBakris => {
+            dmr_bakris(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::BallindorseWrathweavers => {
+            dmr_cold_balls(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::BootsOfTheAssembler => {
+            dmr_blessing_of_the_sky(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+
         _ => DamageModifierResponse::new(),
     }
 }
