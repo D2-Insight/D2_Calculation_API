@@ -11,7 +11,7 @@ use super::{
         CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
         FiringModifierResponse, HandlingModifierResponse, InventoryModifierResponse,
         MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse, FlinchModifierResponse,
-    },
+    }, other_perks::{fmr_accelerated_coils, fmr_faster_string_t1},
 };
 
 pub(super) fn dmr_builtin(
@@ -33,12 +33,42 @@ pub(super) fn dmr_builtin(
             dmg_scale *= 1.15;
         };
     };
+    if *_input.perk_value_map.get(&_input.intrinsic_hash).unwrap_or(&0) > 1 && _input.intrinsic_hash < 1000 {
+        let stat_bump_id: StatHashes = _input.perk_value_map.get(&_input.intrinsic_hash).unwrap().to_owned().into();
+        if stat_bump_id == StatHashes::CHARGE_TIME && _input.weapon_type == &WeaponType::FUSIONRIFLE {
+            dmg_scale *= dmr_chargetime_mw(_input, _value, _is_enhanced, _pvp, _cached_data).impact_dmg_scale;
+        }
+    }
     DamageModifierResponse {
         crit_scale,
         impact_dmg_scale: dmg_scale,
         explosive_dmg_scale: dmg_scale,
     }
 }
+
+pub(super) fn fmr_builtin(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> FiringModifierResponse {
+    let mut delay_add = 0.0;
+    if *_input.perk_value_map.get(&_input.intrinsic_hash).unwrap_or(&0) > 1 && _input.intrinsic_hash < 1000 {
+        let stat_bump_id: StatHashes = _input.perk_value_map.get(&_input.intrinsic_hash).unwrap().to_owned().into();
+        if stat_bump_id == StatHashes::CHARGE_TIME {
+            delay_add += fmr_accelerated_coils(_input, _value, _is_enhanced, _pvp, _cached_data).burst_delay_add;
+        }
+        if stat_bump_id == StatHashes::DRAW_TIME && _input.weapon_type == &WeaponType::BOW {
+            delay_add += fmr_faster_string_t1(_input, _value, _is_enhanced, _pvp, _cached_data).burst_delay_add;
+        }
+    }
+    FiringModifierResponse {
+        burst_delay_add: delay_add,
+        ..Default::default()
+    }
+}
+
 
 pub(super) fn epr_builtin(
     _input: &CalculationInput,
@@ -299,5 +329,29 @@ pub(super) fn rmr_rally_barricade(
         } 
     } else {
         RangeModifierResponse::default()
+    }
+}
+
+pub(super) fn dmr_chargetime_mw(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    fn down5(x: i32) -> f64 {
+        (x as f64 -5.0) / x as f64
+    }
+    let damage_mod = match _input.intrinsic_hash {
+        901 => down5(330), //high impact
+        906 => down5(280),
+        903 => down5(270),
+        902 => down5(245), //rapid fire
+        _ => 1.0
+    };
+    DamageModifierResponse {
+        explosive_dmg_scale: damage_mod,
+        impact_dmg_scale: damage_mod,
+        ..Default::default()
     }
 }

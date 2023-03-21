@@ -811,7 +811,7 @@ fn get_perk_dmr(
             dmr_accelerated_coils(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::ChargetimeMW => {
-            dmr_accelerated_coils(_input_data, val, enhanced, _pvp, _cached_data)
+            dmr_chargetime_mw(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::FullChoke => dmr_full_choke(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::LiquidCoils => dmr_liquid_coils(_input_data, val, enhanced, _pvp, _cached_data),
