@@ -321,6 +321,20 @@ pub fn get_weapon_firing_data(_dynamic_traits: bool, _pvp: bool, _use_rpl: bool)
 }
 
 #[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "getWeaponFlinch")]
+pub fn get_weapon_flinch(_dynamic_traits: bool, _pvp: bool, _resilience: u8) -> Result<f64, JsValue> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    if _dynamic_traits {
+        Ok(weapon
+            .calc_flinch_resist(Some(weapon.static_calc_input()), _resilience as i32, _pvp, None))
+    } else {
+        Ok(weapon.calc_flinch_resist(None, _resilience as i32, _pvp, None))
+    }
+}
+
+
+
+#[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "setEncounter")]
 pub fn set_encounter(_rpl: u32, _override_cap: i32, _difficulty: JsDifficultyOptions, _enemy_type: JsEnemyType) -> Result<(), JsValue> {
     PERS_DATA.with(|perm_data| {

@@ -4,13 +4,14 @@ use super::{reserve_calc::calc_reserves, Stat, Weapon};
 use crate::{
     d2_enums::{StatHashes, WeaponType},
     perks::{
-        get_dmg_modifier, get_explosion_data, get_firing_modifier, get_handling_modifier,
-        get_magazine_modifier, get_range_modifier, get_reload_modifier, get_reserve_modifier, get_flinch_modifier,
+        get_dmg_modifier, get_explosion_data, get_firing_modifier, get_flinch_modifier,
+        get_handling_modifier, get_magazine_modifier, get_range_modifier, get_reload_modifier,
+        get_reserve_modifier,
         lib::{
             CalculationInput, DamageModifierResponse, FiringModifierResponse,
             HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
             RangeModifierResponse, ReloadModifierResponse,
-        }, 
+        },
     },
     types::rs_types::{
         AmmoFormula, AmmoResponse, FiringResponse, HandlingFormula, HandlingResponse, RangeFormula,
@@ -51,12 +52,8 @@ impl Weapon {
         let mut default_chd_dt = HashMap::new();
         let cached_data = _cached_data.unwrap_or(&mut default_chd_dt);
         if _calc_input.is_some() {
-            let modifiers = get_reload_modifier(
-                self.list_perks(),
-                &_calc_input.unwrap(),
-                _pvp,
-                cached_data,
-            );
+            let modifiers =
+                get_reload_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data);
             self.reload_formula
                 .calc_reload_time_formula(reload_stat, modifiers)
         } else {
@@ -125,12 +122,8 @@ impl Weapon {
         let mut default_chd_dt = HashMap::new();
         let cached_data = _cached_data.unwrap_or(&mut default_chd_dt);
         if _calc_input.is_some() {
-            let modifiers = get_range_modifier(
-                self.list_perks(),
-                &_calc_input.unwrap(),
-                _pvp,
-                cached_data,
-            );
+            let modifiers =
+                get_range_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data);
             self.range_formula.calc_range_falloff_formula(
                 range_stat,
                 zoom_stat,
@@ -187,12 +180,8 @@ impl Weapon {
         let mut default_chd_dt = HashMap::new();
         let cached_data = _cached_data.unwrap_or(&mut default_chd_dt);
         if _calc_input.is_some() {
-            let modifiers = get_handling_modifier(
-                self.list_perks(),
-                &_calc_input.unwrap(),
-                _pvp,
-                cached_data,
-            );
+            let modifiers =
+                get_handling_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data);
             self.handling_formula
                 .calc_handling_times_formula(handling_stat, modifiers)
         } else {
@@ -412,18 +401,17 @@ impl Weapon {
     }
 }
 
-
 impl Weapon {
     //Returns the flinch scaler from Resillience, Stability, Perks, and Buffs
-    //flinch resist = 1.0 - flinch scaler 
+    //flinch resist = 1.0 - flinch scaler
     //flinch resist can be negative
-    pub fn flmr_calc_flinch(&self,
-         _calc_input: Option<CalculationInput>,
-         _resillience: i32,
-         _pvp: bool,
-         _cached_data: Option<&mut HashMap<String, f64>>,
-        ) -> f64{
-
+    pub fn calc_flinch_resist(
+        &self,
+        _calc_input: Option<CalculationInput>,
+        _resillience: i32,
+        _pvp: bool,
+        _cached_data: Option<&mut HashMap<String, f64>>,
+    ) -> f64 {
         /*
         Todo:
         X3 Unflinching
@@ -432,11 +420,11 @@ impl Weapon {
         let mut default_chd_dt = HashMap::new();
         let cached_data = _cached_data.unwrap_or(&mut default_chd_dt);
         let mut total_scaler = 1.0;
-        
+
         //resil
-        let resillience:f64 = _resillience.clamp(0, 10).into();
+        let resillience: f64 = _resillience.clamp(0, 10).into();
         total_scaler *= 1.0 - resillience * 0.01;
-        
+
         //stability
         let stability_percent = match self.weapon_type {
             WeaponType::AUTORIFLE => 0.25,
@@ -454,28 +442,24 @@ impl Weapon {
             WeaponType::GRENADELAUNCHER => 0.1,
             WeaponType::LINEARFUSIONRIFLE => 0.1,
             WeaponType::ROCKET => 0.1,
-            //These don't have a stability stat so 0.0
-            WeaponType::GLAIVE => 0.0,
-            WeaponType::SWORD => 0.0,
-            WeaponType::UNKNOWN =>0.0,
+            _ => 0.0,
         };
 
-        
+        let total_stability: f64 = self
+            .stats
+            .get(&StatHashes::STABILITY.into())
+            .unwrap_or(&Stat::new())
+            .perk_val()
+            .clamp(0, 100)
+            .into();
+        total_scaler *= 1.0 - ((total_stability - 20.0) / 80.0 * stability_percent);
 
-        let total_stability:f64 = self.stats
-        .get(&StatHashes::STABILITY.into())
-        .unwrap_or(&Stat::new())
-        .perk_val()
-        .clamp(0, 100)
-        .into();
-        total_scaler *= 1.0 - ((total_stability-20.0)/80.0 * stability_percent);
-        
-
-        if _calc_input.is_some(){
-            total_scaler *= get_flinch_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data).flinch_scale;
+        if _calc_input.is_some() {
+            total_scaler *=
+                get_flinch_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data)
+                    .flinch_scale;
         }
 
         total_scaler
-        
     }
 }
