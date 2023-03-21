@@ -309,11 +309,11 @@ impl From<u32> for Perks {
             902 => Perks::RapidFireFrame,
 
             //armor
-            111111111 => Perks::DexterityMod,
-            222222222 => Perks::TargetingMod,
-            333333333 => Perks::ReserveMod,
-            444444444 => Perks::LoaderMod,
-            555555555 => Perks::UnflinchingMod,
+            1001 => Perks::DexterityMod,
+            1002 => Perks::TargetingMod,
+            1003 => Perks::ReserveMod,
+            1004 => Perks::LoaderMod,
+            1005 => Perks::UnflinchingMod,
             593361144 => Perks::DragonShadow,
             1147638875 => Perks::OphidianAspect,
             3347978672 => Perks::LunaFaction,
