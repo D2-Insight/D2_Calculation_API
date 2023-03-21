@@ -696,3 +696,40 @@ pub(super) fn hmr_tunnel_vision(
         HandlingModifierResponse::default()
     }
 }
+
+pub(super) fn dmr_kickstart(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut damage_mult = if _value > 0 { 0.20 } else { 0.0 };
+    let duration = 1.0;
+    if _input.time_total > duration {
+        damage_mult = 0.0;
+    };
+    DamageModifierResponse {
+        impact_dmg_scale: 1.0 + damage_mult,
+        explosive_dmg_scale: 1.0 + damage_mult,
+        crit_scale: 1.0,
+    }
+}
+
+pub(super) fn fmr_kickstart(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> FiringModifierResponse {
+    let mut fire_rate_mult = if _value > 0 { 0.20 } else { 0.0 };
+    let duration = 1.0;
+    if _input.time_total > duration {
+        fire_rate_mult = 0.0;
+    };
+    FiringModifierResponse {
+        burst_delay_scale: 1.0 - fire_rate_mult,
+        ..Default::default()
+    }
+}

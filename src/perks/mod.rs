@@ -13,6 +13,7 @@ pub mod year_3_perks;
 pub mod year_4_perks;
 pub mod year_5_perks;
 pub mod year_6_perks;
+pub mod buff_perks;
 
 use std::collections::HashMap;
 
@@ -28,7 +29,7 @@ use self::{
         CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
         FiringModifierResponse, HandlingModifierResponse, InventoryModifierResponse,
         MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
-        ReloadOverrideResponse,
+        ReloadOverrideResponse, FlinchModifierResponse,
     },
     meta_perks::*,
     origin_perks::*,
@@ -39,6 +40,7 @@ use self::{
     year_4_perks::*,
     year_5_perks::*,
     year_6_perks::*,
+    buff_perks::*,
 };
 
 pub fn clamp<T: PartialOrd>(n: T, min: T, max: T) -> T {
@@ -62,13 +64,12 @@ pub struct Perk {
 // all armor pekrs are for the future but wanted to started to compile them now
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq)]
 pub enum Perks {
-    ////TOGGLE////
-    VeistStinger, //will give it 100% chance
+    VeistStinger,
     Surrounded,
     Harmony,
-    Frenzy,       //if its disabled will still activate after 12s in dps anyways
-    HakkeBreach,  // can't check if this is a viable option so will always allow it
-    CloseToMelee, //such a stupid name
+    Frenzy,
+    HakkeBreach,
+    CloseToMelee,
     SteadyHands,
     Cornered,
     KillClip,
@@ -80,8 +81,8 @@ pub enum Perks {
     Desperado,
     CascadePoint,
     Outlaw,
-    BackupPlan,   // will apply in dps no matter what
-    BoxBreathing, // will apply in dps no matter what
+    BackupPlan,
+    BoxBreathing,
     Pugilist,
     WellRounded,
     ExplosiveLight,
@@ -116,15 +117,13 @@ pub enum Perks {
     HotSwap,
     RightHook,
     KeepAway,
-    //class
+    NoDistractions,
     Amplified,
     Tempering,
     HeatRises,
     Hedrons,
     Frequency,
     FlowState,
-
-    ////SLIDER////
     FeedingFrenzy,
     RunnethOver,
     MultikillClip,
@@ -132,7 +131,7 @@ pub enum Perks {
     SuccesfulWarmup,
     Swashbuckler,
     Surplus,
-    RapidHit, // dps will still start at 0 :)
+    RapidHit,
     PerpetualMotion,
     AdrenalineJunkie,
     Rampage,
@@ -148,21 +147,15 @@ pub enum Perks {
     BitterSpite,
     TexBalancedStock,
     ShotSwap,
-    //class
     OnYourMark,
-    //weird
     Demolitionist,
     ElementalCapacitor,
-
-    //armor
-    //slides between 1 and 2
     DexterityMod,
     ReloadMod,
     ReserveMod,
     TargetingMod,
     LoaderMod,
-
-    ////STATIC////
+    UnflinchingMod,
     GutShot,
     Vorpal,
     ImpulseAmplifier,
@@ -209,31 +202,20 @@ pub enum Perks {
     LiquidCoils,
     ChargetimeMW,
     AdeptChargeTime,
-
-    //armor
-    QuickCharge,
-
-    ////MISC////
     Ignore,
     MasterWork,
     BuiltIn,
-    EmpowermentBuffs,
-    WeakenDebuffs,
-    ////////EXOTIC////////
-    ////TOGGLE////
+    RallyBarricade,
     CranialSpike,
     AgersCall,
     LagragianSight,
     OphidianAspect,
     DragonShadow,
     LunaFaction,
-
-    ////SLIDER////
+    TomeOfDawn,
     RatPack,
     StringofCurses,
     WormsHunger,
-
-    ////STATIC////
     RocketTracers,
     ParacausalShot,
     CorruptionSpreads,
@@ -252,8 +234,6 @@ pub enum Perks {
     WhisperCatalyst,
     Roadborn,
     HakkeHeavyBurst,
-
-    //too lazy to sort
     SwoopingTalons,
     CalculatedBalance,
     RavenousBeast,
@@ -279,12 +259,40 @@ pub enum Perks {
     EyeOfTheStorm,
     FullStop,
     RideTheBull,
-    HuntersTrance, //hawkmoon catalyst not R0
+    HuntersTrance,
     FasterStringT1,
     FasterStringT2,
     SlowerStringT1,
     SlowerStringT2,
     FieldTested,
+    Radiant,
+    Weaken,
+    PathOfTheBurningSteps,
+    WellOfRadiance,
+    Foetracer,
+    MechaneersTricksleeves,
+    Oathkeeper,
+    SealedAhamkaraGrasps,
+    LuckyPants,
+    Stompees,
+    NoBackupPlans,
+    ActiumWarRig,
+    HallowfireHeart,
+    LionRampart,
+    Peacekeepers,
+    PeregrineGreaves,
+    EyeOfAnotherWorld,
+    AstrocyteVerse,
+    NecroticGrips,
+    BootsOfTheAssembler,
+    RainOfFire,
+    SpeedloaderSlacks,
+    ThreadOfAscent,
+    MantleOfBattleHarmony,
+    MaskOfBakris,
+    BallindorseWrathweavers,
+    NobleRounds,
+    KickStart,
 }
 
 impl From<HashId> for Perks {
@@ -292,21 +300,48 @@ impl From<HashId> for Perks {
         match _value {
             //Meta perks
             0 => Perks::BuiltIn,
-            222 => Perks::EmpowermentBuffs,
-            333 => Perks::WeakenDebuffs,
+            444 => Perks::RallyBarricade,
+
+            1380009033 => Perks::Radiant,
+            1464159054 => Perks::Weaken,
+            2274196887 => Perks::WellOfRadiance, //Should this be here? -- No clue
+
 
             //intrinsics
             902 => Perks::RapidFireFrame,
 
             //armor
-            111111111 => Perks::DexterityMod,
-            222222222 => Perks::TargetingMod,
-            333333333 => Perks::ReserveMod,
-            444444444 => Perks::LoaderMod,
-            1484685884 => Perks::QuickCharge,
+            1001 => Perks::DexterityMod,
+            1002 => Perks::TargetingMod,
+            1003 => Perks::ReserveMod,
+            1004 => Perks::LoaderMod,
+            1005 => Perks::UnflinchingMod,
             593361144 => Perks::DragonShadow,
             1147638875 => Perks::OphidianAspect,
             3347978672 => Perks::LunaFaction,
+            926349160 => Perks::TomeOfDawn,
+            2500502982 => Perks::PathOfTheBurningSteps,
+            2663272109 => Perks::Foetracer,
+            481860151 => Perks::MechaneersTricksleeves,
+            1449897496 => Perks::Oathkeeper,
+            2805134531 => Perks::SealedAhamkaraGrasps,
+            1694242448 => Perks::LuckyPants,
+            1694242450 => Perks::Stompees,
+            569260333 => Perks::NoBackupPlans,
+            1667892711 => Perks::ActiumWarRig,
+            1667892708 => Perks::HallowfireHeart,
+            3241194940 => Perks::LionRampart,
+            3241194941 => Perks::Peacekeepers,
+            235075862 => Perks::PeregrineGreaves,
+            3927963100 => Perks::EyeOfAnotherWorld,
+            3295796664 => Perks::AstrocyteVerse,
+            3824622015 => Perks::NecroticGrips,
+            902934539 => Perks::BootsOfTheAssembler,
+            4222205045 => Perks::RainOfFire,
+            858592012 => Perks::SpeedloaderSlacks,
+            2618534366 => Perks::MantleOfBattleHarmony,
+            692285813 => Perks::MaskOfBakris,
+            2894608781 => Perks::BallindorseWrathweavers,
 
             //parts
             3796465595 => Perks::ImpactCasing,
@@ -325,6 +360,7 @@ impl From<HashId> for Perks {
             4067834857 => Perks::FasterStringT1,
             2801223209 => Perks::FasterStringT2,
             1885045197 => Perks::FasterStringT1,
+            1639384016 => Perks::FasterStringT1,
 
             //mods
             1334978104 => Perks::QuickAccessSling,
@@ -423,6 +459,7 @@ impl From<HashId> for Perks {
             205890336 => Perks::UnderDog,
             3194351027 => Perks::ExplosiveLight,
             699525795 => Perks::EyeOfTheStorm,
+            2866798147 => Perks::NoDistractions,
 
             //season 8 | year 3
             //TODO
@@ -450,6 +487,7 @@ impl From<HashId> for Perks {
             951095735 => Perks::ImpulseAmplifier,
             4104185692 => Perks::Frenzy,
             3927722942 => Perks::LastingImpression,
+            1754714824 => Perks::KickStart,
 
             //season 14 | year 4
             1799762209 => Perks::Cornered,
@@ -508,6 +546,7 @@ impl From<HashId> for Perks {
             1727069361 => Perks::Frequency,
             83039194 => Perks::HeatRises,
             362132290 => Perks::Tempering,
+            4208512216 => Perks::ThreadOfAscent,
 
             //kinetic exotic
             1301843770 => Perks::CranialSpike,
@@ -530,6 +569,7 @@ impl From<HashId> for Perks {
             2984682260 => Perks::FullStop,
             630329983 => Perks::RideTheBull,
             383825919 => Perks::HuntersTrance,
+            2144092201 => Perks::NobleRounds,
 
             //energy exotic
             2881100038 => Perks::LagragianSight,
@@ -687,7 +727,9 @@ fn dyanmic_perk_stats(
         Perks::Adagio => sbr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => sbr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::KeepAway => sbr_keep_away(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::FieldTested => sbr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
+        // Perks::FieldTested => sbr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RallyBarricade => sbr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::TomeOfDawn => sbr_tome_of_dawn(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
 }
@@ -748,10 +790,6 @@ fn get_perk_dmr(
         Perks::LagragianSight => {
             dmr_lagragian_sight(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::EmpowermentBuffs => {
-            dmr_empowerment_buffs(_input_data, val, enhanced, _pvp, _cached_data)
-        }
-        Perks::WeakenDebuffs => dmr_weaken_debuffs(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::BuiltIn => dmr_builtin(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::BossSpec => dmr_boss_spec(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::MajorSpec => dmr_major_spec(_input_data, val, enhanced, _pvp, _cached_data),
@@ -817,6 +855,29 @@ fn get_perk_dmr(
         Perks::ParacausalShot => {
             dmr_paracausal_shot(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::Radiant => dmr_radiant(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Weaken => dmr_weaken(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::PathOfTheBurningSteps => {
+            dmr_path_of_burning_steps(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::WellOfRadiance => {
+            dmr_well_of_radiance(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::MantleOfBattleHarmony => {
+            dmr_mantle_of_battle_harmony(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::MaskOfBakris => {
+            dmr_bakris(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::BallindorseWrathweavers => {
+            dmr_cold_balls(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::BootsOfTheAssembler => {
+            dmr_blessing_of_the_sky(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::KickStart => {
+            dmr_kickstart(_input_data, val, enhanced, _pvp, _cached_data)
+        },
         _ => DamageModifierResponse::new(),
     }
 }
@@ -898,7 +959,8 @@ fn get_perk_rsmr(
         Perks::UnderDog => rsmr_underdog(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => rsmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::KeepAway => rsmr_keep_away(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::FieldTested => rsmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
+        // Perks::FieldTested => rsmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RallyBarricade => rsmr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data),
         _ => ReloadModifierResponse::default(),
     }
 }
@@ -973,6 +1035,10 @@ fn get_perk_fmr(
         Perks::SlowerStringT2 => {
             fmr_slower_string_t2(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::SuccesfulWarmup => {
+            fmr_succesful_warmup(_input_data, val, enhanced, _pvp, _cached_data)
+        }
+        Perks::KickStart => fmr_kickstart(_input_data, val, enhanced, _pvp, _cached_data),
         _ => FiringModifierResponse::default(),
     }
 }
@@ -1054,7 +1120,7 @@ fn get_perk_hmr(
         Perks::TunnelVision => hmr_tunnel_vision(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ShotSwap => hmr_shot_swap(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => hmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::FieldTested => hmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
+        // Perks::FieldTested => hmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HandlingModifierResponse::default(),
     }
 }
@@ -1175,7 +1241,8 @@ fn get_perk_rmr(
         }
         Perks::Adagio => rmr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => rmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::FieldTested => rmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
+        // Perks::FieldTested => rmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RallyBarricade => rmr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data),
         _ => RangeModifierResponse::default(),
     }
 }
@@ -1311,5 +1378,37 @@ fn get_perk_epr(
         }
         Perks::BuiltIn => epr_builtin(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
         _ => ExplosivePercentResponse::default(),
+    }
+}
+
+pub fn get_flinch_modifier(
+    _perks: Vec<Perk>,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> FlinchModifierResponse {
+    let mut tmp = FlinchModifierResponse::default();
+    for perk in _perks{
+        tmp.flinch_scale *= get_perk_flmr(perk, _input_data, _pvp).flinch_scale;
+    }
+    tmp
+}
+
+fn get_perk_flmr(
+    _perk: Perk,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+) -> FlinchModifierResponse{
+    let perk_enum = _perk.hash.into();
+    let val = _perk.value;
+    let enhanced = _perk.enhanced;
+    match perk_enum {
+        Perks::SurosSynergy => flmr_suros_synergy(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::NoDistractions => flmr_no_distractions(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::UnflinchingMod => flmr_unflinching_mod(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::RallyBarricade => flmr_rally_barricade(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::TomeOfDawn => flmr_tome_of_dawn(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        //Perks::PerfectFloat => todo!(), //Perfect floats flinch resist value is unknown atm
+        _ => FlinchModifierResponse::default(),
     }
 }
