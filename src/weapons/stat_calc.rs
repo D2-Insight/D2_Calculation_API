@@ -6,12 +6,12 @@ use crate::{
     perks::{
         get_dmg_modifier, get_explosion_data, get_firing_modifier, get_flinch_modifier,
         get_handling_modifier, get_magazine_modifier, get_range_modifier, get_reload_modifier,
-        get_reserve_modifier,
+        get_reserve_modifier, get_velocity_modifier,
         lib::{
             CalculationInput, DamageModifierResponse, FiringModifierResponse,
             HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
             RangeModifierResponse, ReloadModifierResponse,
-        },
+        }, 
     },
     types::rs_types::{
         AmmoFormula, AmmoResponse, FiringResponse, HandlingFormula, HandlingResponse, RangeFormula,
@@ -457,5 +457,30 @@ impl Weapon {
         }
 
         total_scaler
+    }
+}
+
+//returns the m/s of projectile
+impl Weapon{
+    pub fn calc_projectile_velocity(&self,
+        _calc_input: Option<CalculationInput>,
+        _pvp: bool,
+        _cached_data: Option<&mut HashMap<String, f64>>,
+    ) -> f64 {
+        let mut default_cached_data = HashMap::new();
+        let cached_data = _cached_data.unwrap_or(&mut default_cached_data);
+
+        //Range/Velocity stat to m/s
+        let mut velocity = match self.weapon_type {
+            WeaponType::GLAIVE => f64::from(self.stats.get(&StatHashes::RANGE.into()).unwrap_or(&Stat::new()).perk_val().clamp(0,100)) * 0.4 + 60.0,
+            WeaponType::GRENADELAUNCHER => f64::from(self.stats.get(&StatHashes::VELOCITY.into()).unwrap_or(&Stat::new()).perk_val().clamp(0,100)) * 0.384 + 29.6,
+            //WeaponType::ROCKET => self.stats.get(&StatHashes::VELOCITY.into()).unwrap_or(&Stat::new()).perk_val().clamp(0,100).into(),
+            _ => 0.0,
+        };
+
+        if _calc_input.is_some() {
+            velocity *= get_velocity_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data).velocity_scaler;
+        }
+        velocity
     }
 }

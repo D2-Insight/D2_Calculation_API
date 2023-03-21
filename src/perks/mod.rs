@@ -27,7 +27,7 @@ use self::{
         CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
         FiringModifierResponse, HandlingModifierResponse, InventoryModifierResponse,
         MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
-        ReloadOverrideResponse, FlinchModifierResponse,
+        ReloadOverrideResponse, FlinchModifierResponse, VelocityModifierResponse
     },
     meta_perks::*,
     origin_perks::*,
@@ -1408,5 +1408,33 @@ fn get_perk_flmr(
         Perks::TomeOfDawn => flmr_tome_of_dawn(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
         //Perks::PerfectFloat => todo!(), //Perfect floats flinch resist value is unknown atm
         _ => FlinchModifierResponse::default(),
+    }
+}
+
+pub fn get_velocity_modifier(
+    _perks: Vec<Perk>,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> VelocityModifierResponse {
+    let mut tmp = VelocityModifierResponse::default();
+    for perk in _perks{
+        tmp.velocity_scaler *= get_perk_vmr(perk, _input_data, _pvp).velocity_scaler;
+    }
+    tmp
+}
+
+fn get_perk_vmr(
+    _perk: Perk,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+) -> VelocityModifierResponse{
+    let perk_enum: Perks = _perk.hash.into();
+    let val = _perk.value;
+    let enhanced = _perk.enhanced;
+    match perk_enum {
+        Perks::RangeFinder => vmr_range_finder(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::ImpulseAmplifier => vmr_impulse_amplifier(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        _ => VelocityModifierResponse::default(),
     }
 }
