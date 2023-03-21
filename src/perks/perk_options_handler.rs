@@ -208,6 +208,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::ImpulseAmplifier => Some(PerkOptionData::static_()),
         Perks::Frenzy => Some(PerkOptionData::toggle()),
         Perks::LastingImpression => Some(PerkOptionData::static_()),
+        Perks::KickStart => Some(PerkOptionData::toggle()),
 
         //season 14 | year 4
         Perks::Cornered => Some(PerkOptionData::toggle()),

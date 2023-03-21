@@ -290,6 +290,7 @@ pub enum Perks {
     MaskOfBakris,
     BallindorseWrathweavers,
     NobleRounds,
+    KickStart,
 }
 
 impl From<u32> for Perks {
@@ -297,7 +298,6 @@ impl From<u32> for Perks {
         match _value {
             //Meta perks
             0 => Perks::BuiltIn,
-            
             444 => Perks::RallyBarricade,
 
             1380009033 => Perks::Radiant,
@@ -485,6 +485,7 @@ impl From<u32> for Perks {
             951095735 => Perks::ImpulseAmplifier,
             4104185692 => Perks::Frenzy,
             3927722942 => Perks::LastingImpression,
+            1754714824 => Perks::KickStart,
 
             //season 14 | year 4
             1799762209 => Perks::Cornered,
@@ -872,7 +873,9 @@ fn get_perk_dmr(
         Perks::BootsOfTheAssembler => {
             dmr_blessing_of_the_sky(_input_data, val, enhanced, _pvp, _cached_data)
         },
-
+        Perks::KickStart => {
+            dmr_kickstart(_input_data, val, enhanced, _pvp, _cached_data)
+        },
         _ => DamageModifierResponse::new(),
     }
 }
@@ -1033,6 +1036,7 @@ fn get_perk_fmr(
         Perks::SuccesfulWarmup => {
             fmr_succesful_warmup(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::KickStart => fmr_kickstart(_input_data, val, enhanced, _pvp, _cached_data),
         _ => FiringModifierResponse::default(),
     }
 }
