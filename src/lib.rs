@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
 
+use logging::LogLevel;
 use perks::enhanced_handler::enhanced_check;
 pub mod abilities;
 pub mod activity;
@@ -9,6 +10,7 @@ pub mod enemies;
 pub mod perks;
 pub mod types;
 pub mod weapons;
+pub mod logging;
 
 use crate::perks::{Perk, Perks};
 use crate::weapons::{Stat, Weapon};
@@ -49,6 +51,7 @@ pub struct PersistentData {
     pub activity: Activity,
     pub ability: Ability,
     pub enemy: Enemy,
+    pub log_level: LogLevel,
 }
 impl PersistentData {
     pub fn new() -> PersistentData {
@@ -71,7 +74,7 @@ extern "C" {
 #[cfg(feature = "wasm")]
 #[macro_export]
 macro_rules! console_log {
-    ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
+    ($($t:tt)*) => (crate::log(&format_args!($($t)*).to_string()))
 }
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(start)]
@@ -151,7 +154,7 @@ pub fn set_weapon(
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getStats")]
-pub fn get_stats() -> Result<JsValue, JsValue> {
+pub fn get_stats(_clamp: bool) -> Result<JsValue, JsValue> {
     let stat_map = PERS_DATA.with(|perm_data| {
         perm_data.borrow().weapon.stats.clone()
     });
@@ -345,6 +348,15 @@ pub fn set_encounter(_rpl: u32, _override_cap: i32, _difficulty: JsDifficultyOpt
     PERS_DATA.with(|perm_data| {
         let mut enemy = &mut perm_data.borrow_mut().enemy;
         enemy.type_ = _enemy_type.into();
+    });
+    Ok(())
+}
+
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "setLoggingLevel")]
+pub fn set_logging_level(_level: usize) -> Result<(), JsValue> {
+    PERS_DATA.with(|perm_data| {
+        perm_data.borrow_mut().log_level = _level.into();
     });
     Ok(())
 }

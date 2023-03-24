@@ -124,8 +124,8 @@ pub(super) fn hmr_dexterity_mods(
 ) -> HandlingModifierResponse {
     HandlingModifierResponse {
         handling_stat_add: 0,
-        handling_ads_scale: if _value > 0 { 0.85 - clamp(_value, 1, 3) as f64 * 0.05 } else { 1.0 },
-        handling_swap_scale: 1.0,
+        handling_ads_scale: 1.0,
+        handling_swap_scale: if _value > 0 { 0.85 - clamp(_value, 1, 3) as f64 * 0.05 } else { 1.0 },
     }
 }
 
@@ -153,9 +153,11 @@ pub(super) fn sbr_targeting_mods(
     let mut stats = HashMap::new();
     if _value == 1 {
         stats.insert(StatHashes::AIM_ASSIST.into(), 10);
-    } else if _value > 1 {
+    } else if _value == 2 {
         stats.insert(StatHashes::AIM_ASSIST.into(), 15);
-    };
+    } else if _value > 2 {
+        stats.insert(StatHashes::AIM_ASSIST.into(), 20);
+    }
     stats
 }
 
@@ -170,7 +172,7 @@ pub(super) fn imr_reserve_mods(
     if _value == 2 {
         inv_buff += 15;
     }
-    if _value > 3 {
+    if _value > 2 {
         inv_buff += 20;
     }
     InventoryModifierResponse {
@@ -191,7 +193,7 @@ pub(super) fn sbr_reserve_mods(
     if _value == 2 {
         inv_buff += 15;
     }
-    if _value > 3 {
+    if _value > 2 {
         inv_buff += 20;
     }
     let mut stats = HashMap::new();
@@ -251,11 +253,15 @@ _is_enhanced: bool,
 _pvp: bool,
 _cached_data: &mut HashMap<String, f64>,
 ) -> FlinchModifierResponse {
-    if _value > 1 {
+    if _value > 2 {
+        FlinchModifierResponse {
+            flinch_scale: 0.6
+        }
+    } else if _value == 2 {
         FlinchModifierResponse {   
             flinch_scale: 0.7
         }
-    } else if _value > 0 {
+    } else if _value == 1 {
         FlinchModifierResponse {
             flinch_scale: 0.75
         }
@@ -290,7 +296,7 @@ pub(super) fn flmr_rally_barricade(
             FlinchModifierResponse {
                 flinch_scale: 0.5
             }
-         } else {
+        } else {
             FlinchModifierResponse::default()
         }
     }
@@ -349,6 +355,42 @@ pub(super) fn dmr_chargetime_mw(
         902 => down5(245), //rapid fire
         _ => 1.0
     };
+    DamageModifierResponse {
+        explosive_dmg_scale: damage_mod,
+        impact_dmg_scale: damage_mod,
+        ..Default::default()
+    }
+}
+
+pub(super) fn dmr_surge_mods(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let damage_mod;
+    if _pvp {
+        if _value == 1 {
+            damage_mod = 1.03;
+        } else if _value == 2 {
+            damage_mod = 1.044;
+        } else if _value > 2 {
+            damage_mod = 1.055;
+        } else {
+            damage_mod = 1.0;
+        }
+    } else {
+        if _value == 1 {
+            damage_mod = 1.10;
+        } else if _value == 2 {
+            damage_mod = 1.17;
+        } else if _value > 2 {
+            damage_mod = 1.22;
+        } else {
+            damage_mod = 1.0;
+        }
+    }
     DamageModifierResponse {
         explosive_dmg_scale: damage_mod,
         impact_dmg_scale: damage_mod,

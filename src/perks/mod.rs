@@ -291,6 +291,7 @@ pub enum Perks {
     BallindorseWrathweavers,
     NobleRounds,
     KickStart,
+    SurgeMod,
 }
 
 impl From<u32> for Perks {
@@ -314,6 +315,7 @@ impl From<u32> for Perks {
             1003 => Perks::ReserveMod,
             1004 => Perks::LoaderMod,
             1005 => Perks::UnflinchingMod,
+            1006 => Perks::SurgeMod,
             593361144 => Perks::DragonShadow,
             1147638875 => Perks::OphidianAspect,
             3347978672 => Perks::LunaFaction,
@@ -728,6 +730,9 @@ fn dyanmic_perk_stats(
         // Perks::FieldTested => sbr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::RallyBarricade => sbr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::TomeOfDawn => sbr_tome_of_dawn(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::TargetingMod => {
+            sbr_targeting_mods(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => HashMap::new(),
     }
 }
@@ -875,6 +880,9 @@ fn get_perk_dmr(
         },
         Perks::KickStart => {
             dmr_kickstart(_input_data, val, enhanced, _pvp, _cached_data)
+        },
+        Perks::SurgeMod => {
+            dmr_surge_mods(_input_data, val, enhanced, _pvp, _cached_data)
         },
         _ => DamageModifierResponse::new(),
     }

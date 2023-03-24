@@ -25,11 +25,7 @@ impl ReloadFormula {
         _reload_stat: i32,
         _modifiers: ReloadModifierResponse,
     ) -> ReloadResponse {
-        let reload_stat = if (_reload_stat + _modifiers.reload_stat_add) > 100 {
-            100
-        } else {
-            _reload_stat + _modifiers.reload_stat_add
-        } as f64;
+        let reload_stat = (_reload_stat + _modifiers.reload_stat_add).clamp(0, 100) as f64;
         let reload_time = self.reload_data.solve_at(reload_stat) * _modifiers.reload_time_scale;
         ReloadResponse {
             reload_time,
@@ -143,11 +139,7 @@ impl HandlingFormula {
         _handling_stat: i32,
         _modifiers: HandlingModifierResponse,
     ) -> HandlingResponse {
-        let handling_stat = if (_handling_stat + _modifiers.handling_stat_add) > 100 {
-            100
-        } else {
-            _handling_stat + _modifiers.handling_stat_add
-        } as f64;
+        let handling_stat = (_handling_stat + _modifiers.handling_stat_add).clamp(0, 100) as f64;
         let ready_time = self.ready.solve_at(handling_stat) * _modifiers.handling_swap_scale;
         let mut stow_time = self.stow.solve_at(handling_stat) * _modifiers.handling_swap_scale;
         let ads_time = self.ads.solve_at(handling_stat) * _modifiers.handling_ads_scale;
@@ -197,12 +189,7 @@ impl AmmoFormula {
         _calc_inv: bool,
         _inv_id: u32,
     ) -> AmmoResponse {
-        let mag_stat = if (_mag_stat + _mag_modifiers.magazine_stat_add) > 100 {
-            100
-        } else {
-            _mag_stat + _mag_modifiers.magazine_stat_add
-        } as f64;
-
+        let mag_stat = (_mag_stat + _mag_modifiers.magazine_stat_add).clamp(0, 100) as f64;
         let inv_stat = if (_reserve_stat + _inv_modifiers.inv_stat_add) > 100 {
             100
         } else {

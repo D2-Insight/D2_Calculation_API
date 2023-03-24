@@ -38,10 +38,10 @@ impl Stat {
         }
     }
     pub fn val(&self) -> i32 {
-        self.base_value + self.part_value
+        (self.base_value + self.part_value).clamp(0, 100)
     }
     pub fn perk_val(&self) -> i32 {
-        self.base_value + self.part_value + self.perk_value
+        (self.base_value + self.part_value + self.perk_value).clamp(0, 100)
     }
 }
 impl From<i32> for Stat {
