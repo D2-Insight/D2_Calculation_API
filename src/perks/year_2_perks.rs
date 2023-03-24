@@ -7,7 +7,7 @@ use super::{
     lib::{
         CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
         FiringModifierResponse, HandlingModifierResponse, MagazineModifierResponse,
-        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse,
+        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse, FlinchModifierResponse,
     },
 };
 
@@ -201,7 +201,10 @@ pub(super) fn mmr_overflow(
     _cached_data: &mut HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     let mut mag_scale = if _value > 0 { 2.0 } else { 1.0 };
-    if _input.total_shots_fired == 0.0 {
+    if _is_enhanced && _value > 0{
+        mag_scale *= 1.1;
+    };
+    if _input.total_shots_fired > 0.0 {
         mag_scale = 1.0;
     };
     MagazineModifierResponse {
@@ -463,5 +466,22 @@ pub(super) fn hmr_eye_of_the_storm(
         }
     } else {
         HandlingModifierResponse::default()
+    }
+}
+
+pub(super) fn flmr_no_distractions(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>)
+    -> FlinchModifierResponse
+{
+    if _value > 0 {
+        FlinchModifierResponse  {
+            flinch_scale: 0.65,
+        }
+    } else {
+    FlinchModifierResponse::default()
     }
 }

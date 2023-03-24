@@ -4,8 +4,9 @@ use super::{reserve_calc::calc_reserves, Stat, Weapon};
 use crate::{
     d2_enums::{StatHashes, WeaponType},
     perks::{
-        get_dmg_modifier, get_explosion_data, get_firing_modifier, get_handling_modifier,
-        get_magazine_modifier, get_range_modifier, get_reload_modifier, get_reserve_modifier,
+        get_dmg_modifier, get_explosion_data, get_firing_modifier, get_flinch_modifier,
+        get_handling_modifier, get_magazine_modifier, get_range_modifier, get_reload_modifier,
+        get_reserve_modifier,
         lib::{
             CalculationInput, DamageModifierResponse, FiringModifierResponse,
             HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
@@ -24,11 +25,7 @@ impl ReloadFormula {
         _reload_stat: i32,
         _modifiers: ReloadModifierResponse,
     ) -> ReloadResponse {
-        let reload_stat = if (_reload_stat + _modifiers.reload_stat_add) > 100 {
-            100
-        } else {
-            _reload_stat + _modifiers.reload_stat_add
-        } as f64;
+        let reload_stat = (_reload_stat + _modifiers.reload_stat_add).clamp(0, 100) as f64;
         let reload_time = self.reload_data.solve_at(reload_stat) * _modifiers.reload_time_scale;
         ReloadResponse {
             reload_time,
@@ -51,12 +48,8 @@ impl Weapon {
         let mut default_chd_dt = HashMap::new();
         let cached_data = _cached_data.unwrap_or(&mut default_chd_dt);
         if _calc_input.is_some() {
-            let modifiers = get_reload_modifier(
-                self.list_perks(),
-                &_calc_input.unwrap(),
-                _pvp,
-                cached_data,
-            );
+            let modifiers =
+                get_reload_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data);
             self.reload_formula
                 .calc_reload_time_formula(reload_stat, modifiers)
         } else {
@@ -74,12 +67,8 @@ impl RangeFormula {
         _modifiers: RangeModifierResponse,
         _floor: f64,
     ) -> RangeResponse {
-        let range_stat = if (_range_stat + _modifiers.range_stat_add) > 100 {
-            100
-        } else {
-            _range_stat + _modifiers.range_stat_add
-        } as f64;
-        let zoom_stat = _zoom_stat as f64 * _modifiers.range_zoom_scale;
+        let range_stat = (_range_stat + _modifiers.range_stat_add).clamp(0, 100) as f64;
+        let zoom_stat = _zoom_stat as f64;
 
         let zoom_mult = if self.fusion {
             1.0 + 0.02 * zoom_stat
@@ -90,8 +79,8 @@ impl RangeFormula {
         let mut hip_falloff_start = self.start.solve_at(range_stat) * _modifiers.range_all_scale;
         let mut hip_falloff_end = self.end.solve_at(range_stat) * _modifiers.range_all_scale;
 
-        let ads_falloff_start = hip_falloff_start * zoom_mult;
-        let ads_falloff_end = hip_falloff_end * zoom_mult;
+        let ads_falloff_start = hip_falloff_start * zoom_mult * _modifiers.range_zoom_scale;
+        let ads_falloff_end = hip_falloff_end * zoom_mult * _modifiers.range_zoom_scale;
 
         hip_falloff_start *= _modifiers.range_hip_scale;
         hip_falloff_end *= _modifiers.range_hip_scale;
@@ -125,12 +114,8 @@ impl Weapon {
         let mut default_chd_dt = HashMap::new();
         let cached_data = _cached_data.unwrap_or(&mut default_chd_dt);
         if _calc_input.is_some() {
-            let modifiers = get_range_modifier(
-                self.list_perks(),
-                &_calc_input.unwrap(),
-                _pvp,
-                cached_data,
-            );
+            let modifiers =
+                get_range_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data);
             self.range_formula.calc_range_falloff_formula(
                 range_stat,
                 zoom_stat,
@@ -154,11 +139,7 @@ impl HandlingFormula {
         _handling_stat: i32,
         _modifiers: HandlingModifierResponse,
     ) -> HandlingResponse {
-        let handling_stat = if (_handling_stat + _modifiers.handling_stat_add) > 100 {
-            100
-        } else {
-            _handling_stat + _modifiers.handling_stat_add
-        } as f64;
+        let handling_stat = (_handling_stat + _modifiers.handling_stat_add).clamp(0, 100) as f64;
         let ready_time = self.ready.solve_at(handling_stat) * _modifiers.handling_swap_scale;
         let mut stow_time = self.stow.solve_at(handling_stat) * _modifiers.handling_swap_scale;
         let ads_time = self.ads.solve_at(handling_stat) * _modifiers.handling_ads_scale;
@@ -187,12 +168,8 @@ impl Weapon {
         let mut default_chd_dt = HashMap::new();
         let cached_data = _cached_data.unwrap_or(&mut default_chd_dt);
         if _calc_input.is_some() {
-            let modifiers = get_handling_modifier(
-                self.list_perks(),
-                &_calc_input.unwrap(),
-                _pvp,
-                cached_data,
-            );
+            let modifiers =
+                get_handling_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data);
             self.handling_formula
                 .calc_handling_times_formula(handling_stat, modifiers)
         } else {
@@ -212,12 +189,7 @@ impl AmmoFormula {
         _calc_inv: bool,
         _inv_id: u32,
     ) -> AmmoResponse {
-        let mag_stat = if (_mag_stat + _mag_modifiers.magazine_stat_add) > 100 {
-            100
-        } else {
-            _mag_stat + _mag_modifiers.magazine_stat_add
-        } as f64;
-
+        let mag_stat = (_mag_stat + _mag_modifiers.magazine_stat_add).clamp(0, 100) as f64;
         let inv_stat = if (_reserve_stat + _inv_modifiers.inv_stat_add) > 100 {
             100
         } else {
@@ -409,5 +381,68 @@ impl Weapon {
             delay = epr.delyed;
         }
         (impact, explosion, crit, delay)
+    }
+}
+
+impl Weapon {
+    //Returns the flinch scaler from Resillience, Stability, Perks, and Buffs
+    //flinch resist = 1.0 - flinch scaler
+    //flinch resist can be negative
+    pub fn calc_flinch_resist(
+        &self,
+        _calc_input: Option<CalculationInput>,
+        _resillience: i32,
+        _pvp: bool,
+        _cached_data: Option<&mut HashMap<String, f64>>,
+    ) -> f64 {
+        /*
+        Todo:
+        X3 Unflinching
+        Perfect Float
+         */
+        let mut default_cached_data = HashMap::new();
+        let cached_data = _cached_data.unwrap_or(&mut default_cached_data);
+        let mut total_scaler = 1.0;
+
+        //resil
+        let resillience: f64 = _resillience.clamp(0, 10).into();
+        total_scaler *= 1.0 - resillience * 0.01;
+
+        //stability
+        let stability_percent = match self.weapon_type {
+            WeaponType::AUTORIFLE => 0.25,
+            WeaponType::SUBMACHINEGUN => 0.25,
+            WeaponType::BOW => 0.25,
+            WeaponType::PULSERIFLE => 0.2,
+            WeaponType::SCOUTRIFLE => 0.2,
+            WeaponType::SIDEARM => 0.2,
+            WeaponType::MACHINEGUN => 0.2,
+            WeaponType::HANDCANNON => 0.15,
+            WeaponType::TRACERIFLE => 0.15,
+            WeaponType::FUSIONRIFLE => 0.1,
+            WeaponType::SHOTGUN => 0.1,
+            WeaponType::SNIPER => 0.1,
+            WeaponType::GRENADELAUNCHER => 0.1,
+            WeaponType::LINEARFUSIONRIFLE => 0.1,
+            WeaponType::ROCKET => 0.1,
+            _ => 0.0,
+        };
+
+        let total_stability: f64 = self
+            .stats
+            .get(&StatHashes::STABILITY.into())
+            .unwrap_or(&Stat::new())
+            .perk_val()
+            .clamp(0, 100)
+            .into();
+        total_scaler *= 1.0 - ((total_stability - 20.0) / 80.0 * stability_percent);
+
+        if _calc_input.is_some() {
+            total_scaler *=
+                get_flinch_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data)
+                    .flinch_scale;
+        }
+
+        total_scaler
     }
 }
