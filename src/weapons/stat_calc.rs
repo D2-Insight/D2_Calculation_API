@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use super::{reserve_calc::calc_reserves, Stat, Weapon};
 use crate::{
-    d2_enums::{StatHashes, WeaponType},
+    d2_enums::{StatHashes, WeaponType, Seconds},
     perks::{
         get_dmg_modifier, get_explosion_data, get_firing_modifier, get_flinch_modifier,
         get_handling_modifier, get_magazine_modifier, get_range_modifier, get_reload_modifier,
@@ -457,5 +457,69 @@ impl Weapon {
         }
 
         total_scaler
+    }
+}
+
+impl Weapon{
+    pub fn calc_perfect_draw(
+        &self,
+    ) -> Seconds {
+        if self.weapon_type == WeaponType::BOW {
+            let stability: f64 = self
+                .stats
+                .get(&StatHashes::STABILITY.into())
+                .unwrap_or(&Stat::new())
+                .perk_val()
+                .clamp(0, 100)
+                .into();
+            //divided each by 60 to help compiler realize it can be divided at compile time
+            return stability * 0.15/60.0 + 18.0/60.0;
+        }
+        0.0
+    }
+}
+
+impl Weapon{
+    pub fn calc_shield_duration(
+        &self,
+    ) -> Seconds {
+        if self.weapon_type == WeaponType::GLAIVE {
+            let stability: f64 = self
+                .stats
+                .get(&StatHashes::SHIELD_DURATION.into())
+                .unwrap_or(&Stat::new())
+                .perk_val()
+                .clamp(0, 100)
+                .into();
+
+            return stability * 0.11 + 6.65;
+        }
+        0.0
+    }
+}
+
+impl Weapon {
+    fn get_misc_stats(&self,
+        _calc_input: Option<CalculationInput>,
+        _pvp: bool,
+        _cached_data: Option<&mut HashMap<String, f64>>,)
+        -> HashMap<String, f64>{
+        let mut buffer: HashMap<String, f64> = HashMap::new();
+        //velocity
+        /*match self.weapon_type {
+        WeaponType::ROCKET | WeaponType::GRENADELAUNCHER | WeaponType::GLAIVE => buffer.insert("velocity".to_string(), todo!()),
+        _ => None};*/
+
+        //shield duration
+        if self.weapon_type == WeaponType::GLAIVE {
+            buffer.insert("shield_duration".to_string(), self.calc_shield_duration());
+        }
+        
+        //perfect draw
+        if self.weapon_type == WeaponType::BOW {
+            buffer.insert("perfect_draw".to_string(), self.calc_perfect_draw());
+        }
+
+        buffer
     }
 }
