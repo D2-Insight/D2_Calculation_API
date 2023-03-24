@@ -13,7 +13,7 @@ const AMMO_DATA:     [AmmoFormula; 30] = [AmmoFormula{mag: StatQuadraticFormula{
 
 const META_POINTERS: [(u8, usize); 16] = [(6, 0), (31, 1), (11, 2), (23, 3), (9, 4), (22, 5), (8, 6), (13, 7), (10, 8), (14, 9), (7, 10), (12, 11), (24, 12), (33, 13), (25, 14), (17, 15)];
 
-pub const DATABASE_TIMESTAMP: u64 = 1679669443;
+pub const DATABASE_TIMESTAMP: u64 = 1679669953;
 
 #[derive(Debug, Clone)]
 struct DataPointers {
@@ -77,7 +77,6 @@ impl Weapon {
         let damage_type = DamageType::from(_damage_type_id);
         let intrinsic_alias = enhanced_check(_intrinsic_hash).0;
         Ok(Weapon {
-            is_pvp: false,
             intrinsic_hash: intrinsic_alias,
             hash: _hash,
             perks: HashMap::from([

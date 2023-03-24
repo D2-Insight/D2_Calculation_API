@@ -77,7 +77,6 @@ impl Weapon {
         let damage_type = DamageType::from(_damage_type_id);
         let intrinsic_alias = enhanced_check(_intrinsic_hash).0;
         Ok(Weapon {
-            is_pvp: false,
             intrinsic_hash: intrinsic_alias,
             hash: _hash,
             perks: HashMap::from([
