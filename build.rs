@@ -1,5 +1,6 @@
+use reqwest::blocking::Response;
 use serde::{Deserialize, Serialize};
-use serde_json::{Map, Value};
+use serde_json::{Map, Number, Value};
 use std::collections::HashMap;
 use std::fmt::Debug;
 use std::fs::File;
@@ -8,8 +9,16 @@ use std::io::Write;
 use json_value_remove::Remove;
 extern crate json_value_remove;
 
-fn vec_to_string<T: Debug>(vec: Vec<T>) -> String{
-    return format!("vec!{:?}", vec)
+fn vec_to_string<T: Debug>(vec: Vec<T>) -> String {
+    return format!("vec!{:?}", vec);
+}
+
+fn json_0_float() -> Value {
+    Value::Number(Number::from_f64(0.0).unwrap())
+}
+
+fn json_1_float() -> Value {
+    Value::Number(Number::from_f64(1.0).unwrap())
 }
 
 //these types reflect whats in src/types/rs_types.rs
@@ -22,9 +31,21 @@ pub struct StatQuadraticFormula {
 impl From<&Map<String, Value>> for StatQuadraticFormula {
     fn from(_val: &Map<String, Value>) -> Self {
         StatQuadraticFormula {
-            evpp: _val["evpp"].as_f64().unwrap_or_default(),
-            vpp: _val["vpp"].as_f64().unwrap_or_default(),
-            offset: _val["offset"].as_f64().unwrap_or_default(),
+            evpp: _val
+                .get("evpp")
+                .unwrap_or(&json_0_float())
+                .as_f64()
+                .unwrap_or_default(),
+            vpp: _val
+                .get("vpp")
+                .unwrap_or(&json_0_float())
+                .as_f64()
+                .unwrap_or_default(),
+            offset: _val
+                .get("offset")
+                .unwrap_or(&json_0_float())
+                .as_f64()
+                .unwrap_or_default(),
         }
     }
 }
@@ -42,13 +63,51 @@ pub struct DamageMods {
 impl From<&Map<String, Value>> for DamageMods {
     fn from(_val: &Map<String, Value>) -> Self {
         DamageMods {
-            pve: _val["pve"].as_f64().unwrap_or(1_f64),
-            minor: _val["minor"].as_f64().unwrap_or(1_f64),
-            elite: _val["elite"].as_f64().unwrap(),
-            miniboss: _val["miniboss"].as_f64().unwrap_or(1_f64),
-            champion: _val["champion"].as_f64().unwrap_or(1_f64),
-            boss: _val["boss"].as_f64().unwrap_or(1_f64),
-            vehicle: _val["vehicle"].as_f64().unwrap_or(1_f64),
+            pve: 1.0,
+            minor: _val
+                .get("minor")
+                .unwrap_or(&json_1_float())
+                .as_f64()
+                .unwrap_or(1_f64),
+            elite: _val
+                .get("elite")
+                .unwrap_or(&json_1_float())
+                .as_f64()
+                .unwrap_or(1_f64),
+            miniboss: _val
+                .get("miniboss")
+                .unwrap_or(&json_1_float())
+                .as_f64()
+                .unwrap_or(1_f64),
+            champion: _val
+                .get("champion")
+                .unwrap_or(&json_1_float())
+                .as_f64()
+                .unwrap_or(1_f64),
+            boss: _val
+                .get("boss")
+                .unwrap_or(&json_1_float())
+                .as_f64()
+                .unwrap_or(1_f64),
+            vehicle: _val
+                .get("vehicle")
+                .unwrap_or(&json_1_float())
+                .as_f64()
+                .unwrap_or(1_f64),
+        }
+    }
+}
+impl DamageMods {
+    pub fn add_pve_mult(self, mult: f64) -> Self {
+        // not super memory efficient but it works
+        DamageMods {
+            pve: mult,
+            minor: self.minor,
+            elite: self.elite,
+            miniboss: self.miniboss,
+            champion: self.champion,
+            boss: self.boss,
+            vehicle: self.vehicle,
         }
     }
 }
@@ -63,10 +122,22 @@ pub struct RangeFormula {
 impl From<&Map<String, Value>> for RangeFormula {
     fn from(_val: &Map<String, Value>) -> Self {
         RangeFormula {
-            start: StatQuadraticFormula::from(_val["start"].as_object().unwrap_or(&Map::new())),
-            end: StatQuadraticFormula::from(_val["end"].as_object().unwrap_or(&Map::new())),
+            start: StatQuadraticFormula {
+                evpp: 0.0,
+                vpp: _val["vpp_start"].as_f64().unwrap_or_default(),
+                offset: _val["offset_start"].as_f64().unwrap_or_default(),
+            },
+            end: StatQuadraticFormula {
+                evpp: 0.0,
+                vpp: _val["vpp_end"].as_f64().unwrap_or_default(),
+                offset: _val["offset_end"].as_f64().unwrap_or_default(),
+            },
             floor_percent: _val["floor_percent"].as_f64().unwrap_or_default(),
-            fusion: _val["fusion"].as_bool().unwrap_or(false),
+            fusion: _val
+                .get("fusion")
+                .unwrap_or(&Value::Bool(false))
+                .as_bool()
+                .unwrap_or(false),
         }
     }
 }
@@ -79,10 +150,12 @@ pub struct ReloadFormula {
 impl From<&Map<String, Value>> for ReloadFormula {
     fn from(_val: &Map<String, Value>) -> Self {
         ReloadFormula {
-            reload_data: StatQuadraticFormula::from(
-                _val["reload_data"].as_object().unwrap_or(&Map::new()),
-            ),
-            ammo_percent: _val["ammo_percent"].as_f64().unwrap_or_default(),
+            reload_data: StatQuadraticFormula::from(&_val.clone()),
+            ammo_percent: _val
+                .get("ammo_percent")
+                .unwrap_or(&json_0_float())
+                .as_f64()
+                .unwrap_or_default(),
         }
     }
 }
@@ -113,8 +186,16 @@ impl From<&Map<String, Value>> for AmmoFormula {
     fn from(_val: &Map<String, Value>) -> Self {
         AmmoFormula {
             mag: StatQuadraticFormula::from(_val["mag"].as_object().unwrap_or(&Map::new())),
-            round_to: _val["round_to"].as_i64().unwrap_or_default() as i32,
-            reserve_id: _val["reserve_id"].as_u64().unwrap_or_default() as u32,
+            round_to: _val
+                .get("round_to")
+                .unwrap_or(&Value::Null)
+                .as_i64()
+                .unwrap_or_default() as i32,
+            reserve_id: _val
+                .get("reserve_id")
+                .unwrap_or(&Value::Null)
+                .as_u64()
+                .unwrap_or_default() as u32,
         }
     }
 }
@@ -137,8 +218,16 @@ impl From<&Map<String, Value>> for FiringData {
             burst_delay: _val["burst_delay"].as_f64().unwrap_or_default(),
             inner_burst_delay: _val["inner_burst_delay"].as_f64().unwrap_or_default(),
             burst_size: _val["burst_size"].as_i64().unwrap_or_default() as i32,
-            one_ammo: _val["one_ammo"].as_bool().unwrap_or(false),
-            charge: _val["charge"].as_bool().unwrap_or(false),
+            one_ammo: _val
+                .get("one_ammo")
+                .unwrap_or(&Value::Bool(false))
+                .as_bool()
+                .unwrap_or(false),
+            charge: _val
+                .get("charge")
+                .unwrap_or(&Value::Bool(false))
+                .as_bool()
+                .unwrap_or(false),
         }
     }
 }
@@ -274,8 +363,8 @@ fn main() {
             "Mapping of enhanced perks and intrinsics to their base perk/intrinsic",
         );
     }
-
-    fn construct_weapon_formulas() {
+    construct_weapon_formulas(&mut formula_file);
+    fn construct_weapon_formulas(formula_file: &mut File) {
         let id_to_name = HashMap::from([
             (6, "Auto Rifle"),
             (31, "Combat Bow"),
@@ -329,8 +418,8 @@ fn main() {
         let mut firing_data: Vec<FiringData> = Vec::new();
         let mut scalar_data: Vec<DamageMods> = Vec::new();
 
+        let mut updated_weapon_defs: Vec<(u32, DataPointers)> = Vec::new();
         for (weapon_id, inner_values) in new_jdata.as_object().unwrap() {
-            let mut updated_weapon_defs: HashMap<u32, DataPointers> = HashMap::new();
             for (weapon_hash, weapon_def) in inner_values.as_object().unwrap() {
                 let mut data = DataPointers::default();
                 if weapon_hash.parse::<u32>().is_err() {
@@ -371,7 +460,7 @@ fn main() {
                             ));
                             mag = Map::new();
                         } else {
-                            mag = val["magPrfo"][weapon_def["magProf"].as_str().unwrap()]
+                            mag = val["magProf"][weapon_def["magProf"].as_str().unwrap()]
                                 .as_object()
                                 .unwrap()
                                 .clone();
@@ -469,7 +558,7 @@ fn main() {
                         reload_data.push(reload);
                     }
 
-                    let scalar: DamageMods = cat
+                    let b_scalar: DamageMods = cat
                         .get("combatant_scalars")
                         .unwrap_or_else(|| {
                             err_list.push(format!(
@@ -482,6 +571,13 @@ fn main() {
                         .as_object()
                         .unwrap()
                         .into();
+                    let scalar = b_scalar.add_pve_mult(
+                        weapon_def
+                            .get("pve_mult")
+                            .unwrap_or(&json_1_float())
+                            .as_f64()
+                            .unwrap_or(1.0),
+                    );
                     if scalar_data.contains(&scalar) {
                         data.s = scalar_data.iter().position(|x| x == &scalar).unwrap();
                     } else {
@@ -514,8 +610,58 @@ fn main() {
                 if set_data_res.is_err() {
                     println!("cargo:warning={:?}", set_data_res.unwrap_err());
                 }
-                updated_weapon_defs.insert(weapon_hash.parse::<u32>().unwrap(), data);
+                updated_weapon_defs.push((weapon_hash.parse::<u32>().unwrap(), data));
             }
         }
+        // println!("cargo:warning=Finished parsing weapon definitions {:?}", updated_weapon_defs);
+        write_variable(
+            formula_file,
+            "DATA_POINTERS",
+            &format!("[(u32, DataPointers); {}]", updated_weapon_defs.len()),
+            format!("{:?}", updated_weapon_defs),
+            "Hashmapping for weapon intrinsic hash to data pointers",
+        );
+        write_variable(
+            formula_file,
+            "RANGE_DATA",
+            &format!("[RangeFormula; {}]", range_data.len()),
+            format!("{:?}", range_data),
+            "Array of range formulas",
+        );
+        write_variable(
+            formula_file,
+            "HANDLING_DATA",
+            &format!("[HandlingFormula; {}]", handling_data.len()),
+            format!("{:?}", handling_data),
+            "Array of handling formulas",
+        );
+        write_variable(
+            formula_file,
+            "RELOAD_DATA",
+            &format!("[ReloadFormula; {}]", reload_data.len()),
+            format!("{:?}", reload_data),
+            "Array of reload formulas",
+        );
+        write_variable(
+            formula_file,
+            "RELOAD_DATA",
+            &format!("[DamageMods; {}]", scalar_data.len()),
+            format!("{:?}", scalar_data),
+            "Array of combatant scalar formulas",
+        );
+        write_variable(
+            formula_file,
+            "RELOAD_DATA",
+            &format!("[FiringData; {}]", firing_data.len()),
+            format!("{:?}", firing_data),
+            "Array of firing data formulas",
+        );
+        write_variable(
+            formula_file,
+            "RELOAD_DATA",
+            &format!("[AmmoFormula; {}]", ammo_data.len()),
+            format!("{:?}", ammo_data),
+            "Array of ammo formulas",
+        );
     }
 }

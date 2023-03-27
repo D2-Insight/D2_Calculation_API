@@ -268,41 +268,48 @@ for weapon_id in new_jdata:
         data = {}
         if weapon_hash.isnumeric():
             weapon_def = inner_values[weapon_hash]
+            error_location_name = ""
             try:
                 basic_defs = inner_values["cat"][weapon_def["cat"]]
 
+                error_location_name = "range"
                 range:dict = verify_range_data(basic_defs["range"])
                 if range not in range_data:
                     range_data.append(range)
                 data["r"] = range_data.index(range)
 
+                error_location_name = "handling"
                 handling:dict = verify_handling_data(basic_defs["handling"])
                 if handling not in handling_data:
                     handling_data.append(handling)
                 data["h"] = handling_data.index(handling)
 
+                error_location_name = "reload"
                 reload:dict = verify_reload_data(basic_defs["reload"])
                 if reload not in reload_data:
                     reload_data.append(reload)
                 data["rl"] = reload_data.index(reload)
 
+                error_location_name = "scalar"
                 scalar:dict = verify_scalar_data(basic_defs["combatant_scalars"])
                 scalar["pve"] = weapon_def.get("pve", 1.0)
                 if scalar not in scalar_data:
                     scalar_data.append(scalar)
                 data["s"] = scalar_data.index(scalar)
 
+                error_location_name = "firing"
                 firing:dict = verify_firing_data(inner_values["subFam"][weapon_def["subFam"]])
                 if firing not in firing_data:
                     firing_data.append(firing)
                 data["f"] = firing_data.index(firing)
 
+                error_location_name = "ammo"
                 ammo:dict = verify_ammo_data(inner_values["magProf"][weapon_def["magProf"]])
                 if ammo not in ammo_data:
                     ammo_data.append(ammo)
                 data["a"] = ammo_data.index(ammo)
             except Exception as e:
-                print(e, id_to_name[weapon_id], weapon_hash)
+                print(f"{e} for {error_location_name} at {id_to_name[weapon_id]} {weapon_hash}")
 
             updated_weapon_defs[weapon_hash] = verify_data_pointers(data)
 
