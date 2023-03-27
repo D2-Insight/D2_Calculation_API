@@ -509,7 +509,7 @@ impl Weapon{
         &self,
     ) -> Seconds {
         if self.weapon_type == WeaponType::GLAIVE {
-            let stability: f64 = self
+            let shield_duration: f64 = self
                 .stats
                 .get(&StatHashes::SHIELD_DURATION.into())
                 .unwrap_or(&Stat::new())
@@ -517,7 +517,7 @@ impl Weapon{
                 .clamp(0, 100)
                 .into();
 
-            return stability * 0.11 + 6.65;
+            return shield_duration * 0.11 + 6.65;
         }
         0.0
     }
