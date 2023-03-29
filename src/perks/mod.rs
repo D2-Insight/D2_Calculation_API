@@ -1,5 +1,6 @@
 #![allow(clippy::all)]
 
+pub mod buff_perks;
 pub mod enhanced_handler;
 pub mod exotic_perks;
 pub mod lib;
@@ -13,7 +14,6 @@ pub mod year_3_perks;
 pub mod year_4_perks;
 pub mod year_5_perks;
 pub mod year_6_perks;
-pub mod buff_perks;
 
 use std::collections::HashMap;
 
@@ -22,12 +22,13 @@ use serde::{Deserialize, Serialize};
 use crate::d2_enums::StatHashes;
 
 use self::{
+    buff_perks::*,
     exotic_perks::*,
     lib::{
         CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
-        FiringModifierResponse, HandlingModifierResponse, InventoryModifierResponse,
-        MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
-        ReloadOverrideResponse, FlinchModifierResponse,
+        FiringModifierResponse, FlinchModifierResponse, HandlingModifierResponse,
+        InventoryModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
+        ReloadModifierResponse, ReloadOverrideResponse, VelocityModifierResponse,
     },
     meta_perks::*,
     origin_perks::*,
@@ -38,7 +39,6 @@ use self::{
     year_4_perks::*,
     year_5_perks::*,
     year_6_perks::*,
-    buff_perks::*,
 };
 
 pub fn clamp<T: PartialOrd>(n: T, min: T, max: T) -> T {
@@ -304,7 +304,6 @@ impl From<u32> for Perks {
             1380009033 => Perks::Radiant,
             1464159054 => Perks::Weaken,
             2274196887 => Perks::WellOfRadiance, //Should this be here? -- No clue
-
 
             //intrinsics
             902 => Perks::RapidFireFrame,
@@ -728,11 +727,11 @@ fn dyanmic_perk_stats(
         Perks::HuntersTrance => sbr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::KeepAway => sbr_keep_away(_input_data, val, enhanced, _pvp, _cached_data),
         // Perks::FieldTested => sbr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::RallyBarricade => sbr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::TomeOfDawn => sbr_tome_of_dawn(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::TargetingMod => {
-            sbr_targeting_mods(_input_data, val, enhanced, _pvp, _cached_data)
+        Perks::RallyBarricade => {
+            sbr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::TomeOfDawn => sbr_tome_of_dawn(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::TargetingMod => sbr_targeting_mods(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
 }
@@ -743,7 +742,7 @@ pub fn get_dmg_modifier(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    let mut dmg_modifier = DamageModifierResponse::new();
+    let mut dmg_modifier = DamageModifierResponse::default();
     for perk in _perks {
         let tmp = get_perk_dmr(perk.clone(), _input_data, _pvp, _cached_data);
         dmg_modifier.impact_dmg_scale *= tmp.impact_dmg_scale;
@@ -815,9 +814,7 @@ fn get_perk_dmr(
         Perks::AcceleratedCoils => {
             dmr_accelerated_coils(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::ChargetimeMW => {
-            dmr_chargetime_mw(_input_data, val, enhanced, _pvp, _cached_data)
-        }
+        Perks::ChargetimeMW => dmr_chargetime_mw(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::FullChoke => dmr_full_choke(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::LiquidCoils => dmr_liquid_coils(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HakkeHeavyBurst => {
@@ -862,29 +859,23 @@ fn get_perk_dmr(
         Perks::Weaken => dmr_weaken(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::PathOfTheBurningSteps => {
             dmr_path_of_burning_steps(_input_data, val, enhanced, _pvp, _cached_data)
-        },
+        }
         Perks::WellOfRadiance => {
             dmr_well_of_radiance(_input_data, val, enhanced, _pvp, _cached_data)
-        },
+        }
         Perks::MantleOfBattleHarmony => {
             dmr_mantle_of_battle_harmony(_input_data, val, enhanced, _pvp, _cached_data)
-        },
-        Perks::MaskOfBakris => {
-            dmr_bakris(_input_data, val, enhanced, _pvp, _cached_data)
-        },
+        }
+        Perks::MaskOfBakris => dmr_bakris(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::BallindorseWrathweavers => {
             dmr_cold_balls(_input_data, val, enhanced, _pvp, _cached_data)
-        },
+        }
         Perks::BootsOfTheAssembler => {
             dmr_blessing_of_the_sky(_input_data, val, enhanced, _pvp, _cached_data)
-        },
-        Perks::KickStart => {
-            dmr_kickstart(_input_data, val, enhanced, _pvp, _cached_data)
-        },
-        Perks::SurgeMod => {
-            dmr_surge_mods(_input_data, val, enhanced, _pvp, _cached_data)
-        },
-        _ => DamageModifierResponse::new(),
+        }
+        Perks::KickStart => dmr_kickstart(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SurgeMod => dmr_surge_mods(_input_data, val, enhanced, _pvp, _cached_data),
+        _ => DamageModifierResponse::default(),
     }
 }
 
@@ -966,7 +957,9 @@ fn get_perk_rsmr(
         Perks::HuntersTrance => rsmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::KeepAway => rsmr_keep_away(_input_data, val, enhanced, _pvp, _cached_data),
         // Perks::FieldTested => rsmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::RallyBarricade => rsmr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RallyBarricade => {
+            rsmr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => ReloadModifierResponse::default(),
     }
 }
@@ -1248,7 +1241,9 @@ fn get_perk_rmr(
         Perks::Adagio => rmr_adagio(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => rmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
         // Perks::FieldTested => rmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::RallyBarricade => rmr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RallyBarricade => {
+            rmr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => RangeModifierResponse::default(),
     }
 }
@@ -1394,7 +1389,7 @@ pub fn get_flinch_modifier(
     _cached_data: &mut HashMap<String, f64>,
 ) -> FlinchModifierResponse {
     let mut tmp = FlinchModifierResponse::default();
-    for perk in _perks{
+    for perk in _perks {
         tmp.flinch_scale *= get_perk_flmr(perk, _input_data, _pvp).flinch_scale;
     }
     tmp
@@ -1404,17 +1399,59 @@ fn get_perk_flmr(
     _perk: Perk,
     _input_data: &CalculationInput,
     _pvp: bool,
-) -> FlinchModifierResponse{
+) -> FlinchModifierResponse {
     let perk_enum = _perk.hash.into();
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
-        Perks::SurosSynergy => flmr_suros_synergy(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::NoDistractions => flmr_no_distractions(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::UnflinchingMod => flmr_unflinching_mod(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::RallyBarricade => flmr_rally_barricade(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
-        Perks::TomeOfDawn => flmr_tome_of_dawn(_input_data, val, enhanced, _pvp, &mut HashMap::new()),
+        Perks::SurosSynergy => {
+            flmr_suros_synergy(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+        }
+        Perks::NoDistractions => {
+            flmr_no_distractions(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+        }
+        Perks::UnflinchingMod => {
+            flmr_unflinching_mod(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+        }
+        Perks::RallyBarricade => {
+            flmr_rally_barricade(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+        }
+        Perks::TomeOfDawn => {
+            flmr_tome_of_dawn(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+        }
         //Perks::PerfectFloat => todo!(), //Perfect floats flinch resist value is unknown atm
         _ => FlinchModifierResponse::default(),
+    }
+}
+
+pub fn get_velocity_modifier(
+    _perks: Vec<Perk>,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> VelocityModifierResponse {
+    let mut tmp = VelocityModifierResponse::default();
+    for perk in _perks {
+        tmp.velocity_scaler *= get_perk_vmr(perk, _input_data, _pvp).velocity_scaler;
+    }
+    tmp
+}
+
+fn get_perk_vmr(
+    _perk: Perk,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+) -> VelocityModifierResponse {
+    let perk_enum: Perks = _perk.hash.into();
+    let val = _perk.value;
+    let enhanced = _perk.enhanced;
+    match perk_enum {
+        Perks::RangeFinder => {
+            vmr_range_finder(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+        }
+        Perks::ImpulseAmplifier => {
+            vmr_impulse_amplifier(_input_data, val, enhanced, _pvp, &mut HashMap::new())
+        }
+        _ => VelocityModifierResponse::default(),
     }
 }

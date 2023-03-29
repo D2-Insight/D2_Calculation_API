@@ -122,7 +122,7 @@
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
-                "reload":   {"evpp": 0.00006152, "vpp": -0.00125, "offset": 1.1},
+                "reload":   {"evpp": -0.00006152, "vpp": -0.00125, "offset": 1.1},
                 "handling": {
                     "ready":{"vpp": -0.002909930716, "offset": 0.7364549654},
                     "stow": {"vpp": -0.00179330254,  "offset": 0.5396466513},
@@ -132,7 +132,7 @@
             },
             "exotic": {
                 "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
-                "reload":   {"evpp": 0.00006152, "vpp": -0.00917, "offset": 1.15},
+                "reload":   {"evpp": -0.00006152, "vpp": -0.00125, "offset": 1.1},
                 "handling": {
                     "ready":{"vpp": -0.002909930716, "offset": 0.7364549654},
                     "stow": {"vpp": -0.00179330254,  "offset": 0.5396466513},
@@ -784,9 +784,9 @@
         "31057037":   {"name": "Omolon Adaptive Frame", "cat": "default"   , "subFam": "Adaptive_Burst",   "magProf": "small"},
         "334466122":  {"name": "Devil's Ruin",          "cat": "default"   , "subFam": "Adaptive",         "magProf": "small"},
         "806997698":  {"name": "SUROS Rapid-Fire",      "cat": "default"   , "subFam": "Rapid-Fire",       "magProf": "small"},
-        "975429949":  {"name": "Traveler's Chosen",     "cat": "default"   , "subFam": "Precision",        "magProf": "small"},
+        "975429949":  {"name": "Traveler's Chosen",     "cat": "default"   , "subFam": "Adaptive",         "magProf": "small"},
         "986191425":  {"name": "Cryosthesia 77K",       "cat": "default"   , "subFam": "Precision",        "magProf": "small"},
-        "1282254042": {"name": "Together Forever",      "cat": "default"   , "subFam": "Precision",        "magProf": "small"},
+        "1282254042": {"name": "Together Forever",      "cat": "default"   , "subFam": "Adaptive",         "magProf": "small"},
         "1294026524": {"name": "Adaptive Frame",        "cat": "default"   , "subFam": "Adaptive",         "magProf": "small"},
         "1458010786": {"name": "Lightweight Frame",     "cat": "default"   , "subFam": "Lightweight",      "magProf": "small"},
         "1636108362": {"name": "Precision Frame",       "cat": "default"   , "subFam": "Precision",        "magProf": "small"},

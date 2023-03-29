@@ -9,11 +9,11 @@ use super::{
     clamp,
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
-        HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
-        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse,FlinchModifierResponse,
+        FlinchModifierResponse, HandlingModifierResponse, InventoryModifierResponse,
+        MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
+        ReloadOverrideResponse,
     },
 };
-
 
 pub(super) fn rsmr_alloy_mag(
     _input: &CalculationInput,
@@ -428,7 +428,7 @@ pub(super) fn dmr_full_choke(
             crit_scale: 0.92,
         }
     } else {
-        DamageModifierResponse::new()
+        DamageModifierResponse::default()
     }
 }
 
@@ -506,7 +506,7 @@ pub(super) fn fmr_faster_string_t2(
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     FiringModifierResponse {
-        burst_delay_add: -2.0/30.0,
+        burst_delay_add: -2.0 / 30.0,
         ..Default::default()
     }
 }
@@ -519,7 +519,7 @@ pub(super) fn fmr_faster_string_t1(
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     FiringModifierResponse {
-        burst_delay_add: -1.0/30.0,
+        burst_delay_add: -1.0 / 30.0,
         ..Default::default()
     }
 }
@@ -532,7 +532,7 @@ pub(super) fn fmr_slower_string_t1(
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     FiringModifierResponse {
-        burst_delay_add: 1.0/30.0,
+        burst_delay_add: 1.0 / 30.0,
         ..Default::default()
     }
 }
@@ -545,7 +545,7 @@ pub(super) fn fmr_slower_string_t2(
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     FiringModifierResponse {
-        burst_delay_add: 2.0/30.0,
+        burst_delay_add: 2.0 / 30.0,
         ..Default::default()
     }
 }
@@ -567,7 +567,7 @@ pub(super) fn fmr_assault_mag(
     };
     if _input.weapon_type == &WeaponType::SHOTGUN {
         FiringModifierResponse {
-            burst_delay_add: -(tick_amount/30.0),
+            burst_delay_add: -(tick_amount / 30.0),
             ..Default::default()
         }
     } else {
@@ -595,12 +595,10 @@ pub(super) fn flmr_tome_of_dawn(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-    ) -> FlinchModifierResponse {
-        if _value > 0 {
-            FlinchModifierResponse {
-                flinch_scale: 0.80
-            }
-         } else {
-            FlinchModifierResponse::default()
-        }
+) -> FlinchModifierResponse {
+    if _value > 0 {
+        FlinchModifierResponse { flinch_scale: 0.80 }
+    } else {
+        FlinchModifierResponse::default()
     }
+}

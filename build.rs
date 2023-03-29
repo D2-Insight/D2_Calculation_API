@@ -280,7 +280,7 @@ fn main() {
             construct_enhance_perk_mapping(&mut formula_file);
         }
     } else {
-        panic!("no internet connection :(");
+        // panic!("no internet connection :(");
     }
     fn construct_enhance_perk_mapping(formula_file: &mut File) {
         let mut perk_mappings: Vec<(u32, u32)> = Vec::new();

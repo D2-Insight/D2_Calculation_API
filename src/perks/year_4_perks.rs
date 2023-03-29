@@ -7,7 +7,7 @@ use super::{
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
         HandlingModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
-        ReloadModifierResponse,
+        ReloadModifierResponse, VelocityModifierResponse,
     },
 };
 
@@ -23,7 +23,7 @@ pub(super) fn dmr_adagio(
     if *_input.weapon_type == WeaponType::BOW || *_input.weapon_type == WeaponType::SHOTGUN {
         dmg_boost = 0.2;
     };
-    if _input.time_total > duration || _value == 0{
+    if _input.time_total > duration || _value == 0 {
         dmg_boost = 0.0;
     };
     DamageModifierResponse {
@@ -62,7 +62,7 @@ pub(super) fn sbr_adagio(
 ) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
     let duration = if _is_enhanced { 8.0 } else { 7.0 };
-    if  _input.time_total <= duration && _value > 0 {
+    if _input.time_total <= duration && _value > 0 {
         map.insert(StatHashes::RANGE.into(), 10);
     }
     map
@@ -334,6 +334,18 @@ pub(super) fn sbr_impulse_amplifier(
     out
 }
 
+pub(super) fn vmr_impulse_amplifier(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> VelocityModifierResponse {
+    VelocityModifierResponse {
+        velocity_scaler: 1.35,
+    }
+}
+
 pub(super) fn sbr_perpetual_motion(
     _input: &CalculationInput,
     _value: u32,
@@ -531,7 +543,7 @@ pub(super) fn dmr_golden_tricorn(
             crit_scale: 1.0,
         }
     } else {
-        DamageModifierResponse::new()
+        DamageModifierResponse::default()
     }
 }
 
@@ -660,9 +672,9 @@ pub(super) fn sbr_heating_up(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let val = clamp(_value, 0, 2) as i32;
-    let mut out  = HashMap::new();
-    out.insert(StatHashes::RECOIL_DIR.into(), 20*val);
-    out.insert(StatHashes::STABILITY.into(), 15*val);
+    let mut out = HashMap::new();
+    out.insert(StatHashes::RECOIL_DIR.into(), 20 * val);
+    out.insert(StatHashes::STABILITY.into(), 15 * val);
     out
 }
 
