@@ -7,7 +7,7 @@ use super::{
     lib::{
         CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
         FiringModifierResponse, HandlingModifierResponse, InventoryModifierResponse,
-        MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
+        MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse, VelocityModifierResponse,
     },
 };
 
@@ -500,6 +500,18 @@ pub(super) fn rmr_range_finder(
         range_all_scale: 1.0,
         range_hip_scale: 1.0,
         range_zoom_scale: 1.1,
+    }
+}
+
+pub(super) fn vmr_range_finder(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> VelocityModifierResponse {
+    VelocityModifierResponse {
+        velocity_scaler: 1.05,
     }
 }
 
