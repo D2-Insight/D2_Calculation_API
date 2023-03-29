@@ -318,6 +318,18 @@ impl Default for FlinchModifierResponse{
 }
 
 #[derive(Debug, Clone)]
+pub struct VelocityModifierResponse{
+    pub velocity_scaler: f64,
+}
+impl Default for VelocityModifierResponse{
+    fn default() -> Self {
+        Self {
+            velocity_scaler: 1.0,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct ReloadOverrideResponse {
     pub valid: bool,
     pub reload_time: f64,

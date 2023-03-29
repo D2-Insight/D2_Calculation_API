@@ -7,7 +7,7 @@ use super::{
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
         HandlingModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
-        ReloadModifierResponse,
+        ReloadModifierResponse, VelocityModifierResponse,
     },
 };
 
@@ -332,6 +332,18 @@ pub(super) fn sbr_impulse_amplifier(
     let mut out = HashMap::new();
     out.insert(StatHashes::RELOAD.into(), reload);
     out
+}
+
+pub(super) fn vmr_impulse_amplifier(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> VelocityModifierResponse {
+    VelocityModifierResponse {
+        velocity_scaler: 1.35
+    }
 }
 
 pub(super) fn sbr_perpetual_motion(
