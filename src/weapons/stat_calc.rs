@@ -489,18 +489,19 @@ impl Weapon{
     pub fn calc_perfect_draw(
         &self,
     ) -> Seconds {
-        if self.weapon_type == WeaponType::BOW {
-            let stability: f64 = self
+        let stability: f64 = self
                 .stats
                 .get(&StatHashes::STABILITY.into())
                 .unwrap_or(&Stat::new())
                 .perk_val()
                 .clamp(0, 100)
                 .into();
-            //divided each by 60 to help compiler realize it can be divided at compile time
-            return stability * 0.15/60.0 + 18.0/60.0;
+
+        match self.intrinsic_hash {
+            715195141 => stability * 1.0/400.0 + 0.3,
+            2108556049 => stability * 3.0/1000.0 + 0.5,
+            _ => 0.0,
         }
-        0.0
     }
 }
 
@@ -516,9 +517,17 @@ impl Weapon{
                 .perk_val()
                 .clamp(0, 100)
                 .into();
-
             return shield_duration * 0.11 + 6.65;
-        }
+           } else if self.weapon_type == WeaponType::SWORD {
+            let guard_endruance: f64 = self
+                .stats
+                .get(&StatHashes::GUARD_ENDURANCE.into())
+                .unwrap_or(&Stat::new())
+                .perk_val()
+                .clamp(0, 100)
+                .into();
+            return 100.0/(guard_endruance*-0.75 + 80.0)
+           }
         0.0
     }
 }
