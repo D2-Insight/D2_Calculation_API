@@ -44,7 +44,7 @@ pub fn extern_log(s: &str, log_level: LogLevel) {
     }
     #[cfg(feature = "wasm")]
     crate::console_log!("{}", s);
-    #[cfg(feature = "python")]
+    #[cfg(not(feature = "wasm"))]
     println!("{}", s);
 }
 

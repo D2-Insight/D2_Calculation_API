@@ -1,17 +1,16 @@
-use reqwest::blocking::Response;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use serde_json::{Map, Number, Value};
 use std::collections::HashMap;
 use std::fmt::Debug;
 use std::fs::File;
 use std::io::Write;
 
-use json_value_remove::Remove;
-extern crate json_value_remove;
+// use json_value_remove::Remove;
+// extern crate json_value_remove;
 
-fn vec_to_string<T: Debug>(vec: Vec<T>) -> String {
-    return format!("vec!{:?}", vec);
-}
+// fn vec_to_string<T: Debug>(vec: Vec<T>) -> String {
+//     return format!("vec!{:?}", vec);
+// }
 
 fn json_0_float() -> Value {
     Value::Number(Number::from_f64(0.0).unwrap())
@@ -268,18 +267,20 @@ fn main() {
     let formula_dst = std::path::Path::new(&std::env::var("OUT_DIR").unwrap()).join("formulas.rs");
     println!(
         "cargo:warning=OUT_DIR: {}",
-        &std::env::var("CARGO_MANIFEST_DIR").unwrap()
+        &std::env::var("OUT_DIR").unwrap()
     );
     built::write_built_file_with_opts(&opts, src.as_ref(), &built_dst)
         .expect("Failed to acquire build-time information");
     let mut formula_file = std::fs::File::create(formula_dst).unwrap();
     // checking to see if we have internet connection
-    let ping = reqwest::blocking::get("https://github.com");
+    let ping = reqwest::blocking::get("https://www.bungie.net");
     if ping.is_ok() {
         let status = ping.unwrap().status();
         if status == reqwest::StatusCode::OK {
             construct_enhance_perk_mapping(&mut formula_file);
         }
+    } else {
+        panic!("no internet connection :(");
     }
     fn construct_enhance_perk_mapping(formula_file: &mut File) {
         let mut perk_mappings: Vec<(u32, u32)> = Vec::new();
@@ -308,6 +309,7 @@ fn main() {
             (905, vec!["Lightweight Frame", "MIDA Synergy"]),
             (906, vec!["Precision Frame", "Häkke Precision Frame"]),
             (907, vec!["Double Fire"]),
+            (908, vec!["Wave Frame"]),
             (911, vec!["Legacy PR-55 Frame"]),
         ]);
         let manifest_raw =
@@ -390,10 +392,12 @@ fn main() {
         let mut jdata: serde_json::Value =
             serde_json::from_str(&std::fs::read_to_string(jdata_path).unwrap()).unwrap();
         // remove "COMMENTS" from jdata
-        let res = jdata.remove("COMMENTS");
-        if res.is_err() {
+        let res = jdata.get("COMMENTS");
+        if res.is_none() {
             println!("cargo:warning=comments not found");
             return;
+        } else {
+            jdata.as_object_mut().unwrap().remove("COMMENTS");
         }
 
         let mut new_jdata: Value = Value::Object(Map::new());
@@ -644,21 +648,21 @@ fn main() {
         );
         write_variable(
             formula_file,
-            "RELOAD_DATA",
+            "SCALAR_DATA",
             &format!("[DamageMods; {}]", scalar_data.len()),
             format!("{:?}", scalar_data),
             "Array of combatant scalar formulas",
         );
         write_variable(
             formula_file,
-            "RELOAD_DATA",
+            "FIRING_DATA",
             &format!("[FiringData; {}]", firing_data.len()),
             format!("{:?}", firing_data),
             "Array of firing data formulas",
         );
         write_variable(
             formula_file,
-            "RELOAD_DATA",
+            "AMMO_DATA",
             &format!("[AmmoFormula; {}]", ammo_data.len()),
             format!("{:?}", ammo_data),
             "Array of ammo formulas",
