@@ -348,7 +348,7 @@ pub(super) fn dmr_target_lock(
     let buff;
 
     let enh_increase = if _is_enhanced { 1.125 } else { 1.0 };
-    let low_end_dmg = 0.28/3.0 * enh_increase;
+    let low_end_dmg = 0.28 / 3.0 * enh_increase;
     let high_end_dmg = 0.40 * enh_increase;
 
     let formula_start = -0.3505;
@@ -362,7 +362,7 @@ pub(super) fn dmr_target_lock(
         buff = high_end_dmg;
     } else {
         let x = (percent_of_mag - formula_start) / (formula_end - formula_start);
-        let smoothstep = 3.0*(x.powf(2.0)) - 2.0*(x.powf(3.0));
+        let smoothstep = 3.0 * (x.powf(2.0)) - 2.0 * (x.powf(3.0));
         buff = low_end_dmg + (high_end_dmg - low_end_dmg) * smoothstep;
     }
 
@@ -462,7 +462,7 @@ pub(super) fn dmr_bait_and_switch(
             crit_scale: 1.0,
         }
     } else {
-        DamageModifierResponse::new()
+        DamageModifierResponse::default()
     }
 }
 
@@ -617,8 +617,10 @@ pub(super) fn fmr_succesful_warmup(
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     let fire_rate_buff = if _value > 0 { 0.625 } else { 1.0 };
-    let duration = if _value > 0{
-        6_f64 + (if _is_enhanced { 5_f64 } else { 4_f64 }) * clamp(_value as f64 -1_f64, 0_f64, 4_f64)
+    let duration = if _value > 0 {
+        6_f64
+            + (if _is_enhanced { 5_f64 } else { 4_f64 })
+                * clamp(_value as f64 - 1_f64, 0_f64, 4_f64)
     } else {
         0.0
     };

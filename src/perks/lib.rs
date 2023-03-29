@@ -138,14 +138,14 @@ impl<'a> CalculationInput<'a> {
     }
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone)]
 pub struct DamageModifierResponse {
     pub impact_dmg_scale: f64,
     pub explosive_dmg_scale: f64,
     pub crit_scale: f64,
 }
-impl DamageModifierResponse {
-    pub fn new() -> Self {
+impl Default for DamageModifierResponse {
+    fn default() -> Self {
         Self {
             impact_dmg_scale: 1.0,
             explosive_dmg_scale: 1.0,
@@ -306,22 +306,20 @@ impl Default for InventoryModifierResponse {
 }
 
 #[derive(Debug, Clone)]
-pub struct FlinchModifierResponse{
+pub struct FlinchModifierResponse {
     pub flinch_scale: f64,
 }
-impl Default for FlinchModifierResponse{
+impl Default for FlinchModifierResponse {
     fn default() -> Self {
-        Self {
-            flinch_scale: 1.0,
-        }
+        Self { flinch_scale: 1.0 }
     }
 }
 
 #[derive(Debug, Clone)]
-pub struct VelocityModifierResponse{
+pub struct VelocityModifierResponse {
     pub velocity_scaler: f64,
 }
-impl Default for VelocityModifierResponse{
+impl Default for VelocityModifierResponse {
     fn default() -> Self {
         Self {
             velocity_scaler: 1.0,

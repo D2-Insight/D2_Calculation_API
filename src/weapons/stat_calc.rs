@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use super::{reserve_calc::calc_reserves, Stat, Weapon};
 use crate::{
-    d2_enums::{StatHashes, WeaponType, Seconds, MetersPerSecond},
+    d2_enums::{MetersPerSecond, Seconds, StatHashes, WeaponType},
     perks::{
         get_dmg_modifier, get_explosion_data, get_firing_modifier, get_flinch_modifier,
         get_handling_modifier, get_magazine_modifier, get_range_modifier, get_reload_modifier,
@@ -11,7 +11,7 @@ use crate::{
             CalculationInput, DamageModifierResponse, FiringModifierResponse,
             HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
             RangeModifierResponse, ReloadModifierResponse,
-        }, 
+        },
     },
     types::rs_types::{
         AmmoFormula, AmmoResponse, FiringResponse, HandlingFormula, HandlingResponse, RangeFormula,
@@ -310,8 +310,8 @@ impl Weapon {
             );
         } else {
             firing_modifiers = FiringModifierResponse::default();
-            pvp_damage_modifiers = DamageModifierResponse::new();
-            pve_damage_modifiers = DamageModifierResponse::new();
+            pvp_damage_modifiers = DamageModifierResponse::default();
+            pve_damage_modifiers = DamageModifierResponse::default();
         };
         let tmp_dmg_prof = self.get_damage_profile();
         let impact_dmg = tmp_dmg_prof.0;
@@ -448,8 +448,9 @@ impl Weapon {
 }
 
 //returns the m/s of projectile
-impl Weapon{
-    pub fn calc_projectile_velocity(&self,
+impl Weapon {
+    pub fn calc_projectile_velocity(
+        &self,
         _calc_input: Option<CalculationInput>,
         _pvp: bool,
         _cached_data: Option<&mut HashMap<String, f64>>,
@@ -459,43 +460,68 @@ impl Weapon{
 
         //Range/Velocity stat to m/s
         let mut velocity = match self.weapon_type {
-            WeaponType::GLAIVE => f64::from(self.stats.get(&StatHashes::RANGE.into()).unwrap_or(&Stat::new()).perk_val().clamp(0,100)) * 0.4 + 60.0,
-            WeaponType::GRENADELAUNCHER => f64::from(self.stats.get(&StatHashes::VELOCITY.into()).unwrap_or(&Stat::new()).perk_val().clamp(0,100)) * 0.384 + 29.6,
-            WeaponType::ROCKET => f64::from(self.stats.get(&StatHashes::VELOCITY.into()).unwrap_or(&Stat::new()).perk_val().clamp(0,100)) * 0.13 + 29.0,
+            WeaponType::GLAIVE => {
+                f64::from(
+                    self.stats
+                        .get(&StatHashes::RANGE.into())
+                        .unwrap_or(&Stat::new())
+                        .perk_val()
+                        .clamp(0, 100),
+                ) * 0.4
+                    + 60.0
+            }
+            WeaponType::GRENADELAUNCHER => {
+                f64::from(
+                    self.stats
+                        .get(&StatHashes::VELOCITY.into())
+                        .unwrap_or(&Stat::new())
+                        .perk_val()
+                        .clamp(0, 100),
+                ) * 0.384
+                    + 29.6
+            }
+            WeaponType::ROCKET => {
+                f64::from(
+                    self.stats
+                        .get(&StatHashes::VELOCITY.into())
+                        .unwrap_or(&Stat::new())
+                        .perk_val()
+                        .clamp(0, 100),
+                ) * 0.13
+                    + 29.0
+            }
             _ => 0.0,
         };
 
         if _calc_input.is_some() {
-            velocity *= get_velocity_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data).velocity_scaler;
+            velocity *=
+                get_velocity_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data)
+                    .velocity_scaler;
         }
         velocity
     }
 }
 
-impl Weapon{
-    pub fn calc_perfect_draw(
-        &self,
-    ) -> Seconds {
+impl Weapon {
+    pub fn calc_perfect_draw(&self) -> Seconds {
         let stability: f64 = self
-                .stats
-                .get(&StatHashes::STABILITY.into())
-                .unwrap_or(&Stat::new())
-                .perk_val()
-                .clamp(0, 100)
-                .into();
+            .stats
+            .get(&StatHashes::STABILITY.into())
+            .unwrap_or(&Stat::new())
+            .perk_val()
+            .clamp(0, 100)
+            .into();
 
         match self.intrinsic_hash {
-            715195141 => stability * 1.0/400.0 + 0.3,
-            2108556049 => stability * 3.0/1000.0 + 0.5,
+            715195141 => stability * 1.0 / 400.0 + 0.3,
+            2108556049 => stability * 3.0 / 1000.0 + 0.5,
             _ => 0.0,
         }
     }
 }
 
-impl Weapon{
-    pub fn calc_shield_duration(
-        &self,
-    ) -> Seconds {
+impl Weapon {
+    pub fn calc_shield_duration(&self) -> Seconds {
         if self.weapon_type == WeaponType::GLAIVE {
             let shield_duration: f64 = self
                 .stats
@@ -505,7 +531,7 @@ impl Weapon{
                 .clamp(0, 100)
                 .into();
             return shield_duration * 0.11 + 6.65;
-           } else if self.weapon_type == WeaponType::SWORD {
+        } else if self.weapon_type == WeaponType::SWORD {
             let guard_endruance: f64 = self
                 .stats
                 .get(&StatHashes::GUARD_ENDURANCE.into())
@@ -513,28 +539,33 @@ impl Weapon{
                 .perk_val()
                 .clamp(0, 100)
                 .into();
-            return 100.0/(guard_endruance*-0.75 + 80.0)
-           }
+            return 100.0 / (guard_endruance * -0.75 + 80.0);
+        }
         0.0
     }
 }
 
 impl Weapon {
-    fn get_misc_stats(&self,
+    fn get_misc_stats(
+        &self,
         _calc_input: Option<CalculationInput>,
         _pvp: bool,
-        _cached_data: Option<&mut HashMap<String, f64>>,)
-        -> HashMap<String, f64>{
+        _cached_data: Option<&mut HashMap<String, f64>>,
+    ) -> HashMap<String, f64> {
         let mut buffer: HashMap<String, f64> = HashMap::new();
 
         match self.weapon_type {
-        WeaponType::ROCKET | WeaponType::GRENADELAUNCHER | WeaponType::GLAIVE => buffer.insert("velocity".to_string(), self.calc_projectile_velocity(_calc_input, _pvp, _cached_data)),
-        _ => None};
+            WeaponType::ROCKET | WeaponType::GRENADELAUNCHER | WeaponType::GLAIVE => buffer.insert(
+                "velocity".to_string(),
+                self.calc_projectile_velocity(_calc_input, _pvp, _cached_data),
+            ),
+            _ => None,
+        };
 
         if self.weapon_type == WeaponType::GLAIVE {
             buffer.insert("shield_duration".to_string(), self.calc_shield_duration());
         }
-        
+
         if self.weapon_type == WeaponType::BOW {
             buffer.insert("perfect_draw".to_string(), self.calc_perfect_draw());
         }

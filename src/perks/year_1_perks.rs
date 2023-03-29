@@ -7,7 +7,8 @@ use super::{
     lib::{
         CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
         FiringModifierResponse, HandlingModifierResponse, InventoryModifierResponse,
-        MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse, VelocityModifierResponse,
+        MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
+        VelocityModifierResponse,
     },
 };
 
@@ -141,7 +142,7 @@ pub(super) fn dmr_box_breathing(
             crit_scale: crit_mult,
         };
     };
-    DamageModifierResponse::new()
+    DamageModifierResponse::default()
 }
 
 pub(super) fn fmr_desperado(
@@ -170,7 +171,7 @@ pub(super) fn dmr_explosive_payload(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     if _pvp {
-        DamageModifierResponse::new()
+        DamageModifierResponse::default()
     } else {
         DamageModifierResponse {
             impact_dmg_scale: 1.0,
@@ -202,7 +203,7 @@ pub(super) fn dmr_timed_payload(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     if _pvp {
-        DamageModifierResponse::new()
+        DamageModifierResponse::default()
     } else {
         // let damage_mult = ((1.0 / _input.base_crit_mult) * 0.15) + 1.0;
         DamageModifierResponse {
@@ -297,7 +298,7 @@ pub(super) fn sbr_firmly_planted(
         out.insert(StatHashes::HANDLING.into(), handling);
         out.insert(StatHashes::STABILITY.into(), stabiltiy);
     }
-        out
+    out
 }
 
 pub(super) fn hmr_firmly_planted(
@@ -381,7 +382,8 @@ pub(super) fn rmr_hip_fire_grip(
     let mut hf_range_scale = 1.2;
     if *_input.weapon_type == WeaponType::FUSIONRIFLE
         || *_input.weapon_type == WeaponType::SHOTGUN
-        || _input.intrinsic_hash == 2770223582 //last word
+        || _input.intrinsic_hash == 2770223582
+    //last word
     {
         hf_range_scale = 1.0;
     };
@@ -825,7 +827,7 @@ pub(super) fn sbr_pulse_monitor(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) ->  HashMap<u32, i32> {
+) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
     if _value > 0 {
         map.insert(StatHashes::HANDLING.into(), 50);

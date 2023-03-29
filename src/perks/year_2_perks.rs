@@ -6,8 +6,9 @@ use super::{
     clamp,
     lib::{
         CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
-        FiringModifierResponse, HandlingModifierResponse, MagazineModifierResponse,
-        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse, FlinchModifierResponse,
+        FiringModifierResponse, FlinchModifierResponse, HandlingModifierResponse,
+        MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
+        ReloadOverrideResponse,
     },
 };
 
@@ -48,7 +49,7 @@ pub(super) fn dmr_explosive_head(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     if _pvp {
-        DamageModifierResponse::new()
+        DamageModifierResponse::default()
     } else {
         DamageModifierResponse {
             impact_dmg_scale: 1.0,
@@ -201,7 +202,7 @@ pub(super) fn mmr_overflow(
     _cached_data: &mut HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     let mut mag_scale = if _value > 0 { 2.0 } else { 1.0 };
-    if _is_enhanced && _value > 0{
+    if _is_enhanced && _value > 0 {
         mag_scale *= 1.1;
     };
     if _input.total_shots_fired > 0.0 {
@@ -248,7 +249,10 @@ pub(super) fn sbr_rapid_hit(
     let entry_to_get = clamp(_value + _input.shots_fired_this_mag as u32, 0, 5);
     let mut stats = HashMap::new();
     stats.insert(StatHashes::RELOAD.into(), rel_values[entry_to_get as usize]);
-    stats.insert(StatHashes::STABILITY.into(), stab_values[entry_to_get as usize]);
+    stats.insert(
+        StatHashes::STABILITY.into(),
+        stab_values[entry_to_get as usize],
+    );
     stats
 }
 
@@ -384,7 +388,7 @@ pub(super) fn dmr_explosive_light(
     let shots = if _is_enhanced { 7.0 } else { 6.0 };
     let shots_left = _value as f64 * shots - _input.total_shots_fired;
     if shots_left <= 0.0 {
-        return DamageModifierResponse::new();
+        return DamageModifierResponse::default();
     };
     if _input.weapon_type == &WeaponType::GRENADELAUNCHER {
         let blast_radius_struct = _input.stats.get(&StatHashes::BLAST_RADIUS.into());
@@ -474,14 +478,11 @@ pub(super) fn flmr_no_distractions(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>)
-    -> FlinchModifierResponse
-{
+    _cached_data: &mut HashMap<String, f64>,
+) -> FlinchModifierResponse {
     if _value > 0 {
-        FlinchModifierResponse  {
-            flinch_scale: 0.65,
-        }
+        FlinchModifierResponse { flinch_scale: 0.65 }
     } else {
-    FlinchModifierResponse::default()
+        FlinchModifierResponse::default()
     }
 }
