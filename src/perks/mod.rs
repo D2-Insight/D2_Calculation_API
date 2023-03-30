@@ -19,7 +19,7 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-use crate::d2_enums::StatHashes;
+use crate::d2_enums::{StatHashes, BungieHash, StatBump};
 
 use self::{
     buff_perks::*,
@@ -28,7 +28,7 @@ use self::{
         CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
         FiringModifierResponse, FlinchModifierResponse, HandlingModifierResponse,
         InventoryModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
-        ReloadModifierResponse, ReloadOverrideResponse, VelocityModifierResponse,
+        ReloadModifierResponse, ReloadOverrideResponse, VelocityModifierResponse, ModifierResponse
     },
     meta_perks::*,
     origin_perks::*,
@@ -40,6 +40,8 @@ use self::{
     year_5_perks::*,
     year_6_perks::*,
 };
+
+use crate::weapons::Weapon;
 
 pub fn clamp<T: PartialOrd>(n: T, min: T, max: T) -> T {
     if n < min {
@@ -1455,3 +1457,81 @@ fn get_perk_vmr(
         _ => VelocityModifierResponse::default(),
     }
 }
+
+impl Weapon {
+    pub fn get_modifiers(&self,
+        _calc_input: Option<CalculationInput>,
+        _pvp: bool,
+        _cached_data: Option<&mut HashMap<String, f64>>,)
+        ->HashMap<BungieHash, ModifierResponse>{
+            let mut default_cached_data = HashMap::new();
+            let cached_data = _cached_data.unwrap_or(&mut default_cached_data);
+            let mut buffer:HashMap<u32, ModifierResponse> = HashMap::new();
+            if _calc_input.is_none() {
+                return buffer;
+            }
+
+            let calc_input = _calc_input.unwrap();
+         
+            for perk in self.list_perks(){
+                let mut mod_buffer = ModifierResponse::default();
+
+                let modifier = get_perk_rmr(perk.clone(), &calc_input, _pvp, cached_data);
+                if modifier != RangeModifierResponse::default(){
+                    mod_buffer.rmr = Some(modifier); 
+                }
+
+                let modifier = get_perk_dmr(perk.clone(), &calc_input, _pvp, cached_data);
+                if modifier != DamageModifierResponse::default(){
+                    mod_buffer.dmr = Some(modifier); 
+                }
+
+                let modifier = get_perk_hmr(perk.clone(), &calc_input, _pvp, cached_data);
+                if modifier != HandlingModifierResponse::default(){
+                    mod_buffer.hmr = Some(modifier); 
+                }
+
+                let modifier = get_perk_fmr(perk.clone(), &calc_input, _pvp, cached_data);
+                if modifier != FiringModifierResponse::default(){
+                    mod_buffer.fmr = Some(modifier); 
+                }
+
+                let modifier = get_perk_flmr(perk.clone(), &calc_input, _pvp);
+                if modifier != FlinchModifierResponse::default(){
+                    mod_buffer.flmr = Some(modifier); 
+                }
+
+                let modifier = get_perk_rsmr(perk.clone(), &calc_input, _pvp, cached_data);
+                if modifier != ReloadModifierResponse::default(){
+                    mod_buffer.rsmr = Some(modifier); 
+                }
+                
+                let modifier = get_perk_mmr(perk.clone(), &calc_input, _pvp, cached_data);
+                if modifier != MagazineModifierResponse::default(){
+                    mod_buffer.mmr = Some(modifier); 
+                }
+
+                let modifier = get_perk_imr(perk.clone(), &calc_input, _pvp, cached_data);
+                if modifier != InventoryModifierResponse::default(){
+                    mod_buffer.imr = Some(modifier); 
+                }
+
+                let stat_mod = dyanmic_perk_stats(&perk.clone(), &calc_input, _pvp, cached_data);
+                let mut stat_buffer:HashMap<BungieHash, StatBump> = HashMap::new();
+                for (key, value) in stat_mod {
+                    stat_buffer.insert(key, value);
+                }
+
+                for (key, value) in perk.stat_buffs {
+                    stat_buffer.entry(key).and_modify(|stat|*stat += value).or_insert(value);
+                }
+                mod_buffer.statbump = Some(stat_buffer);
+                buffer.insert(perk.hash, mod_buffer);
+            }
+
+            buffer
+        }
+
+            
+
+    }

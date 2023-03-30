@@ -241,3 +241,5 @@ impl From<u32> for DamageType {
 pub type Seconds = f64;
 pub type Frames = f64;
 pub type MetersPerSecond = f64;
+pub type StatBump = i32;
+pub type BungieHash = u32;

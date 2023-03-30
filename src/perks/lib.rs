@@ -1,10 +1,11 @@
 use crate::{
-    d2_enums::{AmmoType, DamageType, StatHashes, WeaponType},
+    d2_enums::{AmmoType, DamageType, StatHashes, WeaponType, StatBump, BungieHash},
     enemies::EnemyType,
     types::rs_types::HandlingResponse,
     weapons::{FiringData, Stat},
 };
 use std::{cell::RefCell, collections::HashMap, ops::Mul};
+use serde::Serialize;
 
 #[derive(Debug, Clone)]
 pub struct CalculationInput<'a> {
@@ -138,7 +139,7 @@ impl<'a> CalculationInput<'a> {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct DamageModifierResponse {
     pub impact_dmg_scale: f64,
     pub explosive_dmg_scale: f64,
@@ -154,7 +155,7 @@ impl Default for DamageModifierResponse {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ExtraDamageResponse {
     pub additive_damage: f64,
     pub time_for_additive_damage: f64,
@@ -189,7 +190,7 @@ impl Default for ExtraDamageResponse {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct ReloadModifierResponse {
     pub reload_stat_add: i32,
     pub reload_time_scale: f64,
@@ -203,7 +204,7 @@ impl Default for ReloadModifierResponse {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct FiringModifierResponse {
     pub burst_delay_scale: f64,
     pub burst_delay_add: f64,
@@ -221,7 +222,7 @@ impl Default for FiringModifierResponse {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct HandlingModifierResponse {
     pub handling_stat_add: i32,
     pub handling_swap_scale: f64,
@@ -237,7 +238,7 @@ impl Default for HandlingModifierResponse {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct RangeModifierResponse {
     pub range_stat_add: i32,
     pub range_all_scale: f64,
@@ -255,7 +256,7 @@ impl Default for RangeModifierResponse {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct RefundResponse {
     pub crit: bool,
     pub requirement: i32,
@@ -272,8 +273,7 @@ impl Default for RefundResponse {
         }
     }
 }
-
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct MagazineModifierResponse {
     pub magazine_stat_add: i32,
     pub magazine_scale: f64,
@@ -289,7 +289,7 @@ impl Default for MagazineModifierResponse {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct InventoryModifierResponse {
     pub inv_stat_add: i32,
     pub inv_scale: f64,
@@ -305,7 +305,7 @@ impl Default for InventoryModifierResponse {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct FlinchModifierResponse {
     pub flinch_scale: f64,
 }
@@ -315,7 +315,7 @@ impl Default for FlinchModifierResponse {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct VelocityModifierResponse {
     pub velocity_scaler: f64,
 }
@@ -327,7 +327,7 @@ impl Default for VelocityModifierResponse {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ReloadOverrideResponse {
     pub valid: bool,
     pub reload_time: f64,
@@ -351,7 +351,7 @@ impl ReloadOverrideResponse {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ExplosivePercentResponse {
     pub percent: f64,
     pub delyed: f64,
@@ -366,3 +366,34 @@ impl Default for ExplosivePercentResponse {
         }
     }
 }
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
+pub struct ModifierResponse{
+    pub rmr: Option<RangeModifierResponse>,
+    pub dmr: Option<DamageModifierResponse>, 
+    pub hmr: Option<HandlingModifierResponse>, 
+    pub fmr: Option<FiringModifierResponse>,
+    pub flmr: Option<FlinchModifierResponse>,
+    pub rsmr: Option<ReloadModifierResponse>,
+    pub mmr: Option<MagazineModifierResponse>,
+    pub imr: Option<InventoryModifierResponse>,
+    pub statbump: Option<HashMap<BungieHash, StatBump>>,
+}
+    
+
+impl Default for ModifierResponse {
+    fn default() -> Self {
+        Self {
+            rmr: None,
+            dmr: None,
+            hmr: None,
+            fmr: None,
+            flmr: None,
+            rsmr: None,
+            mmr: None,
+            imr: None,
+            statbump: None,
+        }
+    }
+}
+
