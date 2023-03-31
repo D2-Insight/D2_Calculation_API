@@ -731,6 +731,7 @@ fn dyanmic_perk_stats(
             sbr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::TomeOfDawn => sbr_tome_of_dawn(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::LoaderMod => sbr_loader_mods(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::TargetingMod => sbr_targeting_mods(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
@@ -1038,6 +1039,7 @@ fn get_perk_fmr(
             fmr_succesful_warmup(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::KickStart => fmr_kickstart(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::BuiltIn => fmr_builtin(_input_data, val, enhanced, _pvp, _cached_data),
         _ => FiringModifierResponse::default(),
     }
 }

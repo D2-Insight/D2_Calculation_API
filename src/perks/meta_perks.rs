@@ -57,10 +57,10 @@ pub(super) fn fmr_builtin(
     if *_input.perk_value_map.get(&_input.intrinsic_hash).unwrap_or(&0) > 1 && _input.intrinsic_hash < 1000 {
         let stat_bump_id: StatHashes = _input.perk_value_map.get(&_input.intrinsic_hash).unwrap().to_owned().into();
         if stat_bump_id == StatHashes::CHARGE_TIME {
-            delay_add += fmr_accelerated_coils(_input, _value, _is_enhanced, _pvp, _cached_data).burst_delay_add;
+            delay_add += fmr_accelerated_coils(_input, 1, _is_enhanced, _pvp, _cached_data).burst_delay_add;
         }
         if stat_bump_id == StatHashes::DRAW_TIME && _input.weapon_type == &WeaponType::BOW {
-            delay_add += fmr_faster_string_t1(_input, _value, _is_enhanced, _pvp, _cached_data).burst_delay_add;
+            delay_add += fmr_faster_string_t1(_input, 1, _is_enhanced, _pvp, _cached_data).burst_delay_add;
         }
     }
     FiringModifierResponse {
