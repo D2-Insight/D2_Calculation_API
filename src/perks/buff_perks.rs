@@ -326,10 +326,11 @@ pub(super) fn dmr_cold_balls( //BALLIDORSE WRATHWEAVERS
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    let buff = if *_input.damage_type == DamageType::STASIS { 1.15 } else { 1.0 };
-    DamageModifierResponse {
-        impact_dmg_scale: buff,
-        explosive_dmg_scale: buff,
-        ..Default::default()
+    let mut modifier = DamageModifierResponse::default();
+    let value = if _pvp {1.05} else {1.15};
+    if _input.damage_type == &DamageType::STASIS {
+         modifier.impact_dmg_scale = value;
+         modifier.explosive_dmg_scale = value;
     }
+    return modifier;
 }

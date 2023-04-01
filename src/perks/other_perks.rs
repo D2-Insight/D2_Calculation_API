@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, btree_map::Range};
 
 use crate::{
     d2_enums::{DamageType, StatHashes, WeaponType},
@@ -610,9 +610,7 @@ pub(super) fn sbr_foetracer(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
   ) -> HashMap<u32, i32> {
-    let mut stats = HashMap::new();
-    stats.insert(StatHashes::AIRBORNE.into(), 20);
-    stats
+    HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
   }
   
   //SAME AS LUCKY PANTS, NEED TO BE ABLE TO MULTIPLY DMG INCREASE BY STACKS (I WOULD RATHER NOT TYPE OUT 29 IF STATEMENTS)
@@ -711,7 +709,7 @@ pub(super) fn sbr_foetracer(
      _pvp: bool,
      _cached_data: &mut HashMap<String, f64>,
   ) -> HandlingModifierResponse {
-    if _input.weapon_type == &WeaponType::HANDCANNON {
+    if _value > 0 && _input.weapon_type == &WeaponType::HANDCANNON {
       HandlingModifierResponse {
         handling_stat_add: 100,
         handling_ads_scale: 1.0,
@@ -800,9 +798,7 @@ pub(super) fn sbr_hallowfire_heart(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
   ) -> HashMap<u32, i32> {
-    let mut stats = HashMap::new();
-    stats.insert(StatHashes::AIRBORNE.into(), 20);
-    stats
+    HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
   }
 
   pub(super) fn sbr_lion_rampants(
@@ -859,9 +855,7 @@ pub(super) fn sbr_hallowfire_heart(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
   ) -> HashMap<u32, i32> {
-    let mut stats = HashMap::new();
-    stats.insert(StatHashes::AIRBORNE.into(), 20);
-    stats
+    HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
   }
 
   pub(super) fn sbr_eye_of_another_world(
@@ -871,9 +865,7 @@ pub(super) fn sbr_hallowfire_heart(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
   ) -> HashMap<u32, i32> {
-    let mut stats = HashMap::new();
-    stats.insert(StatHashes::AIRBORNE.into(), 15);
-    stats
+    HashMap::from([(StatHashes::AIRBORNE.into(), 15)])
   }  
 
   pub(super) fn sbr_astrocyte_verse(
@@ -899,7 +891,7 @@ pub(super) fn sbr_hallowfire_heart(
     _cached_data: &mut HashMap<String, f64>,
   ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
-    if _input.intrinsic_hash == 1863355414 || _input.intrinsic_hash == 2965975126 || _input.intrinsic_hash == 2724693746 {
+    if _input.intrinsic_hash == 1863355414 || _input.intrinsic_hash == 2965975126 || _input.intrinsic_hash == 2724693746 { //Thorn, Osteo Striga, Touch of Malice
         stats.insert(StatHashes::AIRBORNE.into(), 30);
     };
     stats
@@ -913,7 +905,7 @@ pub(super) fn sbr_hallowfire_heart(
     _cached_data: &mut HashMap<String, f64>,
   ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
-    if _input.intrinsic_hash == 2144092201 {
+    if _input.intrinsic_hash == 2144092201 { //Lumina
         stats.insert(StatHashes::AIRBORNE.into(), 30);
     };
     stats
@@ -961,7 +953,7 @@ pub(super) fn sbr_hallowfire_heart(
         stats.insert(StatHashes::HANDLING.into(), 50); //?
         stats.insert(StatHashes::AIRBORNE.into(), 45);
     }
-    else if _value > 4 {
+    else if _value >= 5 {
         stats.insert(StatHashes::RELOAD.into(), 55);
         stats.insert(StatHashes::HANDLING.into(), 55); //?
         stats.insert(StatHashes::AIRBORNE.into(), 50);
@@ -1000,7 +992,7 @@ pub(super) fn sbr_hallowfire_heart(
             reload_time_scale: 0.91,
         };   
     }
-    else if _value > 4 {
+    else if _value >= 5 {
         ReloadModifierResponse {
             reload_stat_add: 55,
             reload_time_scale: 0.89,
@@ -1008,7 +1000,7 @@ pub(super) fn sbr_hallowfire_heart(
     }
     return ReloadModifierResponse::default();
   }
-
+/* apparently already implemented by fps??
   pub(super) fn dmr_mantle_of_battle_harmony (
     _input: &CalculationInput,
     _value: u32,
@@ -1033,7 +1025,7 @@ pub(super) fn sbr_hallowfire_heart(
         }
     }
     return DamageModifierResponse::default();
-  }
+  }*/
 
   pub(super) fn dmr_mask_of_bakris (
     _input: &CalculationInput,
@@ -1055,6 +1047,7 @@ pub(super) fn sbr_hallowfire_heart(
     return DamageModifierResponse::default();
   }
 
+  /*implemented by fps called dmr_cold_balls ;-;
   pub(super) fn dmr_ballidorse_wrathweavers (
     _input: &CalculationInput,
     _value: u32,
@@ -1062,22 +1055,8 @@ pub(super) fn sbr_hallowfire_heart(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
   ) -> DamageModifierResponse {
-    if _input.damage_type == &DamageType::STASIS && !_pvp {
-        DamageModifierResponse {
-            impact_dmg_scale: 1.15,
-            explosive_dmg_scale: 1.15,
-            crit_scale: 1.0,
-        };
-    }
-    else if _input.damage_type == &DamageType::STASIS && _pvp {
-        DamageModifierResponse {
-            impact_dmg_scale: 1.05,
-            explosive_dmg_scale: 1.05,
-            crit_scale: 1.0,
-        };
-    }
-    return DamageModifierResponse::default();
-  }
+    
+  }*/
 
 pub(super) fn sbr_lunafaction_boots (
     _input: &CalculationInput,
@@ -1087,26 +1066,46 @@ pub(super) fn sbr_lunafaction_boots (
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
-    stats.insert(StatHashes::RELOAD.into(), 100);
-    return stats;
+    if _value >= 1 {
+        stats.insert(StatHashes::RELOAD.into(), 100);
+    }
+    stats
 }
 
-pub(super) fn rdr_lunafaction_boots (
+pub(super) fn rsmr_lunafaction_boots (
     _input: &CalculationInput,
     _value: u32,
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
-    return ReloadModifierResponse { 
-        reload_stat_add: 100,
-        reload_time_scale: 0.9, 
+    if _value >= 1 { 
+        return ReloadModifierResponse { 
+            reload_stat_add: 100,
+            reload_time_scale: 0.9, 
         };
+    }
+    ReloadModifierResponse::default()
+}
+
+pub(super) fn rmr_lunafaction_boots(_input: &CalculationInput,
+    _value: u32,
+    _is_enahanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> RangeModifierResponse {
+    if _value >= 2 {
+        return RangeModifierResponse{
+            range_all_scale: 2.0,
+            ..Default::default()
+        }
+    }
+    RangeModifierResponse::default()
 }
 
 //SAME AS LUCKY PANTS, NEED TO KNOW HOW TO MULTIPLY THE INCREMENTS BY THE VALUE
 
-/* pub(super) fn dmr_the_path_of_burning_steps (
+pub(super) fn dmr_the_path_of_burning_steps (
     _input: &CalculationInput,
     _value: u32,
     _is_enahanced: bool,
@@ -1114,20 +1113,12 @@ pub(super) fn rdr_lunafaction_boots (
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     if _value > 0 {
-        if !_pvp {
-            DamageModifierResponse {
-                impact_dmg_scale: 1.2 + (0.05  * _value),
-                explosive_dmg_scale: 1.2 + (0.05 * _value),
-                crit_scale: 1.0,
-            };
-        }
-        else if _pvp {
-            DamageModifierResponse {
-                impact_dmg_scale: 1.15 + (0.05 * _value),
-                explosive_dmg_scale: 1.15 + (0.05 * _value),
-                crit_scale: 1.0,
-            };
-        }
+        let base = if _pvp {1.15} else {1.2};
+        return DamageModifierResponse {
+            impact_dmg_scale: base + (0.05  * _value as f64),
+            explosive_dmg_scale: base + (0.05 * _value as f64),
+            crit_scale: 1.0,
+        };
     }
     return DamageModifierResponse::default();
-} */
+}
