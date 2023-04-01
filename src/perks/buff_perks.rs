@@ -334,3 +334,86 @@ pub(super) fn dmr_cold_balls( //BALLIDORSE WRATHWEAVERS
     }
     return modifier;
 }
+
+pub(super) fn dmr_mechaneers_tricksleeves(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+  )  -> DamageModifierResponse {
+    let mut dmr = DamageModifierResponse::default();
+    if _value <= 0 || _input.weapon_type != &WeaponType::SIDEARM {return dmr;};
+    let damage_mult = if _pvp { 1.35 } else { 2.0 };
+    dmr.explosive_dmg_scale = damage_mult;
+    dmr.impact_dmg_scale = damage_mult;
+    dmr
+}
+
+pub(super) fn dmr_lucky_pants(
+    _input: &CalculationInput,
+     _value: u32,
+     _is_enhanced: bool,
+     _pvp: bool,
+     _cached_data: &mut HashMap<String, f64>,
+  ) -> DamageModifierResponse {
+    let mut modifier = 1.0;
+
+    if !_pvp {
+        modifier += 0.6 * _value.clamp(0, 10) as f64;
+    }
+
+    DamageModifierResponse {
+        impact_dmg_scale: modifier,
+        explosive_dmg_scale: modifier,
+        crit_scale: 1.0,
+    }
+  } 
+
+  pub(super) fn dmr_mask_of_bakris (
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enahanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+  ) -> DamageModifierResponse {
+    let mut dmr = DamageModifierResponse::default();
+    let modifier = if _value > 0 && !_pvp { 1.1 } else { 1.0 };
+
+    if _input.damage_type == &DamageType::ARC {
+        dmr.impact_dmg_scale =  modifier * modifier;
+        dmr.explosive_dmg_scale = modifier * modifier;
+
+    } else {
+        dmr.impact_dmg_scale = modifier;
+        dmr.explosive_dmg_scale = modifier;
+    }
+    dmr
+  }
+
+  pub(super) fn dmr_the_path_of_burning_steps (
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enahanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    let mut dmr = DamageModifierResponse::default();
+    let multiplier= match _value{
+        0 => (1.0, 1.0),
+        1 => (1.20, 1.15),
+        2 => (1.25, 1.25),
+        3 => (1.35, 1.20),
+        4 => (1.40, 1.35),
+        _ => (1.40, 1.35),
+    };
+    if _pvp {
+        dmr.impact_dmg_scale = multiplier.1;
+        dmr.explosive_dmg_scale = multiplier.1;
+    } else {
+        dmr.explosive_dmg_scale = multiplier.0;
+        dmr.explosive_dmg_scale = multiplier.0;
+    }
+
+    dmr
+}

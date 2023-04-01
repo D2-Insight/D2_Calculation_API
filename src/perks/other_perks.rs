@@ -632,6 +632,8 @@ pub(super) fn sbr_foetracer(
         }
     }*/
   
+//TODO: MECHANEER'S TRICKSLEEVES AUTORELOAD
+
   pub(super) fn sbr_mechaneers_tricksleeves(
     _input: &CalculationInput,
     _value: u32,
@@ -648,23 +650,6 @@ pub(super) fn sbr_foetracer(
     stats
   }
 
-  //TODO: MECHANEER'S TRICKSLEEVES AUTORELOAD
-  
-  pub(super) fn dmr_mechaneers_tricksleeves(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-  )  -> DamageModifierResponse {
-    let mut dmr = DamageModifierResponse::default();
-    if _value <= 0 || _input.weapon_type != &WeaponType::SIDEARM {return dmr;};
-    let damage_mult = if _pvp { 1.35 } else { 2.0 };
-    dmr.explosive_dmg_scale = damage_mult;
-    dmr.impact_dmg_scale = damage_mult;
-    return dmr;
-  }
-  
   pub(super) fn sbr_oathkeeper(
     _input: &CalculationInput,
     _value: u32,
@@ -694,7 +679,7 @@ pub(super) fn sbr_foetracer(
   }
 
 //TODO: AUTORELOAD FOR SEALED AHAMKARA GRASPS
-
+//TODO: LUCKY PANTS AFFECTING ACCURACY CONE 
   //LUCKY PANTS ONLY WORKS FOR READY ?!?!?! crazy :(
   pub(super) fn sbr_lucky_pants(
     _input: &CalculationInput,
@@ -703,10 +688,11 @@ pub(super) fn sbr_foetracer(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
   ) -> HashMap<u32, i32> {
+    let mut stat = HashMap::new();
     if _value > 0 && _input.weapon_type == &WeaponType::HANDCANNON {
-        return HashMap::from([(StatHashes::AIRBORNE.into(), 20)]);
+        stat.insert(StatHashes::AIRBORNE.into(), 20);
     };
-    HashMap::new()
+    stat
   }
   
   pub(super) fn hmr_lucky_pants(
@@ -725,27 +711,6 @@ pub(super) fn sbr_foetracer(
     }
     return HandlingModifierResponse::default();
   }
-
-pub(super) fn dmr_lucky_pants(
-    _input: &CalculationInput,
-     _value: u32,
-     _is_enhanced: bool,
-     _pvp: bool,
-     _cached_data: &mut HashMap<String, f64>,
-  ) -> DamageModifierResponse {
-    if !_pvp {
-        let modifier = 1.0 + 0.6 * _value.clamp(0, 10) as f64;
-        return DamageModifierResponse {
-            impact_dmg_scale: modifier,
-            explosive_dmg_scale: modifier,
-            crit_scale: 1.0,
-        };
-    }
-    return DamageModifierResponse::default();
-  } 
-  
-  //TODO: LUCKY PANTS AFFECTING ACCURACY CONE 
-  
 
   pub(super) fn sbr_stompees(
     _input: &CalculationInput,
@@ -805,9 +770,8 @@ pub(super) fn sbr_hallowfire_heart(
     _cached_data: &mut HashMap<String, f64>,
   ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
-    //hipfire only
     if _value > 0 {
-    stats.insert(StatHashes::AIRBORNE.into(), 50);
+        stats.insert(StatHashes::AIRBORNE.into(), 50);
     };
     stats
   }
@@ -835,7 +799,7 @@ pub(super) fn sbr_hallowfire_heart(
     _cached_data: &mut HashMap<String, f64>,
  ) -> HandlingModifierResponse {
     if _input.weapon_type == &WeaponType::SUBMACHINEGUN {
-     HandlingModifierResponse {
+     return HandlingModifierResponse {
        handling_stat_add: 100,
        handling_ads_scale: 1.0,
        handling_swap_scale: 0.6,
@@ -928,33 +892,21 @@ pub(super) fn sbr_hallowfire_heart(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
   ) -> HashMap<u32, i32> {
-    let mut stats = HashMap::new();
-    if _value == 1 {
-        stats.insert(StatHashes::RELOAD.into(), 40);
-        stats.insert(StatHashes::HANDLING.into(), 40); //?
-        stats.insert(StatHashes::AIRBORNE.into(), 30);
-    }
-    else if _value == 2 {
-        stats.insert(StatHashes::RELOAD.into(), 40);
-        stats.insert(StatHashes::HANDLING.into(), 40); //?
-        stats.insert(StatHashes::AIRBORNE.into(), 35);
-    }
-    else if _value == 3 {
-        stats.insert(StatHashes::RELOAD.into(), 45);
-        stats.insert(StatHashes::HANDLING.into(), 45); //?
-        stats.insert(StatHashes::AIRBORNE.into(), 40);
-    }
-    else if _value == 4 {
-        stats.insert(StatHashes::RELOAD.into(), 50);
-        stats.insert(StatHashes::HANDLING.into(), 50); //?
-        stats.insert(StatHashes::AIRBORNE.into(), 45);
-    }
-    else if _value >= 5 {
-        stats.insert(StatHashes::RELOAD.into(), 55);
-        stats.insert(StatHashes::HANDLING.into(), 55); //?
-        stats.insert(StatHashes::AIRBORNE.into(), 50);
-    }
-    stats
+    let modifiers= match _value {
+        0 => ( 0,  0,  0),
+        1 => (40, 40, 30),
+        2 => (40, 40, 35),
+        3 => (45, 45, 40),
+        4 => (50, 50, 45),
+        5 => (55, 55, 50),
+        _ => (55, 55, 50),
+    };
+
+    HashMap::from([
+    (StatHashes::RELOAD.into(), modifiers.0),
+    (StatHashes::HANDLING.into(), modifiers.1), //?
+    (StatHashes::AIRBORNE.into(), modifiers.2)
+    ])
   }
 
   pub(super) fn rsmr_speedloader_slacks(
@@ -964,102 +916,22 @@ pub(super) fn sbr_hallowfire_heart(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
   ) -> ReloadModifierResponse {
-    if _value == 1 {
-        ReloadModifierResponse {
-            reload_stat_add: 40,
-            reload_time_scale: 1.0,
-        };
-    }
-    else if _value == 2 {
-        ReloadModifierResponse {
-            reload_stat_add: 40,
-            reload_time_scale: 0.925,
-        };
-    }
-    else if _value == 3 {
-        ReloadModifierResponse {
-            reload_stat_add: 45,
-            reload_time_scale: 0.915,
-        };
-    }
-    else if _value == 4 {
-        ReloadModifierResponse {
-            reload_stat_add: 50,
-            reload_time_scale: 0.91,
-        };   
-    }
-    else if _value >= 5 {
-        ReloadModifierResponse {
-            reload_stat_add: 55,
-            reload_time_scale: 0.89,
-        };
-    }
-    return ReloadModifierResponse::default();
-  }
-/* apparently already implemented by fps??
-  pub(super) fn dmr_mantle_of_battle_harmony (
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-  ) -> DamageModifierResponse {
-    if _value > 0 {
-        if _pvp {
-            DamageModifierResponse {
-                impact_dmg_scale: 1.15,
-                explosive_dmg_scale: 1.15,
-                crit_scale: 1.0,
-            };
-        }
-        else if !_pvp {
-            DamageModifierResponse {
-                impact_dmg_scale: 1.20,
-                explosive_dmg_scale: 1.20,
-                crit_scale: 1.0,
-            };
-        }
-    }
-    return DamageModifierResponse::default();
-  }*/
+    let modifiers= match _value {
+        0 => ( 0, 1.0),
+        1 => (40, 1.0),
+        2 => (40, 0.925),
+        3 => (45, 0.915),
+        4 => (50, 0.91),
+        5 => (55, 0.89),
+        _ => (55, 0.89),
+    };
 
-  pub(super) fn dmr_mask_of_bakris (
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-  ) -> DamageModifierResponse {
-    let modifier = if _value > 0 { 1.1 } else { 1.0 };
-    if !_pvp {
-        if _input.damage_type == &DamageType::ARC {
-            return DamageModifierResponse {
-                impact_dmg_scale: 1.1 * modifier,
-                explosive_dmg_scale: 1.1 * modifier,
-                crit_scale: 1.0,
-            };
-        }
-        else {
-            return DamageModifierResponse {
-                impact_dmg_scale: modifier,
-                explosive_dmg_scale: modifier,
-                crit_scale: 1.0,
-            };
-        }
-    }
-    return DamageModifierResponse::default();
-  }
-
-  /*implemented by fps called dmr_cold_balls ;-;
-  pub(super) fn dmr_ballidorse_wrathweavers (
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-  ) -> DamageModifierResponse {
     
-  }*/
+    ReloadModifierResponse { 
+        reload_stat_add: modifiers.0, 
+        reload_time_scale: modifiers.1 
+    }
+  }
 
 pub(super) fn sbr_lunafaction_boots (
     _input: &CalculationInput,
@@ -1068,11 +940,7 @@ pub(super) fn sbr_lunafaction_boots (
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
-    let mut stats = HashMap::new();
-    if _value >= 1 {
-        stats.insert(StatHashes::RELOAD.into(), 100);
-    }
-    stats
+    HashMap::from([(StatHashes::RELOAD.into(), 100)])
 }
 
 pub(super) fn rsmr_lunafaction_boots (
@@ -1082,45 +950,24 @@ pub(super) fn rsmr_lunafaction_boots (
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
-    if _value >= 1 { 
-        return ReloadModifierResponse { 
-            reload_stat_add: 100,
-            reload_time_scale: 0.9, 
-        };
+    ReloadModifierResponse { 
+        reload_stat_add: 100,
+        reload_time_scale: 0.9, 
     }
-    ReloadModifierResponse::default()
 }
 
-pub(super) fn rmr_lunafaction_boots(_input: &CalculationInput,
+pub(super) fn rmr_lunafaction_boots(
+    _input: &CalculationInput,
     _value: u32,
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> RangeModifierResponse {
-    if _value >= 2 {
+    if _value >= 1 {
         return RangeModifierResponse{
             range_all_scale: 2.0,
             ..Default::default()
         }
     }
     RangeModifierResponse::default()
-}
-
-pub(super) fn dmr_the_path_of_burning_steps (
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    if _value > 0 {
-        let base = if _pvp {1.15} else {1.2};
-        let modifier = base + (0.05 * _value.clamp(0, 5) as f64);
-        return DamageModifierResponse {
-            impact_dmg_scale: modifier,
-            explosive_dmg_scale:modifier,
-            crit_scale: 1.0,
-        };
-    }
-    return DamageModifierResponse::default();
 }
