@@ -1,5 +1,7 @@
 use std::collections::{HashMap, btree_map::Range};
 
+use serde::de::value;
+
 use crate::{
     d2_enums::{DamageType, StatHashes, WeaponType},
     enemies::EnemyType,
@@ -612,18 +614,23 @@ pub(super) fn sbr_foetracer(
   ) -> HashMap<u32, i32> {
     HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
   }
-  
-  //SAME AS LUCKY PANTS, NEED TO BE ABLE TO MULTIPLY DMG INCREASE BY STACKS (I WOULD RATHER NOT TYPE OUT 29 IF STATEMENTS)
 
-  /*pub(super) fn dmr_Foetracer(
+  //TODO: HARM FIX THIS PWEASE
+
+  /*pub(super) fn dmr_foetracer(
     _input: &CalculationInput,
     _value: u32,
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
     ) -> DamageModifierResponse {
-    let damage_mult = 
-    */
+        let modifier = 1.0 + (0.01 * _value.clamp(0, 30) as f64);
+        return DamageModifierResponse {
+            impact_dmg_scale: modifier,
+            explosive_dmg_scale: modifier,
+            crit_scale: 1.0,
+        }
+    }*/
   
   pub(super) fn sbr_mechaneers_tricksleeves(
     _input: &CalculationInput,
@@ -637,10 +644,11 @@ pub(super) fn sbr_foetracer(
        stats.insert(StatHashes::AIRBORNE.into(), 50);
        stats.insert(StatHashes::HANDLING.into(), 100);
        stats.insert(StatHashes::RELOAD.into(), 100);
-       //AUTORELOAD NEEDED
     };
     stats
   }
+
+  //TODO: MECHANEER'S TRICKSLEEVES AUTORELOAD
   
   pub(super) fn dmr_mechaneers_tricksleeves(
     _input: &CalculationInput,
@@ -670,9 +678,6 @@ pub(super) fn sbr_foetracer(
     };
     stats
   }
-     // NEED OATHKEEPER PERFECT DRAW SHENANIGANS
-  
-  
   
   pub(super) fn sbr_sealed_ahamkara_grasps(
     _input: &CalculationInput,
@@ -684,10 +689,12 @@ pub(super) fn sbr_foetracer(
     let mut stats = HashMap::new();
     if _value > 0 {
       stats.insert(StatHashes::AIRBORNE.into(), 50);
-      //AUTORELOAD NEEDED
      };
      stats
   }
+
+//TODO: AUTORELOAD FOR SEALED AHAMKARA GRASPS
+
   //LUCKY PANTS ONLY WORKS FOR READY ?!?!?! crazy :(
   pub(super) fn sbr_lucky_pants(
     _input: &CalculationInput,
@@ -710,7 +717,7 @@ pub(super) fn sbr_foetracer(
      _cached_data: &mut HashMap<String, f64>,
   ) -> HandlingModifierResponse {
     if _value > 0 && _input.weapon_type == &WeaponType::HANDCANNON {
-      HandlingModifierResponse {
+      return HandlingModifierResponse {
         handling_stat_add: 100,
         handling_ads_scale: 1.0,
         handling_swap_scale: 0.6,
@@ -718,37 +725,26 @@ pub(super) fn sbr_foetracer(
     }
     return HandlingModifierResponse::default();
   }
-  
 
-  // LUCKY PANTS DMR, HOW TO MULTIPLY THE 60% DMG INCREASE BY NUMBER OF STACKS
-
-  /* pub(super) fn dmr_lucky_pants(
+pub(super) fn dmr_lucky_pants(
     _input: &CalculationInput,
      _value: u32,
      _is_enhanced: bool,
      _pvp: bool,
      _cached_data: &mut HashMap<String, f64>,
   ) -> DamageModifierResponse {
-    if _input.enemy_type != &EnemyType::PLAYER {
-        if _value > 0 && _value < 10 {
-            DamageModifierResponse {
-                impact_dmg_scale: 1.0 + (0.6 * _value),
-                explosive_dmg_scale: 1.0 + (0.6 * _value),
-                crit_scale: 1.0,
-            };
-        }
-        else if _value > 9 {
-            DamageModifierResponse {
-                impact_dmg_scale: 6.0,
-                explosive_dmg_scale: 6.0,
-                crit_scale: 1.0,
-            };
+    if !_pvp {
+        let modifier = 1.0 + 0.6 * _value.clamp(0, 10) as f64;
+        return DamageModifierResponse {
+            impact_dmg_scale: modifier,
+            explosive_dmg_scale: modifier,
+            crit_scale: 1.0,
         };
     }
     return DamageModifierResponse::default();
-  }    */
+  } 
   
-  // NEED LUCKY PANTS ACCURACY CONE struct thing
+  //TODO: LUCKY PANTS AFFECTING ACCURACY CONE 
   
 
   pub(super) fn sbr_stompees(
@@ -789,7 +785,7 @@ pub(super) fn sbr_foetracer(
     stats
   }
 
-// need autoreload on actium - 10% every 1.5s
+//TODO: AUTORELOAD ON ACTIUM WAR RIG
 
 pub(super) fn sbr_hallowfire_heart(
     _input: &CalculationInput,
@@ -1034,15 +1030,22 @@ pub(super) fn sbr_hallowfire_heart(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
   ) -> DamageModifierResponse {
-    if _input.enemy_type != &EnemyType::PLAYER {
+    let modifier = if _value > 0 { 1.1 } else { 1.0 };
+    if !_pvp {
         if _input.damage_type == &DamageType::ARC {
-            DamageModifierResponse {
-                impact_dmg_scale: 1.20,
-                explosive_dmg_scale: 1.20,
+            return DamageModifierResponse {
+                impact_dmg_scale: 1.1 * modifier,
+                explosive_dmg_scale: 1.1 * modifier,
                 crit_scale: 1.0,
             };
         }
-        // NEED TO BE ABLE TO ACCONT FOR TARGETS BEING SLOWED/FROZEN
+        else {
+            return DamageModifierResponse {
+                impact_dmg_scale: modifier,
+                explosive_dmg_scale: modifier,
+                crit_scale: 1.0,
+            };
+        }
     }
     return DamageModifierResponse::default();
   }
@@ -1103,8 +1106,6 @@ pub(super) fn rmr_lunafaction_boots(_input: &CalculationInput,
     RangeModifierResponse::default()
 }
 
-//SAME AS LUCKY PANTS, NEED TO KNOW HOW TO MULTIPLY THE INCREMENTS BY THE VALUE
-
 pub(super) fn dmr_the_path_of_burning_steps (
     _input: &CalculationInput,
     _value: u32,
@@ -1114,9 +1115,10 @@ pub(super) fn dmr_the_path_of_burning_steps (
 ) -> DamageModifierResponse {
     if _value > 0 {
         let base = if _pvp {1.15} else {1.2};
+        let modifier = base + (0.05 * _value.clamp(0, 5) as f64);
         return DamageModifierResponse {
-            impact_dmg_scale: base + (0.05  * _value as f64),
-            explosive_dmg_scale: base + (0.05 * _value as f64),
+            impact_dmg_scale: modifier,
+            explosive_dmg_scale:modifier,
             crit_scale: 1.0,
         };
     }
