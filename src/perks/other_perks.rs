@@ -1,4 +1,4 @@
-use std::{collections::HashMap, default::default};
+use std::collections::HashMap;
 
 use crate::{
     d2_enums::{DamageType, StatHashes, WeaponType},
