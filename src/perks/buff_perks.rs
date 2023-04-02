@@ -14,7 +14,7 @@ use super::{
 fn emp_buff(_cached_data: &mut HashMap<String, f64>, _desired_buff: f64) -> f64 {
     let current_buff = _cached_data.get("empowering").unwrap_or(&1.0).to_owned();
     if current_buff >= _desired_buff {
-        return 0.0;
+        return 1.0;
     } else {
         _cached_data.insert("empowering".to_string(), _desired_buff);
         return _desired_buff / current_buff;
@@ -24,7 +24,7 @@ fn emp_buff(_cached_data: &mut HashMap<String, f64>, _desired_buff: f64) -> f64 
 fn gbl_debuff(_cached_data: &mut HashMap<String, f64>, _desired_buff: f64) -> f64 {
     let current_buff = _cached_data.get("debuff").unwrap_or(&1.0).to_owned();
     if current_buff >= _desired_buff {
-        return 0.0;
+        return 1.0;
     } else {
         _cached_data.insert("debuff".to_string(), _desired_buff);
         return _desired_buff / current_buff;
