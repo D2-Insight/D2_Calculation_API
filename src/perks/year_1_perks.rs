@@ -418,7 +418,9 @@ pub(super) fn sbr_moving_target(
 ) -> HashMap<u32, i32> {
     let aim_assist = if _is_enhanced { 11 } else { 10 };
     let mut out = HashMap::new();
-    out.insert(StatHashes::AIM_ASSIST.into(), aim_assist);
+    if _value >= 1 {
+        out.insert(StatHashes::AIM_ASSIST.into(), aim_assist);
+    }
     out
 }
 
