@@ -368,7 +368,7 @@ impl Default for ExplosivePercentResponse {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
-pub struct ModifierResponse{
+pub struct ModifierResponseSummary{
     pub rmr: Option<RangeModifierResponse>,
     pub dmr: Option<DamageModifierResponse>, 
     pub hmr: Option<HandlingModifierResponse>, 
@@ -381,7 +381,7 @@ pub struct ModifierResponse{
 }
     
 
-impl Default for ModifierResponse {
+impl Default for ModifierResponseSummary {
     fn default() -> Self {
         Self {
             rmr: None,

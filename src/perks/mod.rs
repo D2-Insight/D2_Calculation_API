@@ -28,7 +28,7 @@ use self::{
         CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
         FiringModifierResponse, FlinchModifierResponse, HandlingModifierResponse,
         InventoryModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
-        ReloadModifierResponse, ReloadOverrideResponse, VelocityModifierResponse, ModifierResponse
+        ReloadModifierResponse, ReloadOverrideResponse, VelocityModifierResponse, ModifierResponseSummary
     },
     meta_perks::*,
     origin_perks::*,
@@ -1461,14 +1461,14 @@ fn get_perk_vmr(
 }
 
 impl Weapon {
-    pub fn get_modifiers(&self,
+    pub fn get_modifier_summary(&self,
         _calc_input: Option<CalculationInput>,
         _pvp: bool,
         _cached_data: Option<&mut HashMap<String, f64>>,)
-        ->HashMap<BungieHash, ModifierResponse>{
+        ->HashMap<BungieHash, ModifierResponseSummary>{
             let mut default_cached_data = HashMap::new();
             let cached_data = _cached_data.unwrap_or(&mut default_cached_data);
-            let mut buffer:HashMap<u32, ModifierResponse> = HashMap::new();
+            let mut buffer:HashMap<u32, ModifierResponseSummary> = HashMap::new();
             if _calc_input.is_none() {
                 return buffer;
             }
@@ -1476,7 +1476,7 @@ impl Weapon {
             let calc_input = _calc_input.unwrap();
          
             for perk in self.list_perks(){
-                let mut mod_buffer = ModifierResponse::default();
+                let mut mod_buffer = ModifierResponseSummary::default();
 
                 let modifier = get_perk_rmr(perk.clone(), &calc_input, _pvp, cached_data);
                 if modifier != RangeModifierResponse::default(){
