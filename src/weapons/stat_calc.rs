@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap};
 
 use super::{reserve_calc::calc_reserves, Stat, Weapon};
 use crate::{
@@ -272,6 +272,9 @@ impl Weapon {
         }
         if mag_stat > 90 && self.weapon_type == WeaponType::SNIPER {
             out.mag_size += 1;
+        }
+        if self.weapon_type == WeaponType::SIDEARM {
+            out.mag_size = ((out.mag_size as f64 / 3.0).round() * 3.0) as i32;
         }
         out
     }
