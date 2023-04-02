@@ -88,7 +88,7 @@ impl From<&Map<String, Value>> for StatQuadraticFormula {
 }
 impl UuidTimestamp for StatQuadraticFormula {
     fn uuid(&self) -> f64 {
-        (self.evpp-11.0)*67293.0 + self.vpp*1892.0 + self.offset*3321.0
+        (self.evpp-11.0)*97293.0 + self.vpp*14892.0 + self.offset*3321.0
     }
 }
 
@@ -158,7 +158,7 @@ impl DamageMods {
 }
 impl UuidTimestamp for DamageMods {
     fn uuid(&self) -> f64 {
-        (self.pve-12.0)*6729.0 + self.minor*18342.0 + self.elite*88831.0 + self.miniboss*544.0 + self.champion*995.0 + self.boss*112.0 + self.vehicle*3223.0
+        (self.pve-12.0)*6729.0 + self.minor*18342.0 + self.elite*88831.0 + self.miniboss*544.0 + self.champion*995.0 + self.boss*392.0 + self.vehicle*3223.0
     }
 }
 
