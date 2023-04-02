@@ -94,8 +94,10 @@ pub(super) fn sbr_dragon_shadow(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
-    stats.insert(StatHashes::HANDLING.into(), 100);
-    stats.insert(StatHashes::RELOAD.into(), 100);
+    if _value >= 1 {
+        stats.insert(StatHashes::HANDLING.into(), 100);
+        stats.insert(StatHashes::RELOAD.into(), 100);
+    }
     stats
 }
 
@@ -106,10 +108,14 @@ pub(super) fn hmr_dragon_shadow(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
-    HandlingModifierResponse {
-        handling_stat_add: 100,
-        handling_ads_scale: 1.0,
-        handling_swap_scale: 0.95,
+    if _value >= 1 {
+        HandlingModifierResponse {
+            handling_stat_add: 100,
+            handling_ads_scale: 1.0,
+            handling_swap_scale: 0.95,
+        }
+    } else {
+        HandlingModifierResponse::default()
     }
 }
 
@@ -120,10 +126,15 @@ pub(super) fn rsmr_dragon_shadow(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
-    ReloadModifierResponse {
-        reload_stat_add: 100,
-        reload_time_scale: 1.0,
+    if _value >= 1 {
+        ReloadModifierResponse {
+            reload_stat_add: 100,
+            reload_time_scale: 1.0,
+        }
+    } else {
+        ReloadModifierResponse::default()
     }
+
 }
 
 pub(super) fn sbr_amplified(
