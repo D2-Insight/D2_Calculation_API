@@ -220,7 +220,7 @@ impl From<&Map<String, Value>> for ReloadFormula {
 }
 impl UuidTimestamp for ReloadFormula {
     fn uuid(&self) -> f64 {
-        (self.reload_data.uuid()+29.5)*72.0 + self.ammo_percent*3.0
+        (self.reload_data.uuid()+29.5)*72.0 + (self.ammo_percent+3.0)*12.0
     }
 }
 
@@ -243,7 +243,7 @@ impl From<&Map<String, Value>> for HandlingFormula {
 }
 impl UuidTimestamp for HandlingFormula {
     fn uuid(&self) -> f64 {
-        self.ready.uuid()*7.0 + self.stow.uuid()/2.0 + self.ads.uuid()*6.9
+        self.ready.uuid()*79.0 + self.stow.uuid()/2.0 + self.ads.uuid()*62.9
     }
 }
 
@@ -274,7 +274,7 @@ impl From<&Map<String, Value>> for AmmoFormula {
 }
 impl UuidTimestamp for AmmoFormula {
     fn uuid(&self) -> f64 {
-        self.mag.uuid()*3.0 + self.round_to as f64*67.3 + self.reserve_id as f64*52.2
+        self.mag.uuid()*13.0 + self.round_to as f64*6723.3 + self.reserve_id as f64*5299.2
     }
 }
 
@@ -648,6 +648,9 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
                 }
 
                 let mut firing: FiringData = (&fam).into();
+                firing.burst_delay *= 1.0/30.0;
+                firing.inner_burst_delay *= 1.0/30.0;
+                firing.crit_mult = 1.5 + (firing.crit_mult / 51.0);
                 let index_option = find_uuid(&firing_data, firing.uuid());
                 if index_option.is_some() {
                     data.f = index_option.unwrap();
