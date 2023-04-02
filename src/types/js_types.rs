@@ -7,7 +7,7 @@ use crate::{
     enemies::EnemyType,
     perks::Perk,
     types::rs_types::StatQuadraticFormula,
-    weapons::{ttk_calc::{ResillienceSummary, OptimalKillData, BodyKillData}, FiringData, Stat},
+    weapons::{ttk_calc::{ResillienceSummary, OptimalKillData, BodyKillData}, Stat},
 };
 use serde::{Deserialize, Serialize};
 // use tsify::Tsify;
@@ -15,7 +15,7 @@ use wasm_bindgen::{prelude::wasm_bindgen, JsValue, convert::{IntoWasmAbi, WasmSl
 
 use super::rs_types::{
     AmmoFormula, AmmoResponse, DamageMods, DpsResponse, FiringResponse, HandlingFormula,
-    HandlingResponse, RangeFormula, RangeResponse, ReloadFormula, ReloadResponse,
+    HandlingResponse, RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, FiringData
 };
 
 #[derive(Debug, Clone, Copy, Serialize)]
@@ -288,8 +288,6 @@ impl From<Stat> for JsStat {
 #[derive(Debug, Clone, Serialize)]
 #[wasm_bindgen(js_name = "MetaData", inspectable)]
 pub struct JsMetaData {
-    #[wasm_bindgen(js_name = "databaseTimestamp", readonly)]
-    pub database_timestamp: u64,
     #[wasm_bindgen(js_name = "apiVersion", readonly)]
     pub api_version: &'static str,
     #[wasm_bindgen(js_name = "apiTimestamp", readonly)]

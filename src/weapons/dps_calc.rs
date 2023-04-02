@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::{cell::RefCell, rc::Rc};
 
-use super::{FiringData, Weapon};
+use super::Weapon;
 use crate::d2_enums::{AmmoType, WeaponType};
 use crate::enemies::Enemy;
 use crate::perks::lib::{

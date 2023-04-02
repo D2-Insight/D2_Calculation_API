@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use serde::Serialize;
 
-use super::{Perk, Perks, enhanced_handler::enhanced_check};
+use super::{Perk, Perks, enhanced_check};
 
 #[derive(Debug, Clone, Serialize)]
 pub enum PerkValueVariant {
