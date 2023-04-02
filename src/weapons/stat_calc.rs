@@ -274,7 +274,7 @@ impl Weapon {
             out.mag_size += 1;
         }
         if self.weapon_type == WeaponType::SIDEARM {
-            out.mag_size = ((out.mag_size as f64 / 3.0) * 3.0) as i32;
+            out.mag_size = ((out.mag_size as f64 / 3.0).round() * 3.0) as i32;
         }
         out
     }
