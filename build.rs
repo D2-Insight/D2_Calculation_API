@@ -28,11 +28,12 @@ impl CachedBuildData {
             .duration_since(std::time::UNIX_EPOCH)
             .unwrap()
             .as_secs();
-        let out = *self.perk_formula_timestamps.get(&uuid).unwrap_or(&now);
-        if out == now {
+        if !self.perk_formula_timestamps.contains_key(&uuid) {
             self.perk_formula_timestamps.insert(uuid, now);
+            now
+        } else {
+            *self.perk_formula_timestamps.get(&uuid).unwrap()
         }
-        out
     }
 
     fn sort(&mut self) {
