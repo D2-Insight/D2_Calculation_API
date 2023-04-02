@@ -118,6 +118,7 @@ pub struct RangeResponse {
     pub ads_falloff_start: f64,
     pub ads_falloff_end: f64,
     pub floor_percent: f64,
+    pub timestamp: u64,
 }
 
 #[derive(Debug, Clone, Default, Copy)]
@@ -125,18 +126,21 @@ pub struct HandlingResponse {
     pub ready_time: f64,
     pub stow_time: f64,
     pub ads_time: f64,
+    pub timestamp: u64,
 }
 
 #[derive(Debug, Clone, Default)]
 pub struct AmmoResponse {
     pub mag_size: i32,
     pub reserve_size: i32,
+    pub timestamp: u64,
 }
 
 #[derive(Debug, Clone, Default)]
 pub struct ReloadResponse {
     pub reload_time: f64,
     pub ammo_time: f64,
+    pub timestamp: u64,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -186,6 +190,8 @@ pub struct FiringResponse {
     pub burst_size: i32,
 
     pub rpm: f64,
+
+    pub timestamp: u64,
 }
 impl FiringResponse{
     pub fn apply_pve_bonuses(&mut self, _rpl_mult: f64, _gpl_mult: f64, _pve_mult: f64, _combatant_mult: f64) {
