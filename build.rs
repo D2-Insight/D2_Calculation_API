@@ -5,13 +5,6 @@ use std::fmt::Debug;
 use std::fs::File;
 use std::io::Write;
 
-// use json_value_remove::Remove;
-// extern crate json_value_remove;
-
-// fn vec_to_string<T: Debug>(vec: Vec<T>) -> String {
-//     return format!("vec!{:?}", vec);
-// }
-
 fn json_0_float() -> Value {
     Value::Number(Number::from_f64(0.0).unwrap())
 }
@@ -284,7 +277,8 @@ fn main() {
     }
     fn construct_enhance_perk_mapping(formula_file: &mut File) {
         let mut perk_mappings: Vec<(u32, u32)> = Vec::new();
-        let json_file = reqwest::blocking::get("https://raw.githubusercontent.com/DestinyItemManager/d2-additional-info/master/output/trait-to-enhanced-trait.json");
+        let json_file = reqwest::blocking::get(
+            "https://raw.githubusercontent.com/DestinyItemManager/d2-additional-info/master/output/trait-to-enhanced-trait.json");
         if json_file.is_ok() {
             let json_file = json_file.unwrap();
             let dct = json_file.json::<HashMap<String, u32>>();
@@ -388,7 +382,7 @@ fn main() {
 
         //get current directory
         let jdata_path = std::path::Path::new(&std::env::var("CARGO_MANIFEST_DIR").unwrap())
-            .join("database/weapon_formulas_editable.json");
+            .join("build_resources/weapon_formulas.json");
         let mut jdata: serde_json::Value =
             serde_json::from_str(&std::fs::read_to_string(jdata_path).unwrap()).unwrap();
         // remove "COMMENTS" from jdata
