@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{StatHashes, WeaponType, DamageType};
+use crate::d2_enums::{StatHashes, WeaponType, DamageType, AmmoType};
 
 use super::{
     clamp,
@@ -298,38 +298,6 @@ pub(super) fn dmr_dsc_scanner_mod(
     DamageModifierResponse {
         impact_dmg_scale: debuff,
         explosive_dmg_scale: debuff,
-        ..Default::default()
-    }
-}
-
-// random shit
-
-pub(super) fn dmr_bakris(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let combo_val = if _value > 0 { 1.1 } else { 1.0 };
-    DamageModifierResponse {
-        impact_dmg_scale: 1.1*combo_val,
-        explosive_dmg_scale: 1.1*combo_val,
-        ..Default::default()
-    }
-}
-
-pub(super) fn dmr_cold_balls( //BALLIDORSE WRATHWEAVERS
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let buff = if *_input.damage_type == DamageType::STASIS { 1.15 } else { 1.0 };
-    DamageModifierResponse {
-        impact_dmg_scale: buff,
-        explosive_dmg_scale: buff,
         ..Default::default()
     }
 }

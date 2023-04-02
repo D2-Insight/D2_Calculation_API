@@ -85,6 +85,8 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
         //Optimal ttk
         while opt_bullets_hit < 50.0 {
             //PERK CALCULATIONS////////////
+            
+            persistent_data.insert("health%".to_string(), opt_damage_dealt/health);
             let calc_input = _weapon.pvp_calc_input(
                 opt_bullets_fired,
                 opt_bullets_hit,
@@ -209,6 +211,7 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
         let mut bdy_damage_dealt = 0.0;
         while bdy_bullets_hit < 50.0 {
             //PERK CALCULATIONS////////////
+            persistent_data.insert("health%".to_string(), bdy_damage_dealt/health);
             let calc_input = _weapon.pvp_calc_input(
                 bdy_bullets_fired,
                 bdy_bullets_hit,

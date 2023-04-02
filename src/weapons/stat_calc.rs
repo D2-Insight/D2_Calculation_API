@@ -4,7 +4,7 @@ use super::{reserve_calc::calc_reserves, Stat, Weapon};
 use crate::{
     d2_enums::{MetersPerSecond, Seconds, StatHashes, WeaponType},
     perks::{
-        get_dmg_modifier, get_explosion_data, get_firing_modifier, get_flinch_modifier,
+        Perks, get_dmg_modifier, get_explosion_data, get_firing_modifier, get_flinch_modifier,
         get_handling_modifier, get_magazine_modifier, get_range_modifier, get_reload_modifier,
         get_reserve_modifier, get_velocity_modifier,
         lib::{
@@ -511,7 +511,9 @@ impl Weapon {
             .perk_val()
             .clamp(0, 100)
             .into();
-
+        if self.perks.get(&1449897496).is_some() && self.weapon_type == WeaponType::BOW{
+            return Seconds::INFINITY;
+        }
         match self.intrinsic_hash {
             715195141 => stability * 1.0 / 400.0 + 0.3,
             2108556049 => stability * 3.0 / 1000.0 + 0.5,

@@ -434,23 +434,6 @@ pub(super) fn edr_rocket_tracers(
 //     };
 // }
 
-pub(super) fn rsmr_lunafaction(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> ReloadModifierResponse {
-    if _value > 0 {
-        ReloadModifierResponse {
-            reload_stat_add: 100,
-            reload_time_scale: 0.9,
-        }
-    } else {
-        ReloadModifierResponse::default()
-    }
-}
-
 pub(super) fn fmr_hakke_heavy_burst(
     _input: &CalculationInput,
     _value: u32,

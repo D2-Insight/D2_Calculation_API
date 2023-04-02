@@ -3,6 +3,7 @@
 pub mod buff_perks;
 pub mod enhanced_handler;
 pub mod exotic_perks;
+pub mod exotic_armor;
 pub mod lib;
 pub mod meta_perks;
 pub mod origin_perks;
@@ -24,6 +25,7 @@ use crate::d2_enums::{StatHashes, BungieHash, StatBump};
 use self::{
     buff_perks::*,
     exotic_perks::*,
+    exotic_armor::*,
     lib::{
         CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
         FiringModifierResponse, FlinchModifierResponse, HandlingModifierResponse,
@@ -735,6 +737,25 @@ fn dyanmic_perk_stats(
         Perks::TomeOfDawn => sbr_tome_of_dawn(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::LoaderMod => sbr_loader_mods(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::TargetingMod => sbr_targeting_mods(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::LunaFaction => sbr_lunafaction_boots(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Foetracer => sbr_foetracer(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::MechaneersTricksleeves => sbr_mechaneers_tricksleeves(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Oathkeeper => sbr_oathkeeper(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SealedAhamkaraGrasps => sbr_sealed_ahamkara_grasps(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::LuckyPants => sbr_lucky_pants(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Stompees => sbr_stompees(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::NoBackupPlans => sbr_no_backup_plans(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ActiumWarRig => sbr_actium_war_rig(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::HallowfireHeart => sbr_hallowfire_heart(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::LionRampart => sbr_lion_rampants(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Peacekeepers => sbr_peacekeepers(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::PeregrineGreaves => sbr_peregrine_greaves(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::EyeOfAnotherWorld => sbr_eye_of_another_world(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::AstrocyteVerse => sbr_astrocyte_verse(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::NecroticGrips => sbr_necrotic_grip(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::BootsOfTheAssembler => sbr_boots_of_the_assembler(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RainOfFire => sbr_rain_of_fire(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::SpeedloaderSlacks => sbr_speedloader_slacks(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HashMap::new(),
     }
 }
@@ -869,15 +890,18 @@ fn get_perk_dmr(
         Perks::MantleOfBattleHarmony => {
             dmr_mantle_of_battle_harmony(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::MaskOfBakris => dmr_bakris(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::MaskOfBakris => dmr_mask_of_bakris(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::BallindorseWrathweavers => {
-            dmr_cold_balls(_input_data, val, enhanced, _pvp, _cached_data)
+            dmr_ballidorse_wrathweavers(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::BootsOfTheAssembler => {
             dmr_blessing_of_the_sky(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::KickStart => dmr_kickstart(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::SurgeMod => dmr_surge_mods(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::MechaneersTricksleeves => dmr_mechaneers_tricksleeves(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::LuckyPants => dmr_lucky_pants(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Foetracer => dmr_foetracer(_input_data, val, enhanced, _pvp, _cached_data),
         _ => DamageModifierResponse::default(),
     }
 }
@@ -963,6 +987,9 @@ fn get_perk_rsmr(
         Perks::RallyBarricade => {
             rsmr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        
+        Perks::SpeedloaderSlacks => rsmr_speedloader_slacks(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::LunaFaction => rsmr_lunafaction_boots(_input_data, val, enhanced, _pvp, _cached_data),
         _ => ReloadModifierResponse::default(),
     }
 }
@@ -1123,6 +1150,8 @@ fn get_perk_hmr(
         Perks::TunnelVision => hmr_tunnel_vision(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ShotSwap => hmr_shot_swap(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::HuntersTrance => hmr_hunters_trance(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::LuckyPants => hmr_lucky_pants(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Peacekeepers => hmr_peacekeepers(_input_data, val, enhanced, _pvp, _cached_data),
         // Perks::FieldTested => hmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HandlingModifierResponse::default(),
     }
@@ -1248,6 +1277,7 @@ fn get_perk_rmr(
         Perks::RallyBarricade => {
             rmr_rally_barricade(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::LunaFaction => rmr_lunafaction_boots(_input_data, val, enhanced, _pvp, _cached_data),
         _ => RangeModifierResponse::default(),
     }
 }

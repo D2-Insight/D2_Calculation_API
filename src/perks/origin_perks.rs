@@ -322,8 +322,8 @@ pub(super) fn sbr_tex_balanced_stock(
 ) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
     if _value > 0 {
-        map.insert(StatHashes::HANDLING.into(), 50);
-        map.insert(StatHashes::RELOAD.into(), 75);
+        map.insert(StatHashes::HANDLING.into(), 20);
+        map.insert(StatHashes::RELOAD.into(), 20);
     }
     map
 }
@@ -354,7 +354,7 @@ pub(super) fn rsmr_tex_balanced_stock(
 ) -> ReloadModifierResponse {
     if _value > 0 {
         ReloadModifierResponse {
-            reload_stat_add: 75,
+            reload_stat_add: 20,
             reload_time_scale: 0.9,
             ..Default::default()
         }
