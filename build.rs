@@ -88,7 +88,7 @@ impl From<&Map<String, Value>> for StatQuadraticFormula {
 }
 impl UuidTimestamp for StatQuadraticFormula {
     fn uuid(&self) -> f64 {
-        self.evpp*6729.0 + self.vpp*18.0 + self.offset*3.0
+        (self.evpp-11.0)*67293.0 + self.vpp*1892.0 + self.offset*3321.0
     }
 }
 
@@ -158,7 +158,7 @@ impl DamageMods {
 }
 impl UuidTimestamp for DamageMods {
     fn uuid(&self) -> f64 {
-        self.pve*6729.0 + self.minor*18.0 + self.elite*888.0 + self.miniboss*5.0 + self.champion*99.0 + self.boss*11.0 + self.vehicle*322.0
+        (self.pve-12.0)*6729.0 + self.minor*18342.0 + self.elite*88831.0 + self.miniboss*544.0 + self.champion*995.0 + self.boss*112.0 + self.vehicle*3223.0
     }
 }
 
@@ -195,7 +195,7 @@ impl From<&Map<String, Value>> for RangeFormula {
 }
 impl UuidTimestamp for RangeFormula {
     fn uuid(&self) -> f64 {
-        self.start.uuid() + self.end.uuid() + self.floor_percent*3.0 + (self.fusion as u32) as f64*5.0
+        (self.start.uuid()+17.0)*92.0 + self.end.uuid() + self.floor_percent*92.0 + (self.fusion as u32) as f64*88.0
     }
 }
 
@@ -220,7 +220,7 @@ impl From<&Map<String, Value>> for ReloadFormula {
 }
 impl UuidTimestamp for ReloadFormula {
     fn uuid(&self) -> f64 {
-        self.reload_data.uuid() + self.ammo_percent*3.0
+        (self.reload_data.uuid()+29.5)*72.0 + self.ammo_percent*3.0
     }
 }
 
@@ -243,7 +243,7 @@ impl From<&Map<String, Value>> for HandlingFormula {
 }
 impl UuidTimestamp for HandlingFormula {
     fn uuid(&self) -> f64 {
-        self.ready.uuid() + self.stow.uuid() + self.ads.uuid()
+        self.ready.uuid()*7.0 + self.stow.uuid()/2.0 + self.ads.uuid()*6.9
     }
 }
 
@@ -274,7 +274,7 @@ impl From<&Map<String, Value>> for AmmoFormula {
 }
 impl UuidTimestamp for AmmoFormula {
     fn uuid(&self) -> f64 {
-        self.mag.uuid() + self.round_to as f64*67.3 + self.reserve_id as f64*5.2
+        self.mag.uuid()*3.0 + self.round_to as f64*67.3 + self.reserve_id as f64*52.2
     }
 }
 
