@@ -59,7 +59,7 @@ fn json_1_float() -> Value {
 }
 
 //these types reflect whats in src/types/rs_types.rs
-#[derive(Debug, Clone, Serialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Default)]
 pub struct StatQuadraticFormula {
     pub evpp: f64,
     pub vpp: f64,
@@ -92,7 +92,7 @@ impl UuidTimestamp for StatQuadraticFormula {
     }
 }
 
-#[derive(Debug, Clone, Serialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Default)]
 pub struct DamageMods {
     pub pve: f64,
     pub minor: f64,
@@ -162,7 +162,7 @@ impl UuidTimestamp for DamageMods {
     }
 }
 
-#[derive(Debug, Clone, Serialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Default)]
 pub struct RangeFormula {
     pub start: StatQuadraticFormula,
     pub end: StatQuadraticFormula,
@@ -199,7 +199,7 @@ impl UuidTimestamp for RangeFormula {
     }
 }
 
-#[derive(Debug, Clone, Serialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Default)]
 pub struct ReloadFormula {
     pub reload_data: StatQuadraticFormula,
     pub ammo_percent: f64,
@@ -224,7 +224,7 @@ impl UuidTimestamp for ReloadFormula {
     }
 }
 
-#[derive(Debug, Clone, Serialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Default)]
 pub struct HandlingFormula {
     pub ready: StatQuadraticFormula,
     pub stow: StatQuadraticFormula,
@@ -247,7 +247,7 @@ impl UuidTimestamp for HandlingFormula {
     }
 }
 
-#[derive(Debug, Clone, Serialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Default)]
 pub struct AmmoFormula {
     pub mag: StatQuadraticFormula,
     pub round_to: i32,
@@ -278,7 +278,7 @@ impl UuidTimestamp for AmmoFormula {
     }
 }
 
-#[derive(Debug, Clone, Serialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Default)]
 pub struct FiringData {
     pub damage: f64,
     pub crit_mult: f64,
@@ -453,12 +453,12 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
         new_jdata[key] = Value::Object(tmp_data_set);
     }
 
-    let mut handling_data: Vec<HandlingFormula> = Vec::new();
-    let mut range_data: Vec<RangeFormula> = Vec::new();
-    let mut reload_data: Vec<ReloadFormula> = Vec::new();
-    let mut ammo_data: Vec<AmmoFormula> = Vec::new();
-    let mut firing_data: Vec<FiringData> = Vec::new();
-    let mut scalar_data: Vec<DamageMods> = Vec::new();
+    let mut handling_data: Vec<HandlingFormula> = vec![HandlingFormula::default()];
+    let mut range_data: Vec<RangeFormula> = vec![RangeFormula::default()];
+    let mut reload_data: Vec<ReloadFormula> = vec![ReloadFormula::default()];
+    let mut ammo_data: Vec<AmmoFormula> = vec![AmmoFormula::default()];
+    let mut firing_data: Vec<FiringData> = vec![FiringData::default()];
+    let mut scalar_data: Vec<DamageMods> = vec![DamageMods::default()];
 
     let mut updated_weapon_defs: Vec<(u32, DataPointers)> = Vec::new();
     for (weapon_id, inner_values) in new_jdata.as_object().unwrap() {
