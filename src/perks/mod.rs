@@ -901,6 +901,7 @@ fn get_perk_dmr(
         Perks::SurgeMod => dmr_surge_mods(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::MechaneersTricksleeves => dmr_mechaneers_tricksleeves(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::LuckyPants => dmr_lucky_pants(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Foetracer => dmr_foetracer(_input_data, val, enhanced, _pvp, _cached_data),
         _ => DamageModifierResponse::default(),
     }
 }

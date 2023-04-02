@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{StatHashes, WeaponType, DamageType, AmmoType};
+use crate::{d2_enums::{StatHashes, WeaponType, DamageType, AmmoType}, logging::{extern_log, LogLevel}};
 
 use super::{
     clamp,
@@ -123,22 +123,23 @@ pub(super) fn sbr_foetracer(
   HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
 }
 
-  //TODO: HARM FIX THIS PWEASE
 
-  /*pub(super) fn dmr_foetracer(
+  pub(super) fn dmr_foetracer(
     _input: &CalculationInput,
     _value: u32,
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
     ) -> DamageModifierResponse {
-        let modifier = 1.0 + (0.01 * _value.clamp(0, 30) as f64);
+        let health_percent = _cached_data.get("health%").unwrap_or(&0.0).clone();
+        if health_percent <= 0.7 {return DamageModifierResponse::default();}
+        let modifier = 1.0 + (0.01 * (health_percent-0.7)*100.0);
         return DamageModifierResponse {
             impact_dmg_scale: modifier,
             explosive_dmg_scale: modifier,
             crit_scale: 1.0,
         }
-    }*/
+    }
   
 //TODO: MECHANEER'S TRICKSLEEVES AUTORELOAD
 
