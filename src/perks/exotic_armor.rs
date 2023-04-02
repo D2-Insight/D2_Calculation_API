@@ -20,7 +20,7 @@ pub(super) fn dmr_ballidorse_wrathweavers( //BALLIDORSE WRATHWEAVERS
 ) -> DamageModifierResponse {
   let mut modifier = DamageModifierResponse::default();
   let value = if _pvp {1.05} else {1.15};
-  if _input.damage_type == &DamageType::STASIS {
+  if _input.damage_type == &DamageType::STASIS && _value >=1 {
     modifier.impact_dmg_scale = value;
     modifier.explosive_dmg_scale = value;
   }
@@ -131,6 +131,7 @@ pub(super) fn sbr_foetracer(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
     ) -> DamageModifierResponse {
+        if _value == 0 {return DamageModifierResponse::default();}
         let health_percent = _cached_data.get("health%").unwrap_or(&0.0).clone();
         if health_percent <= 0.7 {return DamageModifierResponse::default();}
         let modifier = 1.0 + (0.01 * (health_percent-0.7)*100.0);
@@ -451,7 +452,7 @@ pub(super) fn sbr_lunafaction_boots (
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
   let mut stat = HashMap::new();
-  if _value > 0 {
+  if _value >= 1 {
     stat.insert(StatHashes::RELOAD.into(), 100);
   }
   stat
@@ -464,7 +465,7 @@ pub(super) fn rsmr_lunafaction_boots(
   _pvp: bool,
   _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
-  if _value > 0 {
+  if _value >= 1 {
       ReloadModifierResponse {
           reload_stat_add: 100,
           reload_time_scale: 0.9,
