@@ -200,6 +200,7 @@ pub(super) fn sbr_lucky_pants(
     let mut stat = HashMap::new();
     if _value > 0 && _input.weapon_type == &WeaponType::HANDCANNON {
       stat.insert(StatHashes::AIRBORNE.into(), 20);
+      stat.insert(StatHashes::HANDLING.into(), 100);
     };
     stat
   }
