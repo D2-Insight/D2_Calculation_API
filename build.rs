@@ -559,7 +559,7 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
                 if index_option.is_some() {
                     data.rl = index_option.unwrap();
                 } else {
-                    data.rl = reload_data.len();
+                    data.rl = reload_data.len()-1;
                     reload.timestamp = cached.get_timestamp(&reload);
                     reload_data.push(reload);
                 }
@@ -581,7 +581,7 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
                 if index_option.is_some() {
                     data.r = index_option.unwrap();
                 } else {
-                    data.r = range_data.len();
+                    data.r = range_data.len()-1;
                     range.timestamp = cached.get_timestamp(&range);
                     range_data.push(range);
                 }
@@ -603,7 +603,7 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
                 if index_option.is_some() {
                     data.h = index_option.unwrap();
                 } else {
-                    data.h = handling_data.len();
+                    data.h = handling_data.len()-1;
                     handling.timestamp = cached.get_timestamp(&handling);
                     handling_data.push(handling);
                 }
@@ -632,7 +632,7 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
                 if index_option.is_some() {
                     data.s = index_option.unwrap();
                 } else {
-                    data.s = scalar_data.len();
+                    data.s = scalar_data.len()-1;
                     scalar.timestamp = cached.get_timestamp(&scalar);
                     scalar_data.push(scalar);
                 }
@@ -642,7 +642,7 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
                 if index_option.is_some() {
                     data.a = index_option.unwrap();
                 } else {
-                    data.a = ammo_data.len();
+                    data.a = ammo_data.len()-1;
                     ammo.timestamp = cached.get_timestamp(&ammo);
                     ammo_data.push(ammo);
                 }
