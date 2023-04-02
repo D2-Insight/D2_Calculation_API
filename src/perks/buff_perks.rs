@@ -58,6 +58,7 @@ pub(super) fn dmr_blessing_of_the_sky(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
+    if _value == 0 {return DamageModifierResponse::default()}
     let des_buff = if _pvp { 1.15 } else { 1.35 };
     let buff = emp_buff(_cached_data, des_buff);
     DamageModifierResponse {

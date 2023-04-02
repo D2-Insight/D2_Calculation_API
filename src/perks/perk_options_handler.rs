@@ -322,7 +322,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::Frequency => Some(PerkOptionData::toggle()),
         Perks::Tempering => Some(PerkOptionData::toggle()),
         Perks::DragonShadow => Some(PerkOptionData::toggle()),
-        Perks::OphidianAspect => Some(PerkOptionData::toggle()),
+        Perks::OphidianAspect => Some(PerkOptionData::static_()),
         Perks::Hedrons => Some(PerkOptionData::toggle()),
         Perks::HeatRises => Some(PerkOptionData::toggle()),
         Perks::RallyBarricade => Some(PerkOptionData::toggle()),
@@ -336,8 +336,8 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::MantleOfBattleHarmony => Some(PerkOptionData::static_()),
         Perks::MaskOfBakris => Some(PerkOptionData::options(
             ["one buff", "both buffs"].to_vec())),
-        Perks::BallindorseWrathweavers => Some(PerkOptionData::static_()),
-        Perks::LunaFaction => Some(PerkOptionData::options(["No Rift", "Heal Rift", "Empowering Rift / Well"].to_vec())),
+        Perks::BallindorseWrathweavers => Some(PerkOptionData::toggle()),
+        Perks::LunaFaction => Some(PerkOptionData::options(["Heal Rift", "Empowering Rift / Well"].to_vec())),
         Perks::Foetracer => Some(PerkOptionData::toggle()),
         Perks::MechaneersTricksleeves => Some(PerkOptionData::toggle()),
         Perks::Oathkeeper => Some(PerkOptionData::static_()),
@@ -352,9 +352,10 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::EyeOfAnotherWorld => Some(PerkOptionData::static_()),
         Perks::AstrocyteVerse => Some(PerkOptionData::static_()),
         Perks::NecroticGrips => Some(PerkOptionData::static_()),
-        Perks::BootsOfTheAssembler => Some(PerkOptionData::static_()),
+        Perks::BootsOfTheAssembler => Some(PerkOptionData::toggle()),
         Perks::RainOfFire => Some(PerkOptionData::static_()),
         Perks::SpeedloaderSlacks => Some(PerkOptionData::stacking(5)),
+        Perks::PeregrineGreaves => Some(PerkOptionData::static_()),
 
         _ => None,
     }
