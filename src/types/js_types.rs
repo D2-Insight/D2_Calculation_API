@@ -28,7 +28,7 @@ pub struct JsHandlingResponse {
     #[wasm_bindgen(js_name = "adsTime", readonly)]
     pub ads_time: f64,
     #[wasm_bindgen(js_name = "timestamp", readonly)]
-    pub timestamp: u64,
+    pub timestamp: u32,
 }
 impl From<HandlingResponse> for JsHandlingResponse {
     fn from(handling: HandlingResponse) -> Self {
@@ -36,7 +36,7 @@ impl From<HandlingResponse> for JsHandlingResponse {
             ready_time: handling.ready_time,
             stow_time: handling.stow_time,
             ads_time: handling.ads_time,
-            timestamp: handling.timestamp,
+            timestamp: handling.timestamp as u32,
         }
     }
 }
@@ -55,7 +55,7 @@ pub struct JsRangeResponse {
     #[wasm_bindgen(js_name = "floorPercent", readonly)]
     pub floor_percent: f64,
     #[wasm_bindgen(js_name = "timestamp", readonly)]
-    pub timestamp: u64,
+    pub timestamp: u32,
 }
 impl From<RangeResponse> for JsRangeResponse {
     fn from(range: RangeResponse) -> Self {
@@ -65,7 +65,7 @@ impl From<RangeResponse> for JsRangeResponse {
             ads_falloff_start: range.ads_falloff_start,
             ads_falloff_end: range.ads_falloff_end,
             floor_percent: range.floor_percent,
-            timestamp: range.timestamp,
+            timestamp: range.timestamp as u32,
         }
     }
 }
@@ -78,14 +78,14 @@ pub struct JsReloadResponse {
     #[wasm_bindgen(js_name = "ammoTime", readonly)]
     pub ammo_time: f64,
     #[wasm_bindgen(js_name = "timestamp", readonly)]
-    pub timestamp: u64,
+    pub timestamp: u32,
 }
 impl From<ReloadResponse> for JsReloadResponse {
     fn from(reload: ReloadResponse) -> Self {
         JsReloadResponse {
             reload_time: reload.reload_time,
             ammo_time: reload.ammo_time,
-            timestamp: reload.timestamp,
+            timestamp: reload.timestamp as u32,
         }
     }
 }
@@ -98,14 +98,14 @@ pub struct JsAmmoResponse {
     #[wasm_bindgen(js_name = "reserveSize", readonly)]
     pub reserve_size: i32,
     #[wasm_bindgen(js_name = "timestamp", readonly)]
-    pub timestamp: u64,
+    pub timestamp: u32,
 }
 impl From<AmmoResponse> for JsAmmoResponse {
     fn from(ammo: AmmoResponse) -> Self {
         JsAmmoResponse {
             mag_size: ammo.mag_size,
             reserve_size: ammo.reserve_size,
-            timestamp: ammo.timestamp,
+            timestamp: ammo.timestamp as u32,
         }
     }
 }
@@ -248,7 +248,7 @@ pub struct JsFiringResponse {
     #[wasm_bindgen(js_name = "burstSize", readonly)]
     pub burst_size: i32,
     #[wasm_bindgen(js_name = "timestamp", readonly)]
-    pub timestamp: u64,
+    pub timestamp: u32,
     #[wasm_bindgen(js_name = "rpm", readonly)]
     pub rpm: f64,
 }
@@ -265,7 +265,7 @@ impl From<FiringResponse> for JsFiringResponse {
             inner_burst_delay: firing.inner_burst_delay,
             burst_size: firing.burst_size,
             rpm: firing.rpm,
-            timestamp: firing.timestamp,
+            timestamp: firing.timestamp as u32,
         }
     }
 }
