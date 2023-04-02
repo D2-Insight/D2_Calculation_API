@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 use serde_json::{Map, Number, Value};
-use std::collections::HashMap;
+use std::collections::{HashMap, BTreeMap};
 use std::fmt::Debug;
 use std::fs::File;
 use std::io::Write;
@@ -10,7 +10,8 @@ struct CachedBuildData {
     last_manifest_version: String,
     dim_perk_mappings: Vec<(u32, u32)>,
     procedural_intrinsic_mappings: Vec<(u32, u32)>,
-    perk_formula_timestamps: HashMap<i32, u64>,
+    //use ordered hash map
+    perk_formula_timestamps: BTreeMap<i32, u64>,
 }
 impl CachedBuildData {
     fn has_data(&self) -> bool {
@@ -32,6 +33,11 @@ impl CachedBuildData {
             self.perk_formula_timestamps.insert(uuid, now);
         }
         out
+    }
+
+    fn sort(&mut self) {
+        self.dim_perk_mappings.sort();
+        self.procedural_intrinsic_mappings.sort();
     }
 }
 
@@ -383,7 +389,8 @@ fn main() {
     construct_enhance_perk_mapping(&mut formula_file, &mut cached_data);
     construct_weapon_formulas(&mut formula_file, &mut cached_data);
 
-    //write cached build data
+    cached_data.sort();
+
     let file_res = std::fs::File::create("./build_resources/cached_build.ron");
     if file_res.is_err() {
         println!("cargo:warning=error writing cached build file");
