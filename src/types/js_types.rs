@@ -7,7 +7,7 @@ use crate::{
     enemies::EnemyType,
     perks::Perk,
     types::rs_types::StatQuadraticFormula,
-    weapons::{ttk_calc::{ResillienceSummary, OptimalKillData, BodyKillData}, FiringData, Stat},
+    weapons::{ttk_calc::{ResillienceSummary, OptimalKillData, BodyKillData}, Stat},
 };
 use serde::{Deserialize, Serialize};
 // use tsify::Tsify;
@@ -15,7 +15,7 @@ use wasm_bindgen::{prelude::wasm_bindgen, JsValue, convert::{IntoWasmAbi, WasmSl
 
 use super::rs_types::{
     AmmoFormula, AmmoResponse, DamageMods, DpsResponse, FiringResponse, HandlingFormula,
-    HandlingResponse, RangeFormula, RangeResponse, ReloadFormula, ReloadResponse,
+    HandlingResponse, RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, FiringData
 };
 
 #[derive(Debug, Clone, Copy, Serialize)]
@@ -27,6 +27,8 @@ pub struct JsHandlingResponse {
     pub stow_time: f64,
     #[wasm_bindgen(js_name = "adsTime", readonly)]
     pub ads_time: f64,
+    #[wasm_bindgen(js_name = "timestamp", readonly)]
+    pub timestamp: u64,
 }
 impl From<HandlingResponse> for JsHandlingResponse {
     fn from(handling: HandlingResponse) -> Self {
@@ -34,6 +36,7 @@ impl From<HandlingResponse> for JsHandlingResponse {
             ready_time: handling.ready_time,
             stow_time: handling.stow_time,
             ads_time: handling.ads_time,
+            timestamp: handling.timestamp,
         }
     }
 }
@@ -51,6 +54,8 @@ pub struct JsRangeResponse {
     pub ads_falloff_end: f64,
     #[wasm_bindgen(js_name = "floorPercent", readonly)]
     pub floor_percent: f64,
+    #[wasm_bindgen(js_name = "timestamp", readonly)]
+    pub timestamp: u64,
 }
 impl From<RangeResponse> for JsRangeResponse {
     fn from(range: RangeResponse) -> Self {
@@ -60,6 +65,7 @@ impl From<RangeResponse> for JsRangeResponse {
             ads_falloff_start: range.ads_falloff_start,
             ads_falloff_end: range.ads_falloff_end,
             floor_percent: range.floor_percent,
+            timestamp: range.timestamp,
         }
     }
 }
@@ -71,12 +77,15 @@ pub struct JsReloadResponse {
     pub reload_time: f64,
     #[wasm_bindgen(js_name = "ammoTime", readonly)]
     pub ammo_time: f64,
+    #[wasm_bindgen(js_name = "timestamp", readonly)]
+    pub timestamp: u64,
 }
 impl From<ReloadResponse> for JsReloadResponse {
     fn from(reload: ReloadResponse) -> Self {
         JsReloadResponse {
             reload_time: reload.reload_time,
             ammo_time: reload.ammo_time,
+            timestamp: reload.timestamp,
         }
     }
 }
@@ -88,12 +97,15 @@ pub struct JsAmmoResponse {
     pub mag_size: i32,
     #[wasm_bindgen(js_name = "reserveSize", readonly)]
     pub reserve_size: i32,
+    #[wasm_bindgen(js_name = "timestamp", readonly)]
+    pub timestamp: u64,
 }
 impl From<AmmoResponse> for JsAmmoResponse {
     fn from(ammo: AmmoResponse) -> Self {
         JsAmmoResponse {
             mag_size: ammo.mag_size,
             reserve_size: ammo.reserve_size,
+            timestamp: ammo.timestamp,
         }
     }
 }
@@ -235,7 +247,9 @@ pub struct JsFiringResponse {
     pub inner_burst_delay: f64,
     #[wasm_bindgen(js_name = "burstSize", readonly)]
     pub burst_size: i32,
-
+    #[wasm_bindgen(js_name = "timestamp", readonly)]
+    pub timestamp: u64,
+    #[wasm_bindgen(js_name = "rpm", readonly)]
     pub rpm: f64,
 }
 impl From<FiringResponse> for JsFiringResponse {
@@ -251,6 +265,7 @@ impl From<FiringResponse> for JsFiringResponse {
             inner_burst_delay: firing.inner_burst_delay,
             burst_size: firing.burst_size,
             rpm: firing.rpm,
+            timestamp: firing.timestamp,
         }
     }
 }
@@ -288,8 +303,6 @@ impl From<Stat> for JsStat {
 #[derive(Debug, Clone, Serialize)]
 #[wasm_bindgen(js_name = "MetaData", inspectable)]
 pub struct JsMetaData {
-    #[wasm_bindgen(js_name = "databaseTimestamp", readonly)]
-    pub database_timestamp: u64,
     #[wasm_bindgen(js_name = "apiVersion", readonly)]
     pub api_version: &'static str,
     #[wasm_bindgen(js_name = "apiTimestamp", readonly)]

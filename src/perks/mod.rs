@@ -1,7 +1,6 @@
 #![allow(clippy::all)]
 
 pub mod buff_perks;
-pub mod enhanced_handler;
 pub mod exotic_perks;
 pub mod exotic_armor;
 pub mod lib;
@@ -21,6 +20,7 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 
 use crate::d2_enums::{StatHashes, BungieHash, StatBump};
+use crate::database;
 
 use self::{
     buff_perks::*,
@@ -61,6 +61,19 @@ pub struct Perk {
     pub enhanced: bool,
     pub value: u32, //used for toggle and stacks
     pub hash: u32,
+}
+
+pub fn enhanced_check(_hash: u32) -> (u32, bool) {
+    let mut result = _hash;
+    let mut found = false;
+    for (_, (h, r)) in database::ENHANCE_PERK_MAPPING.iter().enumerate() {
+        if _hash == *h {
+            result = *r;
+            found = true;
+            break;
+        }
+    }
+    (result, found)
 }
 
 // all armor pekrs are for the future but wanted to started to compile them now

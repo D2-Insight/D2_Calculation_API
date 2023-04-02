@@ -30,6 +30,7 @@ impl ReloadFormula {
         ReloadResponse {
             reload_time,
             ammo_time: reload_time * self.ammo_percent,
+            timestamp: self.timestamp,
         }
     }
 }
@@ -91,6 +92,7 @@ impl RangeFormula {
             ads_falloff_start,
             ads_falloff_end,
             floor_percent: _floor,
+            timestamp: self.timestamp,
         }
     }
 }
@@ -150,6 +152,7 @@ impl HandlingFormula {
             ready_time,
             stow_time,
             ads_time,
+            timestamp: self.timestamp
         }
     }
 }
@@ -216,6 +219,7 @@ impl AmmoFormula {
         AmmoResponse {
             mag_size,
             reserve_size,
+            timestamp: self.timestamp,
         }
     }
 }
@@ -358,6 +362,8 @@ impl Weapon {
             inner_burst_delay,
 
             rpm,
+
+            timestamp: fd.timestamp,
         };
         out
     }

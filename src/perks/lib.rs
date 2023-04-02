@@ -1,8 +1,8 @@
 use crate::{
     d2_enums::{AmmoType, DamageType, StatHashes, WeaponType, StatBump, BungieHash},
     enemies::EnemyType,
-    types::rs_types::HandlingResponse,
-    weapons::{FiringData, Stat},
+    types::rs_types::{HandlingResponse, FiringData},
+    weapons::Stat,
 };
 use std::{cell::RefCell, collections::HashMap, ops::Mul};
 use serde::Serialize;

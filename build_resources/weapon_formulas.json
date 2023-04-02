@@ -505,7 +505,7 @@
                 "handling": {
                     "ready":{"vpp": -0.002391721353, "offset": 0.4950499748},
                     "stow": {"vpp": -0.002041393236, "offset": 0.4547501262},
-                    "ads":  {"vpp": -0.001234477537, "offset": 0.4574687027}
+                    "ads":  {"vpp": -0.001234477537, "offset": 0.4584687027}
                 },
                 "combatant_scalars": {"vehicle": 2.38, "boss": 1.80, "champion": 2.25, "miniboss": 2.25, "elite": 4.80, "minor": 4.20}
             }

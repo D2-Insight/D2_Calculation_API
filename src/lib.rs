@@ -2,7 +2,6 @@
 #![allow(unused_imports)]
 
 use logging::LogLevel;
-use perks::enhanced_handler::enhanced_check;
 pub mod abilities;
 pub mod activity;
 pub mod d2_enums;
@@ -24,6 +23,10 @@ use std::panic;
 
 mod built_info {
     include!(concat!(env!("OUT_DIR"), "/built.rs"));
+}
+
+mod database {
+    include!(concat!(env!("OUT_DIR"), "/formulas.rs"));
 }
 
 //JavaScript
@@ -88,9 +91,7 @@ pub fn start() {
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getMetadata")]
 pub fn get_metadata() -> Result<JsMetaData, JsValue> {
-    use weapons::weapon_formulas::DATABASE_TIMESTAMP;
     let metadata = JsMetaData{
-        database_timestamp: DATABASE_TIMESTAMP,
         api_timestamp: built_info::BUILT_TIME_UTC,
         api_version: built_info::PKG_VERSION,
         api_commit: built_info::GIT_COMMIT_HASH.unwrap(),
@@ -106,13 +107,13 @@ pub fn weapon_as_string() -> Result<String, JsValue> {
     Ok(format!("{:?}", weapon))
 }
 
-#[cfg(feature = "wasm")]
-#[wasm_bindgen(js_name = "weaponJSON")]
-///Returns the weapon as a JSON structure, snake case fields
-pub fn weapon_as_json() -> Result<JsValue, JsValue> {
-    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
-    Ok(serde_wasm_bindgen::to_value(&weapon).unwrap())
-}
+// #[cfg(feature = "wasm")]
+// #[wasm_bindgen(js_name = "weaponJSON")]
+// ///Returns the weapon as a JSON structure, snake case fields
+// pub fn weapon_as_json() -> Result<JsValue, JsValue> {
+//     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+//     Ok(serde_wasm_bindgen::to_value(&weapon).unwrap())
+// }
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "setWeapon")]
@@ -146,12 +147,6 @@ pub fn set_weapon(
     Ok(())
 }
 
-// #[cfg(feature = "wasm")]
-// #[wasm_bindgen(js_name = "getWeaponHash")]
-// pub fn get_weapon_hash() -> Result<bool, JsValue> {
-//     Ok(PERS_DATA.with(|weapon| weapon.borrow().weapon.hash != 0))
-// }
-
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getStats")]
 pub fn get_stats(_clamp: bool) -> Result<JsValue, JsValue> {
@@ -184,7 +179,7 @@ pub fn set_stats(_stats: JsValue) -> Result<(), JsValue> {
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "addTrait")]
 pub fn add_perk(_stats: JsValue, _value: u32, _hash: u32) -> Result<(), JsValue> {
-    let data = enhanced_check(_hash);
+    let data = perks::enhanced_check(_hash);
     let perk = Perk {
         stat_buffs: serde_wasm_bindgen::from_value(_stats).unwrap(),
         enhanced: data.1,

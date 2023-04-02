@@ -12,12 +12,17 @@ python = ["pyo3", "pyo3-built"]
 
 [build-dependencies]
 built = { version = "0.6", features = ["git2", "chrono", "semver"] }
+serde = { version = "^1.0", features = ["derive"]}
+reqwest = { version = "^0.11", features = ["json", "blocking"] }
+serde_json = "^1.0"
+ron = "^0.8"
+
 
 [dependencies]
 serde = { version = "^1.0", features = ["derive"]}
 built = { version = "0.6", features = ["chrono", "semver"] }
 
-serde-wasm-bindgen = { version = "^0.4", optional = true }
+serde-wasm-bindgen = { version = "^0.5", optional = true }
 console_error_panic_hook = { version = "0.1.7", optional = true}
 wasm-bindgen = { version = "^0.2", optional = true}
 
