@@ -238,6 +238,15 @@ impl From<u32> for DamageType {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
+pub enum DamageSource {
+    SNIPER,
+    MELEE,
+    EXPLOSION,
+    ENVIRONMENTAL,
+    UNKNOWN,
+}
+
 pub type Seconds = f64;
 pub type Frames = f64;
 pub type MetersPerSecond = f64;

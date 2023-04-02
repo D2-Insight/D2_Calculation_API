@@ -1,5 +1,5 @@
 use crate::{
-    d2_enums::{AmmoType, DamageType, StatHashes, WeaponType, StatBump, BungieHash},
+    d2_enums::{AmmoType, DamageType, StatHashes, WeaponType, StatBump, BungieHash, DamageSource},
     enemies::EnemyType,
     types::rs_types::HandlingResponse,
     weapons::{FiringData, Stat},
@@ -368,6 +368,25 @@ impl Default for ExplosivePercentResponse {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
+
+pub struct DamageResistModifierResponse {
+    pub body_shot_resist: f64,
+    pub head_shot_resist: f64,
+    pub element: Option<DamageType>,
+    pub source: Option<DamageSource>,
+}
+impl Default for DamageResistModifierResponse {
+    fn default() -> Self { 
+        Self {
+            body_shot_resist: 1.0,
+            head_shot_resist: 1.0,
+            element: None,
+            source: None,
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct ModifierResponse{
     pub rmr: Option<RangeModifierResponse>,
     pub dmr: Option<DamageModifierResponse>, 
@@ -377,6 +396,7 @@ pub struct ModifierResponse{
     pub rsmr: Option<ReloadModifierResponse>,
     pub mmr: Option<MagazineModifierResponse>,
     pub imr: Option<InventoryModifierResponse>,
+    pub drmr: Option<DamageResistModifierResponse>,
     pub statbump: Option<HashMap<BungieHash, StatBump>>,
 }
     
@@ -392,6 +412,7 @@ impl Default for ModifierResponse {
             rsmr: None,
             mmr: None,
             imr: None,
+            drmr: None,
             statbump: None,
         }
     }
