@@ -3,6 +3,7 @@
 pub mod buff_perks;
 pub mod enhanced_handler;
 pub mod exotic_perks;
+pub mod exotic_armor;
 pub mod lib;
 pub mod meta_perks;
 pub mod origin_perks;
@@ -24,6 +25,7 @@ use crate::d2_enums::{StatHashes, BungieHash, StatBump};
 use self::{
     buff_perks::*,
     exotic_perks::*,
+    exotic_armor::*,
     lib::{
         CalculationInput, DamageModifierResponse, ExplosivePercentResponse, ExtraDamageResponse,
         FiringModifierResponse, FlinchModifierResponse, HandlingModifierResponse,
@@ -869,9 +871,9 @@ fn get_perk_dmr(
         Perks::MantleOfBattleHarmony => {
             dmr_mantle_of_battle_harmony(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::MaskOfBakris => dmr_bakris(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::MaskOfBakris => dmr_mask_of_bakris(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::BallindorseWrathweavers => {
-            dmr_cold_balls(_input_data, val, enhanced, _pvp, _cached_data)
+            dmr_ballidorse_wrathweavers(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::BootsOfTheAssembler => {
             dmr_blessing_of_the_sky(_input_data, val, enhanced, _pvp, _cached_data)
