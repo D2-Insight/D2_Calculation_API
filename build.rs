@@ -42,6 +42,9 @@ impl CachedBuildData {
     }
 }
 
+#[derive(Debug, Clone, Hash)]
+struct WeaponPath(u32, u32);
+
 trait UuidTimestamp {
     fn uuid(&self) -> f64;
 }
@@ -158,7 +161,13 @@ impl DamageMods {
 }
 impl UuidTimestamp for DamageMods {
     fn uuid(&self) -> f64 {
-        (self.pve-12.0)*6729.0 + self.minor*18342.0 + self.elite*88831.0 + self.miniboss*544.0 + self.champion*995.0 + self.boss*392.0 + self.vehicle*3223.0
+        (self.pve-12.0)*6729.0 +
+        self.minor*18342.0 +
+        self.elite*88831.0 +
+        self.miniboss*544.0 +
+        self.champion*995.0 +
+        self.boss*392.0 +
+        self.vehicle*3223.0
     }
 }
 
@@ -366,7 +375,7 @@ fn main() {
     //write imports in file
     let res = writeln!(
         formula_file,
-        "use crate::types::rs_types::{{StatQuadraticFormula, RangeFormula, HandlingFormula, ReloadFormula, DamageMods, AmmoFormula, DataPointers, FiringData}};");
+        "use crate::types::rs_types::{{StatQuadraticFormula, RangeFormula, HandlingFormula, ReloadFormula, DamageMods, AmmoFormula, DataPointers, FiringData, WeaponPath}};");
     if res.is_err() {
         panic!("cargo:warning=error writing imports");
     }
@@ -460,7 +469,7 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
     let mut firing_data: Vec<FiringData> = vec![FiringData::default()];
     let mut scalar_data: Vec<DamageMods> = vec![DamageMods::default()];
 
-    let mut updated_weapon_defs: Vec<(u32, DataPointers)> = Vec::new();
+    let mut updated_weapon_defs: Vec<(WeaponPath, DataPointers)> = Vec::new();
     for (weapon_id, inner_values) in new_jdata.as_object().unwrap() {
         for (weapon_hash, weapon_def) in inner_values.as_object().unwrap() {
             let mut data = DataPointers::default();
@@ -559,7 +568,7 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
                 if index_option.is_some() {
                     data.rl = index_option.unwrap();
                 } else {
-                    data.rl = reload_data.len()-1;
+                    data.rl = reload_data.len();
                     reload.timestamp = cached.get_timestamp(&reload);
                     reload_data.push(reload);
                 }
@@ -581,7 +590,7 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
                 if index_option.is_some() {
                     data.r = index_option.unwrap();
                 } else {
-                    data.r = range_data.len()-1;
+                    data.r = range_data.len();
                     range.timestamp = cached.get_timestamp(&range);
                     range_data.push(range);
                 }
@@ -603,7 +612,7 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
                 if index_option.is_some() {
                     data.h = index_option.unwrap();
                 } else {
-                    data.h = handling_data.len()-1;
+                    data.h = handling_data.len();
                     handling.timestamp = cached.get_timestamp(&handling);
                     handling_data.push(handling);
                 }
@@ -632,7 +641,7 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
                 if index_option.is_some() {
                     data.s = index_option.unwrap();
                 } else {
-                    data.s = scalar_data.len()-1;
+                    data.s = scalar_data.len();
                     scalar.timestamp = cached.get_timestamp(&scalar);
                     scalar_data.push(scalar);
                 }
@@ -642,7 +651,7 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
                 if index_option.is_some() {
                     data.a = index_option.unwrap();
                 } else {
-                    data.a = ammo_data.len()-1;
+                    data.a = ammo_data.len();
                     ammo.timestamp = cached.get_timestamp(&ammo);
                     ammo_data.push(ammo);
                 }
@@ -669,16 +678,16 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
             if set_data_res.is_err() {
                 println!("cargo:warning={:?}", set_data_res.unwrap_err());
             }
-            updated_weapon_defs.push((weapon_hash.parse::<u32>().unwrap(), data));
+            updated_weapon_defs.push((WeaponPath(weapon_id.parse::<u32>().unwrap(),weapon_hash.parse::<u32>().unwrap()), data));
         }
     }
 
-    let expected_formulas = scalar_data.len()-1 +
-        ammo_data.len()-1 +
-        firing_data.len()-1 +
-        range_data.len()-1 +
-        handling_data.len()-1 +
-        reload_data.len()-1;
+    let expected_formulas = scalar_data.len() +
+        ammo_data.len() +
+        firing_data.len() +
+        range_data.len() +
+        handling_data.len() +
+        reload_data.len();
     if expected_formulas != cached.perk_formula_timestamps.len() {
         panic!("cargo:warning=Expected {} formulas, got {}", expected_formulas, cached.perk_formula_timestamps.len());
     }
@@ -686,7 +695,7 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
     write_variable(
         formula_file,
         "DATA_POINTERS",
-        &format!("[(u32, DataPointers); {}]", updated_weapon_defs.len()),
+        &format!("[(WeaponPath, DataPointers); {}]", updated_weapon_defs.len()),
         format!("{:?}", updated_weapon_defs),
         "Hashmapping for weapon intrinsic hash to data pointers",
     );

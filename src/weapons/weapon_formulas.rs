@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::{types::rs_types::{StatQuadraticFormula, RangeFormula, HandlingFormula, ReloadFormula, DamageMods, AmmoFormula, DataPointers}, d2_enums::{DamageType, AmmoType, WeaponType}, perks::{Perk, enhanced_check}, database};
+use crate::{types::rs_types::{StatQuadraticFormula, RangeFormula, HandlingFormula, ReloadFormula, DamageMods, AmmoFormula, DataPointers, WeaponPath}, d2_enums::{DamageType, AmmoType, WeaponType}, perks::{Perk, enhanced_check}, database};
 
 use super::{Weapon, FiringData};
 
@@ -8,8 +8,8 @@ use super::{Weapon, FiringData};
 
 
 fn get_data_pointers(_weapon_type_id: u8, _intrinsic_hash: u32,) -> Result<DataPointers, String> {
-    let pointer_map:HashMap<u32, DataPointers> = HashMap::from(database::DATA_POINTERS);
-    let pointer_result = pointer_map.get(&_intrinsic_hash);
+    let pointer_map:HashMap<WeaponPath, DataPointers> = HashMap::from(database::DATA_POINTERS);
+    let pointer_result = pointer_map.get(&WeaponPath(_weapon_type_id as u32, _intrinsic_hash));
     if pointer_result.is_none() {
         return Err(format!("No data pointers found for intrinsic hash: {}", _intrinsic_hash));
     }

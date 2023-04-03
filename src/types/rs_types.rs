@@ -14,6 +14,9 @@ pub struct DataPointers {
     pub a: usize,
 }
 
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub struct WeaponPath(pub u32, pub u32);
+
 #[derive(Debug, Clone, Default, Copy, Serialize)]
 pub struct FiringData {
     pub damage: f64,
