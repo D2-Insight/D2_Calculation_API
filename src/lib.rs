@@ -284,19 +284,20 @@ pub fn get_weapon_ttk(_overshield: f64) -> Result<JsValue, JsValue> {
     Ok(serde_wasm_bindgen::to_value(&js_ttk_data).unwrap())
 }
 
-#[cfg(feature = "wasm")]
-#[wasm_bindgen(js_name = "getWeaponDps")]
-pub fn get_weapon_dps(_use_rpl: bool) -> Result<JsDpsResponse, JsValue> {
-    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
-    let enemy = PERS_DATA.with(|perm_data| perm_data.borrow().enemy.clone());
-    let pl_dmg_mult = PERS_DATA.with(|perm_data| perm_data.borrow().activity.get_pl_delta());
-    let mut dps_response = weapon.calc_dps(enemy, pl_dmg_mult);
-    let rpl_mult = PERS_DATA.with(|perm_data| perm_data.borrow().activity.get_rpl_mult());
-    if _use_rpl {
-        dps_response.apply_rpl(rpl_mult)
-    }
-    Ok(dps_response.into())
-}
+///DEPRECATED for now
+// #[cfg(feature = "wasm")]
+// #[wasm_bindgen(js_name = "getWeaponDps")]
+// pub fn get_weapon_dps(_use_rpl: bool) -> Result<JsDpsResponse, JsValue> {
+//     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+//     let enemy = PERS_DATA.with(|perm_data| perm_data.borrow().enemy.clone());
+//     let pl_dmg_mult = PERS_DATA.with(|perm_data| perm_data.borrow().activity.get_pl_delta());
+//     let mut dps_response = weapon.calc_dps(enemy, pl_dmg_mult);
+//     let rpl_mult = PERS_DATA.with(|perm_data| perm_data.borrow().activity.get_rpl_mult());
+//     if _use_rpl {
+//         dps_response.apply_rpl(rpl_mult)
+//     }
+//     Ok(dps_response.into())
+// }
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getWeaponFiringData")]

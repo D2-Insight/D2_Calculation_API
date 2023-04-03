@@ -4,7 +4,7 @@ use serde::Serialize;
 
 use crate::{
     d2_enums::WeaponType,
-    perks::{get_dmg_modifier, get_firing_modifier, lib::CalculationInput},
+    perks::{get_dmg_modifier, get_firing_modifier, lib::CalculationInput}, logging::extern_log,
 };
 
 use super::{FiringData, Weapon};
@@ -87,6 +87,8 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
             //PERK CALCULATIONS////////////
             
             persistent_data.insert("health%".to_string(), opt_damage_dealt/health);
+            persistent_data.insert("empowering".to_string(), 1.0);
+            persistent_data.insert("debuff".to_string(), 1.0);
             let calc_input = _weapon.pvp_calc_input(
                 opt_bullets_fired,
                 opt_bullets_hit,
