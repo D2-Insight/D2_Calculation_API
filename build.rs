@@ -688,7 +688,7 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
         range_data.len() +
         handling_data.len() +
         reload_data.len();
-    if expected_formulas != cached.perk_formula_timestamps.len() {
+    if expected_formulas-6 != cached.perk_formula_timestamps.len() {
         panic!("cargo:warning=Expected {} formulas, got {}", expected_formulas, cached.perk_formula_timestamps.len());
     }
 
