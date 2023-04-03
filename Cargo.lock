@@ -184,6 +184,7 @@ version = "1.0.1"
 dependencies = [
  "built",
  "console_error_panic_hook",
+ "num-traits",
  "pyo3",
  "pyo3-built",
  "reqwest",

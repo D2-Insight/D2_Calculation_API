@@ -146,7 +146,7 @@ impl HandlingFormula {
         let ready_time = self.ready.solve_at(handling_stat) * _modifiers.handling_swap_scale;
         let mut stow_time = self.stow.solve_at(handling_stat) * _modifiers.handling_swap_scale;
         let ads_time = self.ads.solve_at(handling_stat) * _modifiers.handling_ads_scale;
-        if stow_time < self.stow.solve_at(100.0) {
+        if stow_time < self.stow.solve_at(100.0) && (self.stow.vpp < 0_f64 && self.stow.evpp < 0_f64) {
             stow_time = self.stow.solve_at(100.0);
         }
         HandlingResponse {

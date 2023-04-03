@@ -568,7 +568,7 @@
             },
             "test": {
                 "range": {"vpp_start": 0.1, "offset_start": 10.0, "vpp_end": 0.2, "offset_end": 20.0, "floor_percent": 0.5},
-                "reload": {"evpp": 0.0, "vpp": 0.5, "offset": 10.0},
+                "reload": {"evpp": 0.0, "vpp": -0.1, "offset": 10.0},
                 "handling": {
                     "ready": {"vpp": 0.0, "offset": 5.0},
                     "stow": {"vpp": 0.1, "offset": 0.0},
