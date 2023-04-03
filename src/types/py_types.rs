@@ -7,7 +7,7 @@ use crate::{
     activity::{damage_calc::DifficultyOptions, Activity, Player, PlayerClass},
     enemies::{Enemy, EnemyType},
     perks::Perk,
-    weapons::{ttk_calc::ResillienceSummary, FiringData},
+    weapons::ttk_calc::ResillienceSummary
 };
 
 use super::rs_types::{
