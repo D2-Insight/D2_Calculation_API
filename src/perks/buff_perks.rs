@@ -92,6 +92,7 @@ pub(super) fn dmr_path_of_burning_steps(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
+    if _value == 0 {return DamageModifierResponse::default()}
     let pvp_values = [1.15, 1.25, 1.2, 1.35];
     let pve_values = [1.2, 1.25, 1.35, 1.4];
     let des_buff = if _pvp {

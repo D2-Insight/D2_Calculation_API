@@ -1006,7 +1006,7 @@ pub(super) fn dmr_noble_rounds(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     if _value > 0 {
-        dmr_blessing_of_the_sky(_input, 0, false, _pvp, _cached_data)
+        dmr_blessing_of_the_sky(_input, 1, false, _pvp, _cached_data)
     } else {
         DamageModifierResponse::default()
     }
