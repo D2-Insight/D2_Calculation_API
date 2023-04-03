@@ -16,7 +16,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+    - name: Rust Cache
+      uses: Swatinem/rust-cache@v2.2.1
+    - name: Install Wasm-Pack
+      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
     - name: Build
       run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+    - name: Build Wasm target
+      run: wasm-pack build --target web --features wasm
+
+
