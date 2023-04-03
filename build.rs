@@ -11,7 +11,7 @@ struct CachedBuildData {
     dim_perk_mappings: Vec<(u32, u32)>,
     procedural_intrinsic_mappings: Vec<(u32, u32)>,
     //use ordered hash map
-    perk_formula_timestamps: BTreeMap<i32, u64>,
+    perk_formula_timestamps: BTreeMap<u64, u64>,
 }
 impl CachedBuildData {
     fn has_data(&self) -> bool {
@@ -23,7 +23,7 @@ impl CachedBuildData {
 
     fn get_timestamp(&mut self, formula: &impl UuidTimestamp) -> u64 {
         // get current unix time
-        let uuid = formula.uuid() as i32;
+        let uuid = (formula.uuid()*10.0).to_bits() as u64;
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
             .unwrap()
@@ -88,7 +88,7 @@ impl From<&Map<String, Value>> for StatQuadraticFormula {
 }
 impl UuidTimestamp for StatQuadraticFormula {
     fn uuid(&self) -> f64 {
-        (self.evpp-11.0)*97293.0 + self.vpp*14892.0 + self.offset*3321.0
+        (self.evpp-11.0)*97293.0 + self.vpp*84892.0 + self.offset*3321.0
     }
 }
 
@@ -195,7 +195,7 @@ impl From<&Map<String, Value>> for RangeFormula {
 }
 impl UuidTimestamp for RangeFormula {
     fn uuid(&self) -> f64 {
-        (self.start.uuid()+17.0)*92.0 + self.end.uuid() + self.floor_percent*92.0 + (self.fusion as u32) as f64*88.0
+        (self.start.uuid()+17.0)*920.0 + self.end.uuid() + self.floor_percent*92.0 + (self.fusion as u32) as f64*88.0
     }
 }
 
@@ -243,7 +243,7 @@ impl From<&Map<String, Value>> for HandlingFormula {
 }
 impl UuidTimestamp for HandlingFormula {
     fn uuid(&self) -> f64 {
-        self.ready.uuid()*79.0 + self.stow.uuid()/2.0 + self.ads.uuid()*62.9
+        self.ready.uuid()*79.0 + self.stow.uuid()/2.0 + self.ads.uuid()*79.9
     }
 }
 
@@ -274,7 +274,7 @@ impl From<&Map<String, Value>> for AmmoFormula {
 }
 impl UuidTimestamp for AmmoFormula {
     fn uuid(&self) -> f64 {
-        self.mag.uuid()*13.0 + self.round_to as f64*6723.3 + self.reserve_id as f64*5299.2
+        self.mag.uuid()*99.0 + self.round_to as f64*6723.3 + self.reserve_id as f64*5299.2
     }
 }
 
@@ -313,13 +313,13 @@ impl From<&Map<String, Value>> for FiringData {
 }
 impl UuidTimestamp for FiringData {
     fn uuid(&self) -> f64 {
-        self.damage*821.88 +
-        self.crit_mult*3.1 +
-        self.burst_delay*5.7 +
-        self.inner_burst_delay*7.9 +
-        self.burst_size as f64*9.3 +
-        (self.one_ammo as u32) as f64*1155.5 +
-        (self.charge as u32) as f64*13.9
+        (self.damage*821.88 +
+        self.crit_mult*388.1 +
+        self.burst_delay*9999.7 +
+        self.inner_burst_delay*7234.9 +
+        self.burst_size as f64*999.3 +
+        (self.one_ammo as u32) as f64*16655.5 +
+        (self.charge as u32) as f64*7388.9)*10.0
     }
 }
 
@@ -672,7 +672,17 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
             updated_weapon_defs.push((weapon_hash.parse::<u32>().unwrap(), data));
         }
     }
-    // println!("cargo:warning=Finished parsing weapon definitions {:?}", updated_weapon_defs);
+
+    let expected_formulas = scalar_data.len()-1 +
+        ammo_data.len()-1 +
+        firing_data.len()-1 +
+        range_data.len()-1 +
+        handling_data.len()-1 +
+        reload_data.len()-1;
+    if expected_formulas != cached.perk_formula_timestamps.len() {
+        panic!("cargo:warning=Expected {} formulas, got {}", expected_formulas, cached.perk_formula_timestamps.len());
+    }
+
     write_variable(
         formula_file,
         "DATA_POINTERS",
