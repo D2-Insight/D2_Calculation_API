@@ -557,18 +557,18 @@ impl Weapon {
 }
 
 impl Weapon {
-    fn get_misc_stats(
+    pub fn get_misc_stats(
         &self,
         _calc_input: Option<CalculationInput>,
-        _pvp: bool,
-        _cached_data: Option<&mut HashMap<String, f64>>,
+        _pvp: bool
     ) -> HashMap<String, f64> {
         let mut buffer: HashMap<String, f64> = HashMap::new();
+        let mut cached_data: HashMap<String, f64> = HashMap::new();
 
         match self.weapon_type {
             WeaponType::ROCKET | WeaponType::GRENADELAUNCHER | WeaponType::GLAIVE => buffer.insert(
                 "velocity".to_string(),
-                self.calc_projectile_velocity(_calc_input, _pvp, _cached_data),
+                self.calc_projectile_velocity(_calc_input, _pvp, Some(&mut cached_data)),
             ),
             _ => None,
         };

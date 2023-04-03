@@ -331,6 +331,17 @@ pub fn get_weapon_flinch(_dynamic_traits: bool, _pvp: bool, _resilience: u8) -> 
 }
 
 #[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "getMiscData")]
+pub fn get_misc_data(_dynamic_traits: bool, _pvp: bool) -> Result<JsValue, JsValue> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    if _dynamic_traits {
+        Ok(serde_wasm_bindgen::to_value(&weapon.get_misc_stats(Some(weapon.static_calc_input()), _pvp)).unwrap())
+    } else {
+        Ok(serde_wasm_bindgen::to_value(&weapon.get_misc_stats(None, _pvp)).unwrap())
+    }
+}
+
+#[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "setEncounter")]
 pub fn set_encounter(_rpl: u32, _override_cap: i32, _difficulty: JsDifficultyOptions, _enemy_type: JsEnemyType) -> Result<(), JsValue> {
     PERS_DATA.with(|perm_data| {
@@ -357,7 +368,7 @@ pub fn set_logging_level(_level: usize) -> Result<(), JsValue> {
 }
 
 #[cfg(feature = "wasm")]
-#[wasm_bindgen(js_name = "getModifierResponse")]
+#[wasm_bindgen(js_name = "getModifierResponseSummary")]
 pub fn get_modifier_response(_dynamic_traits: bool, _pvp: bool) -> Result<JsValue, JsValue> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     let modifier = weapon.get_modifier_summary(_dynamic_traits.then_some(weapon.static_calc_input()), _pvp, None);
