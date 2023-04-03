@@ -4,6 +4,28 @@ use serde::{Deserialize, Serialize};
 
 use crate::enemies::EnemyType;
 
+#[derive(Debug, Clone)]
+pub struct DataPointers {
+    pub h: usize,
+    pub r: usize,
+    pub rl: usize,
+    pub s: usize,
+    pub f: usize,
+    pub a: usize,
+}
+
+#[derive(Debug, Clone, Default, Copy, Serialize)]
+pub struct FiringData {
+    pub damage: f64,
+    pub crit_mult: f64,
+    pub burst_delay: f64,
+    pub inner_burst_delay: f64,
+    pub burst_size: i32,
+    pub one_ammo: bool,
+    pub charge: bool,
+    pub timestamp: u64,
+}
+
 #[derive(Debug, Clone, Serialize)]
 pub struct DamageMods {
     pub pve: f64,
@@ -13,6 +35,7 @@ pub struct DamageMods {
     pub champion: f64,
     pub boss: f64,
     pub vehicle: f64,
+    pub timestamp: u64,
 }
 impl Default for DamageMods {
     fn default() -> Self {
@@ -24,6 +47,7 @@ impl Default for DamageMods {
             champion: 1.0,
             boss: 1.0,
             vehicle: 1.0,
+            timestamp: 0,
         }
     }
 }
@@ -48,6 +72,7 @@ pub struct RangeFormula {
     pub end: StatQuadraticFormula,
     pub floor_percent: f64,
     pub fusion: bool,
+    pub timestamp: u64,
 }
 
 //even if just linear use this
@@ -67,6 +92,7 @@ impl StatQuadraticFormula {
 pub struct ReloadFormula {
     pub reload_data: StatQuadraticFormula,
     pub ammo_percent: f64,
+    pub timestamp: u64,
 }
 
 #[derive(Debug, Clone, Default, Serialize)]
@@ -74,6 +100,7 @@ pub struct HandlingFormula {
     pub ready: StatQuadraticFormula,
     pub stow: StatQuadraticFormula,
     pub ads: StatQuadraticFormula,
+    pub timestamp: u64,
 }
 
 #[derive(Debug, Clone, Default, Serialize)]
@@ -81,6 +108,7 @@ pub struct AmmoFormula {
     pub mag: StatQuadraticFormula,
     pub round_to: i32,
     pub reserve_id: u32,
+    pub timestamp: u64,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -90,6 +118,7 @@ pub struct RangeResponse {
     pub ads_falloff_start: f64,
     pub ads_falloff_end: f64,
     pub floor_percent: f64,
+    pub timestamp: u64,
 }
 
 #[derive(Debug, Clone, Default, Copy)]
@@ -97,18 +126,21 @@ pub struct HandlingResponse {
     pub ready_time: f64,
     pub stow_time: f64,
     pub ads_time: f64,
+    pub timestamp: u64,
 }
 
 #[derive(Debug, Clone, Default)]
 pub struct AmmoResponse {
     pub mag_size: i32,
     pub reserve_size: i32,
+    pub timestamp: u64,
 }
 
 #[derive(Debug, Clone, Default)]
 pub struct ReloadResponse {
     pub reload_time: f64,
     pub ammo_time: f64,
+    pub timestamp: u64,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -158,6 +190,8 @@ pub struct FiringResponse {
     pub burst_size: i32,
 
     pub rpm: f64,
+
+    pub timestamp: u64,
 }
 impl FiringResponse{
     pub fn apply_pve_bonuses(&mut self, _rpl_mult: f64, _gpl_mult: f64, _pve_mult: f64, _combatant_mult: f64) {

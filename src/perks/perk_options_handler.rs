@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use serde::Serialize;
 
-use super::{Perk, Perks, enhanced_handler::enhanced_check};
+use super::{Perk, Perks, enhanced_check};
 
 #[derive(Debug, Clone, Serialize)]
 pub enum PerkValueVariant {
@@ -125,7 +125,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::FieldPrep => Some(PerkOptionData::toggle()),
         Perks::Rampage => Some(PerkOptionData::stacking(3)),
         Perks::OpeningShot => Some(PerkOptionData::toggle()),
-        Perks::MovingTarget => Some(PerkOptionData::static_()),
+        Perks::MovingTarget => Some(PerkOptionData::toggle()),
         Perks::AmbitiousAssassin => Some(PerkOptionData::stacking(15)),
         Perks::ClusterBomb => Some(PerkOptionData::static_()),
         Perks::ExplosivePayload => Some(PerkOptionData::static_()),
@@ -322,7 +322,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::Frequency => Some(PerkOptionData::toggle()),
         Perks::Tempering => Some(PerkOptionData::toggle()),
         Perks::DragonShadow => Some(PerkOptionData::toggle()),
-        Perks::OphidianAspect => Some(PerkOptionData::toggle()),
+        Perks::OphidianAspect => Some(PerkOptionData::static_()),
         Perks::Hedrons => Some(PerkOptionData::toggle()),
         Perks::HeatRises => Some(PerkOptionData::toggle()),
         Perks::RallyBarricade => Some(PerkOptionData::toggle()),
@@ -336,7 +336,27 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::MantleOfBattleHarmony => Some(PerkOptionData::static_()),
         Perks::MaskOfBakris => Some(PerkOptionData::options(
             ["one buff", "both buffs"].to_vec())),
-        Perks::BallindorseWrathweavers => Some(PerkOptionData::static_()),
+        Perks::BallindorseWrathweavers => Some(PerkOptionData::toggle()),
+        Perks::LunaFaction => Some(PerkOptionData::options(["Heal Rift", "Empowering Rift / Well"].to_vec())),
+        Perks::Foetracer => Some(PerkOptionData::toggle()),
+        Perks::MechaneersTricksleeves => Some(PerkOptionData::toggle()),
+        Perks::Oathkeeper => Some(PerkOptionData::static_()),
+        Perks::SealedAhamkaraGrasps => Some(PerkOptionData::static_()),
+        Perks::LuckyPants => Some(PerkOptionData::toggle()),
+        Perks::Stompees => Some(PerkOptionData::static_()),
+        Perks::NoBackupPlans => Some(PerkOptionData::static_()),
+        Perks::ActiumWarRig => Some(PerkOptionData::static_()),
+        Perks::HallowfireHeart => Some(PerkOptionData::static_()),
+        Perks::LionRampart => Some(PerkOptionData::toggle()),
+        Perks::Peacekeepers => Some(PerkOptionData::static_()),
+        Perks::EyeOfAnotherWorld => Some(PerkOptionData::static_()),
+        Perks::AstrocyteVerse => Some(PerkOptionData::static_()),
+        Perks::NecroticGrips => Some(PerkOptionData::static_()),
+        Perks::BootsOfTheAssembler => Some(PerkOptionData::toggle()),
+        Perks::RainOfFire => Some(PerkOptionData::static_()),
+        Perks::SpeedloaderSlacks => Some(PerkOptionData::stacking(5)),
+        Perks::PeregrineGreaves => Some(PerkOptionData::static_()),
+
         _ => None,
     }
 }

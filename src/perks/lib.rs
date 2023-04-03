@@ -1,8 +1,8 @@
 use crate::{
     d2_enums::{AmmoType, DamageType, StatHashes, WeaponType, StatBump, BungieHash, DamageSource},
     enemies::EnemyType,
-    types::rs_types::HandlingResponse,
-    weapons::{FiringData, Stat},
+    types::rs_types::{HandlingResponse, FiringData},
+    weapons::Stat,
 };
 use std::{cell::RefCell, collections::HashMap, ops::Mul};
 use serde::Serialize;
@@ -368,7 +368,6 @@ impl Default for ExplosivePercentResponse {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
-
 pub struct DamageResistModifierResponse {
     pub body_shot_resist: f64,
     pub head_shot_resist: f64,
@@ -387,7 +386,7 @@ impl Default for DamageResistModifierResponse {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
-pub struct ModifierResponse{
+pub struct ModifierResponseSummary{
     pub rmr: Option<RangeModifierResponse>,
     pub dmr: Option<DamageModifierResponse>, 
     pub hmr: Option<HandlingModifierResponse>, 
@@ -401,7 +400,7 @@ pub struct ModifierResponse{
 }
     
 
-impl Default for ModifierResponse {
+impl Default for ModifierResponseSummary {
     fn default() -> Self {
         Self {
             rmr: None,

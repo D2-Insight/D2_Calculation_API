@@ -280,6 +280,20 @@ pub(super) fn imr_field_prep(
     }
 }
 
+pub(super) fn hmr_field_prep(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse{
+    let mut hmr = HandlingModifierResponse::default();
+    if _value >= 1 {
+        hmr.handling_swap_scale = 0.8;
+    }
+    hmr
+} 
+
 pub(super) fn sbr_firmly_planted(
     _input: &CalculationInput,
     _value: u32,
@@ -418,7 +432,9 @@ pub(super) fn sbr_moving_target(
 ) -> HashMap<u32, i32> {
     let aim_assist = if _is_enhanced { 11 } else { 10 };
     let mut out = HashMap::new();
-    out.insert(StatHashes::AIM_ASSIST.into(), aim_assist);
+    if _value >= 1 {
+        out.insert(StatHashes::AIM_ASSIST.into(), aim_assist);
+    }
     out
 }
 

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{StatHashes, WeaponType, DamageType};
+use crate::d2_enums::{StatHashes, WeaponType, DamageType, AmmoType};
 
 use super::{
     clamp,
@@ -14,7 +14,7 @@ use super::{
 fn emp_buff(_cached_data: &mut HashMap<String, f64>, _desired_buff: f64) -> f64 {
     let current_buff = _cached_data.get("empowering").unwrap_or(&1.0).to_owned();
     if current_buff >= _desired_buff {
-        return 0.0;
+        return 1.0;
     } else {
         _cached_data.insert("empowering".to_string(), _desired_buff);
         return _desired_buff / current_buff;
@@ -24,7 +24,7 @@ fn emp_buff(_cached_data: &mut HashMap<String, f64>, _desired_buff: f64) -> f64 
 fn gbl_debuff(_cached_data: &mut HashMap<String, f64>, _desired_buff: f64) -> f64 {
     let current_buff = _cached_data.get("debuff").unwrap_or(&1.0).to_owned();
     if current_buff >= _desired_buff {
-        return 0.0;
+        return 1.0;
     } else {
         _cached_data.insert("debuff".to_string(), _desired_buff);
         return _desired_buff / current_buff;
@@ -58,6 +58,7 @@ pub(super) fn dmr_blessing_of_the_sky(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
+    if _value == 0 {return DamageModifierResponse::default()}
     let des_buff = if _pvp { 1.15 } else { 1.35 };
     let buff = emp_buff(_cached_data, des_buff);
     DamageModifierResponse {
@@ -300,37 +301,4 @@ pub(super) fn dmr_dsc_scanner_mod(
         explosive_dmg_scale: debuff,
         ..Default::default()
     }
-}
-
-// random shit
-
-pub(super) fn dmr_bakris(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let combo_val = if _value > 0 { 1.1 } else { 1.0 };
-    DamageModifierResponse {
-        impact_dmg_scale: 1.1*combo_val,
-        explosive_dmg_scale: 1.1*combo_val,
-        ..Default::default()
-    }
-}
-
-pub(super) fn dmr_cold_balls( //BALLIDORSE WRATHWEAVERS
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let mut modifier = DamageModifierResponse::default();
-    let value = if _pvp {1.05} else {1.15};
-    if _input.damage_type == &DamageType::STASIS {
-         modifier.impact_dmg_scale = value;
-         modifier.explosive_dmg_scale = value;
-    }
-    return modifier;
 }

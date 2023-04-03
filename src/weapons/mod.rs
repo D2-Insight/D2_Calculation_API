@@ -15,7 +15,7 @@ use crate::perks::{
 };
 
 use crate::types::rs_types::{
-    AmmoFormula, DamageMods, DpsResponse, HandlingFormula, RangeFormula, ReloadFormula,
+    AmmoFormula, DamageMods, DpsResponse, HandlingFormula, RangeFormula, ReloadFormula, FiringData,
 };
 
 use self::dps_calc::complex_dps_calc;
@@ -54,16 +54,7 @@ impl From<i32> for Stat {
     }
 }
 
-#[derive(Debug, Clone, Default, Copy, Serialize)]
-pub struct FiringData {
-    pub damage: f64,
-    pub crit_mult: f64,
-    pub burst_delay: f64,
-    pub inner_burst_delay: f64,
-    pub burst_size: i32,
-    pub one_ammo: bool,
-    pub charge: bool,
-}
+
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Weapon {
