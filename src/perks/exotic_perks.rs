@@ -455,10 +455,11 @@ pub(super) fn dmr_hakke_heavy_burst(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
+    let crit_scale = (1.5 + 5.0/51.0)/_input.base_crit_mult;
     DamageModifierResponse {
         explosive_dmg_scale: 1.48,
         impact_dmg_scale: 1.48,
-        crit_scale: 0.941,
+        crit_scale
     }
 }
 
