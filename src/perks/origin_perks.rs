@@ -307,7 +307,7 @@ pub(super) fn mmr_runneth_over(
 ) -> MagazineModifierResponse {
     let val = clamp(_value, 0, 5) as f64;
     MagazineModifierResponse {
-        magazine_scale: val * 0.1,
+        magazine_scale: 1.0 + val * 0.1,
         ..Default::default()
     }
 }

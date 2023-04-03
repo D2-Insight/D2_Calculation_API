@@ -398,7 +398,6 @@ pub struct ModifierResponseSummary{
     pub drmr: Option<DamageResistModifierResponse>,
     pub statbump: Option<HashMap<BungieHash, StatBump>>,
 }
-    
 
 impl Default for ModifierResponseSummary {
     fn default() -> Self {
