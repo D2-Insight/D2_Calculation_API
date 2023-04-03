@@ -554,6 +554,7 @@
         "891750167":  {"name": "Revision Zero III",      "cat": "default",   "subFam": "Aggressive",    "magProf": "default"},
         "891750166":  {"name": "Revision Zero II",       "cat": "default",   "subFam": "Aggressive",    "magProf": "default"},
         "3834106778": {"name": "Revision Zero I",        "cat": "default",   "subFam": "Aggressive",    "magProf": "default"},
+        "69420":      {"name": "test_weapon",            "cat": "test",      "subFam": "test",          "magProf": "test"},
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.07378,"offset_start": 16.329,"vpp_end": 0.0,"offset_end": 40.4, "floor_percent": 0.5},
@@ -564,20 +565,35 @@
                     "ads":  {"vpp": -0.00196208, "offset": 0.45746870}
                 },
                 "combatant_scalars": {"vehicle": 0.90, "boss": 1.00, "champion": 1.05, "miniboss": 1.05, "elite": 1.05, "minor": 1.48}
+            },
+            "test": {
+                "range": {"vpp_start": 0.1, "offset_start": 10.0, "vpp_end": 0.2, "offset_end": 20.0, "floor_percent": 0.5},
+                "reload": {"evpp": 0.0, "vpp": 0.5, "offset": 10.0},
+                "handling": {
+                    "ready": {"vpp": 0.0, "offset": 5.0},
+                    "stow": {"vpp": 0.1, "offset": 0.0},
+                    "ads": {"vpp": 0.05, "offset": 2.5}
+                },
+                "combatant_scalars": {"vehicle": 1.0, "boss": 1.0, "champion": 1.0, "miniboss": 1.0, "elite": 1.0, "minor": 1.0}
             }
         },
         "subFam": {
-            "Aggressive":    {"damage": 15.5, "crit_mult": 8,  "burst_delay": 10,  "burst_size": 4, "inner_burst_delay": 2},
-            "High-Impact":   {"damage": 22.0, "crit_mult": 5,  "burst_delay": 12, "burst_size": 3, "inner_burst_delay": 2},
-            "Rapid-Fire":    {"damage": 14.0, "crit_mult": 10,  "burst_delay": 6, "burst_size": 3, "inner_burst_delay": 2},
-            "Adaptive":      {"damage": 19.0, "crit_mult": 8,  "burst_delay": 10, "burst_size": 3, "inner_burst_delay": 2},
-            "Lightweight":   {"damage": 16.0, "crit_mult": 8,  "burst_delay": 8,  "burst_size": 3, "inner_burst_delay": 2},
-            "VigilanceWing": {"damage": 15.7, "crit_mult": -2, "burst_delay": 9,  "burst_size": 5, "inner_burst_delay": 2},
-            "GravitonLance": {"damage": 23.0, "crit_mult": 8,  "burst_delay": 12, "burst_size": 2, "inner_burst_delay": 2}
+            "Aggressive":    {"damage": 15.5, "crit_mult": 8,    "burst_delay": 10, "burst_size": 4, "inner_burst_delay": 2},
+            "High-Impact":   {"damage": 22.0, "crit_mult": 5,    "burst_delay": 12, "burst_size": 3, "inner_burst_delay": 2},
+            "Rapid-Fire":    {"damage": 14.0, "crit_mult": 10,   "burst_delay": 6,  "burst_size": 3, "inner_burst_delay": 2},
+            "Adaptive":      {"damage": 19.0, "crit_mult": 8,    "burst_delay": 10, "burst_size": 3, "inner_burst_delay": 2},
+            "Lightweight":   {"damage": 16.0, "crit_mult": 8,    "burst_delay": 8,  "burst_size": 3, "inner_burst_delay": 2},
+            "VigilanceWing": {"damage": 15.7, "crit_mult": -2,   "burst_delay": 9,  "burst_size": 5, "inner_burst_delay": 2},
+            "GravitonLance": {"damage": 23.0, "crit_mult": 8,    "burst_delay": 12, "burst_size": 2, "inner_burst_delay": 2},
+            "test":          {"damage": 10.0, "crit_mult": 25.5, "burst_delay": 2,  "burst_size": 5, "inner_burst_delay": 2}
         },
         "magProf": {
             "default": {
                 "mag": {"evpp": 0.0, "vpp": 0.3, "offset": 17.5},
+                "reserve_id": 0
+            },
+            "test": {
+                "mag": {"evpp": 0.0, "vpp": 0.5, "offset": 25.0},
                 "reserve_id": 0
             }
         }

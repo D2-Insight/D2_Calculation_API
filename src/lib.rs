@@ -10,6 +10,8 @@ pub mod logging;
 pub mod perks;
 pub mod types;
 pub mod weapons;
+#[cfg(test)]
+mod test;
 
 use crate::perks::{Perk, Perks};
 use crate::weapons::{Stat, Weapon};
