@@ -4,7 +4,8 @@ use serde::Serialize;
 
 use crate::{
     d2_enums::WeaponType,
-    perks::{get_dmg_modifier, get_firing_modifier, lib::CalculationInput}, logging::extern_log,
+    logging::extern_log,
+    perks::{get_dmg_modifier, get_firing_modifier, lib::CalculationInput},
 };
 
 use super::{FiringData, Weapon};
@@ -81,12 +82,12 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
         let opt_bodyshots = 0;
         let mut opt_headshots = 0;
         let mut opt_bullet_timeline: Vec<(f64, f64)> = Vec::new();
-        
+
         //Optimal ttk
         while opt_bullets_hit < 50.0 {
             //PERK CALCULATIONS////////////
-            
-            persistent_data.insert("health%".to_string(), opt_damage_dealt/health);
+
+            persistent_data.insert("health%".to_string(), opt_damage_dealt / health);
             persistent_data.insert("empowering".to_string(), 1.0);
             persistent_data.insert("debuff".to_string(), 1.0);
             let calc_input = _weapon.pvp_calc_input(
@@ -107,8 +108,11 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 true,
                 &mut persistent_data,
             );
-            let tmp_range_data =
-                _weapon.calc_range_falloff(Some(calc_input.clone()), Some(&mut persistent_data), true);
+            let tmp_range_data = _weapon.calc_range_falloff(
+                Some(calc_input.clone()),
+                Some(&mut persistent_data),
+                true,
+            );
             if tmp_range_data.ads_falloff_start > 998.0 {
                 opt_infnite_range = true;
             } else {
@@ -161,7 +165,11 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 opt_damage_dealt += body_damage + head_diff;
                 if _weapon.weapon_type == WeaponType::BOW {
                     opt_time_taken += _weapon
-                        .calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data), true)
+                        .calc_reload_time(
+                            Some(calc_input.clone()),
+                            Some(&mut persistent_data),
+                            true,
+                        )
                         .reload_time;
                 }
             }
@@ -213,7 +221,7 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
         let mut bdy_damage_dealt = 0.0;
         while bdy_bullets_hit < 50.0 {
             //PERK CALCULATIONS////////////
-            persistent_data.insert("health%".to_string(), bdy_damage_dealt/health);
+            persistent_data.insert("health%".to_string(), bdy_damage_dealt / health);
             let calc_input = _weapon.pvp_calc_input(
                 bdy_bullets_fired,
                 bdy_bullets_hit,

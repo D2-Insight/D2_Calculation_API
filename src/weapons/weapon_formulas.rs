@@ -1,22 +1,29 @@
 use std::collections::HashMap;
 
-use crate::{types::rs_types::{StatQuadraticFormula, RangeFormula, HandlingFormula, ReloadFormula, DamageMods, AmmoFormula, DataPointers, WeaponPath}, d2_enums::{DamageType, AmmoType, WeaponType}, perks::{Perk, enhanced_check}, database};
+use crate::{
+    d2_enums::{AmmoType, DamageType, WeaponType},
+    database,
+    perks::{enhanced_check, Perk},
+    types::rs_types::{
+        AmmoFormula, DamageMods, DataPointers, HandlingFormula, RangeFormula, ReloadFormula,
+        StatQuadraticFormula, WeaponPath,
+    },
+};
 
-use super::{Weapon, FiringData};
+use super::{FiringData, Weapon};
 
-
-
-
-fn get_data_pointers(_weapon_type_id: u8, _intrinsic_hash: u32,) -> Result<DataPointers, String> {
-    let pointer_map:HashMap<WeaponPath, DataPointers> = HashMap::from(database::DATA_POINTERS);
+fn get_data_pointers(_weapon_type_id: u8, _intrinsic_hash: u32) -> Result<DataPointers, String> {
+    let pointer_map: HashMap<WeaponPath, DataPointers> = HashMap::from(database::DATA_POINTERS);
     let pointer_result = pointer_map.get(&WeaponPath(_weapon_type_id as u32, _intrinsic_hash));
     if pointer_result.is_none() {
-        return Err(format!("No data pointers found for intrinsic hash: {}", _intrinsic_hash));
+        return Err(format!(
+            "No data pointers found for intrinsic hash: {}",
+            _intrinsic_hash
+        ));
     }
     let pointer = pointer_result.unwrap();
     Ok(pointer.clone())
 }
-
 
 impl Weapon {
     pub fn generate_weapon(
@@ -72,16 +79,7 @@ impl Weapon {
                 ),
             ]),
             stats: HashMap::new(),
-            perk_value_map: HashMap::from([
-                (
-                    intrinsic_alias,
-                    0
-                ),
-                (
-                    0,
-                    0
-                ),
-            ]),
+            perk_value_map: HashMap::from([(intrinsic_alias, 0), (0, 0)]),
             damage_mods,
             ammo_formula,
             firing_data,

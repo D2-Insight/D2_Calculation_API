@@ -1,7 +1,7 @@
 #![allow(dead_code)]
+use super::Activity;
 use crate::{enemies::EnemyType, types::rs_types::DamageMods};
 use serde::{Deserialize, Serialize};
-use super::Activity;
 
 #[derive(Debug, Clone, Copy)]
 struct TableKey {
@@ -131,7 +131,11 @@ pub(super) fn gpl_delta(_activity: Activity, _gpl: u32) -> f64 {
     let difficulty_data = _activity.difficulty.get_difficulty_data();
     let curve = difficulty_data.table;
     let rpl = _activity.rpl;
-    let cap = if _activity.cap<difficulty_data.cap {_activity.cap} else {difficulty_data.cap};
+    let cap = if _activity.cap < difficulty_data.cap {
+        _activity.cap
+    } else {
+        difficulty_data.cap
+    };
     let mut delta = _gpl as i32 - rpl as i32;
     if delta < -99 {
         return 0.0;
@@ -143,13 +147,18 @@ pub(super) fn gpl_delta(_activity: Activity, _gpl: u32) -> f64 {
     wep_delta_mult * gear_delta_mult
 }
 
-pub(super) fn remove_pve_bonuses(_rpl: f64, _pl: u32, _combatant_mult: f64, _difficulty: DifficultyOptions, _damage: f64)->f64{
+pub(super) fn remove_pve_bonuses(
+    _rpl: f64,
+    _pl: u32,
+    _combatant_mult: f64,
+    _difficulty: DifficultyOptions,
+    _damage: f64,
+) -> f64 {
     let rpl_mult = rpl_mult(_rpl);
     let mut tmp_activity = Activity::default();
     tmp_activity.difficulty = _difficulty;
     tmp_activity.rpl = _rpl as u32;
     let gpl_delta = gpl_delta(tmp_activity, _pl);
 
-    _damage / (gpl_delta*rpl_mult*_combatant_mult)
-
+    _damage / (gpl_delta * rpl_mult * _combatant_mult)
 }

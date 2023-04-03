@@ -6,8 +6,8 @@ use super::{
     clamp,
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
-        HandlingModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
-        ReloadModifierResponse, ReloadOverrideResponse, FlinchModifierResponse,
+        FlinchModifierResponse, HandlingModifierResponse, MagazineModifierResponse,
+        RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse,
     },
 };
 
@@ -27,17 +27,17 @@ pub(super) fn rr_veist_stinger(
     };
     let time_since_last_proc = _input.time_total - last_proc;
     if time_since_last_proc >= 4.0 && _value > 0 {
-        let max_refund = _input.base_mag-_input.curr_mag;
-        let refund_amount = (_input.base_mag/4.0).ceil() as i32;
+        let max_refund = _input.base_mag - _input.curr_mag;
+        let refund_amount = (_input.base_mag / 4.0).ceil() as i32;
         if max_refund > 0.0 {
             _cached_data.insert("veist_stinger".to_string(), _input.time_total);
             let final_refund_ammount = clamp(refund_amount, 0, max_refund as i32);
-            return RefundResponse{
+            return RefundResponse {
                 requirement: 1,
                 crit: false,
                 refund_mag: refund_amount,
                 refund_reserves: -final_refund_ammount,
-            }
+            };
         } else {
             RefundResponse::default()
         }
@@ -312,7 +312,6 @@ pub(super) fn mmr_runneth_over(
     }
 }
 
-
 pub(super) fn sbr_tex_balanced_stock(
     _input: &CalculationInput,
     _value: u32,
@@ -399,13 +398,11 @@ pub(super) fn flmr_suros_synergy(
     _value: u32,
     _is_enhanced: bool,
     _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>
-)-> FlinchModifierResponse {
+    _cached_data: &mut HashMap<String, f64>,
+) -> FlinchModifierResponse {
     if _value > 0 {
-        FlinchModifierResponse {
-            flinch_scale: 0.80,
-        }
+        FlinchModifierResponse { flinch_scale: 0.80 }
     } else {
-    FlinchModifierResponse::default()
+        FlinchModifierResponse::default()
     }
 }

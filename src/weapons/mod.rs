@@ -15,7 +15,7 @@ use crate::perks::{
 };
 
 use crate::types::rs_types::{
-    AmmoFormula, DamageMods, DpsResponse, HandlingFormula, RangeFormula, ReloadFormula, FiringData,
+    AmmoFormula, DamageMods, DpsResponse, FiringData, HandlingFormula, RangeFormula, ReloadFormula,
 };
 
 use self::dps_calc::complex_dps_calc;
@@ -53,8 +53,6 @@ impl From<i32> for Stat {
         }
     }
 }
-
-
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Weapon {
@@ -218,7 +216,6 @@ impl Weapon {
 impl Default for Weapon {
     fn default() -> Weapon {
         Weapon {
-
             intrinsic_hash: 0,
             hash: 0,
 

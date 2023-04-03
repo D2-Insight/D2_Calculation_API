@@ -1,11 +1,9 @@
-
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum LogLevel {
     Error,
     Warning,
     Info,
-    Debug
+    Debug,
 }
 impl From<usize> for LogLevel {
     fn from(i: usize) -> Self {
@@ -14,7 +12,7 @@ impl From<usize> for LogLevel {
             1 => LogLevel::Warning,
             2 => LogLevel::Info,
             3 => LogLevel::Debug,
-            _ => panic!("Invalid log level")
+            _ => panic!("Invalid log level"),
         }
     }
 }
@@ -24,7 +22,7 @@ impl From<LogLevel> for usize {
             LogLevel::Error => 0,
             LogLevel::Warning => 1,
             LogLevel::Info => 2,
-            LogLevel::Debug => 3
+            LogLevel::Debug => 3,
         }
     }
 }

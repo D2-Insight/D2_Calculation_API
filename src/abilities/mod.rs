@@ -1,4 +1,3 @@
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum AbilityType {
     GRENADE,
@@ -10,7 +9,7 @@ pub enum AbilityType {
     WEAPON,
     ARMOR,
     MISC,
-    UNKNOWN
+    UNKNOWN,
 }
 impl Default for AbilityType {
     fn default() -> Self {
@@ -24,7 +23,7 @@ pub struct AbilityDamageProfile {
     secondary: f64,
     sec_hit_count: u32,
     lin_hit_scalar: f64,
-    crit_mult: f64,// if 1.0, no crit
+    crit_mult: f64, // if 1.0, no crit
 }
 
 #[derive(Debug, Clone, Default)]

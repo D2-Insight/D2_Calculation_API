@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{StatHashes, WeaponType, DamageType, AmmoType};
+use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponType};
 
 use super::{
     clamp,
@@ -58,7 +58,9 @@ pub(super) fn dmr_blessing_of_the_sky(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    if _value == 0 {return DamageModifierResponse::default()}
+    if _value == 0 {
+        return DamageModifierResponse::default();
+    }
     let des_buff = if _pvp { 1.15 } else { 1.35 };
     let buff = emp_buff(_cached_data, des_buff);
     DamageModifierResponse {
@@ -92,13 +94,15 @@ pub(super) fn dmr_path_of_burning_steps(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    if _value == 0 {return DamageModifierResponse::default()}
+    if _value == 0 {
+        return DamageModifierResponse::default();
+    }
     let pvp_values = [1.15, 1.25, 1.2, 1.35];
     let pve_values = [1.2, 1.25, 1.35, 1.4];
     let des_buff = if _pvp {
-        pvp_values[clamp(_value-1, 0, 3) as usize]
+        pvp_values[clamp(_value - 1, 0, 3) as usize]
     } else {
-        pve_values[clamp(_value-1, 0, 3) as usize]
+        pve_values[clamp(_value - 1, 0, 3) as usize]
     };
     let buff = emp_buff(_cached_data, des_buff);
     DamageModifierResponse {
@@ -211,7 +215,11 @@ pub(super) fn dmr_umbral_vow_mod(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let pve_values = [1.2, 1.25, 1.35, 1.4];
-    let des_buff = if _pvp { 1.0 } else { pve_values[clamp(_value, 0, 3) as usize] };
+    let des_buff = if _pvp {
+        1.0
+    } else {
+        pve_values[clamp(_value, 0, 3) as usize]
+    };
     let buff = emp_buff(_cached_data, des_buff);
     DamageModifierResponse {
         impact_dmg_scale: buff,
@@ -295,7 +303,11 @@ pub(super) fn dmr_dsc_scanner_mod(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let pve_values = [1.08, 1.137, 1.173, 1.193, 1.2];
-    let des_debuff = if _pvp { 1.0 } else { pve_values[clamp(_value, 0, 4) as usize] };
+    let des_debuff = if _pvp {
+        1.0
+    } else {
+        pve_values[clamp(_value, 0, 4) as usize]
+    };
     let debuff = gbl_debuff(_cached_data, des_debuff);
     DamageModifierResponse {
         impact_dmg_scale: debuff,

@@ -286,13 +286,13 @@ pub(super) fn hmr_field_prep(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HandlingModifierResponse{
+) -> HandlingModifierResponse {
     let mut hmr = HandlingModifierResponse::default();
     if _value >= 1 {
         hmr.handling_swap_scale = 0.8;
     }
     hmr
-} 
+}
 
 pub(super) fn sbr_firmly_planted(
     _input: &CalculationInput,

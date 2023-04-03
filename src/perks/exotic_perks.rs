@@ -4,14 +4,14 @@ use std::collections::HashMap;
 use crate::{d2_enums::StatHashes, enemies::EnemyType, weapons::Stat};
 
 use super::{
+    buff_perks::dmr_blessing_of_the_sky,
     clamp,
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
         HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
         RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse,
-    }, buff_perks::dmr_blessing_of_the_sky,
+    },
 };
-
 
 pub(super) fn dmr_paracausal_shot(
     _input: &CalculationInput,
@@ -49,7 +49,7 @@ pub(super) fn sbr_hunters_trance(
 ) -> HashMap<u32, i32> {
     let mut out = HashMap::new();
     let inter_val = *_input.perk_value_map.get(&213689231).unwrap_or(&0);
-    let buff_val = (clamp(inter_val, 0, 7)*5) as i32;
+    let buff_val = (clamp(inter_val, 0, 7) * 5) as i32;
     out.insert(StatHashes::RELOAD.into(), buff_val);
     out.insert(StatHashes::RANGE.into(), buff_val);
     out.insert(StatHashes::HANDLING.into(), buff_val);
@@ -64,7 +64,7 @@ pub(super) fn rsmr_hunters_trance(
     _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let inter_val = *_input.perk_value_map.get(&213689231).unwrap_or(&0);
-    let buff_val = (clamp(inter_val, 0, 7)*5) as i32;
+    let buff_val = (clamp(inter_val, 0, 7) * 5) as i32;
     ReloadModifierResponse {
         reload_stat_add: buff_val,
         ..Default::default()
@@ -79,7 +79,7 @@ pub(super) fn rmr_hunters_trance(
     _cached_data: &mut HashMap<String, f64>,
 ) -> RangeModifierResponse {
     let inter_val = *_input.perk_value_map.get(&213689231).unwrap_or(&0);
-    let buff_val = (clamp(inter_val, 0, 7)*5) as i32;
+    let buff_val = (clamp(inter_val, 0, 7) * 5) as i32;
     RangeModifierResponse {
         range_stat_add: buff_val,
         ..Default::default()
@@ -94,7 +94,7 @@ pub(super) fn hmr_hunters_trance(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     let inter_val = *_input.perk_value_map.get(&213689231).unwrap_or(&0);
-    let buff_val = (clamp(inter_val, 0, 7)*5) as i32;
+    let buff_val = (clamp(inter_val, 0, 7) * 5) as i32;
     HandlingModifierResponse {
         handling_stat_add: buff_val,
         ..Default::default()
@@ -455,11 +455,11 @@ pub(super) fn dmr_hakke_heavy_burst(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    let crit_scale = (1.5 + 5.0/51.0)/_input.base_crit_mult;
+    let crit_scale = (1.5 + 5.0 / 51.0) / _input.base_crit_mult;
     DamageModifierResponse {
         explosive_dmg_scale: 1.48,
         impact_dmg_scale: 1.48,
-        crit_scale
+        crit_scale,
     }
 }
 
@@ -548,7 +548,11 @@ pub(super) fn dmr_ravenous_beast(
     let mut crit_mult = 1.0;
     if _value > 0 {
         damage_mult = if _pvp { 2.2 } else { 2.87 };
-        crit_mult = if _pvp { 1.0 / (1.5 + -3.0 / 51.0) } else { 1.99 / 2.87 };
+        crit_mult = if _pvp {
+            1.0 / (1.5 + -3.0 / 51.0)
+        } else {
+            1.99 / 2.87
+        };
     }
     DamageModifierResponse {
         impact_dmg_scale: damage_mult,
@@ -949,8 +953,8 @@ pub(super) fn fmr_rat_pack(
     } else {
         val = 0;
     }
-    FiringModifierResponse{
-        burst_delay_add: val as f64 * (-0.625/30.0),
+    FiringModifierResponse {
+        burst_delay_add: val as f64 * (-0.625 / 30.0),
         ..Default::default()
     }
 }
@@ -963,7 +967,7 @@ pub(super) fn mmr_rat_pack(
     _cached_data: &mut HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     let val = clamp(_value - 1, 0, 4);
-    MagazineModifierResponse{
+    MagazineModifierResponse {
         magazine_add: val as f64 * if val == 4 { 2.25 } else { 2.0 },
         ..Default::default()
     }
@@ -978,8 +982,8 @@ pub(super) fn fmr_ride_the_bull(
 ) -> FiringModifierResponse {
     let extra_value = _input.shots_fired_this_mag as f64 / 10.0;
     let val = clamp(_value + extra_value as u32, 0, 2);
-    FiringModifierResponse{
-        burst_delay_add: val as f64 * (-0.25/30.0),
+    FiringModifierResponse {
+        burst_delay_add: val as f64 * (-0.25 / 30.0),
         ..Default::default()
     }
 }
@@ -993,8 +997,8 @@ pub(super) fn fmr_spinning_up(
 ) -> FiringModifierResponse {
     let extra_value = _input.shots_fired_this_mag as f64 / 12.0;
     let val = clamp(_value + extra_value as u32, 0, 2);
-    FiringModifierResponse{
-        burst_delay_add: val as f64 * (-0.5/30.0),
+    FiringModifierResponse {
+        burst_delay_add: val as f64 * (-0.5 / 30.0),
         ..Default::default()
     }
 }

@@ -7,15 +7,22 @@ use crate::{
     enemies::EnemyType,
     perks::Perk,
     types::rs_types::StatQuadraticFormula,
-    weapons::{ttk_calc::{ResillienceSummary, OptimalKillData, BodyKillData}, Stat},
+    weapons::{
+        ttk_calc::{BodyKillData, OptimalKillData, ResillienceSummary},
+        Stat,
+    },
 };
 use serde::{Deserialize, Serialize};
 // use tsify::Tsify;
-use wasm_bindgen::{prelude::wasm_bindgen, JsValue, convert::{IntoWasmAbi, WasmSlice}};
+use wasm_bindgen::{
+    convert::{IntoWasmAbi, WasmSlice},
+    prelude::wasm_bindgen,
+    JsValue,
+};
 
 use super::rs_types::{
-    AmmoFormula, AmmoResponse, DamageMods, DpsResponse, FiringResponse, HandlingFormula,
-    HandlingResponse, RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, FiringData
+    AmmoFormula, AmmoResponse, DamageMods, DpsResponse, FiringData, FiringResponse,
+    HandlingFormula, HandlingResponse, RangeFormula, RangeResponse, ReloadFormula, ReloadResponse,
 };
 
 #[derive(Debug, Clone, Copy, Serialize)]
@@ -93,7 +100,7 @@ impl From<ReloadResponse> for JsReloadResponse {
 #[derive(Debug, Clone, Copy, Serialize)]
 #[wasm_bindgen(js_name = "AmmoResponse", inspectable)]
 pub struct JsAmmoResponse {
-    #[wasm_bindgen(js_name = "magSize" ,readonly)]
+    #[wasm_bindgen(js_name = "magSize", readonly)]
     pub mag_size: i32,
     #[wasm_bindgen(js_name = "reserveSize", readonly)]
     pub reserve_size: i32,

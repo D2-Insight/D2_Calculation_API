@@ -1,10 +1,10 @@
-use std::{collections::HashMap};
+use std::collections::HashMap;
 
 use super::{reserve_calc::calc_reserves, Stat, Weapon};
 use crate::{
     d2_enums::{MetersPerSecond, Seconds, StatHashes, WeaponType},
     perks::{
-        Perks, get_dmg_modifier, get_explosion_data, get_firing_modifier, get_flinch_modifier,
+        get_dmg_modifier, get_explosion_data, get_firing_modifier, get_flinch_modifier,
         get_handling_modifier, get_magazine_modifier, get_range_modifier, get_reload_modifier,
         get_reserve_modifier, get_velocity_modifier,
         lib::{
@@ -12,6 +12,7 @@ use crate::{
             HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
             RangeModifierResponse, ReloadModifierResponse,
         },
+        Perks,
     },
     types::rs_types::{
         AmmoFormula, AmmoResponse, FiringResponse, HandlingFormula, HandlingResponse, RangeFormula,
@@ -152,7 +153,7 @@ impl HandlingFormula {
             ready_time,
             stow_time,
             ads_time,
-            timestamp: self.timestamp
+            timestamp: self.timestamp,
         }
     }
 }
@@ -520,7 +521,7 @@ impl Weapon {
             .perk_val()
             .clamp(0, 100)
             .into();
-        if self.perks.get(&1449897496).is_some() && self.weapon_type == WeaponType::BOW{
+        if self.perks.get(&1449897496).is_some() && self.weapon_type == WeaponType::BOW {
             return Seconds::INFINITY;
         }
         match self.intrinsic_hash {
@@ -560,7 +561,7 @@ impl Weapon {
     pub fn get_misc_stats(
         &self,
         _calc_input: Option<CalculationInput>,
-        _pvp: bool
+        _pvp: bool,
     ) -> HashMap<String, f64> {
         let mut buffer: HashMap<String, f64> = HashMap::new();
         let mut cached_data: HashMap<String, f64> = HashMap::new();

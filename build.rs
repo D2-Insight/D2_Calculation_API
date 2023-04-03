@@ -1,6 +1,6 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use serde_json::{Map, Number, Value};
-use std::collections::{HashMap, BTreeMap};
+use std::collections::{BTreeMap, HashMap};
 use std::fmt::Debug;
 use std::fs::File;
 use std::io::Write;
@@ -15,15 +15,15 @@ struct CachedBuildData {
 }
 impl CachedBuildData {
     fn has_data(&self) -> bool {
-        !self.last_manifest_version.is_empty() &&
-        !self.dim_perk_mappings.is_empty() &&
-        !self.procedural_intrinsic_mappings.is_empty() &&
-        !self.perk_formula_timestamps.is_empty()
+        !self.last_manifest_version.is_empty()
+            && !self.dim_perk_mappings.is_empty()
+            && !self.procedural_intrinsic_mappings.is_empty()
+            && !self.perk_formula_timestamps.is_empty()
     }
 
     fn get_timestamp(&mut self, formula: &impl UuidTimestamp) -> u64 {
         // get current unix time
-        let uuid = (formula.uuid()*10.0).to_bits() as u64;
+        let uuid = (formula.uuid() * 10.0).to_bits() as u64;
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
             .unwrap()
@@ -91,7 +91,7 @@ impl From<&Map<String, Value>> for StatQuadraticFormula {
 }
 impl UuidTimestamp for StatQuadraticFormula {
     fn uuid(&self) -> f64 {
-        (self.evpp-11.0)*97293.0 + self.vpp*84892.0 + self.offset*3321.0
+        (self.evpp - 11.0) * 97293.0 + self.vpp * 84892.0 + self.offset * 3321.0
     }
 }
 
@@ -104,7 +104,7 @@ pub struct DamageMods {
     pub champion: f64,
     pub boss: f64,
     pub vehicle: f64,
-    pub timestamp: u64
+    pub timestamp: u64,
 }
 impl From<&Map<String, Value>> for DamageMods {
     fn from(_val: &Map<String, Value>) -> Self {
@@ -140,7 +140,7 @@ impl From<&Map<String, Value>> for DamageMods {
                 .unwrap_or(&json_1_float())
                 .as_f64()
                 .unwrap_or(1_f64),
-            timestamp: 0
+            timestamp: 0,
         }
     }
 }
@@ -155,19 +155,19 @@ impl DamageMods {
             champion: self.champion,
             boss: self.boss,
             vehicle: self.vehicle,
-            timestamp: 0
+            timestamp: 0,
         }
     }
 }
 impl UuidTimestamp for DamageMods {
     fn uuid(&self) -> f64 {
-        (self.pve-12.0)*6729.0 +
-        self.minor*18342.0 +
-        self.elite*88831.0 +
-        self.miniboss*544.0 +
-        self.champion*995.0 +
-        self.boss*392.0 +
-        self.vehicle*3223.0
+        (self.pve - 12.0) * 6729.0
+            + self.minor * 18342.0
+            + self.elite * 88831.0
+            + self.miniboss * 544.0
+            + self.champion * 995.0
+            + self.boss * 392.0
+            + self.vehicle * 3223.0
     }
 }
 
@@ -177,7 +177,7 @@ pub struct RangeFormula {
     pub end: StatQuadraticFormula,
     pub floor_percent: f64,
     pub fusion: bool,
-    pub timestamp: u64
+    pub timestamp: u64,
 }
 impl From<&Map<String, Value>> for RangeFormula {
     fn from(_val: &Map<String, Value>) -> Self {
@@ -198,13 +198,16 @@ impl From<&Map<String, Value>> for RangeFormula {
                 .unwrap_or(&Value::Bool(false))
                 .as_bool()
                 .unwrap_or(false),
-            timestamp: 0
+            timestamp: 0,
         }
     }
 }
 impl UuidTimestamp for RangeFormula {
     fn uuid(&self) -> f64 {
-        (self.start.uuid()+17.0)*920.0 + self.end.uuid() + self.floor_percent*92.0 + (self.fusion as u32) as f64*88.0
+        (self.start.uuid() + 17.0) * 920.0
+            + self.end.uuid()
+            + self.floor_percent * 92.0
+            + (self.fusion as u32) as f64 * 88.0
     }
 }
 
@@ -212,7 +215,7 @@ impl UuidTimestamp for RangeFormula {
 pub struct ReloadFormula {
     pub reload_data: StatQuadraticFormula,
     pub ammo_percent: f64,
-    pub timestamp: u64
+    pub timestamp: u64,
 }
 impl From<&Map<String, Value>> for ReloadFormula {
     fn from(_val: &Map<String, Value>) -> Self {
@@ -223,13 +226,13 @@ impl From<&Map<String, Value>> for ReloadFormula {
                 .unwrap_or(&json_0_float())
                 .as_f64()
                 .unwrap_or_default(),
-            timestamp: 0
+            timestamp: 0,
         }
     }
 }
 impl UuidTimestamp for ReloadFormula {
     fn uuid(&self) -> f64 {
-        (self.reload_data.uuid()+29.5)*72.0 + (self.ammo_percent+3.0)*12.0
+        (self.reload_data.uuid() + 29.5) * 72.0 + (self.ammo_percent + 3.0) * 12.0
     }
 }
 
@@ -238,7 +241,7 @@ pub struct HandlingFormula {
     pub ready: StatQuadraticFormula,
     pub stow: StatQuadraticFormula,
     pub ads: StatQuadraticFormula,
-    pub timestamp: u64
+    pub timestamp: u64,
 }
 impl From<&Map<String, Value>> for HandlingFormula {
     fn from(_val: &Map<String, Value>) -> Self {
@@ -246,13 +249,13 @@ impl From<&Map<String, Value>> for HandlingFormula {
             ready: StatQuadraticFormula::from(_val["ready"].as_object().unwrap_or(&Map::new())),
             stow: StatQuadraticFormula::from(_val["stow"].as_object().unwrap_or(&Map::new())),
             ads: StatQuadraticFormula::from(_val["ads"].as_object().unwrap_or(&Map::new())),
-            timestamp: 0
+            timestamp: 0,
         }
     }
 }
 impl UuidTimestamp for HandlingFormula {
     fn uuid(&self) -> f64 {
-        self.ready.uuid()*79.0 + self.stow.uuid()/2.0 + self.ads.uuid()*79.9
+        self.ready.uuid() * 79.0 + self.stow.uuid() / 2.0 + self.ads.uuid() * 79.9
     }
 }
 
@@ -261,7 +264,7 @@ pub struct AmmoFormula {
     pub mag: StatQuadraticFormula,
     pub round_to: i32,
     pub reserve_id: u32,
-    pub timestamp: u64
+    pub timestamp: u64,
 }
 impl From<&Map<String, Value>> for AmmoFormula {
     fn from(_val: &Map<String, Value>) -> Self {
@@ -277,13 +280,13 @@ impl From<&Map<String, Value>> for AmmoFormula {
                 .unwrap_or(&Value::Null)
                 .as_u64()
                 .unwrap_or_default() as u32,
-            timestamp: 0
+            timestamp: 0,
         }
     }
 }
 impl UuidTimestamp for AmmoFormula {
     fn uuid(&self) -> f64 {
-        self.mag.uuid()*99.0 + self.round_to as f64*6723.3 + self.reserve_id as f64*5299.2
+        self.mag.uuid() * 99.0 + self.round_to as f64 * 6723.3 + self.reserve_id as f64 * 5299.2
     }
 }
 
@@ -296,7 +299,7 @@ pub struct FiringData {
     pub burst_size: i32,
     pub one_ammo: bool,
     pub charge: bool,
-    pub timestamp: u64
+    pub timestamp: u64,
 }
 impl From<&Map<String, Value>> for FiringData {
     fn from(_val: &Map<String, Value>) -> Self {
@@ -316,19 +319,20 @@ impl From<&Map<String, Value>> for FiringData {
                 .unwrap_or(&Value::Bool(false))
                 .as_bool()
                 .unwrap_or(false),
-            timestamp: 0
+            timestamp: 0,
         }
     }
 }
 impl UuidTimestamp for FiringData {
     fn uuid(&self) -> f64 {
-        (self.damage*821.88 +
-        self.crit_mult*388.1 +
-        self.burst_delay*9999.7 +
-        self.inner_burst_delay*7234.9 +
-        self.burst_size as f64*999.3 +
-        (self.one_ammo as u32) as f64*16655.5 +
-        (self.charge as u32) as f64*7388.9)*10.0
+        (self.damage * 821.88
+            + self.crit_mult * 388.1
+            + self.burst_delay * 9999.7
+            + self.inner_burst_delay * 7234.9
+            + self.burst_size as f64 * 999.3
+            + (self.one_ammo as u32) as f64 * 16655.5
+            + (self.charge as u32) as f64 * 7388.9)
+            * 10.0
     }
 }
 
@@ -657,8 +661,8 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
                 }
 
                 let mut firing: FiringData = (&fam).into();
-                firing.burst_delay *= 1.0/30.0;
-                firing.inner_burst_delay *= 1.0/30.0;
+                firing.burst_delay *= 1.0 / 30.0;
+                firing.inner_burst_delay *= 1.0 / 30.0;
                 firing.crit_mult = 1.5 + (firing.crit_mult / 51.0);
                 let index_option = find_uuid(&firing_data, firing.uuid());
                 if index_option.is_some() {
@@ -678,14 +682,23 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
             if set_data_res.is_err() {
                 println!("cargo:warning={:?}", set_data_res.unwrap_err());
             }
-            updated_weapon_defs.push((WeaponPath(weapon_id.parse::<u32>().unwrap(),weapon_hash.parse::<u32>().unwrap()), data));
+            updated_weapon_defs.push((
+                WeaponPath(
+                    weapon_id.parse::<u32>().unwrap(),
+                    weapon_hash.parse::<u32>().unwrap(),
+                ),
+                data,
+            ));
         }
     }
 
     write_variable(
         formula_file,
         "DATA_POINTERS",
-        &format!("[(WeaponPath, DataPointers); {}]", updated_weapon_defs.len()),
+        &format!(
+            "[(WeaponPath, DataPointers); {}]",
+            updated_weapon_defs.len()
+        ),
         format!("{:?}", updated_weapon_defs),
         "Hashmapping for weapon intrinsic hash to data pointers",
     );
@@ -735,7 +748,11 @@ fn construct_weapon_formulas(formula_file: &mut File, cached: &mut CachedBuildDa
 
 fn construct_enhance_perk_mapping(formula_file: &mut File, cached: &mut CachedBuildData) {
     let ping = reqwest::blocking::get("https://www.bungie.net");
-    let has_internet = if ping.is_ok() {ping.unwrap().status() == reqwest::StatusCode::OK} else { false};
+    let has_internet = if ping.is_ok() {
+        ping.unwrap().status() == reqwest::StatusCode::OK
+    } else {
+        false
+    };
 
     if !has_internet {
         println!("cargo:warning=no internet connection");
@@ -775,7 +792,7 @@ fn construct_enhance_perk_mapping(formula_file: &mut File, cached: &mut CachedBu
     if has_internet {
         let mut manifest_secured: bool;
         let manifest_raw =
-                reqwest::blocking::get("https://www.bungie.net/Platform/Destiny2/Manifest/");
+            reqwest::blocking::get("https://www.bungie.net/Platform/Destiny2/Manifest/");
         let manifest_text: String;
         if manifest_raw.is_ok() {
             manifest_text = manifest_raw.unwrap().text().unwrap();
@@ -810,7 +827,10 @@ fn construct_enhance_perk_mapping(formula_file: &mut File, cached: &mut CachedBu
                 let mut cached_manifest_mappings = cached.procedural_intrinsic_mappings.clone();
                 perk_mappings.append(&mut cached_manifest_mappings);
             } else {
-                cached.last_manifest_version = manifest_json["Response"]["version"].as_str().unwrap().to_owned();
+                cached.last_manifest_version = manifest_json["Response"]["version"]
+                    .as_str()
+                    .unwrap()
+                    .to_owned();
                 let intrinsic_map: HashMap<u32, Vec<&str>> = HashMap::from([
                     (901, vec!["High-Impact Frame"]),
                     (902, vec!["VEIST Rapid-Fire", "Rapid-Fire Frame"]),
@@ -822,7 +842,8 @@ fn construct_enhance_perk_mapping(formula_file: &mut File, cached: &mut CachedBu
                     (908, vec!["Wave Frame"]),
                     (911, vec!["Legacy PR-55 Frame"]),
                 ]);
-                let content_paths = manifest_json["Response"]["jsonWorldComponentContentPaths"]["en"]
+                let content_paths = manifest_json["Response"]["jsonWorldComponentContentPaths"]
+                    ["en"]
                     .as_object()
                     .unwrap();
                 let item_data_raw = reqwest::blocking::get(format!(
@@ -861,7 +882,7 @@ fn construct_enhance_perk_mapping(formula_file: &mut File, cached: &mut CachedBu
                 }
             }
         }
-    } else { 
+    } else {
         let mut cached_manifest_mappings = cached.procedural_intrinsic_mappings.clone();
         perk_mappings.append(&mut cached_manifest_mappings);
     }

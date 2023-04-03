@@ -196,8 +196,14 @@ pub struct FiringResponse {
 
     pub timestamp: u64,
 }
-impl FiringResponse{
-    pub fn apply_pve_bonuses(&mut self, _rpl_mult: f64, _gpl_mult: f64, _pve_mult: f64, _combatant_mult: f64) {
+impl FiringResponse {
+    pub fn apply_pve_bonuses(
+        &mut self,
+        _rpl_mult: f64,
+        _gpl_mult: f64,
+        _pve_mult: f64,
+        _combatant_mult: f64,
+    ) {
         self.pve_impact_damage *= _rpl_mult * _gpl_mult * _pve_mult * _combatant_mult;
         self.pve_explosion_damage *= _rpl_mult * _gpl_mult * _pve_mult * _combatant_mult;
     }

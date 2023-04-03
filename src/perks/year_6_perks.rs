@@ -67,10 +67,10 @@ pub(super) fn sbr_field_tested(
 ) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
     let val = clamp(_value, 0, 5) as i32;
-    map.insert(StatHashes::RANGE.into(), val*5);
-    map.insert(StatHashes::HANDLING.into(), val*5);
-    map.insert(StatHashes::RELOAD.into(), val*5);
-    map.insert(StatHashes::STABILITY.into(), val*5);
+    map.insert(StatHashes::RANGE.into(), val * 5);
+    map.insert(StatHashes::HANDLING.into(), val * 5);
+    map.insert(StatHashes::RELOAD.into(), val * 5);
+    map.insert(StatHashes::STABILITY.into(), val * 5);
     map
 }
 
@@ -83,7 +83,7 @@ pub(super) fn hmr_field_tested(
 ) -> HandlingModifierResponse {
     let val = clamp(_value, 0, 5) as i32;
     HandlingModifierResponse {
-        handling_stat_add: val*5,
+        handling_stat_add: val * 5,
         ..Default::default()
     }
 }
@@ -97,7 +97,7 @@ pub(super) fn rsmr_field_tested(
 ) -> ReloadModifierResponse {
     let val = clamp(_value, 0, 5) as i32;
     ReloadModifierResponse {
-        reload_stat_add: val*5,
+        reload_stat_add: val * 5,
         ..Default::default()
     }
 }
@@ -111,7 +111,7 @@ pub(super) fn rmr_field_tested(
 ) -> RangeModifierResponse {
     let val = clamp(_value, 0, 5) as i32;
     RangeModifierResponse {
-        range_stat_add: val*5,
+        range_stat_add: val * 5,
         ..Default::default()
     }
 }

@@ -1,4 +1,4 @@
-use self::damage_calc::{DifficultyOptions, rpl_mult, gpl_delta};
+use self::damage_calc::{gpl_delta, rpl_mult, DifficultyOptions};
 
 pub mod damage_calc;
 
@@ -37,7 +37,10 @@ impl Default for Activity {
             difficulty: DifficultyOptions::default(),
             rpl: expansion_base,
             cap: 100,
-            player: Player{pl: expansion_base+200, class: PlayerClass::default()},
+            player: Player {
+                pl: expansion_base + 200,
+                class: PlayerClass::default(),
+            },
         }
     }
 }

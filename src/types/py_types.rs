@@ -7,15 +7,14 @@ use crate::{
     activity::{damage_calc::DifficultyOptions, Activity, Player, PlayerClass},
     enemies::{Enemy, EnemyType},
     perks::Perk,
-    weapons::ttk_calc::ResillienceSummary
+    weapons::ttk_calc::ResillienceSummary,
 };
 
 use super::rs_types::{
-    AmmoFormula, AmmoResponse, DamageMods, DpsResponse, HandlingFormula, HandlingResponse,
-    RangeFormula, RangeResponse, ReloadFormula, ReloadResponse, StatQuadraticFormula, FiringResponse
+    AmmoFormula, AmmoResponse, DamageMods, DpsResponse, FiringResponse, HandlingFormula,
+    HandlingResponse, RangeFormula, RangeResponse, ReloadFormula, ReloadResponse,
+    StatQuadraticFormula,
 };
-
-
 
 #[derive(Debug, Clone, Default)]
 #[pyclass(name = "Trait")]
@@ -222,7 +221,7 @@ impl From<DpsResponse> for PyDpsResponse {
 
 #[derive(Debug, Clone)]
 #[pyclass(name = "OptimalKillData")]
-pub struct PyOptimalKillData{
+pub struct PyOptimalKillData {
     headshots: i32,
     bodyshots: i32,
     time_taken: f64,
@@ -241,7 +240,7 @@ impl PyOptimalKillData {
 
 #[derive(Debug, Clone)]
 #[pyclass(name = "BodyKillData")]
-pub struct PyBodyKillData{
+pub struct PyBodyKillData {
     bodyshots: i32,
     time_taken: f64,
 }
@@ -257,7 +256,7 @@ impl PyBodyKillData {
 
 #[derive(Debug, Clone)]
 #[pyclass(name = "ResillienceSummary")]
-pub struct PyResillienceSummary{
+pub struct PyResillienceSummary {
     value: i32,
     body_ttk: PyBodyKillData,
     optimal_ttk: PyOptimalKillData,
@@ -275,16 +274,16 @@ impl From<ResillienceSummary> for PyResillienceSummary {
     fn from(r: ResillienceSummary) -> Self {
         PyResillienceSummary {
             value: r.value,
-            body_ttk: PyBodyKillData{
+            body_ttk: PyBodyKillData {
                 bodyshots: r.body_ttk.bodyshots,
                 time_taken: r.body_ttk.time_taken,
             },
-            optimal_ttk: PyOptimalKillData{
+            optimal_ttk: PyOptimalKillData {
                 headshots: r.optimal_ttk.headshots,
                 bodyshots: r.optimal_ttk.bodyshots,
                 time_taken: r.optimal_ttk.time_taken,
                 achievable_range: r.optimal_ttk.achievable_range,
-            }
+            },
         }
     }
 }

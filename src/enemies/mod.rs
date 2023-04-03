@@ -1,7 +1,5 @@
 use crate::activity::Activity;
 
-
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum EnemyType {
     MINOR,
@@ -11,7 +9,7 @@ pub enum EnemyType {
     VEHICLE,
     ENCLAVE,
     PLAYER,
-    CHAMPION
+    CHAMPION,
 }
 impl Default for EnemyType {
     fn default() -> Self {

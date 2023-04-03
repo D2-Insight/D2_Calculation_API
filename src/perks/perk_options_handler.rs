@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use serde::Serialize;
 
-use super::{Perk, Perks, enhanced_check};
+use super::{enhanced_check, Perk, Perks};
 
 #[derive(Debug, Clone, Serialize)]
 pub enum PerkValueVariant {
@@ -18,39 +18,39 @@ impl Default for PerkValueVariant {
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct PerkOptionData{
+pub struct PerkOptionData {
     stacks: (u32, u32),
     options: Vec<String>,
     #[serde(rename = "optionType")]
-    option_type: PerkValueVariant
+    option_type: PerkValueVariant,
 }
 impl PerkOptionData {
     pub fn static_() -> PerkOptionData {
-        PerkOptionData{
+        PerkOptionData {
             stacks: (0, 0),
             options: vec![],
-            option_type: PerkValueVariant::STATIC
+            option_type: PerkValueVariant::STATIC,
         }
     }
     pub fn toggle() -> PerkOptionData {
-        PerkOptionData{
+        PerkOptionData {
             stacks: (0, 1),
             options: vec![],
-            option_type: PerkValueVariant::TOGGLE
+            option_type: PerkValueVariant::TOGGLE,
         }
     }
     pub fn stacking(_stacks: u32) -> PerkOptionData {
-        PerkOptionData{
+        PerkOptionData {
             stacks: (0, _stacks),
             options: vec![],
-            option_type: PerkValueVariant::SLIDER
+            option_type: PerkValueVariant::SLIDER,
         }
     }
     pub fn stacking_min(_stacks: u32, _min_stacks: u32) -> PerkOptionData {
-        PerkOptionData{
+        PerkOptionData {
             stacks: (_min_stacks, _stacks),
             options: vec![],
-            option_type: PerkValueVariant::SLIDER
+            option_type: PerkValueVariant::SLIDER,
         }
     }
     pub fn options(_options: Vec<&str>) -> PerkOptionData {
@@ -58,10 +58,10 @@ impl PerkOptionData {
         for option in _options {
             options.push(option.to_string());
         }
-        PerkOptionData{
+        PerkOptionData {
             stacks: (0, options.len() as u32 - 1),
             options,
-            option_type: PerkValueVariant::OPTIONS
+            option_type: PerkValueVariant::OPTIONS,
         }
     }
 }
@@ -188,7 +188,8 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         //season 9 | year 3
         Perks::ClownCartridge => Some(PerkOptionData::static_()),
         Perks::ElementalCapacitor => Some(PerkOptionData::options(
-            ["Void","Solar","Arc","Stasis", "Strand"].to_vec())),
+            ["Void", "Solar", "Arc", "Stasis", "Strand"].to_vec(),
+        )),
         Perks::Vorpal => Some(PerkOptionData::static_()),
 
         //season 10 | year 3
@@ -288,15 +289,15 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::RavenousBeast => Some(PerkOptionData::toggle()),
         Perks::LordOfWolvesCatalyst => Some(PerkOptionData::static_()),
         Perks::ReleaseTheWolves => Some(PerkOptionData::toggle()),
-        Perks::Fundamentals => Some(PerkOptionData::options(
-            ["Void","Solar","Arc"].to_vec())),
+        Perks::Fundamentals => Some(PerkOptionData::options(["Void", "Solar", "Arc"].to_vec())),
         Perks::ThinTheHerd => Some(PerkOptionData::toggle()),
         Perks::Chimera => Some(PerkOptionData::toggle()),
         Perks::FirstGlance => Some(PerkOptionData::toggle()),
         Perks::FateOfAllFools => Some(PerkOptionData::stacking(3)),
         Perks::HonedEdge => Some(PerkOptionData::stacking_min(4, 1)),
         Perks::TakenPredator => Some(PerkOptionData::options(
-            ["Taken","Witherhoard","Both"].to_vec())),
+            ["Taken", "Witherhoard", "Both"].to_vec(),
+        )),
         Perks::MarkovChain => Some(PerkOptionData::stacking(5)),
         Perks::StormAndStress => Some(PerkOptionData::toggle()),
         Perks::DualSpeedReceiver => Some(PerkOptionData::toggle()),
@@ -306,11 +307,10 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::DarkDescent => Some(PerkOptionData::toggle()),
         Perks::SleeperCatalyst => Some(PerkOptionData::static_()),
         Perks::TargetAquired => Some(PerkOptionData::toggle()),
-        Perks::RatPack => Some(PerkOptionData::stacking_min(5,1)),
+        Perks::RatPack => Some(PerkOptionData::stacking_min(5, 1)),
         Perks::HuntersTrance => Some(PerkOptionData::static_()),
         Perks::RideTheBull => Some(PerkOptionData::stacking(2)),
         Perks::NobleRounds => Some(PerkOptionData::toggle()),
-
 
         Perks::DexterityMod => Some(PerkOptionData::stacking(3)),
         Perks::ReserveMod => Some(PerkOptionData::stacking(3)),
@@ -334,10 +334,11 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::Weaken => Some(PerkOptionData::static_()),
         Perks::PathOfTheBurningSteps => Some(PerkOptionData::stacking(4)),
         Perks::MantleOfBattleHarmony => Some(PerkOptionData::static_()),
-        Perks::MaskOfBakris => Some(PerkOptionData::options(
-            ["one buff", "both buffs"].to_vec())),
+        Perks::MaskOfBakris => Some(PerkOptionData::options(["one buff", "both buffs"].to_vec())),
         Perks::BallindorseWrathweavers => Some(PerkOptionData::toggle()),
-        Perks::LunaFaction => Some(PerkOptionData::options(["Heal Rift", "Empowering Rift / Well"].to_vec())),
+        Perks::LunaFaction => Some(PerkOptionData::options(
+            ["Heal Rift", "Empowering Rift / Well"].to_vec(),
+        )),
         Perks::Foetracer => Some(PerkOptionData::toggle()),
         Perks::MechaneersTricksleeves => Some(PerkOptionData::toggle()),
         Perks::Oathkeeper => Some(PerkOptionData::static_()),
@@ -366,7 +367,7 @@ pub fn enh_hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
     match perk {
         Perks::Recombination => Some(PerkOptionData::stacking(8)),
         Perks::ExplosiveLight => Some(PerkOptionData::stacking(7)),
-        _ => hash_to_perk_option_data(_hash)
+        _ => hash_to_perk_option_data(_hash),
     }
 }
 

@@ -1,4 +1,4 @@
-use std::collections::{HashMap, btree_map::Range};
+use std::collections::{btree_map::Range, HashMap};
 
 use serde::de::value;
 
@@ -134,7 +134,6 @@ pub(super) fn rsmr_dragon_shadow(
     } else {
         ReloadModifierResponse::default()
     }
-
 }
 
 pub(super) fn sbr_amplified(
