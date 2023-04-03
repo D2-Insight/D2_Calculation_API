@@ -861,6 +861,7 @@ fn construct_enhance_perk_mapping(formula_file: &mut File, cached: &mut CachedBu
                         .unwrap()
                 ));
                 println!("cargo:warning=downloaded new manifest");
+                cached.procedural_intrinsic_mappings.clear();
                 let item_data_json: Value =
                     serde_json::from_str(&item_data_raw.unwrap().text().unwrap()).unwrap();
                 for (key, value) in item_data_json.as_object().unwrap() {
