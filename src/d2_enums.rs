@@ -248,7 +248,6 @@ pub enum DamageSource {
 }
 
 pub type Seconds = f64;
-pub type Frames = f64;
 pub type MetersPerSecond = f64;
 pub type StatBump = i32;
 pub type BungieHash = u32;
