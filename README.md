@@ -1,5 +1,5 @@
 # D2_Calculation_API
-
+[![Rust](https://github.com/oh-yes-0-fps/D2_Calculation_API/actions/workflows/rust.yml/badge.svg?branch=master)](https://github.com/oh-yes-0-fps/D2_Calculation_API/actions/workflows/rust.yml)
 
 Credit goes first and foremost as this would not have been possible without the great community of Destiny Massive Breakdowns and the people in it.
   * Mossy, a majority of damage values are from him and the underlying pve formulas for PL
