@@ -524,9 +524,9 @@ impl Weapon {
             return Seconds::INFINITY;
         }
         match self.intrinsic_hash {
-            715195141 => stability * 1.0 / 400.0 + 0.3,
-            2108556049 => stability * 3.0 / 1000.0 + 0.5,
-            _ => 0.0,
+            906 => stability * 1.0 / 400.0 + 0.3,
+            905 => stability * 3.0 / 1000.0 + 0.5,
+            _ => Seconds::NAN,
         }
     }
 }
@@ -552,7 +552,7 @@ impl Weapon {
                 .into();
             return 100.0 / (guard_endruance * -0.75 + 80.0);
         }
-        0.0
+        Seconds::NAN
     }
 }
 
@@ -565,15 +565,17 @@ impl Weapon {
         let mut buffer: HashMap<String, f64> = HashMap::new();
         let mut cached_data: HashMap<String, f64> = HashMap::new();
 
-        match self.weapon_type {
-            WeaponType::ROCKET | WeaponType::GRENADELAUNCHER | WeaponType::GLAIVE => buffer.insert(
+        if matches!(
+            self.weapon_type,
+            WeaponType::ROCKET | WeaponType::GRENADELAUNCHER | WeaponType::GLAIVE
+        ) {
+            buffer.insert(
                 "velocity".to_string(),
                 self.calc_projectile_velocity(_calc_input, _pvp, Some(&mut cached_data)),
-            ),
-            _ => None,
+            );
         };
 
-        if self.weapon_type == WeaponType::GLAIVE {
+        if matches!(self.weapon_type, WeaponType::GLAIVE ) { // add "| WeaponType::SWORD" to matches when swords work
             buffer.insert("shield_duration".to_string(), self.calc_shield_duration());
         }
 
