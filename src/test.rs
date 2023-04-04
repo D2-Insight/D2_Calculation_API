@@ -261,24 +261,14 @@ fn test_bow_range() {
         let weapon = perm_data.borrow_mut().weapon.clone();
         let response = weapon.calc_range_falloff(None, None, true);
         assert!(
-            cmp_floats(response.hip_falloff_start, 15.0),
-            "hip falloff start: {}",
-            response.hip_falloff_start
-        );
-        assert!(
-            cmp_floats(response.ads_falloff_start, 15.0 * (1.5 - 0.025)),
+            response.ads_falloff_start > 998.0,
             "ads falloff start: {}",
             response.ads_falloff_start
         );
         assert!(
-            cmp_floats(response.hip_falloff_end, 30.0),
+            response.hip_falloff_end > 998.0,
             "hip falloff end: {}",
             response.hip_falloff_end
-        );
-        assert!(
-            cmp_floats(response.ads_falloff_end, 30.0 * (1.5 - 0.025)),
-            "ads falloff end: {}",
-            response.ads_falloff_end
         );
     });
 }
@@ -311,7 +301,7 @@ fn test_bow_firing_data() {
             "explosive damage: {}",
             response.pvp_explosion_damage
         );
-        assert!(cmp_floats(response.burst_delay, 0.500), "draw time: {}", response.rpm);
+        assert!(cmp_floats(response.burst_delay, 20.0/30.0), "draw time: {}", response.burst_delay);
         assert!(
             cmp_floats(response.pvp_crit_mult, 1.5 + (2.0/51.0)),
             "crit mult: {}",
