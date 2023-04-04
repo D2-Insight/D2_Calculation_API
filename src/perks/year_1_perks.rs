@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponType};
+use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponType, StatBump, BungieHash};
 
 use super::{
     clamp,
@@ -49,9 +49,10 @@ pub(super) fn hmr_threat_detector(
     let val = clamp(_value, 0, 2) as i32;
     let time_scale = 0.75_f64.powi(val);
     HandlingModifierResponse {
-        handling_stat_add: 0,
-        handling_swap_scale: time_scale,
-        handling_ads_scale: time_scale,
+        stat_add: 0,
+        draw_scale: time_scale,
+        stow_scale: time_scale,
+        ads_scale: time_scale,
     }
 }
 
@@ -80,7 +81,7 @@ pub(super) fn sbr_threat_detector(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stability = 0;
     let mut reload = 0;
     if _value == 1 {
@@ -234,7 +235,7 @@ pub(super) fn sbr_field_prep(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut out = HashMap::new();
     if _value > 0 {
         let reload = if _is_enhanced { 55 } else { 50 };
@@ -287,11 +288,15 @@ pub(super) fn hmr_field_prep(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
-    let mut hmr = HandlingModifierResponse::default();
     if _value >= 1 {
-        hmr.handling_swap_scale = 0.8;
+        HandlingModifierResponse {
+            stow_scale: 0.8,
+            draw_scale: 0.8,
+            ..Default::default()
+        }
+    } else {
+        HandlingModifierResponse::default()
     }
-    hmr
 }
 
 pub(super) fn sbr_firmly_planted(
@@ -300,7 +305,7 @@ pub(super) fn sbr_firmly_planted(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut handling = if _is_enhanced { 35 } else { 30 };
     let mut stabiltiy = if _is_enhanced { 25 } else { 20 };
     if *_input.weapon_type == WeaponType::FUSIONRIFLE {
@@ -328,9 +333,8 @@ pub(super) fn hmr_firmly_planted(
     };
     if _value > 0 {
         HandlingModifierResponse {
-            handling_stat_add: handling,
-            handling_ads_scale: 1.0,
-            handling_swap_scale: 1.0,
+            stat_add: handling,
+            ..Default::default()
         }
     } else {
         HandlingModifierResponse::default()
@@ -377,7 +381,7 @@ pub(super) fn sbr_hip_fire_grip(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut out = HashMap::new();
     if _value > 0 {
         out.insert(StatHashes::AIM_ASSIST.into(), 15);
@@ -429,7 +433,7 @@ pub(super) fn sbr_moving_target(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let aim_assist = if _is_enhanced { 11 } else { 10 };
     let mut out = HashMap::new();
     if _value >= 1 {
@@ -444,7 +448,7 @@ pub(super) fn sbr_opening_shot(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let aim_assist = if _is_enhanced { 25 } else { 20 };
     let range = if _is_enhanced { 30 } else { 25 };
     let mut out = HashMap::new();
@@ -480,7 +484,7 @@ pub(super) fn sbr_outlaw(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut out = HashMap::new();
     if _value > 0 {
         out.insert(StatHashes::RELOAD.into(), 70);
@@ -539,7 +543,7 @@ pub(super) fn sbr_slide_shot(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let stability = if _is_enhanced { 35 } else { 30 };
     let range = if _is_enhanced { 25 } else { 20 };
     let mut out = HashMap::new();
@@ -577,7 +581,7 @@ pub(super) fn sbr_slide_ways(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let stability = if _is_enhanced { 25 } else { 20 };
     let handling = if _is_enhanced { 25 } else { 20 };
     let mut out = HashMap::new();
@@ -597,7 +601,7 @@ pub(super) fn hmr_slide_ways(
 ) -> HandlingModifierResponse {
     let handling = if _value > 0 { 20 } else { 0 };
     HandlingModifierResponse {
-        handling_stat_add: handling,
+        stat_add: handling,
         ..Default::default()
     }
 }
@@ -614,7 +618,7 @@ pub(super) fn hmr_snapshot(
         ads_mult = 0.8; //its 0.8 from my testing idk
     };
     HandlingModifierResponse {
-        handling_ads_scale: ads_mult,
+        ads_scale: ads_mult,
         ..Default::default()
     }
 }
@@ -625,7 +629,7 @@ pub(super) fn sbr_tap_the_trigger(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stability = if _is_enhanced { 44 } else { 40 };
     if *_input.weapon_type == WeaponType::FUSIONRIFLE {
         stability = stability / 4;
@@ -730,7 +734,7 @@ pub(super) fn hmr_backup_plan(
         handling_add = 0;
     };
     HandlingModifierResponse {
-        handling_stat_add: handling_add,
+        stat_add: handling_add,
         ..Default::default()
     }
 }
@@ -741,7 +745,7 @@ pub(super) fn sbr_backup_plan(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut handling = if _value > 0 { 100 } else { 0 };
     let duration = if _is_enhanced { 2.2 } else { 2.0 };
     if _input.time_total > duration {
@@ -802,8 +806,8 @@ pub(super) fn hmr_quickdraw(
 ) -> HandlingModifierResponse {
     if _value > 0 {
         HandlingModifierResponse {
-            handling_stat_add: 100,
-            handling_swap_scale: 0.95,
+            stat_add: 100,
+            draw_scale: 0.95,
             ..Default::default()
         }
     } else {
@@ -817,7 +821,7 @@ pub(super) fn sbr_quickdraw(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut map = HashMap::new();
     if _value > 0 {
         map.insert(StatHashes::HANDLING.into(), 100);
@@ -834,8 +838,9 @@ pub(super) fn hmr_pulse_monitor(
 ) -> HandlingModifierResponse {
     if _value > 0 {
         HandlingModifierResponse {
-            handling_stat_add: 50,
-            handling_swap_scale: 0.95,
+            stat_add: 50,
+            draw_scale: 0.95,
+            stow_scale: 0.95,
             ..Default::default()
         }
     } else {
@@ -849,7 +854,7 @@ pub(super) fn sbr_pulse_monitor(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut map = HashMap::new();
     if _value > 0 {
         map.insert(StatHashes::HANDLING.into(), 50);
@@ -863,7 +868,7 @@ pub(super) fn sbr_underdog(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut map = HashMap::new();
     if _value > 0 {
         map.insert(StatHashes::RELOAD.into(), 100);
@@ -895,7 +900,7 @@ pub(super) fn sbr_under_pressure(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut map = HashMap::new();
     let buff = if _is_enhanced { 35 } else { 30 };
     if _value > 0 {

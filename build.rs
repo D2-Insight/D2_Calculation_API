@@ -420,7 +420,7 @@ fn main() {
         let file = file_res.unwrap();
         let res = ron::ser::to_writer(file, &cached_data);
         if res.is_err() {
-            println!("cargo:warning=error writing cached build file");
+            panic!("cargo:warning=error writing cached build file");
         }
     }
 }

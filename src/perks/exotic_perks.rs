@@ -96,7 +96,7 @@ pub(super) fn hmr_hunters_trance(
     let inter_val = *_input.perk_value_map.get(&213689231).unwrap_or(&0);
     let buff_val = (clamp(inter_val, 0, 7) * 5) as i32;
     HandlingModifierResponse {
-        handling_stat_add: buff_val,
+        stat_add: buff_val,
         ..Default::default()
     }
 }
@@ -663,7 +663,7 @@ pub(super) fn hmr_fundamentals(
         handling = 25;
     }
     HandlingModifierResponse {
-        handling_stat_add: handling,
+        stat_add: handling,
         ..Default::default()
     }
 }
@@ -742,7 +742,7 @@ pub(super) fn hmr_chimera(
 ) -> HandlingModifierResponse {
     if _value > 0 {
         HandlingModifierResponse {
-            handling_stat_add: 100,
+            stat_add: 100,
             ..Default::default()
         }
     } else {

@@ -1124,9 +1124,10 @@ pub fn get_handling_modifier(
     let mut handling_modifier = HandlingModifierResponse::default();
     for perk in _perks {
         let tmp = get_perk_hmr(perk, _input_data, _pvp, _cached_data);
-        handling_modifier.handling_stat_add += tmp.handling_stat_add;
-        handling_modifier.handling_swap_scale *= tmp.handling_swap_scale;
-        handling_modifier.handling_ads_scale *= tmp.handling_ads_scale;
+        handling_modifier.stat_add += tmp.stat_add;
+        handling_modifier.stow_scale *= tmp.stow_scale;
+        handling_modifier.draw_scale *= tmp.draw_scale;
+        handling_modifier.ads_scale *= tmp.ads_scale;
     }
     handling_modifier
 }

@@ -133,9 +133,8 @@ pub(super) fn hmr_adrenaline_junkie(
 ) -> HandlingModifierResponse {
     let handling = if _value > 0 { 20 } else { 0 };
     HandlingModifierResponse {
-        handling_stat_add: handling,
-        handling_swap_scale: 1.0,
-        handling_ads_scale: 1.0,
+        stat_add: handling,
+        ..Default::default()
     }
 }
 
@@ -187,16 +186,11 @@ pub(super) fn hmr_ensemble(
     let handling = if _is_enhanced { 30 } else { 35 };
     if _value > 0 {
         HandlingModifierResponse {
-            handling_stat_add: handling,
-            handling_swap_scale: 1.0,
-            handling_ads_scale: 1.0,
+            stat_add: handling,
+            ..Default::default()
         }
     } else {
-        HandlingModifierResponse {
-            handling_stat_add: 0,
-            handling_swap_scale: 1.0,
-            handling_ads_scale: 1.0,
-        }
+        HandlingModifierResponse::default()
     }
 }
 
@@ -256,9 +250,8 @@ pub(super) fn hmr_frenzy(
         handling = 100;
     };
     HandlingModifierResponse {
-        handling_stat_add: handling,
-        handling_swap_scale: 1.0,
-        handling_ads_scale: 1.0,
+        stat_add: handling,
+        ..Default::default()
     }
 }
 
@@ -382,9 +375,8 @@ pub(super) fn hmr_perpetual_motion(
         stat_bump = 20;
     };
     HandlingModifierResponse {
-        handling_stat_add: stat_bump,
-        handling_swap_scale: 1.0,
-        handling_ads_scale: 1.0,
+        stat_add: stat_bump,
+        ..Default::default()
     }
 }
 
@@ -448,9 +440,8 @@ pub(super) fn hrm_pugilist(
         handling = 30;
     };
     HandlingModifierResponse {
-        handling_stat_add: handling,
-        handling_swap_scale: 1.0,
-        handling_ads_scale: 1.0,
+        stat_add: handling,
+        ..Default::default()
     }
 }
 
@@ -575,9 +566,8 @@ pub(super) fn hmr_harmony(
 ) -> HandlingModifierResponse {
     let handling = if _value > 0 { 15 } else { 0 };
     HandlingModifierResponse {
-        handling_stat_add: handling,
-        handling_swap_scale: 1.0,
-        handling_ads_scale: 1.0,
+        stat_add: handling,
+        ..Default::default()
     }
 }
 
@@ -636,9 +626,8 @@ pub(super) fn hmr_surplus(
         0
     };
     HandlingModifierResponse {
-        handling_stat_add: handling,
-        handling_swap_scale: 1.0,
-        handling_ads_scale: 1.0,
+        stat_add: handling,
+        ..Default::default()
     }
 }
 
@@ -701,7 +690,7 @@ pub(super) fn hmr_tunnel_vision(
 ) -> HandlingModifierResponse {
     if _value > 0 {
         HandlingModifierResponse {
-            handling_ads_scale: 0.85,
+            ads_scale: 0.85,
             ..Default::default()
         }
     } else {

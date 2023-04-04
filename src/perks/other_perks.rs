@@ -56,9 +56,9 @@ pub(super) fn hmr_swap_mag(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     HandlingModifierResponse {
-        handling_stat_add: 0,
-        handling_ads_scale: 1.0,
-        handling_swap_scale: 0.9,
+        draw_scale: 0.9,
+        stow_scale: 0.9,
+        ..Default::default()
     }
 }
 
@@ -70,9 +70,8 @@ pub(super) fn hmr_ophidian_aspects(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     HandlingModifierResponse {
-        handling_stat_add: 35,
-        handling_ads_scale: 1.0,
-        handling_swap_scale: 1.0,
+        stat_add: 35,
+        ..Default::default()
     }
 }
 
@@ -127,9 +126,10 @@ pub(super) fn hmr_dragon_shadow(
 ) -> HandlingModifierResponse {
     if _value >= 1 {
         HandlingModifierResponse {
-            handling_stat_add: 100,
-            handling_ads_scale: 1.0,
-            handling_swap_scale: 0.95,
+            stat_add: 100,
+            draw_scale: 0.95,
+            stow_scale: 0.95,
+            ..Default::default()
         }
     } else {
         HandlingModifierResponse::default()
@@ -173,9 +173,10 @@ pub(super) fn hmr_amplified(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     HandlingModifierResponse {
-        handling_stat_add: 40,
-        handling_ads_scale: 1.0,
-        handling_swap_scale: 0.95,
+        stat_add: 40,
+        draw_scale: 0.95,
+        stow_scale: 0.95,
+        ..Default::default()
     }
 }
 
@@ -246,9 +247,8 @@ pub(super) fn hmr_on_your_mark(
 ) -> HandlingModifierResponse {
     let val = clamp(_value, 0, 3) as i32;
     HandlingModifierResponse {
-        handling_stat_add: 20 * val,
-        handling_ads_scale: 1.0,
-        handling_swap_scale: 1.0,
+        stat_add: 20 * val,
+        ..Default::default()
     }
 }
 

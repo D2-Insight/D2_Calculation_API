@@ -150,7 +150,7 @@ pub(super) fn hmr_hot_swap(
     let handling_add = if _is_enhanced { 60 } else { 30 };
     if _value > 0 {
         HandlingModifierResponse {
-            handling_stat_add: handling_add,
+            stat_add: handling_add,
             ..Default::default()
         }
     } else {
@@ -302,7 +302,7 @@ pub(super) fn hmr_search_party(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     HandlingModifierResponse {
-        handling_ads_scale: 0.85,
+        ads_scale: 0.85,
         ..Default::default()
     }
 }
@@ -345,7 +345,7 @@ pub(super) fn hmr_tex_balanced_stock(
 ) -> HandlingModifierResponse {
     if _value > 0 {
         HandlingModifierResponse {
-            handling_stat_add: 50,
+            stat_add: 50,
             ..Default::default()
         }
     } else {
@@ -394,7 +394,7 @@ pub(super) fn hmr_suros_synergy(
 ) -> HandlingModifierResponse {
     if _value > 0 {
         HandlingModifierResponse {
-            handling_stat_add: 40,
+            stat_add: 40,
             ..Default::default()
         }
     } else {

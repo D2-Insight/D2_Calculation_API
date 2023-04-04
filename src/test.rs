@@ -9,13 +9,8 @@ use crate::{
 };
 
 const FLOAT_DELTA: f32 = 0.0001;
-
 fn cmp_floats<T: Float + Zero>(a: T, b: T) -> bool {
     let delta = T::from(FLOAT_DELTA).unwrap();
-    (a - b).abs() < delta
-}
-
-fn cmp_floats_delta<T: Float + Zero>(a: T, b: T, delta: T) -> bool {
     (a - b).abs() < delta
 }
 
@@ -168,6 +163,3 @@ fn test_firing_data() {
         );
     });
 }
-
-
-

@@ -465,7 +465,7 @@ pub(super) fn hmr_eye_of_the_storm(
 ) -> HandlingModifierResponse {
     if _value > 0 {
         HandlingModifierResponse {
-            handling_stat_add: 30,
+            stat_add: 30,
             ..Default::default()
         }
     } else {

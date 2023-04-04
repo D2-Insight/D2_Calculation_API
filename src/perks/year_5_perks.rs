@@ -198,9 +198,10 @@ pub(super) fn hmr_slickdraw(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     HandlingModifierResponse {
-        handling_stat_add: 100,
-        handling_ads_scale: 1.0,
-        handling_swap_scale: 0.9,
+        stat_add: 100,
+        stow_scale: 0.9,
+        draw_scale: 0.9,
+        ..Default::default()
     }
 }
 
@@ -254,9 +255,8 @@ pub(super) fn hmr_stats_for_all(
         handling_boost = 35;
     };
     HandlingModifierResponse {
-        handling_stat_add: handling_boost,
-        handling_ads_scale: 1.0,
-        handling_swap_scale: 1.0,
+        stat_add: handling_boost,
+        ..Default::default()
     }
 }
 
@@ -332,9 +332,10 @@ pub(super) fn hmr_steady_hands(
         handling = 100;
     };
     HandlingModifierResponse {
-        handling_stat_add: handling,
-        handling_ads_scale: 1.0,
-        handling_swap_scale: handling_mult,
+        stat_add: handling,
+        stow_scale: handling_mult,
+        draw_scale: handling_mult,
+        ..Default::default()
     }
 }
 
@@ -424,9 +425,8 @@ pub(super) fn hmr_well_rounded(
     let stat_base = if _is_enhanced { 12 } else { 10 };
     let handling = stat_base * val;
     HandlingModifierResponse {
-        handling_stat_add: handling,
-        handling_ads_scale: 1.0,
-        handling_swap_scale: 1.0,
+        stat_add: handling,
+        ..Default::default()
     }
 }
 
@@ -554,7 +554,7 @@ pub(super) fn hmr_sleight_of_hand(
     let stat_base = 10;
     let handling = stat_base * val;
     HandlingModifierResponse {
-        handling_stat_add: handling,
+        stat_add: handling,
         ..Default::default()
     }
 }
@@ -589,9 +589,10 @@ pub(super) fn hmr_shot_swap(
         handling = 100;
     };
     HandlingModifierResponse {
-        handling_stat_add: handling,
-        handling_ads_scale: 1.0,
-        handling_swap_scale: handling_mult,
+        stat_add: handling,
+        stow_scale: handling_mult,
+        draw_scale: handling_mult,
+        ..Default::default()
     }
 }
 

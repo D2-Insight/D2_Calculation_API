@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::{
-    d2_enums::{AmmoType, DamageType, StatHashes, WeaponType},
+    d2_enums::{AmmoType, DamageType, StatHashes, WeaponType, BungieHash, StatBump},
     logging::{extern_log, LogLevel},
 };
 
@@ -100,7 +100,7 @@ pub(super) fn sbr_tome_of_dawn(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stats = HashMap::new();
     if _value > 0 {
         stats.insert(StatHashes::AIRBORNE.into(), 50);
@@ -128,7 +128,7 @@ pub(super) fn sbr_foetracer(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
 }
 
@@ -162,7 +162,7 @@ pub(super) fn sbr_mechaneers_tricksleeves(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stats = HashMap::new();
     if _input.weapon_type == &WeaponType::SIDEARM {
         stats.insert(StatHashes::AIRBORNE.into(), 50);
@@ -178,7 +178,7 @@ pub(super) fn sbr_oathkeeper(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stats = HashMap::new();
     if _input.weapon_type == &WeaponType::BOW {
         stats.insert(StatHashes::AIRBORNE.into(), 40);
@@ -192,7 +192,7 @@ pub(super) fn sbr_sealed_ahamkara_grasps(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stats = HashMap::new();
     if _value > 0 {
         stats.insert(StatHashes::AIRBORNE.into(), 50);
@@ -209,7 +209,7 @@ pub(super) fn sbr_lucky_pants(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stat = HashMap::new();
     if _value > 0 && _input.weapon_type == &WeaponType::HANDCANNON {
         stat.insert(StatHashes::AIRBORNE.into(), 20);
@@ -227,9 +227,10 @@ pub(super) fn hmr_lucky_pants(
 ) -> HandlingModifierResponse {
     if _value > 0 && _input.weapon_type == &WeaponType::HANDCANNON {
         return HandlingModifierResponse {
-            handling_stat_add: 100,
-            handling_ads_scale: 1.0,
-            handling_swap_scale: 0.6,
+            stat_add: 100,
+            ads_scale: 1.0,
+            draw_scale: 0.6,
+            ..Default::default()
         };
     }
     return HandlingModifierResponse::default();
@@ -241,7 +242,7 @@ pub(super) fn sbr_stompees(
     _is_enhanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     HashMap::from([(StatHashes::AIRBORNE.into(), -50)])
 }
 
@@ -251,7 +252,7 @@ pub(super) fn sbr_no_backup_plans(
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stats = HashMap::new();
     if _input.weapon_type == &WeaponType::SHOTGUN {
         stats.insert(StatHashes::AIRBORNE.into(), 30);
@@ -265,7 +266,7 @@ pub(super) fn sbr_actium_war_rig(
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stats = HashMap::new();
     if _input.weapon_type == &WeaponType::AUTORIFLE || _input.weapon_type == &WeaponType::MACHINEGUN
     {
@@ -282,7 +283,7 @@ pub(super) fn sbr_hallowfire_heart(
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
 }
 
@@ -292,7 +293,7 @@ pub(super) fn sbr_lion_rampants(
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stats = HashMap::new();
     if _value > 0 {
         stats.insert(StatHashes::AIRBORNE.into(), 50);
@@ -306,7 +307,7 @@ pub(super) fn sbr_peacekeepers(
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stats = HashMap::new();
     if _input.weapon_type == &WeaponType::SUBMACHINEGUN {
         stats.insert(StatHashes::AIRBORNE.into(), 40);
@@ -324,9 +325,10 @@ pub(super) fn hmr_peacekeepers(
 ) -> HandlingModifierResponse {
     if _input.weapon_type == &WeaponType::SUBMACHINEGUN {
         return HandlingModifierResponse {
-            handling_stat_add: 100,
-            handling_ads_scale: 1.0,
-            handling_swap_scale: 0.6,
+            stat_add: 100,
+            ads_scale: 1.0,
+            draw_scale: 0.6,
+            stow_scale: 0.6
         };
     }
     return HandlingModifierResponse::default();
@@ -338,7 +340,7 @@ pub(super) fn sbr_peregrine_greaves(
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
 }
 
@@ -348,7 +350,7 @@ pub(super) fn sbr_eye_of_another_world(
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     HashMap::from([(StatHashes::AIRBORNE.into(), 15)])
 }
 
@@ -358,7 +360,7 @@ pub(super) fn sbr_astrocyte_verse(
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stats = HashMap::new();
     stats.insert(StatHashes::AIRBORNE.into(), 30);
     if _value > 0 {
@@ -373,7 +375,7 @@ pub(super) fn sbr_necrotic_grip(
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stats = HashMap::new();
     if _input.intrinsic_hash == 1863355414
         || _input.intrinsic_hash == 2965975126
@@ -391,7 +393,7 @@ pub(super) fn sbr_boots_of_the_assembler(
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stats = HashMap::new();
     if _input.intrinsic_hash == 2144092201 {
         //Lumina
@@ -406,7 +408,7 @@ pub(super) fn sbr_rain_of_fire(
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stats = HashMap::new();
     if _input.weapon_type == &WeaponType::FUSIONRIFLE
         || _input.weapon_type == &WeaponType::LINEARFUSIONRIFLE
@@ -422,7 +424,7 @@ pub(super) fn sbr_speedloader_slacks(
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let modifiers = match _value {
         0 => (0, 0, 0),
         1 => (40, 40, 30),
@@ -469,7 +471,7 @@ pub(super) fn sbr_lunafaction_boots(
     _is_enahanced: bool,
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+) -> HashMap<BungieHash, StatBump> {
     let mut stat = HashMap::new();
     if _value >= 1 {
         stat.insert(StatHashes::RELOAD.into(), 100);

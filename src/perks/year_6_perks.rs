@@ -83,7 +83,7 @@ pub(super) fn hmr_field_tested(
 ) -> HandlingModifierResponse {
     let val = clamp(_value, 0, 5) as i32;
     HandlingModifierResponse {
-        handling_stat_add: val * 5,
+        stat_add: val * 5,
         ..Default::default()
     }
 }

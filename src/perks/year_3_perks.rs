@@ -60,7 +60,7 @@ pub(super) fn hmr_elemental_capacitor(
         handling = if _is_enhanced { 55 } else { 50 };
     };
     HandlingModifierResponse {
-        handling_stat_add: handling,
+        stat_add: handling,
         ..Default::default()
     }
 }
@@ -130,16 +130,11 @@ pub(super) fn hmr_killing_wind(
 ) -> HandlingModifierResponse {
     if _value > 0 {
         HandlingModifierResponse {
-            handling_stat_add: 40,
-            handling_ads_scale: 1.0,
-            handling_swap_scale: 1.0,
+            stat_add: 40,
+            ..Default::default()
         }
     } else {
-        HandlingModifierResponse {
-            handling_stat_add: 0,
-            handling_ads_scale: 1.0,
-            handling_swap_scale: 1.0,
-        }
+        HandlingModifierResponse::default()
     }
 }
 

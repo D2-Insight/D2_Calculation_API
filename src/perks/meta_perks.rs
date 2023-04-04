@@ -149,14 +149,15 @@ pub(super) fn hmr_dexterity_mods(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
+    let swap_scale = if _value > 0 {
+        0.85 - clamp(_value, 1, 3) as f64 * 0.05
+    } else {
+        1.0
+    };
     HandlingModifierResponse {
-        handling_stat_add: 0,
-        handling_ads_scale: 1.0,
-        handling_swap_scale: if _value > 0 {
-            0.85 - clamp(_value, 1, 3) as f64 * 0.05
-        } else {
-            1.0
-        },
+        stow_scale: swap_scale,
+        draw_scale: swap_scale,
+        ..Default::default()
     }
 }
 
@@ -168,9 +169,8 @@ pub(super) fn hmr_targeting_mods(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
     HandlingModifierResponse {
-        handling_stat_add: 0,
-        handling_ads_scale: if _value > 0 { 0.75 } else { 1.0 },
-        handling_swap_scale: 1.0,
+        ads_scale: if _value > 0 { 0.75 } else { 1.0 },
+        ..Default::default()
     }
 }
 

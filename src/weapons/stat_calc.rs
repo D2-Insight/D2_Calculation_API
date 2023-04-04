@@ -142,11 +142,13 @@ impl HandlingFormula {
         _handling_stat: i32,
         _modifiers: HandlingModifierResponse,
     ) -> HandlingResponse {
-        let handling_stat = (_handling_stat + _modifiers.handling_stat_add).clamp(0, 100) as f64;
-        let ready_time = self.ready.solve_at(handling_stat) * _modifiers.handling_swap_scale;
-        let mut stow_time = self.stow.solve_at(handling_stat) * _modifiers.handling_swap_scale;
-        let ads_time = self.ads.solve_at(handling_stat) * _modifiers.handling_ads_scale;
-        if stow_time < self.stow.solve_at(100.0) && (self.stow.vpp < 0_f64 && self.stow.evpp < 0_f64) {
+        let handling_stat = (_handling_stat + _modifiers.stat_add).clamp(0, 100) as f64;
+        let ready_time = self.ready.solve_at(handling_stat) * _modifiers.draw_scale;
+        let mut stow_time = self.stow.solve_at(handling_stat) * _modifiers.stow_scale;
+        let ads_time = self.ads.solve_at(handling_stat) * _modifiers.ads_scale;
+        if stow_time < self.stow.solve_at(100.0)
+            && (self.stow.vpp < 0_f64 && self.stow.evpp < 0_f64)
+        {
             stow_time = self.stow.solve_at(100.0);
         }
         HandlingResponse {
@@ -334,7 +336,8 @@ impl Weapon {
         } else {
             0.0
         };
-        let burst_delay=  (fd.burst_delay + firing_modifiers.burst_delay_add) * firing_modifiers.burst_delay_scale;
+        let burst_delay = (fd.burst_delay + firing_modifiers.burst_delay_add)
+            * firing_modifiers.burst_delay_scale;
         let burst_size = fd.burst_size + firing_modifiers.burst_size_add as i32;
         let inner_burst_delay = fd.inner_burst_delay * firing_modifiers.inner_burst_scale;
         let raw_rpm = 60.0
@@ -575,7 +578,8 @@ impl Weapon {
             );
         };
 
-        if matches!(self.weapon_type, WeaponType::GLAIVE ) { // add "| WeaponType::SWORD" to matches when swords work
+        if matches!(self.weapon_type, WeaponType::GLAIVE) {
+            // add "| WeaponType::SWORD" to matches when swords work
             buffer.insert("shield_duration".to_string(), self.calc_shield_duration());
         }
 
