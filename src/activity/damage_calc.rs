@@ -78,7 +78,7 @@ const RAID_TIMES: [f64; 11] = [
     0.0, -10.0, -20.0, -30.0, -40.0, -50.0, -60.0, -70.0, -80.0, -90.0, -99.0,
 ];
 
-const WWEAPON_DELTA_EXPONENT: f64 = 1.006736;
+const WEAPON_DELTA_EXPONENT: f64 = 1.006736;
 
 #[derive(Debug, Clone)]
 pub enum DifficultyOptions {
@@ -127,7 +127,7 @@ pub(super) fn rpl_mult(_rpl: f64) -> f64 {
     return (1.0 + ((1.0 / 30.0) * _rpl)) / (1.0 + 1.0 / 3.0);
 }
 
-pub(super) fn gpl_delta(_activity: Activity, _gpl: u32) -> f64 {
+pub(super) fn gpl_delta(_activity: &Activity) -> f64 {
     let difficulty_data = _activity.difficulty.get_difficulty_data();
     let curve = difficulty_data.table;
     let rpl = _activity.rpl;
@@ -136,29 +136,40 @@ pub(super) fn gpl_delta(_activity: Activity, _gpl: u32) -> f64 {
     } else {
         difficulty_data.cap
     };
-    let mut delta = _gpl as i32 - rpl as i32;
+    let mut delta = _activity.player.pl as i32 - rpl as i32;
     if delta < -99 {
         return 0.0;
     } else if delta > cap {
         delta = cap;
     }
-    let wep_delta_mult = WWEAPON_DELTA_EXPONENT.powi(delta);
+    let wep_delta_mult = WEAPON_DELTA_EXPONENT.powi(delta);
     let gear_delta_mult = curve.evaluate(delta as f64);
     wep_delta_mult * gear_delta_mult
 }
 
-pub(super) fn remove_pve_bonuses(
-    _rpl: f64,
-    _pl: u32,
-    _combatant_mult: f64,
-    _difficulty: DifficultyOptions,
+// pub(super) fn remove_pve_bonuses(
+//     _rpl: f64,
+//     _pl: u32,
+//     _combatant_mult: f64,
+//     _difficulty: DifficultyOptions,
+//     _damage: f64,
+// ) -> f64 {
+//     let rpl_mult = rpl_mult(_rpl);
+//     let mut tmp_activity = Activity::default();
+//     tmp_activity.difficulty = _difficulty;
+//     tmp_activity.rpl = _rpl as u32;
+//     let gpl_delta = gpl_delta(tmp_activity, _pl);
+
+//     _damage / (gpl_delta * rpl_mult * _combatant_mult)
+// }
+
+pub fn remove_pve_bonuses(
     _damage: f64,
+    _combatant_mult: f64,
+    _activity: &Activity,
 ) -> f64 {
-    let rpl_mult = rpl_mult(_rpl);
-    let mut tmp_activity = Activity::default();
-    tmp_activity.difficulty = _difficulty;
-    tmp_activity.rpl = _rpl as u32;
-    let gpl_delta = gpl_delta(tmp_activity, _pl);
+    let rpl_mult = rpl_mult(_activity.rpl as f64);
+    let gpl_delta = gpl_delta(_activity);
 
     _damage / (gpl_delta * rpl_mult * _combatant_mult)
 }

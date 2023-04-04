@@ -8,10 +8,10 @@ pub mod d2_enums;
 pub mod enemies;
 pub mod logging;
 pub mod perks;
-pub mod types;
-pub mod weapons;
 #[cfg(test)]
 mod test;
+pub mod types;
+pub mod weapons;
 
 use crate::perks::{Perk, Perks};
 use crate::weapons::{Stat, Weapon};
@@ -558,6 +558,21 @@ fn set_weapon_stats(_in: &PyDict) {
 }
 
 #[cfg(feature = "python")]
+#[pyfunction(name = "reverse_pve_calc")]
+fn reverse_pve_calc(_damage: f64, _combatant_mult: Option<f64>, _pve_mult: Option<f64>) -> PyResult<f64> {
+    use logging::extern_log;
+    let output = PERS_DATA.with(|perm_data| {
+        let combatant_mult = _combatant_mult.unwrap_or(1.0);
+        let pve_mult = _pve_mult.unwrap_or(1.0);
+        if perm_data.borrow().activity.name == "Default" {
+            extern_log("Activity is default and can return bad values", LogLevel::Warning)
+        }
+        activity::damage_calc::remove_pve_bonuses(_damage, combatant_mult, &perm_data.borrow().activity) / pve_mult
+    });
+    Ok(output)
+}
+
+#[cfg(feature = "python")]
 fn register_weapon_interface(py: Python<'_>, parent_module: &PyModule) -> PyResult<()> {
     let weapon_interface = PyModule::new(py, "WeaponInterface")?;
     //functions
@@ -572,6 +587,7 @@ fn register_weapon_interface(py: Python<'_>, parent_module: &PyModule) -> PyResu
     weapon_interface.add_function(wrap_pyfunction!(get_weapon_ttk, weapon_interface)?)?;
     weapon_interface.add_function(wrap_pyfunction!(set_weapon_stats, weapon_interface)?)?;
     weapon_interface.add_function(wrap_pyfunction!(get_firing_data, weapon_interface)?)?;
+    weapon_interface.add_function(wrap_pyfunction!(reverse_pve_calc, weapon_interface)?)?;
 
     //classes;
     weapon_interface.add_class::<PyPerk>()?;

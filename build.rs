@@ -399,9 +399,7 @@ fn main() {
             let file = file_res.unwrap();
             let res = ron::de::from_reader(file);
             if res.is_err() {
-                // println!("cargo:warning=error reading cached build file: {}", res.err().unwrap());
-                // cached_data = CachedBuildData::default();
-                panic!("cargo:warning=error reading cached build file: {} (re-run build)", res.err().unwrap());
+                panic!("cargo:warning=error reading cached build file");
             } else {
                 cached_data = res.unwrap();
             }
