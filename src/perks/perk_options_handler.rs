@@ -71,6 +71,8 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
     match perk {
         //Meta perks
         Perks::BuiltIn => None,
+        Perks::RallyBarricade => Some(PerkOptionData::static_()),
+        Perks::EmpRift => Some(PerkOptionData::static_()),
 
         //intrinsics
         Perks::RapidFireFrame => Some(PerkOptionData::toggle()),
@@ -327,7 +329,6 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::OphidianAspect => Some(PerkOptionData::static_()),
         Perks::Hedrons => Some(PerkOptionData::toggle()),
         Perks::HeatRises => Some(PerkOptionData::toggle()),
-        Perks::RallyBarricade => Some(PerkOptionData::toggle()),
         Perks::FlowState => Some(PerkOptionData::toggle()),
         Perks::TomeOfDawn => Some(PerkOptionData::toggle()),
         Perks::ThreadOfAscent => Some(PerkOptionData::toggle()),

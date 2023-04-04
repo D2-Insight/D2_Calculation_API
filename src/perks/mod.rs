@@ -312,6 +312,7 @@ pub enum Perks {
     SurgeMod,
     FreehandGrip,
     ParacausalAffinity,
+    EmpRift,
 }
 
 impl From<u32> for Perks {
@@ -320,10 +321,11 @@ impl From<u32> for Perks {
             //Meta perks
             0 => Perks::BuiltIn,
             444 => Perks::RallyBarricade,
+            555 => Perks::EmpRift,
 
             1380009033 => Perks::Radiant,
             1464159054 => Perks::Weaken,
-            2274196887 => Perks::WellOfRadiance, //Should this be here? -- No clue
+            2274196887 => Perks::WellOfRadiance,
 
             //intrinsics
             902 => Perks::RapidFireFrame,
@@ -942,6 +944,7 @@ fn get_perk_dmr(
         Perks::ParacausalAffinity => {
             dmr_paracausal_affinity(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::EmpRift => dmr_empowering_rift(_input_data, val, enhanced, _pvp, _cached_data),
         _ => DamageModifierResponse::default(),
     }
 }
