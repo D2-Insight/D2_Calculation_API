@@ -899,7 +899,7 @@
         },
         "magProf": {
             "default": {
-                "mag": {"vpp": 0.03, "offset": 2.4},
+                "mag": {"vpp": 0.03, "offset": 2.49},
                 "reserve_id": 121
             }
         }
