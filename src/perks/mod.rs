@@ -1056,9 +1056,9 @@ pub fn get_firing_modifier(
         firing_modifier.burst_size_add += tmp.burst_size_add;
     }
     if _input_data.weapon_type == &WeaponType::BOW
-        && _input_data.curr_firing_data.burst_delay + firing_modifier.burst_delay_add < 0.5
+        && _input_data.curr_firing_data.burst_delay + firing_modifier.burst_delay_add < 0.533
     {
-        firing_modifier.burst_delay_add = 0.5 - _input_data.curr_firing_data.burst_delay;
+        firing_modifier.burst_delay_add = 0.533 - _input_data.curr_firing_data.burst_delay;
     }
     firing_modifier
 }

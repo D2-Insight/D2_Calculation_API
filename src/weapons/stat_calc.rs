@@ -21,7 +21,7 @@ use crate::{
 };
 
 impl ReloadFormula {
-    pub fn calc_reload_time_formula(
+    fn calc_reload_time_formula(
         &self,
         _reload_stat: i32,
         _modifiers: ReloadModifierResponse,
@@ -49,20 +49,25 @@ impl Weapon {
             .val();
         let mut default_chd_dt = HashMap::new();
         let cached_data = _cached_data.unwrap_or(&mut default_chd_dt);
+        let mut out;
         if _calc_input.is_some() {
             let modifiers =
                 get_reload_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data);
-            self.reload_formula
-                .calc_reload_time_formula(reload_stat, modifiers)
+            out = self.reload_formula
+                .calc_reload_time_formula(reload_stat, modifiers);
         } else {
-            self.reload_formula
-                .calc_reload_time_formula(reload_stat, ReloadModifierResponse::default())
+            out = self.reload_formula
+                .calc_reload_time_formula(reload_stat, ReloadModifierResponse::default());
         }
+        if self.weapon_type == WeaponType::BOW {
+            out.reload_time = out.reload_time.clamp(0.6, 5.0);
+        }
+        out
     }
 }
 
 impl RangeFormula {
-    pub fn calc_range_falloff_formula(
+    fn calc_range_falloff_formula(
         &self,
         _range_stat: i32,
         _zoom_stat: i32,
@@ -137,7 +142,7 @@ impl Weapon {
 }
 
 impl HandlingFormula {
-    pub fn calc_handling_times_formula(
+    fn calc_handling_times_formula(
         &self,
         _handling_stat: i32,
         _modifiers: HandlingModifierResponse,
@@ -186,7 +191,7 @@ impl Weapon {
 }
 
 impl AmmoFormula {
-    pub fn calc_ammo_size_formula(
+    fn calc_ammo_size_formula(
         &self,
         _mag_stat: i32,
         _mag_modifiers: MagazineModifierResponse,
