@@ -310,6 +310,7 @@ pub enum Perks {
     NobleRounds,
     KickStart,
     SurgeMod,
+    FreehandGrip,
 }
 
 impl From<u32> for Perks {
@@ -387,6 +388,7 @@ impl From<u32> for Perks {
             3018373291 => Perks::BigOnesSpec,
             1513326571 => Perks::TakenSpec,
             744770875 => Perks::AdeptChargeTime,
+            736000386 => Perks::FreehandGrip,
 
             //origin | year 5+
             3988215619 => Perks::VeistStinger,
@@ -1196,6 +1198,7 @@ fn get_perk_hmr(
         Perks::LuckyPants => hmr_lucky_pants(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Peacekeepers => hmr_peacekeepers(_input_data, val, enhanced, _pvp, _cached_data),
         // Perks::FieldTested => hmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::FreehandGrip => hmr_freehand_grip(_input_data, val, enhanced, _pvp, _cached_data),
         _ => HandlingModifierResponse::default(),
     }
 }

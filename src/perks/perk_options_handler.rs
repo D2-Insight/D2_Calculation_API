@@ -102,6 +102,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::MinorSpec => Some(PerkOptionData::static_()),
         Perks::BigOnesSpec => Some(PerkOptionData::static_()),
         Perks::TakenSpec => Some(PerkOptionData::toggle()),
+        Perks::FreehandGrip => Some(PerkOptionData::static_()),
 
         //origin | year 5+
         Perks::VeistStinger => Some(PerkOptionData::static_()),

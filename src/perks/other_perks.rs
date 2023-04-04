@@ -62,6 +62,19 @@ pub(super) fn hmr_swap_mag(
     }
 }
 
+pub(super) fn hmr_freehand_grip(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    HandlingModifierResponse {
+        draw_scale: 0.95,
+        ..Default::default()
+    }
+}
+
 pub(super) fn hmr_ophidian_aspects(
     _input: &CalculationInput,
     _value: u32,
@@ -294,23 +307,6 @@ pub(super) fn sbr_hedrons(
         stats.insert(StatHashes::AIRBORNE.into(), 20);
         stats.insert(StatHashes::AIM_ASSIST.into(), 15);
         stats.insert(StatHashes::STABILITY.into(), 30);
-    };
-    stats
-}
-
-pub(super) fn sbr_quick_charge(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
-    let mut stats = HashMap::new();
-    if *_input.weapon_type == WeaponType::FUSIONRIFLE
-        || *_input.weapon_type == WeaponType::SHOTGUN
-        || *_input.weapon_type == WeaponType::SIDEARM
-    {
-        stats.insert(StatHashes::HANDLING.into(), 25);
     };
     stats
 }
