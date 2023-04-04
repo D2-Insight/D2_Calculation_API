@@ -963,7 +963,7 @@ fn get_perk_rsmr(
     let val = _perk.value;
     let enhanced = _perk.enhanced;
     match perk_enum {
-        Perks::RapidFireFrame => rsmr_alloy_mag(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::RapidFireFrame => rsmr_rapid_fire(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::AlloyMag => rsmr_alloy_mag(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Roadborn => rsmr_roadborn(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::OphidianAspect => {

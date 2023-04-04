@@ -31,6 +31,23 @@ pub(super) fn rsmr_alloy_mag(
     }
 }
 
+pub(super) fn rsmr_rapid_fire(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> ReloadModifierResponse {
+    if _value > 0 {
+        ReloadModifierResponse {
+            reload_stat_add: 0,
+            reload_time_scale: 0.85,
+        }
+    } else {
+        ReloadModifierResponse::default()
+    }
+}
+
 pub(super) fn hmr_swap_mag(
     _input: &CalculationInput,
     _value: u32,

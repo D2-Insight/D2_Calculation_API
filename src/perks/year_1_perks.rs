@@ -800,10 +800,14 @@ pub(super) fn hmr_quickdraw(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> HandlingModifierResponse {
-    HandlingModifierResponse {
-        handling_stat_add: 100,
-        handling_swap_scale: 0.95,
-        ..Default::default()
+    if _value > 0 {
+        HandlingModifierResponse {
+            handling_stat_add: 100,
+            handling_swap_scale: 0.95,
+            ..Default::default()
+        }
+    } else {
+        HandlingModifierResponse::default()
     }
 }
 
@@ -815,7 +819,9 @@ pub(super) fn sbr_quickdraw(
     _cached_data: &mut HashMap<String, f64>,
 ) -> HashMap<u32, i32> {
     let mut map = HashMap::new();
-    map.insert(StatHashes::HANDLING.into(), 100);
+    if _value > 0 {
+        map.insert(StatHashes::HANDLING.into(), 100);
+    }
     map
 }
 

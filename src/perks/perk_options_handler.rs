@@ -73,7 +73,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::BuiltIn => None,
 
         //intrinsics
-        Perks::RapidFireFrame => Some(PerkOptionData::static_()),
+        Perks::RapidFireFrame => Some(PerkOptionData::toggle()),
 
         //armor
 
@@ -137,7 +137,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::Snapshot => Some(PerkOptionData::static_()),
         Perks::TapTheTrigger => Some(PerkOptionData::toggle()),
         Perks::SlideWays => Some(PerkOptionData::toggle()),
-        Perks::QuickDraw => Some(PerkOptionData::static_()),
+        Perks::QuickDraw => Some(PerkOptionData::toggle()),
         Perks::TimedPayload => Some(PerkOptionData::static_()),
         Perks::ThreatDetector => Some(PerkOptionData::stacking(2)),
         Perks::SlideShot => Some(PerkOptionData::toggle()),
