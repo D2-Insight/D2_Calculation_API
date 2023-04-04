@@ -24,10 +24,13 @@ pub(super) fn rsmr_alloy_mag(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
-    //also works for rapid fire frames
-    ReloadModifierResponse {
-        reload_stat_add: 0,
-        reload_time_scale: 0.85,
+    if _value > 0 {
+        ReloadModifierResponse {
+            reload_stat_add: 0,
+            reload_time_scale: 0.85,
+        }
+    } else {
+        ReloadModifierResponse::default()
     }
 }
 
