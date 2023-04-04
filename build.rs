@@ -411,15 +411,29 @@ fn main() {
 
     cached_data.sort();
 
+    //check if being run by rust-analyzer
+    let is_rust_analyzer = std::env::var("IS_RA");
+    if is_rust_analyzer.is_ok() {
+        if is_rust_analyzer.unwrap() == "true" {
+            println!("cargo:warning=running in rust-analyzer");
+            return;
+        }
+    }
+
     let file_res = std::fs::File::create("./build_resources/cached_build.ron");
     if file_res.is_err() {
         println!("cargo:warning=error writing cached build file");
     } else {
-        let file = file_res.unwrap();
-        let res = ron::ser::to_writer(file, &cached_data);
+        let mut file = file_res.unwrap();
+        // let serializer = ron::ser::Serializer::new(file, None);
+        let res = ron::ser::to_string_pretty(&cached_data, ron::ser::PrettyConfig::default());
         if res.is_err() {
-            panic!("cargo:warning=error writing cached build file");
+            panic!("cargo:warning=error initializing ron serializer");
+        } else {
+            #[allow(unused_variables)]
+            let cd: CachedBuildData = ron::de::from_str(&res.clone().unwrap()).expect("cargo:warning=error deserializing");
         }
+        file.write_all(res.unwrap().as_bytes()).expect("cargo:warning=error writing cached build file");
     }
 }
 

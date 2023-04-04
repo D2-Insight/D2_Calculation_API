@@ -589,7 +589,7 @@ fn register_weapon_interface(py: Python<'_>, parent_module: &PyModule) -> PyResu
     weapon_interface.add_function(wrap_pyfunction!(get_firing_data, weapon_interface)?)?;
     weapon_interface.add_function(wrap_pyfunction!(reverse_pve_calc, weapon_interface)?)?;
 
-    //classes;
+    //classes
     weapon_interface.add_class::<PyPerk>()?;
     weapon_interface.add_class::<PyRangeResponse>()?;
     weapon_interface.add_class::<PyHandlingResponse>()?;

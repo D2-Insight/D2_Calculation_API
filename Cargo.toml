@@ -9,7 +9,6 @@ build = "build.rs"
 [features]
 wasm = ["serde-wasm-bindgen", "wasm-bindgen", "console_error_panic_hook"]
 python = ["pyo3", "pyo3-built"]
-foundry = []
 
 [build-dependencies]
 built = { version = "0.6", features = ["git2", "chrono", "semver"] }
