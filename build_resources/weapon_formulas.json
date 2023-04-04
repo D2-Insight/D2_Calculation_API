@@ -485,9 +485,9 @@
         }
     },
     "Machine Gun": {
-        "878286503":  {"name": "Rapid-Fire Frame",    "cat": "default",   "subFam": "Rapid-Fire",   "magProf": "large"},
-        "1019291327": {"name": "High-Impact Frame",   "cat": "default",   "subFam": "High-Impact",  "magProf": "small"},
-        "1294026524": {"name": "Adaptive Frame",      "cat": "default",   "subFam": "Adaptive",     "magProf": "small"},
+        "878286503":  {"name": "Rapid-Fire Frame",    "cat": "default",   "subFam": "Rapid-Fire",   "magProf": "large", "pve": 1.1},
+        "1019291327": {"name": "High-Impact Frame",   "cat": "default",   "subFam": "High-Impact",  "magProf": "small", "pve": 1.1},
+        "1294026524": {"name": "Adaptive Frame",      "cat": "default",   "subFam": "Adaptive",     "magProf": "small", "pve": 1.1},
         "2261491232": {"name": "Xenophage",           "cat": "Xenophage", "subFam": "Xenophage",    "magProf": "xenophage", "pve":2.75},
         "2608508147": {"name": "Heir Apparent",       "cat": "default",   "subFam": "HeirApparent", "magProf": "large"},
         "4148158229": {"name": "Thunderlord",         "cat": "default",   "subFam": "Adaptive",     "magProf": "small"},
@@ -528,8 +528,8 @@
         },
 
         "subFam": {
-            "High-Impact": {"damage": 34.0,  "crit_mult": -5,    "burst_delay": 5,  "burst_size": 1, "inner_burst_delay": 0.0},
-            "Adaptive":    {"damage": 30.0,  "crit_mult": -5,    "burst_delay": 4,  "burst_size": 1, "inner_burst_delay": 0.0},
+            "High-Impact": {"damage": 33.5,  "crit_mult": -5,    "burst_delay": 5,  "burst_size": 1, "inner_burst_delay": 0.0},
+            "Adaptive":    {"damage": 29.0,  "crit_mult": -5,    "burst_delay": 4,  "burst_size": 1, "inner_burst_delay": 0.0},
             "Rapid-Fire":  {"damage": 18.0,  "crit_mult": -10,   "burst_delay": 2,  "burst_size": 1, "inner_burst_delay": 0.0},
             "Xenophage":   {"damage": 150.0, "crit_mult": -25.5, "burst_delay": 15, "burst_size": 1, "inner_burst_delay": 0.0},
             "HeirApparent":{"damage": 234.0, "crit_mult": -5,    "burst_delay": 2,  "burst_size": 1, "inner_burst_delay": 0.0}
