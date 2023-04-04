@@ -173,15 +173,6 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
             } else {
                 opt_headshots += 1;
                 opt_damage_dealt += body_damage + head_diff;
-                if _weapon.weapon_type == WeaponType::BOW {
-                    opt_time_taken += _weapon
-                        .calc_reload_time(
-                            Some(calc_input.clone()),
-                            Some(&mut persistent_data),
-                            true,
-                        )
-                        .reload_time;
-                }
             }
         }
 
