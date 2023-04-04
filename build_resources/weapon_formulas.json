@@ -118,6 +118,7 @@
         "3239299468": {"name": "Ticuu's Divination", "cat": "exotic",  "subFam": "Precision",   "magProf": "default"},
         "2226793914": {"name": "Hierarchy Of Needs", "cat": "exotic",  "subFam": "Hierarchy",   "magProf": "default"},
         "2636679416": {"name": "Verglass Curve",     "cat": "exotic",  "subFam": "Lightweight", "magProf": "default"},
+        "696969":     {"name": "Test_Bow",           "cat": "test",    "subFam": "test",        "magProf": "test"},
 
         "cat": {
             "default": {
@@ -139,6 +140,16 @@
                     "ads":  {"vpp": -0.001855658199, "offset": 0.5293778291}
                 },
                 "combatant_scalars": {"vehicle": 1.5, "boss": 1.5, "champion": 1.5, "miniboss": 1.5, "elite": 1.9, "minor": 2.5}
+            },
+            "test": {
+                "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
+                "reload":   {"evpp": 0.0, "vpp": -0.1, "offset": 10.0},
+                "handling": {
+                    "ready":{"vpp": 0.0, "offset": 5.0},
+                    "stow": {"vpp": 0.1,  "offset": 0.0},
+                    "ads":  {"vpp": 0.05, "offset": 2.5}
+                },
+                "combatant_scalars": {"vehicle": 1.0, "boss": 1.0, "champion": 1.0, "miniboss": 1.0, "elite": 1.9, "minor": 1.0}
             }
         },
         "subFam": {
@@ -146,11 +157,16 @@
             "Lightweight": {"damage": 85.61, "crit_mult": 5, "burst_delay": 17.5, "burst_size": 1, "inner_burst_delay": 0},
             "Trinity":     {"damage": 34.3,  "crit_mult": 0, "burst_delay": 20.5, "burst_size": 3, "inner_burst_delay": 0},
             "Hierarchy":   {"damage": 93.0,  "crit_mult": 5, "burst_delay": 20.5, "burst_size": 1, "inner_burst_delay": 0},
-            "leviathan":   {"damage": 345.6, "crit_mult": 5, "burst_delay": 40,   "burst_size": 1, "inner_burst_delay": 0}
+            "leviathan":   {"damage": 345.6, "crit_mult": 5, "burst_delay": 40,   "burst_size": 1, "inner_burst_delay": 0},
+            "test" :       {"damage": 100,   "crit_mult": 2, "burst_delay": 20,   "burst_size": 2, "inner_burst_delay": 0}
         },
         "magProf": {
             "default": {
                 "mag": {"evpp": 0.0 ,"vpp": 0.0, "offset": 1},
+                "reserve_id": 0
+            },
+            "test": {
+                "mag": {"evpp": 0.0, "vpp": 0.5, "offset": 25},
                 "reserve_id": 0
             },
             "leviathan": {
