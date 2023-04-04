@@ -232,9 +232,18 @@ pub(super) fn rsmr_bitter_spite(
     _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let val = clamp(_value, 0, 5) as i32;
+    let mult = match val {
+        0 => 1.0,
+        1 => 0.97,
+        2 => 0.96,
+        3 => 0.95,
+        4 => 0.92,
+        5 => 0.90,
+        _ => 0.90,
+    };
     ReloadModifierResponse {
         reload_stat_add: val * 10,
-        ..Default::default()
+        reload_time_scale: mult,
     }
 }
 

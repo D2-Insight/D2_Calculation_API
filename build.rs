@@ -384,19 +384,27 @@ fn main() {
         panic!("cargo:warning=error writing imports");
     }
 
+    let build_cache_path = std::path::Path::new("./build_resources/cached_build.ron");
     let mut cached_data: CachedBuildData;
-    let file_res = std::fs::File::open("./build_resources/cached_build.ron");
-    if file_res.is_err() {
+    //if "./build_resources/cached_build.ron" exists
+    if !build_cache_path.exists() {
         println!("cargo:warning=no cached build file found");
         cached_data = CachedBuildData::default();
     } else {
-        let file = file_res.unwrap();
-        let res = ron::de::from_reader(file);
-        if res.is_err() {
-            println!("cargo:warning=error reading cached build file");
+        let file_res = std::fs::File::open(build_cache_path);
+        if file_res.is_err() {
+            println!("cargo:warning=error opening cached build file: {}", file_res.err().unwrap());
             cached_data = CachedBuildData::default();
         } else {
-            cached_data = res.unwrap();
+            let file = file_res.unwrap();
+            let res = ron::de::from_reader(file);
+            if res.is_err() {
+                // println!("cargo:warning=error reading cached build file: {}", res.err().unwrap());
+                // cached_data = CachedBuildData::default();
+                panic!("cargo:warning=error reading cached build file: {} (re-run build)", res.err().unwrap());
+            } else {
+                cached_data = res.unwrap();
+            }
         }
     }
 
@@ -853,6 +861,7 @@ fn construct_enhance_perk_mapping(formula_file: &mut File, cached: &mut CachedBu
                         .unwrap()
                 ));
                 println!("cargo:warning=downloaded new manifest");
+                cached.procedural_intrinsic_mappings.clear();
                 let item_data_json: Value =
                     serde_json::from_str(&item_data_raw.unwrap().text().unwrap()).unwrap();
                 for (key, value) in item_data_json.as_object().unwrap() {
