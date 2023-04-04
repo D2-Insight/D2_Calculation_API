@@ -136,13 +136,23 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
             let shot_burst_size =
                 _weapon.firing_data.burst_size as f64 + firing_mods.burst_size_add;
 
-            let shot_delay = if opt_bullets_hit % shot_burst_size > 0.0 && opt_bullets_hit > 0.0 {
+            let mut shot_delay = if opt_bullets_hit % shot_burst_size > 0.0 && opt_bullets_hit > 0.0 {
                 shot_inner_burst_delay
             } else if opt_bullets_hit == 0.0 {
                 0.0
             } else {
                 shot_burst_delay
             };
+
+            if _weapon.weapon_type == WeaponType::LINEARFUSIONRIFLE {
+                shot_delay *= 1.95;
+            } else if _weapon.weapon_type == WeaponType::FUSIONRIFLE {
+                shot_delay *= 1.45;
+            }
+
+            if opt_bullets_fired >= _weapon.calc_ammo_sizes(Some(calc_input.clone()), Some(&mut persistent_data), true).mag_size.into() {
+                shot_delay += _weapon.calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data), true).reload_time;
+            }
 
             if opt_bullets_hit % shot_burst_size == 0.0 {
                 opt_bullets_fired += 1.0;
@@ -256,13 +266,23 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
             let shot_burst_size =
                 _weapon.firing_data.burst_size as f64 + firing_mods.burst_size_add;
 
-            let shot_delay = if bdy_bullets_hit % shot_burst_size > 0.0 && bdy_bullets_hit > 0.0 {
+            let mut shot_delay = if bdy_bullets_hit % shot_burst_size > 0.0 && bdy_bullets_hit > 0.0 {
                 shot_inner_burst_delay
             } else if bdy_bullets_hit == 0.0 {
                 0.0
             } else {
                 shot_burst_delay
             };
+
+            if _weapon.weapon_type == WeaponType::LINEARFUSIONRIFLE {
+                shot_delay *= 1.95;
+            } else if _weapon.weapon_type == WeaponType::FUSIONRIFLE {
+                shot_delay *= 1.45;
+            }
+
+            if bdy_bullets_fired >= _weapon.calc_ammo_sizes(Some(calc_input.clone()), Some(&mut persistent_data), true).mag_size.into() {
+                shot_delay += _weapon.calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data), true).reload_time;
+            }
 
             bdy_time_taken += shot_delay;
             if bdy_bullets_hit % shot_burst_size == 0.0 {
