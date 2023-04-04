@@ -939,6 +939,9 @@ fn get_perk_dmr(
         Perks::LuckyPants => dmr_lucky_pants(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::Foetracer => dmr_foetracer(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::NobleRounds => dmr_noble_rounds(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ParacausalAffinity => {
+            dmr_paracausal_affinity(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => DamageModifierResponse::default(),
     }
 }

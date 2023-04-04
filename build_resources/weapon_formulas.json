@@ -947,7 +947,7 @@
         },
         "magProf": {
             "small": {
-                "mag": {"evpp": 0.0, "vpp": 0.1, "offset": 23.9},
+                "mag": {"evpp": 0.0, "vpp": 0.1, "offset": 23.5},
                 "reserve_id": 0
             },
             "large": {
