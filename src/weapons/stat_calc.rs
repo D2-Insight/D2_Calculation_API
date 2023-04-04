@@ -334,8 +334,7 @@ impl Weapon {
         } else {
             0.0
         };
-        let burst_delay = (fd.burst_delay + firing_modifiers.burst_delay_add)
-            * firing_modifiers.burst_delay_scale;
+        let burst_delay=  (fd.burst_delay + firing_modifiers.burst_delay_add) * firing_modifiers.burst_delay_scale;
         let burst_size = fd.burst_size + firing_modifiers.burst_size_add as i32;
         let inner_burst_delay = fd.inner_burst_delay * firing_modifiers.inner_burst_scale;
         let raw_rpm = 60.0
