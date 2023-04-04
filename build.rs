@@ -418,7 +418,7 @@ fn main() {
         println!("cargo:warning=error writing cached build file");
     } else {
         let file = file_res.unwrap();
-        let res = ron::ser::to_writer_pretty(file, &cached_data, ron::ser::PrettyConfig::default());
+        let res = ron::ser::to_writer(file, &cached_data);
         if res.is_err() {
             println!("cargo:warning=error writing cached build file");
         }
