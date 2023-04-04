@@ -115,3 +115,21 @@ pub(super) fn rmr_field_tested(
         ..Default::default()
     }
 }
+
+pub(super) fn dmr_paracausal_affinity(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> DamageModifierResponse {
+    if _value > 0 {
+        DamageModifierResponse {
+            explosive_dmg_scale: 1.2,
+            impact_dmg_scale: 1.2,
+            ..Default::default()
+        }
+    } else {
+        DamageModifierResponse::default()
+    }
+}

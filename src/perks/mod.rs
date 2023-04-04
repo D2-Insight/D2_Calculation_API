@@ -311,6 +311,7 @@ pub enum Perks {
     KickStart,
     SurgeMod,
     FreehandGrip,
+    ParacausalAffinity,
 }
 
 impl From<u32> for Perks {
@@ -557,6 +558,7 @@ impl From<u32> for Perks {
 
             //season 20 | year 6
             3619207468 => Perks::KeepAway,
+            3215448563 => Perks::ParacausalAffinity,
 
             //subclass
             3066103999 => Perks::OnYourMark,
