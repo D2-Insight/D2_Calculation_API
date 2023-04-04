@@ -19,7 +19,7 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 
-use crate::d2_enums::{BungieHash, StatBump, StatHashes};
+use crate::d2_enums::{BungieHash, StatBump, StatHashes, WeaponType};
 use crate::database;
 
 use self::{
@@ -1044,6 +1044,11 @@ pub fn get_firing_modifier(
         firing_modifier.burst_delay_add += tmp.burst_delay_add;
         firing_modifier.inner_burst_scale *= tmp.inner_burst_scale;
         firing_modifier.burst_size_add += tmp.burst_size_add;
+    }
+    if _input_data.weapon_type == &WeaponType::BOW
+        && _input_data.curr_firing_data.burst_delay + firing_modifier.burst_delay_add < 0.5
+    {
+        firing_modifier.burst_delay_add = 500.0 - _input_data.curr_firing_data.burst_delay;
     }
     firing_modifier
 }
