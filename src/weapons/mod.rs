@@ -2,7 +2,7 @@ pub mod dps_calc;
 pub mod reserve_calc;
 pub mod stat_calc;
 pub mod ttk_calc;
-pub mod weapon_formulas;
+pub mod weapon_constructor;
 
 use std::collections::HashMap;
 
