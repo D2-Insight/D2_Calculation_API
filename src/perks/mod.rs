@@ -1121,6 +1121,7 @@ fn get_perk_fmr(
         }
         Perks::KickStart => fmr_kickstart(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::BuiltIn => fmr_builtin(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Oathkeeper => fmr_faster_string_t1(_input_data, val, enhanced, _pvp, _cached_data),
         _ => FiringModifierResponse::default(),
     }
 }
