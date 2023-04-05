@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::{
-    d2_enums::{AmmoType, DamageType, StatHashes, WeaponType, BungieHash, StatBump},
+    d2_enums::{AmmoType, BungieHash, DamageType, StatBump, StatHashes, WeaponType},
     logging::{extern_log, LogLevel},
 };
 
@@ -328,7 +328,7 @@ pub(super) fn hmr_peacekeepers(
             stat_add: 100,
             ads_scale: 1.0,
             draw_scale: 0.6,
-            stow_scale: 0.6
+            stow_scale: 0.6,
         };
     }
     return HandlingModifierResponse::default();
