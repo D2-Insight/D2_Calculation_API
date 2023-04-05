@@ -93,7 +93,6 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::AdeptChargeTime => Some(PerkOptionData::static_()),
         //bow strings
         Perks::SlowerStringT1 => Some(PerkOptionData::static_()),
-        Perks::SlowerStringT2 => Some(PerkOptionData::static_()),
         Perks::FasterStringT1 => Some(PerkOptionData::static_()),
         Perks::FasterStringT2 => Some(PerkOptionData::static_()),
 
@@ -296,7 +295,6 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::Fundamentals => Some(PerkOptionData::options(["Void", "Solar", "Arc"].to_vec())),
         Perks::ThinTheHerd => Some(PerkOptionData::toggle()),
         Perks::Chimera => Some(PerkOptionData::toggle()),
-        Perks::FirstGlance => Some(PerkOptionData::toggle()),
         Perks::FateOfAllFools => Some(PerkOptionData::stacking(3)),
         Perks::HonedEdge => Some(PerkOptionData::stacking_min(4, 1)),
         Perks::TakenPredator => Some(PerkOptionData::options(
@@ -332,6 +330,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::FlowState => Some(PerkOptionData::toggle()),
         Perks::TomeOfDawn => Some(PerkOptionData::toggle()),
         Perks::ThreadOfAscent => Some(PerkOptionData::toggle()),
+        Perks::WellOfRadiance => Some(PerkOptionData::static_()),
 
         Perks::Radiant => Some(PerkOptionData::static_()),
         Perks::Weaken => Some(PerkOptionData::static_()),

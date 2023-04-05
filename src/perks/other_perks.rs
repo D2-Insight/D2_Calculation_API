@@ -204,9 +204,13 @@ pub(super) fn rsmr_frequency(
     _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     //far far too lazy to do this properly
-    ReloadModifierResponse {
-        reload_stat_add: 100,
-        reload_time_scale: 0.8,
+    if _value > 0 {
+        ReloadModifierResponse {
+            reload_stat_add: 100,
+            reload_time_scale: 0.8,
+        }
+    } else {
+        ReloadModifierResponse::default()
     }
 }
 

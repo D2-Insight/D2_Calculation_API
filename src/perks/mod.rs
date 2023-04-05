@@ -17,6 +17,7 @@ pub mod year_6_perks;
 
 use std::collections::HashMap;
 
+use num_enum::FromPrimitive;
 use serde::{Deserialize, Serialize};
 
 use crate::d2_enums::{BungieHash, StatBump, StatHashes, WeaponType};
@@ -78,553 +79,331 @@ pub fn enhanced_check(_hash: u32) -> (u32, bool) {
 }
 
 // all armor pekrs are for the future but wanted to started to compile them now
-#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq)]
+
+#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, FromPrimitive)]
+#[repr(u32)]
 pub enum Perks {
-    VeistStinger,
-    Surrounded,
-    Harmony,
-    Frenzy,
-    HakkeBreach,
-    CloseToMelee,
-    SteadyHands,
-    Cornered,
-    KillClip,
-    Ensemble,
-    FiringLine,
-    StatsForAll,
-    FragileFocus,
-    KillingWind,
-    Desperado,
-    CascadePoint,
-    Outlaw,
-    BackupPlan,
-    BoxBreathing,
-    Pugilist,
-    WellRounded,
-    ExplosiveLight,
-    Adagio,
-    Ambush,
-    FieldPrep,
-    OpeningShot,
-    FirmlyPlanted,
-    SlideShot,
-    SlideWays,
-    TapTheTrigger,
-    PerfectFloat,
-    OffhandStrike,
-    TakenSpec,
-    OverFlow,
-    Reconstruction,
-    UnderPressure,
-    TrenchBarrel,
-    DisruptionBreak,
-    UnderDog,
-    OneForAll,
-    FireFly,
-    DangerZone,
-    TunnelVision,
-    Alacrity,
-    FluidDynamics,
-    QuietMoment,
-    SurosSynergy,
-    CompulsiveReloader,
-    BaitAndSwitch,
-    UnstoppableForce,
-    HotSwap,
-    RightHook,
-    KeepAway,
-    NoDistractions,
-    Amplified,
-    Tempering,
-    HeatRises,
-    Hedrons,
-    Frequency,
-    FlowState,
-    FeedingFrenzy,
-    RunnethOver,
-    MultikillClip,
-    Encore,
-    SuccesfulWarmup,
-    Swashbuckler,
-    Surplus,
-    RapidHit,
-    PerpetualMotion,
-    AdrenalineJunkie,
-    Rampage,
-    ThreatDetector,
-    AirAssault,
-    KillingTally,
-    AmbitiousAssassin,
-    FullCourt,
-    Recombination,
-    HeatingUp,
-    GoldenTricorn,
-    SleightOfHand,
-    BitterSpite,
-    TexBalancedStock,
-    ShotSwap,
-    OnYourMark,
-    Demolitionist,
-    ElementalCapacitor,
-    DexterityMod,
-    ReloadMod,
-    ReserveMod,
-    TargetingMod,
-    LoaderMod,
-    UnflinchingMod,
-    GutShot,
-    Vorpal,
-    ImpulseAmplifier,
-    MovingTarget,
-    TargetLock,
-    HighImpactReserves,
-    FocusedFury,
-    ChillClip,
-    LastingImpression,
-    TripleTap,
-    FourthTimesTheCharm,
-    HipFireGrip,
-    RewindRounds,
-    ExplosivePayload,
-    TimedPayload,
-    ExplosiveHead,
-    SpikeGrenades,
-    DisorientingGrenades,
-    AlloyMag,
-    RapidFireFrame,
-    SwapMag,
-    QuickAccessSling,
-    BossSpec,
-    MinorSpec,
-    MajorSpec,
-    BigOnesSpec,
-    AssaultMag,
-    QuickDraw,
-    ImpactCasing,
-    FullChoke,
-    ResevoirBurst,
-    OverUnder,
-    ArchersTempo,
-    Snapshot,
-    Slickdraw,
-    ClownCartridge,
-    RangeFinder,
-    ClusterBomb,
-    FullAutoTrigger,
-    HeadSeeker,
-    DualLoader,
-    SearchParty,
-    AcceleratedCoils,
-    LiquidCoils,
-    ChargetimeMW,
-    AdeptChargeTime,
-    Ignore,
-    MasterWork,
-    BuiltIn,
-    RallyBarricade,
-    CranialSpike,
-    AgersCall,
-    LagragianSight,
-    OphidianAspect,
-    DragonShadow,
-    LunaFaction,
-    TomeOfDawn,
-    RatPack,
-    StringofCurses,
-    WormsHunger,
-    RocketTracers,
-    ParacausalShot,
-    CorruptionSpreads,
-    TimeSlip,
-    ToM,
-    IgnitionTrigger,
-    GuidanceRing,
-    ConserveMomentum,
-    Impetus,
-    LooksCanKill,
-    PerfectFith,
-    Broadside,
-    Stormbringer,
-    PrismaticInferno,
-    ReignHavoc,
-    WhisperCatalyst,
-    Roadborn,
-    HakkeHeavyBurst,
-    SwoopingTalons,
-    CalculatedBalance,
-    RavenousBeast,
-    LordOfWolvesCatalyst,
-    ReleaseTheWolves,
-    Fundamentals,
-    ThinTheHerd,
-    Chimera,
-    FirstGlance,
-    FateOfAllFools,
-    HonedEdge,
-    TakenPredator,
-    MarkovChain,
-    StormAndStress,
-    DualSpeedReceiver,
-    ExplosiveShadow,
-    SurosLegacy,
-    SpinningUp,
-    DarkDescent,
-    SleeperCatalyst,
-    TargetAquired,
-    PulseMonitor,
-    EyeOfTheStorm,
-    FullStop,
-    RideTheBull,
-    HuntersTrance,
-    FasterStringT1,
-    FasterStringT2,
-    SlowerStringT1,
-    SlowerStringT2,
-    FieldTested,
-    Radiant,
-    Weaken,
-    PathOfTheBurningSteps,
-    WellOfRadiance,
-    Foetracer,
-    MechaneersTricksleeves,
-    Oathkeeper,
-    SealedAhamkaraGrasps,
-    LuckyPants,
-    Stompees,
-    NoBackupPlans,
-    ActiumWarRig,
-    HallowfireHeart,
-    LionRampart,
-    Peacekeepers,
-    PeregrineGreaves,
-    EyeOfAnotherWorld,
-    AstrocyteVerse,
-    NecroticGrips,
-    BootsOfTheAssembler,
-    RainOfFire,
-    SpeedloaderSlacks,
-    ThreadOfAscent,
-    MantleOfBattleHarmony,
-    MaskOfBakris,
-    BallindorseWrathweavers,
-    NobleRounds,
-    KickStart,
-    SurgeMod,
-    FreehandGrip,
-    ParacausalAffinity,
-    EmpRift,
-}
+    //Meta perks
+    BuiltIn = 0,
+    RallyBarricade = 444,
+    EmpRift = 555,
 
-impl From<u32> for Perks {
-    fn from(_value: u32) -> Perks {
-        match _value {
-            //Meta perks
-            0 => Perks::BuiltIn,
-            444 => Perks::RallyBarricade,
-            555 => Perks::EmpRift,
+    Radiant = 1380009033,
+    Weaken = 1464159054,
+    WellOfRadiance = 2274196887,
+    WardOfDawn = 4260353953,
+    BannerShield = 4260353952,
 
-            1380009033 => Perks::Radiant,
-            1464159054 => Perks::Weaken,
-            2274196887 => Perks::WellOfRadiance,
+    //intrinsics
+    RapidFireFrame = 902,
 
-            //intrinsics
-            902 => Perks::RapidFireFrame,
+    //armor
+    DexterityMod = 1001,
+    TargetingMod = 1002,
+    ReserveMod = 1003,
+    LoaderMod = 1004,
+    UnflinchingMod = 1005,
+    SurgeMod = 1006,
+    DragonShadow = 593361144,
+    OphidianAspect = 1147638875,
+    LunaFaction = 3347978672,
+    TomeOfDawn = 926349160,
+    PathOfTheBurningSteps = 2500502982,
+    Foetracer = 2663272109,
+    MechaneersTricksleeves = 481860151,
+    Oathkeeper = 1449897496,
+    SealedAhamkaraGrasps = 2805134531,
+    LuckyPants = 1694242448,
+    Stompees = 1694242450,
+    NoBackupPlans = 569260333,
+    ActiumWarRig = 1667892711,
+    HallowfireHeart = 1667892708,
+    LionRampart = 3241194940,
+    Peacekeepers = 3241194941,
+    PeregrineGreaves = 235075862,
+    EyeOfAnotherWorld = 3927963100,
+    AstrocyteVerse = 3295796664,
+    NecroticGrips = 3824622015,
+    BootsOfTheAssembler = 902934539,
+    RainOfFire = 4222205045,
+    SpeedloaderSlacks = 858592012,
+    MantleOfBattleHarmony = 2618534366,
+    MaskOfBakris = 692285813,
+    BallindorseWrathweavers = 2894608781,
 
-            //armor
-            1001 => Perks::DexterityMod,
-            1002 => Perks::TargetingMod,
-            1003 => Perks::ReserveMod,
-            1004 => Perks::LoaderMod,
-            1005 => Perks::UnflinchingMod,
-            1006 => Perks::SurgeMod,
-            593361144 => Perks::DragonShadow,
-            1147638875 => Perks::OphidianAspect,
-            3347978672 => Perks::LunaFaction,
-            926349160 => Perks::TomeOfDawn,
-            2500502982 => Perks::PathOfTheBurningSteps,
-            2663272109 => Perks::Foetracer,
-            481860151 => Perks::MechaneersTricksleeves,
-            1449897496 => Perks::Oathkeeper,
-            2805134531 => Perks::SealedAhamkaraGrasps,
-            1694242448 => Perks::LuckyPants,
-            1694242450 => Perks::Stompees,
-            569260333 => Perks::NoBackupPlans,
-            1667892711 => Perks::ActiumWarRig,
-            1667892708 => Perks::HallowfireHeart,
-            3241194940 => Perks::LionRampart,
-            3241194941 => Perks::Peacekeepers,
-            235075862 => Perks::PeregrineGreaves,
-            3927963100 => Perks::EyeOfAnotherWorld,
-            3295796664 => Perks::AstrocyteVerse,
-            3824622015 => Perks::NecroticGrips,
-            902934539 => Perks::BootsOfTheAssembler,
-            4222205045 => Perks::RainOfFire,
-            858592012 => Perks::SpeedloaderSlacks,
-            2618534366 => Perks::MantleOfBattleHarmony,
-            692285813 => Perks::MaskOfBakris,
-            2894608781 => Perks::BallindorseWrathweavers,
+    //parts
+    ImpactCasing = 3796465595,
+    SwapMag = 3721627275,
+    FullChoke = 1047830412,
+    SpikeGrenades = 3301904089,
+    AlloyMag = 1431678320,
+    LiquidCoils = 1687452232,
+    AcceleratedCoils = 689005463,
+    ChargetimeMW = 3128594062,
+    DisorientingGrenades = 3032599245,
+    AssaultMag = 791862061,
+    //bow strings
+    SlowerStringT1 = 3371775011,
+    FasterStringT2 = 2801223209,
+    #[num_enum(alternatives = [
+        1639384016,
+        4067834857,
+        852209214,
+    ])]
+    FasterStringT1 = 1885045197,
 
-            //parts
-            3796465595 => Perks::ImpactCasing,
-            3721627275 => Perks::SwapMag,
-            1047830412 => Perks::FullChoke,
-            3301904089 => Perks::SpikeGrenades,
-            1431678320 => Perks::AlloyMag,
-            1687452232 => Perks::LiquidCoils,
-            689005463 => Perks::AcceleratedCoils,
-            3128594062 => Perks::ChargetimeMW,
-            3032599245 => Perks::DisorientingGrenades,
-            791862061 => Perks::AssaultMag,
-            //bow strings
-            3371775011 => Perks::SlowerStringT1,
-            852209214 => Perks::FasterStringT1,
-            4067834857 => Perks::FasterStringT1,
-            2801223209 => Perks::FasterStringT2,
-            1885045197 => Perks::FasterStringT1,
-            1639384016 => Perks::FasterStringT1,
+    //mods
+    QuickAccessSling = 1334978104,
+    BossSpec = 2788909693,
+    MajorSpec = 984527513,
+    MinorSpec = 4091000557,
+    BigOnesSpec = 3018373291,
+    TakenSpec = 1513326571,
+    AdeptChargeTime = 744770875,
+    FreehandGrip = 736000386,
 
-            //mods
-            1334978104 => Perks::QuickAccessSling,
-            2788909693 => Perks::BossSpec,
-            984527513 => Perks::MajorSpec,
-            4091000557 => Perks::MinorSpec,
-            3018373291 => Perks::BigOnesSpec,
-            1513326571 => Perks::TakenSpec,
-            744770875 => Perks::AdeptChargeTime,
-            736000386 => Perks::FreehandGrip,
+    //origin | year 5+
+    VeistStinger = 3988215619,
+    HakkeBreach = 1607056502,
+    Alacrity = 2988596335,
+    FluidDynamics = 2839173408,
+    QuietMoment = 4091460919,
+    SurosSynergy = 4008116374,
+    BitterSpite = 4154828211,
+    RunnethOver = 120721526,
+    HotSwap = 1260401931,
+    RightHook = 3907865655,
+    Ambush = 192157151,
+    TexBalancedStock = 2437618208,
+    SearchParty = 2250679103,
+    FieldTested = 2120661319,
 
-            //origin | year 5+
-            3988215619 => Perks::VeistStinger,
-            1607056502 => Perks::HakkeBreach,
-            2988596335 => Perks::Alacrity,
-            2839173408 => Perks::FluidDynamics,
-            4091460919 => Perks::QuietMoment,
-            4008116374 => Perks::SurosSynergy,
-            4154828211 => Perks::BitterSpite,
-            120721526 => Perks::RunnethOver,
-            1260401931 => Perks::HotSwap,
-            3907865655 => Perks::RightHook,
-            192157151 => Perks::Ambush,
-            2437618208 => Perks::TexBalancedStock,
-            2250679103 => Perks::SearchParty,
-            2120661319 => Perks::FieldTested,
+    //season 1 | year 1
+    KillClip = 1015611457,
+    #[num_enum(alternatives = [
+        1528281896, //rose
+        3124871000, //redrix
+        1266037487, //R0
+    ])]
+    Outlaw = 1168162263,
+    BackupPlan = 1600092898,
+    FieldPrep = 2869569095,
+    #[num_enum(alternatives = [3551326236, ])]//huckleberry
+    Rampage = 3425386926,
+    OpeningShot = 47981717,
+    MovingTarget = 588594999,
+    AmbitiousAssassin = 2010801679,
+    ClusterBomb = 1275731761,
+    ExplosivePayload = 3038247973,
+    FirmlyPlanted = 280464955,
+    FullAutoTrigger = 2117683199,
+    HeadSeeker = 460017080,
+    HighImpactReserves = 2213355989,
+    HipFireGrip = 1866048759,
+    Snapshot = 957782887,
+    TapTheTrigger = 1890422124,
+    SlideWays = 2039302152,
+    QuickDraw = 706527188,
+    TimedPayload = 1954620775,
+    ThreatDetector = 4071163871,
+    SlideShot = 3161816588,
+    #[num_enum(alternatives = [1409312565, ])]//cloudstrike
+    TripleTap = 3400784728,
+    UnderPressure = 1645158859,
+    PulseMonitor = 972757866,
 
-            //season 1 | year 1
-            1015611457 => Perks::KillClip,
-            1168162263 => Perks::Outlaw,
-            1528281896 => Perks::Outlaw, //rose
-            3124871000 => Perks::Outlaw, //redrix
-            1266037487 => Perks::Outlaw, //R0
-            1600092898 => Perks::BackupPlan,
-            2869569095 => Perks::FieldPrep,
-            3425386926 => Perks::Rampage,
-            3551326236 => Perks::Rampage, //huckleberry
-            47981717 => Perks::OpeningShot,
-            588594999 => Perks::MovingTarget,
-            2010801679 => Perks::AmbitiousAssassin,
-            1275731761 => Perks::ClusterBomb,
-            3038247973 => Perks::ExplosivePayload,
-            280464955 => Perks::FirmlyPlanted,
-            2117683199 => Perks::FullAutoTrigger,
-            460017080 => Perks::HeadSeeker,
-            2213355989 => Perks::HighImpactReserves,
-            1866048759 => Perks::HipFireGrip,
-            957782887 => Perks::Snapshot,
-            1890422124 => Perks::TapTheTrigger,
-            2039302152 => Perks::SlideWays,
-            706527188 => Perks::QuickDraw,
-            1954620775 => Perks::TimedPayload,
-            4071163871 => Perks::ThreatDetector,
-            3161816588 => Perks::SlideShot,
-            3400784728 => Perks::TripleTap,
-            1409312565 => Perks::TripleTap, //cloudstrike
-            1645158859 => Perks::UnderPressure,
-            972757866 => Perks::PulseMonitor,
+    //season 2 | year 1
+    //lmao bozo
 
-            //season 2 | year 1
-            //lmao bozo
+    //season 3 | year 1
+    RangeFinder = 2846385770,
+    #[num_enum(alternatives = [1683379515, ])]//Arbalest
+    DisruptionBreak = 3871884143,
+    #[num_enum(alternatives = [2360754333, ])]//Acrius
+    TrenchBarrel = 806159697,
+    Desperado = 3047969693,
+    BoxBreathing = 2551157718,
 
-            //season 3 | year 1
-            2846385770 => Perks::RangeFinder,
-            3871884143 => Perks::DisruptionBreak,
-            1683379515 => Perks::DisruptionBreak,
-            806159697 => Perks::TrenchBarrel,
-            2360754333 => Perks::TrenchBarrel,
-            3047969693 => Perks::Desperado,
-            2551157718 => Perks::BoxBreathing,
+    //season 4 | year 2
+    ArchersTempo = 201365942,
+    ExplosiveHead = 3365897133,
+    #[num_enum(alternatives = [1266037485, ])]//R0
+    FeedingFrenzy = 2779035018,
+    #[num_enum(alternatives = [1266037486, ])]//R0
+    FourthTimesTheCharm = 1354429876,
+    RapidHit = 247725512,
 
-            //season 4 | year 2
-            201365942 => Perks::ArchersTempo,
-            3365897133 => Perks::ExplosiveHead,
-            2779035018 => Perks::FeedingFrenzy,
-            1266037485 => Perks::FeedingFrenzy, //R0
-            1354429876 => Perks::FourthTimesTheCharm,
-            1266037486 => Perks::FourthTimesTheCharm, //R0
-            247725512 => Perks::RapidHit,
+    //season 5 | year 2
+    ResevoirBurst = 1427256713,
+    Surrounded = 3708227201,
+    AirAssault = 3722653512,
+    OverFlow = 3643424744,
 
-            //season 5 | year 2
-            1427256713 => Perks::ResevoirBurst,
-            3708227201 => Perks::Surrounded,
-            3722653512 => Perks::AirAssault,
-            3643424744 => Perks::OverFlow,
+    //season 6 | year 2
+    FiringLine = 1771339417,
+    FullCourt = 2888557110,
+    #[num_enum(alternatives = [557221067, ])]// delirium
+    KillingTally = 2782457288,
+    Demolitionist = 3523296417,
+    MultikillClip = 2458213969,
+    Swashbuckler = 4082225868,
 
-            //season 6 | year 2
-            1771339417 => Perks::FiringLine,
-            2888557110 => Perks::FullCourt,
-            2782457288 => Perks::KillingTally,
-            557221067 => Perks::KillingTally,
-            3523296417 => Perks::Demolitionist,
-            2458213969 => Perks::MultikillClip,
-            4082225868 => Perks::Swashbuckler,
+    //season 7 | year 2
+    UnderDog = 205890336,
+    ExplosiveLight = 3194351027,
+    EyeOfTheStorm = 699525795,
+    NoDistractions = 2866798147,
 
-            //season 7 | year 2
-            205890336 => Perks::UnderDog,
-            3194351027 => Perks::ExplosiveLight,
-            699525795 => Perks::EyeOfTheStorm,
-            2866798147 => Perks::NoDistractions,
+    //season 8 | year 3
+    //TODO
 
-            //season 8 | year 3
-            //TODO
+    //season 9 | year 3
+    ClownCartridge = 2284787283,
+    ElementalCapacitor = 3511092054,
+    Vorpal = 1546637391,
 
-            //season 9 | year 3
-            2284787283 => Perks::ClownCartridge,
-            3511092054 => Perks::ElementalCapacitor,
-            1546637391 => Perks::Vorpal,
+    //season 10 | year 3
+    //bad season lmao
 
-            //season 10 | year 3
-            //bad season lmao
+    //season 11 | year 3
+    KillingWind = 2450788523,
 
-            //season 11 | year 3
-            2450788523 => Perks::KillingWind,
+    //season 12 | year 4
+    DualLoader = 25606670,
+    OneForAll = 4049631843,
+    Recombination = 469285294,
+    Reconstruction = 1523832109,
+    #[num_enum(alternatives = [3967134106, ])]
+    Surplus = 3436462433,
 
-            //season 12 | year 4
-            25606670 => Perks::DualLoader,
-            4049631843 => Perks::OneForAll,
-            469285294 => Perks::Recombination,
-            1523832109 => Perks::Reconstruction,
-            3436462433 => Perks::Surplus,
-            3967134106 => Perks::Surplus, // travelers chosen
+    //season 13 | year 4
+    ImpulseAmplifier = 951095735,
+    Frenzy = 4104185692,
+    LastingImpression = 3927722942,
+    KickStart = 1754714824,
 
-            //season 13 | year 4
-            951095735 => Perks::ImpulseAmplifier,
-            4104185692 => Perks::Frenzy,
-            3927722942 => Perks::LastingImpression,
-            1754714824 => Perks::KickStart,
+    //season 14 | year 4
+    Cornered = 1799762209,
+    AdrenalineJunkie = 11612903,
+    RewindRounds = 3418782618,
+    HeatingUp = 1570042021,
+    FireFly = 3824105627,
+    DangerZone = 960810156,
+    TunnelVision = 2946784966,
 
-            //season 14 | year 4
-            1799762209 => Perks::Cornered,
-            11612903 => Perks::AdrenalineJunkie,
-            3418782618 => Perks::RewindRounds,
-            1570042021 => Perks::HeatingUp,
-            3824105627 => Perks::FireFly,
-            960810156 => Perks::DangerZone,
-            2946784966 => Perks::TunnelVision,
+    //season 15 | year 4
+    Encore = 1195158366,
+    #[num_enum(alternatives = [
+        615063267, //V-wing
+    ])]
+    Ensemble = 2621346526,
+    GoldenTricorn = 2610012052,
+    Harmony = 438098033,
+    PerpetualMotion = 1428297954,
+    Adagio = 3673922083,
 
-            //season 15 | year 4
-            1195158366 => Perks::Encore,
-            2621346526 => Perks::Ensemble,
-            615063267 => Perks::Ensemble, //V-wing
-            2610012052 => Perks::GoldenTricorn,
-            438098033 => Perks::Harmony,
-            1428297954 => Perks::PerpetualMotion,
-            3673922083 => Perks::Adagio,
+    //season 16 | year 5
+    BaitAndSwitch = 3078487919,
+    CompulsiveReloader = 671806388,
+    FocusedFury = 2896038713,
+    ChillClip = 2978966579,
+    SleightOfHand = 2172504645,
+    StatsForAll = 1583705720,
+    SteadyHands = 509074078,
+    SuccesfulWarmup = 2652708987,
+    UnstoppableForce = 2224838837,
 
-            //season 16 | year 5
-            3078487919 => Perks::BaitAndSwitch,
-            671806388 => Perks::CompulsiveReloader,
-            2896038713 => Perks::FocusedFury,
-            2978966579 => Perks::ChillClip,
-            2172504645 => Perks::SleightOfHand,
-            1583705720 => Perks::StatsForAll,
-            509074078 => Perks::SteadyHands,
-            2652708987 => Perks::SuccesfulWarmup,
-            2224838837 => Perks::UnstoppableForce,
+    //season 17 | year 5
+    FragileFocus = 2451262963,
+    WellRounded = 744594675,
 
-            //season 17 | year 5
-            2451262963 => Perks::FragileFocus,
-            744594675 => Perks::WellRounded,
+    //season 18 | year 5
+    GutShot = 1365187766,
+    Pugilist = 691659142,
+    Slickdraw = 1821614984,
+    OverUnder = 1870851715,
 
-            //season 18 | year 5
-            1365187766 => Perks::GutShot,
-            691659142 => Perks::Pugilist,
-            1821614984 => Perks::Slickdraw,
-            1870851715 => Perks::OverUnder,
+    //season 19 | year 5
+    CascadePoint = 3751912585,
+    CloseToMelee = 1782407750,
+    OffhandStrike = 2416023159,
+    PerfectFloat = 2272927194,
+    ShotSwap = 2586829431,
+    TargetLock = 365154968,
 
-            //season 19 | year 5
-            3751912585 => Perks::CascadePoint,
-            1782407750 => Perks::CloseToMelee,
-            2416023159 => Perks::OffhandStrike,
-            2272927194 => Perks::PerfectFloat,
-            2586829431 => Perks::ShotSwap,
-            365154968 => Perks::TargetLock,
+    //season 20 | year 6
+    KeepAway = 3619207468,
+    ParacausalAffinity = 3215448563,
 
-            //season 20 | year 6
-            3619207468 => Perks::KeepAway,
-            3215448563 => Perks::ParacausalAffinity,
+    //subclass
+    OnYourMark = 3066103999,
+    Hedrons = 3469412970,
+    FlowState = 4194622036,
+    Frequency = 1727069361,
+    HeatRises = 83039194,
+    Tempering = 362132290,
+    ThreadOfAscent = 4208512216,
+    Amplified = 880704824,
 
-            //subclass
-            3066103999 => Perks::OnYourMark,
-            3469412970 => Perks::Hedrons,
-            4194622036 => Perks::FlowState,
-            1727069361 => Perks::Frequency,
-            83039194 => Perks::HeatRises,
-            362132290 => Perks::Tempering,
-            4208512216 => Perks::ThreadOfAscent,
+    //kinetic exotic
+    CranialSpike = 1301843770,
+    AgersCall = 970163821,
+    RatPack = 2121086290,
+    StringofCurses = 4004944400,
+    RocketTracers = 3602718766,
+    ParacausalShot = 213689231,
+    TimeSlip = 3556949035,
+    ToM = 2724693746,
+    CorruptionSpreads = 4208418110,
+    HonedEdge = 1070100196,
+    HakkeHeavyBurst = 2206869417,
+    FateOfAllFools = 3668782036,
+    ExplosiveShadow = 1791592647,
+    TakenPredator = 2130042297,
+    SurosLegacy = 944506345,
+    SpinningUp = 1378047685,
+    DualSpeedReceiver = 4012962526,
+    FullStop = 2984682260,
+    RideTheBull = 630329983,
+    HuntersTrance = 383825919,
+    NobleRounds = 2144092201,
+    StormAndStress = 2238035098,
+    Roadborn = 3413860062,
+    MarkovChain = 2814973067,
 
-            //kinetic exotic
-            1301843770 => Perks::CranialSpike,
-            970163821 => Perks::AgersCall,
-            2121086290 => Perks::RatPack,
-            4004944400 => Perks::StringofCurses,
-            3602718766 => Perks::RocketTracers,
-            213689231 => Perks::ParacausalShot,
-            3556949035 => Perks::TimeSlip,
-            2724693746 => Perks::ToM,
-            4208418110 => Perks::CorruptionSpreads,
-            1070100196 => Perks::HonedEdge,
-            2206869417 => Perks::HakkeHeavyBurst,
-            3668782036 => Perks::FateOfAllFools,
-            1791592647 => Perks::ExplosiveShadow,
-            2130042297 => Perks::TakenPredator,
-            944506345 => Perks::SurosLegacy,
-            1378047685 => Perks::SpinningUp,
-            4012962526 => Perks::DualSpeedReceiver,
-            2984682260 => Perks::FullStop,
-            630329983 => Perks::RideTheBull,
-            383825919 => Perks::HuntersTrance,
-            2144092201 => Perks::NobleRounds,
+    //energy exotic
+    LagragianSight = 2881100038,
+    IgnitionTrigger = 961505134,
+    GuidanceRing = 2226793914,
+    LooksCanKill = 3174300811,
+    ConserveMomentum = 656200654,
+    Broadside = 407549716,
+    Impetus = 2333607307,
+    Stormbringer = 3117514172,
+    PerfectFith = 1000724343,
+    PrismaticInferno = 571267712,
+    CalculatedBalance = 838219733,
+    Chimera = 924149234,
+    ThinTheHerd = 2003108620,
+    RavenousBeast = 2540536653,
+    LordOfWolvesCatalyst = 431220296,
+    ReleaseTheWolves = 299272945,
+    SwoopingTalons = 2656694271,
+    #[num_enum(alternatives = [
+        3081173348, //borealis
+    ])]
+    Fundamentals = 2620589274,
 
-            //energy exotic
-            2881100038 => Perks::LagragianSight,
-            961505134 => Perks::IgnitionTrigger,
-            2226793914 => Perks::GuidanceRing,
-            3174300811 => Perks::LooksCanKill,
-            656200654 => Perks::ConserveMomentum,
-            407549716 => Perks::Broadside,
-            2333607307 => Perks::Impetus,
-            3117514172 => Perks::Stormbringer,
-            1000724343 => Perks::PerfectFith,
-            571267712 => Perks::PrismaticInferno,
-            838219733 => Perks::CalculatedBalance,
-            924149234 => Perks::Chimera,
-            2003108620 => Perks::ThinTheHerd,
-            2540536653 => Perks::RavenousBeast,
-            431220296 => Perks::LordOfWolvesCatalyst,
-            299272945 => Perks::ReleaseTheWolves,
-            2656694271 => Perks::SwoopingTalons,
-            2620589274 => Perks::Fundamentals, //others
-            3081173348 => Perks::Fundamentals, //borealis
+    //heavy exotic
+    ReignHavoc = 4148158229,
+    WormsHunger = 2812324400,
+    WhisperCatalyst = 1340292993,
+    DarkDescent = 3333994164,
+    TargetAquired = 939227542,
+    SleeperCatalyst = 2142466730,
 
-            //heavy exotic
-            4148158229 => Perks::ReignHavoc,
-            2812324400 => Perks::WormsHunger,
-            1340292993 => Perks::WhisperCatalyst,
-            3333994164 => Perks::DarkDescent,
-            939227542 => Perks::TargetAquired,
-
-            _ => Perks::Ignore,
-        }
-    }
+    #[num_enum(default)]
+    Ignore = 69420
 }
 
 pub fn get_perk_stats(
@@ -901,7 +680,7 @@ fn get_perk_dmr(
         Perks::ReleaseTheWolves => {
             dmr_release_the_wolves(_input_data, val, enhanced, _pvp, _cached_data)
         }
-        Perks::FirstGlance => dmr_first_glance(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::LooksCanKill => dmr_first_glance(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::FateOfAllFools => {
             dmr_fate_of_all_fools(_input_data, val, enhanced, _pvp, _cached_data)
         }
@@ -945,6 +724,8 @@ fn get_perk_dmr(
             dmr_paracausal_affinity(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::EmpRift => dmr_empowering_rift(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::WardOfDawn => dmr_ward_of_dawn(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::BannerShield => dmr_banner_shield(_input_data, val, enhanced, _pvp, _cached_data),
         _ => DamageModifierResponse::default(),
     }
 }
@@ -1112,9 +893,6 @@ fn get_perk_fmr(
         }
         Perks::SlowerStringT1 => {
             fmr_slower_string_t1(_input_data, val, enhanced, _pvp, _cached_data)
-        }
-        Perks::SlowerStringT2 => {
-            fmr_slower_string_t2(_input_data, val, enhanced, _pvp, _cached_data)
         }
         Perks::SuccesfulWarmup => {
             fmr_succesful_warmup(_input_data, val, enhanced, _pvp, _cached_data)
