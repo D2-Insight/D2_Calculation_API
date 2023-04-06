@@ -1,0 +1,29 @@
+name: Foundry
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+    - name: Rust Cache
+      uses: Swatinem/rust-cache@v2.2.1
+    - name: Install Wasm-Pack
+      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+    - name: Test
+      run: wasm-pack test --target web --features wasm,foundry
+    - name: Build Wasm target
+      run: wasm-pack build --target web --features wasm,foundry
+
