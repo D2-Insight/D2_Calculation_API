@@ -36,10 +36,13 @@ mod database {
 use crate::types::js_types::{
     JsAmmoResponse, JsDifficultyOptions, JsDpsResponse, JsEnemyType, JsFiringResponse,
     JsHandlingResponse, JsMetaData, JsRangeResponse, JsReloadResponse, JsResillienceSummary,
-    JsStat, JsScalarResponse,
+    JsStat,
 };
 #[cfg(feature = "wasm")]
 use wasm_bindgen::prelude::*;
+
+#[cfg(all(feature = "wasm", feature = "foundry"))]
+use crate::types::js_types::JsScalarResponse;
 
 //python
 #[cfg(feature = "python")]
