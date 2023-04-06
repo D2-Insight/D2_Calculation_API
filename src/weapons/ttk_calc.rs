@@ -144,7 +144,8 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 shot_burst_delay
             };
 
-            if _weapon.weapon_type == WeaponType::LINEARFUSIONRIFLE {
+            if _weapon.hash == 4289226715 { // vex mythoclast
+            } else if _weapon.weapon_type == WeaponType::LINEARFUSIONRIFLE {
                 shot_delay *= 1.95;
             } else if _weapon.weapon_type == WeaponType::FUSIONRIFLE {
                 shot_delay *= 1.45;
@@ -265,7 +266,8 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 shot_burst_delay
             };
 
-            if _weapon.weapon_type == WeaponType::LINEARFUSIONRIFLE {
+            if _weapon.hash == 4289226715 { //vex mythoclast
+            } else if _weapon.weapon_type == WeaponType::LINEARFUSIONRIFLE {
                 shot_delay *= 1.95;
             } else if _weapon.weapon_type == WeaponType::FUSIONRIFLE {
                 shot_delay *= 1.45;

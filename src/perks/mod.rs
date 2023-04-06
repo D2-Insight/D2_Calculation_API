@@ -334,6 +334,7 @@ pub enum Perks {
     //season 20 | year 6
     KeepAway = 3619207468,
     ParacausalAffinity = 3215448563,
+    EnviousAssasin = 968510818,
 
     //subclass
     OnYourMark = 3066103999,
@@ -1030,6 +1031,9 @@ fn get_perk_mmr(
         Perks::Reconstruction => mmr_reconstruction(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::RunnethOver => mmr_runneth_over(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::RatPack => mmr_rat_pack(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::EnviousAssasin => {
+            mmr_envious_assassin(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => MagazineModifierResponse::default(),
     }
 }
