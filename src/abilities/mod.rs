@@ -1,4 +1,6 @@
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum AbilityType {
     GRENADE,
     MELEE,
@@ -17,7 +19,7 @@ impl Default for AbilityType {
     }
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AbilityDamageProfile {
     impact: f64,
     secondary: f64,
@@ -26,7 +28,7 @@ pub struct AbilityDamageProfile {
     crit_mult: f64, // if 1.0, no crit
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Ability {
     pub name: String,
     pub hash: u32,

@@ -2,7 +2,9 @@ use self::damage_calc::{gpl_delta, rpl_mult, DifficultyOptions};
 
 pub mod damage_calc;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum PlayerClass {
     Unknown = 0,
     Titan = 1,
@@ -15,13 +17,13 @@ impl Default for PlayerClass {
     }
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Player {
     pub pl: u32,
     pub class: PlayerClass,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Activity {
     pub name: String,
     pub difficulty: DifficultyOptions,

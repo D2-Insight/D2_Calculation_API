@@ -2,6 +2,7 @@
 #![allow(unused_imports)]
 
 use logging::LogLevel;
+use serde::{Deserialize, Serialize};
 pub mod abilities;
 pub mod activity;
 pub mod d2_enums;
@@ -36,7 +37,7 @@ mod database {
 use crate::types::js_types::{
     JsAmmoResponse, JsDifficultyOptions, JsDpsResponse, JsEnemyType, JsFiringResponse,
     JsHandlingResponse, JsMetaData, JsRangeResponse, JsReloadResponse, JsResillienceSummary,
-    JsStat, JsScalarResponse,
+    JsScalarResponse, JsStat,
 };
 #[cfg(feature = "wasm")]
 use wasm_bindgen::prelude::*;
@@ -50,7 +51,7 @@ use crate::types::py_types::{
 #[cfg(feature = "python")]
 use pyo3::{prelude::*, types::PyDict};
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct PersistentData {
     pub weapon: Weapon,
     pub activity: Activity,
@@ -66,6 +67,29 @@ impl PersistentData {
 
 thread_local! {
     static PERS_DATA: RefCell<PersistentData> = RefCell::new(PersistentData::new());
+}
+
+pub fn set_instance_data(input: Vec<u8>) -> Result<(), String> {
+    let r = flexbuffers::Reader::get_root(input.as_slice());
+    if r.is_err() {
+        return Err("Failed to read flexbuffer".to_string());
+    }
+    let loaded_data = PersistentData::deserialize(r.unwrap()).unwrap();
+    PERS_DATA.with(|data| {
+        *data.borrow_mut() = loaded_data;
+    });
+    Ok(())
+}
+
+pub fn snapshot_instance_data() -> Result<Vec<u8>, String> {
+    let mut buffer = Vec::new();
+    PERS_DATA.with(|pers_data| {
+        let data = pers_data.borrow().to_owned();
+        let mut writer = flexbuffers::FlexbufferSerializer::new();
+        data.serialize(&mut writer).unwrap();
+        buffer = writer.take_buffer();
+    });
+    Ok(buffer)
 }
 
 #[cfg(feature = "wasm")]
@@ -413,10 +437,12 @@ pub fn get_scalar_response(_pvp: bool) -> Result<JsScalarResponse, JsValue> {
     let mut cached_data = HashMap::new();
     let rmr = perks::get_range_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
     let rsmr = perks::get_reload_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
-    let mmr = perks::get_magazine_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
-    let hmr = perks::get_handling_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
+    let mmr =
+        perks::get_magazine_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
+    let hmr =
+        perks::get_handling_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
     let imr = perks::get_reserve_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
-    Ok(JsScalarResponse{
+    Ok(JsScalarResponse {
         ads_range_scalar: rmr.range_zoom_scale,
         global_range_scalar: rmr.range_all_scale,
         hipfire_range_scalar: rmr.range_hip_scale,
@@ -583,15 +609,26 @@ fn set_weapon_stats(_in: &PyDict) {
 
 #[cfg(feature = "python")]
 #[pyfunction(name = "reverse_pve_calc")]
-fn reverse_pve_calc(_damage: f64, _combatant_mult: Option<f64>, _pve_mult: Option<f64>) -> PyResult<f64> {
+fn reverse_pve_calc(
+    _damage: f64,
+    _combatant_mult: Option<f64>,
+    _pve_mult: Option<f64>,
+) -> PyResult<f64> {
     use logging::extern_log;
     let output = PERS_DATA.with(|perm_data| {
         let combatant_mult = _combatant_mult.unwrap_or(1.0);
         let pve_mult = _pve_mult.unwrap_or(1.0);
         if perm_data.borrow().activity.name == "Default" {
-            extern_log("Activity is default and can return bad values", LogLevel::Warning)
+            extern_log(
+                "Activity is default and can return bad values",
+                LogLevel::Warning,
+            )
         }
-        activity::damage_calc::remove_pve_bonuses(_damage, combatant_mult, &perm_data.borrow().activity) / pve_mult
+        activity::damage_calc::remove_pve_bonuses(
+            _damage,
+            combatant_mult,
+            &perm_data.borrow().activity,
+        ) / pve_mult
     });
     Ok(output)
 }

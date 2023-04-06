@@ -57,7 +57,7 @@ pub fn clamp<T: PartialOrd>(n: T, min: T, max: T) -> T {
     }
 }
 
-#[derive(Clone, Debug, Default, Serialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Perk {
     pub stat_buffs: HashMap<u32, i32>,
     pub enhanced: bool,

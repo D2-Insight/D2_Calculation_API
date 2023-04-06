@@ -17,7 +17,7 @@ pub struct DataPointers {
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct WeaponPath(pub u32, pub u32);
 
-#[derive(Debug, Clone, Default, Copy, Serialize)]
+#[derive(Debug, Clone, Default, Copy, Serialize, Deserialize)]
 pub struct FiringData {
     pub damage: f64,
     pub crit_mult: f64,
@@ -29,7 +29,7 @@ pub struct FiringData {
     pub timestamp: u64,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DamageMods {
     pub pve: f64,
     pub minor: f64,
@@ -69,7 +69,7 @@ impl DamageMods {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct RangeFormula {
     pub start: StatQuadraticFormula,
     pub end: StatQuadraticFormula,
@@ -79,7 +79,7 @@ pub struct RangeFormula {
 }
 
 //even if just linear use this
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct StatQuadraticFormula {
     pub evpp: f64,
     pub vpp: f64,
@@ -91,14 +91,14 @@ impl StatQuadraticFormula {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ReloadFormula {
     pub reload_data: StatQuadraticFormula,
     pub ammo_percent: f64,
     pub timestamp: u64,
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct HandlingFormula {
     pub ready: StatQuadraticFormula,
     pub stow: StatQuadraticFormula,
@@ -106,7 +106,7 @@ pub struct HandlingFormula {
     pub timestamp: u64,
 }
 
-#[derive(Debug, Clone, Default, Serialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct AmmoFormula {
     pub mag: StatQuadraticFormula,
     pub round_to: i32,

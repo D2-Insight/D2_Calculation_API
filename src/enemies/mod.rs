@@ -1,6 +1,8 @@
 use crate::activity::Activity;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Deserialize, Serialize)]
 pub enum EnemyType {
     MINOR,
     ELITE,
@@ -17,7 +19,7 @@ impl Default for EnemyType {
     }
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
 pub struct Enemy {
     pub health: f64,
     pub damage: f64,

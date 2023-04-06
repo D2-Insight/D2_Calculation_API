@@ -23,7 +23,7 @@ use self::dps_calc::complex_dps_calc;
 #[derive(Debug, Clone)]
 pub struct PsuedoWeapon {}
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Stat {
     pub base_value: i32,
     pub part_value: i32,
@@ -54,7 +54,7 @@ impl From<i32> for Stat {
     }
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Weapon {
     pub hash: u32,
     pub intrinsic_hash: u32,
