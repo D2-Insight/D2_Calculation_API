@@ -189,8 +189,8 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                 stats: &stats,
                 perk_value_map: &weapon.perk_value_map_update(),
                 enemy_type: &_enemy.type_,
-                shots_fired_this_mag: shots_this_mag as f64,
-                total_shots_fired: total_shots_fired as f64,
+                ammo_fired_this_mag: shots_this_mag as f64,
+                total_ammo_fired: total_shots_fired as f64,
                 total_shots_hit: total_shots_hit as f64,
                 reserves_left: reserve as f64,
                 time_total: total_time,
@@ -267,7 +267,7 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
 
             //REFUNDS//////////////////////
             let mut refund_calc_input = weapon.sparse_calc_input(total_shots_fired, total_time);
-            refund_calc_input.shots_fired_this_mag = shots_this_mag as f64;
+            refund_calc_input.ammo_fired_this_mag = shots_this_mag as f64;
             let refunds = get_refund_modifier(
                 perks.clone(),
                 &refund_calc_input,
@@ -291,8 +291,8 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
                 stats: &stats,
                 perk_value_map: &weapon.perk_value_map_update(),
                 enemy_type: &_enemy.type_,
-                shots_fired_this_mag: shots_this_mag as f64,
-                total_shots_fired: total_shots_fired as f64,
+                ammo_fired_this_mag: shots_this_mag as f64,
+                total_ammo_fired: total_shots_fired as f64,
                 total_shots_hit: total_shots_hit as f64,
                 reserves_left: reserve as f64,
                 time_total: total_time,
@@ -401,8 +401,8 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
             stats: &stats,
             perk_value_map: &weapon.perk_value_map_update(),
             enemy_type: &_enemy.type_,
-            shots_fired_this_mag: shots_this_mag as f64,
-            total_shots_fired: total_shots_fired as f64,
+            ammo_fired_this_mag: shots_this_mag as f64,
+            total_ammo_fired: total_shots_fired as f64,
             total_shots_hit: total_shots_hit as f64,
             reserves_left: reserve as f64,
             time_total: total_time,

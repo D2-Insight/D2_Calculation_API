@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponType, StatBump, BungieHash};
+use crate::d2_enums::{AmmoType, BungieHash, DamageType, StatBump, StatHashes, WeaponType};
 
 use super::{
     clamp,
@@ -105,7 +105,7 @@ pub(super) fn mmr_ambitious_assassin(
     _cached_data: &mut HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     let val = clamp(_value, 0, 15) as f64;
-    if _input.total_shots_fired == 0.0 {
+    if _input.total_ammo_fired == 0.0 {
         let mut mag_mult = 1.0;
         if *_input.ammo_type == AmmoType::PRIMARY {
             mag_mult += 0.2 * val;
@@ -132,7 +132,7 @@ pub(super) fn dmr_box_breathing(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
-    if _input.total_shots_fired == 0.0 && _value > 0 {
+    if _input.total_ammo_fired == 0.0 && _value > 0 {
         let mut crit_mult = (_input.base_crit_mult + 1.0) / _input.base_crit_mult;
         if *_input.weapon_type == WeaponType::SCOUTRIFLE {
             crit_mult *= 0.95;
@@ -467,7 +467,7 @@ pub(super) fn rmr_opening_shot(
     _cached_data: &mut HashMap<String, f64>,
 ) -> RangeModifierResponse {
     let mut range = if _is_enhanced { 30 } else { 25 };
-    if _input.total_shots_fired != 0.0 || _value == 0 {
+    if _input.total_ammo_fired != 0.0 || _value == 0 {
         range = 0;
     };
     RangeModifierResponse {

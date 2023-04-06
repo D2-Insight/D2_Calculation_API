@@ -24,7 +24,7 @@ pub(super) fn dmr_paracausal_shot(
     let bufflist_pvp = vec![1.0, 1.01, 1.03, 1.13, 1.41, 1.96, 3.0, 4.73];
     let mut damage_buff = 1.0;
     if _input.curr_mag == 1.0 {
-        let num_of_crits = clamp(_input.shots_fired_this_mag as i32, 0, 7);
+        let num_of_crits = clamp(_input.ammo_fired_this_mag as i32, 0, 7);
         let bufflist = if _pvp { &bufflist_pvp } else { &bufflist_pve };
         damage_buff = bufflist[num_of_crits as usize];
     };
@@ -109,7 +109,7 @@ pub(super) fn dmr_momento_mori(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut damage_buff = 1.0;
-    if _value > 0 && _input.total_shots_fired < 7.0 {
+    if _value > 0 && _input.total_ammo_fired < 7.0 {
         damage_buff = if _pvp { 1.5 } else { 1.285 };
     };
     DamageModifierResponse {
@@ -145,7 +145,7 @@ pub(super) fn mmr_agers_call(
     _cached_data: &mut HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     let mut mag_buff = 1.0;
-    if _value > 0 && _input.total_shots_fired == 0.0 {
+    if _value > 0 && _input.total_ammo_fired == 0.0 {
         mag_buff = 2.0;
     };
     MagazineModifierResponse {
@@ -262,10 +262,10 @@ pub(super) fn fmr_reign_havoc(
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
     let mut delay_mult = 1.0;
-    if _input.shots_fired_this_mag >= _input.base_mag * 0.2 {
+    if _input.ammo_fired_this_mag >= _input.base_mag * 0.2 {
         delay_mult = 0.75;
     };
-    if _input.shots_fired_this_mag >= _input.base_mag * 0.4 {
+    if _input.ammo_fired_this_mag >= _input.base_mag * 0.4 {
         delay_mult = 0.625;
     };
     FiringModifierResponse {
@@ -474,7 +474,7 @@ pub(super) fn dmr_swooping_talons(
     if _value > 0 {
         dmg_mult = 1.4;
     }
-    dmg_mult += _input.total_shots_fired * 0.04;
+    dmg_mult += _input.total_ammo_fired * 0.04;
     dmg_mult = clamp(dmg_mult, 1.0, 1.4);
     DamageModifierResponse {
         impact_dmg_scale: dmg_mult,
@@ -491,7 +491,7 @@ pub(super) fn dmr_ignition_trigger(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let mut dmg_mult = 1.0;
-    if _value > 0 || _input.total_shots_fired > 20.0 {
+    if _value > 0 || _input.total_ammo_fired > 20.0 {
         dmg_mult = if _pvp { 1.55 } else { 1.99 };
     }
     DamageModifierResponse {
@@ -774,7 +774,7 @@ pub(super) fn dmr_first_glance(
     let mut damage_mult = 1.0;
     let mut crit_mult = 1.0;
     if _value > 0 {
-        if _input.total_shots_fired == 0.0 {
+        if _input.total_ammo_fired == 0.0 {
             damage_mult = 1.33;
         } else {
             crit_mult = 1.33;
@@ -796,7 +796,7 @@ pub(super) fn dmr_fate_of_all_fools(
 ) -> DamageModifierResponse {
     let mut damage_mult = 1.0;
     let mut crit_mult = 1.0;
-    if _value as f64 > _input.total_shots_fired {
+    if _value as f64 > _input.total_ammo_fired {
         let cc = _input.base_crit_mult;
         damage_mult = cc;
         crit_mult = 1.0 / cc;
@@ -980,7 +980,7 @@ pub(super) fn fmr_ride_the_bull(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
-    let extra_value = _input.shots_fired_this_mag as f64 / 10.0;
+    let extra_value = _input.ammo_fired_this_mag as f64 / 10.0;
     let val = clamp(_value + extra_value as u32, 0, 2);
     FiringModifierResponse {
         burst_delay_add: val as f64 * (-0.25 / 30.0),
@@ -995,7 +995,7 @@ pub(super) fn fmr_spinning_up(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> FiringModifierResponse {
-    let extra_value = _input.shots_fired_this_mag as f64 / 12.0;
+    let extra_value = _input.ammo_fired_this_mag as f64 / 12.0;
     let val = clamp(_value + extra_value as u32, 0, 2);
     FiringModifierResponse {
         burst_delay_add: val as f64 * (-0.5 / 30.0),

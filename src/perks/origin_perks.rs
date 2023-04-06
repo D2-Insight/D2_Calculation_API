@@ -166,7 +166,7 @@ pub(super) fn rsmr_fluid_dynamics(
     _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let reload_add = if _is_enhanced { 35 } else { 30 };
-    if _input.shots_fired_this_mag <= _input.base_mag / 2.0 {
+    if _input.ammo_fired_this_mag <= _input.base_mag / 2.0 {
         ReloadModifierResponse {
             reload_stat_add: reload_add,
             reload_time_scale: 1.0,
@@ -186,7 +186,7 @@ pub(super) fn sbr_fluid_dynamics(
     let mut map = HashMap::new();
     let reload = if _is_enhanced { 35 } else { 30 };
     let stability = if _is_enhanced { 25 } else { 20 };
-    if _input.shots_fired_this_mag <= _input.base_mag / 2.0 && _value > 0 {
+    if _input.ammo_fired_this_mag <= _input.base_mag / 2.0 && _value > 0 {
         map.insert(StatHashes::RELOAD.into(), reload);
         map.insert(StatHashes::STABILITY.into(), stability);
     }

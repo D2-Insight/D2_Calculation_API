@@ -205,7 +205,7 @@ pub(super) fn mmr_overflow(
     if _is_enhanced && _value > 0 {
         mag_scale *= 1.1;
     };
-    if _input.total_shots_fired > 0.0 {
+    if _input.total_ammo_fired > 0.0 {
         mag_scale = 1.0;
     };
     MagazineModifierResponse {
@@ -230,7 +230,7 @@ pub(super) fn rsmr_rapid_hit(
         (45, 0.94),
         (60, 0.93),
     ];
-    let entry_to_get = clamp(_value + _input.shots_fired_this_mag as u32, 0, 5);
+    let entry_to_get = clamp(_value + _input.ammo_fired_this_mag as u32, 0, 5);
     ReloadModifierResponse {
         reload_stat_add: values[entry_to_get as usize].0,
         reload_time_scale: values[entry_to_get as usize].1,
@@ -246,7 +246,7 @@ pub(super) fn sbr_rapid_hit(
 ) -> HashMap<u32, i32> {
     let rel_values = vec![0, 5, 30, 35, 45, 60];
     let stab_values = vec![0, 2, 12, 14, 18, 25];
-    let entry_to_get = clamp(_value + _input.shots_fired_this_mag as u32, 0, 5);
+    let entry_to_get = clamp(_value + _input.ammo_fired_this_mag as u32, 0, 5);
     let mut stats = HashMap::new();
     stats.insert(StatHashes::RELOAD.into(), rel_values[entry_to_get as usize]);
     stats.insert(
@@ -386,7 +386,7 @@ pub(super) fn dmr_explosive_light(
     _cached_data: &mut HashMap<String, f64>,
 ) -> DamageModifierResponse {
     let shots = if _is_enhanced { 7.0 } else { 6.0 };
-    let shots_left = _value as f64 * shots - _input.total_shots_fired;
+    let shots_left = _value as f64 * shots - _input.total_ammo_fired;
     if shots_left <= 0.0 {
         return DamageModifierResponse::default();
     };

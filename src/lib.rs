@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
 
-use logging::LogLevel;
+use logging::{LogLevel, extern_log};
 use serde::{Deserialize, Serialize};
 pub mod abilities;
 pub mod activity;
@@ -13,6 +13,7 @@ pub mod perks;
 mod test;
 pub mod types;
 pub mod weapons;
+pub mod dps;
 
 use crate::perks::{Perk, Perks};
 use crate::weapons::{Stat, Weapon};
@@ -72,6 +73,7 @@ thread_local! {
 pub fn set_instance_data(input: Vec<u8>) -> Result<(), String> {
     let r = flexbuffers::Reader::get_root(input.as_slice());
     if r.is_err() {
+        extern_log("Failed to read flexbuffer", LogLevel::Error);
         return Err("Failed to read flexbuffer".to_string());
     }
     let loaded_data = PersistentData::deserialize(r.unwrap()).unwrap();

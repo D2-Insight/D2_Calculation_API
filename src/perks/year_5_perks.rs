@@ -82,7 +82,7 @@ pub(super) fn dmr_focused_fury(
     } else {
         shots_needed = (_input.base_mag * (_input.curr_firing_data.burst_size as f64)) / 2.0;
     }
-    if _input.total_shots_fired >= shots_needed || _value > 0 {
+    if _input.total_ammo_fired >= shots_needed || _value > 0 {
         dmg_boost = 1.2;
     }
     DamageModifierResponse {
@@ -355,7 +355,7 @@ pub(super) fn dmr_target_lock(
     let formula_start = -0.3505;
     let formula_end = 1.1395;
 
-    let percent_of_mag = _input.shots_fired_this_mag / _input.base_mag;
+    let percent_of_mag = _input.ammo_fired_this_mag / _input.base_mag;
 
     if percent_of_mag < 0.125 {
         buff = 0.0;
@@ -501,7 +501,7 @@ pub(super) fn rsmr_compulsive_reloader(
     _cached_data: &mut HashMap<String, f64>,
 ) -> ReloadModifierResponse {
     let reload_add = if _is_enhanced { 55 } else { 50 };
-    if _input.shots_fired_this_mag <= _input.base_mag / 2.0 && _value > 0 {
+    if _input.ammo_fired_this_mag <= _input.base_mag / 2.0 && _value > 0 {
         ReloadModifierResponse {
             reload_stat_add: reload_add,
             reload_time_scale: 0.95,
@@ -520,7 +520,7 @@ pub(super) fn sbr_compulsive_reloader(
 ) -> HashMap<u32, i32> {
     let reload_add = if _is_enhanced { 55 } else { 50 };
     let mut map = HashMap::new();
-    if _input.shots_fired_this_mag <= _input.base_mag / 2.0 && _value > 0 {
+    if _input.ammo_fired_this_mag <= _input.base_mag / 2.0 && _value > 0 {
         map.insert(StatHashes::RELOAD.into(), reload_add);
     }
     map

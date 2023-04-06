@@ -179,8 +179,8 @@ impl Weapon {
         );
         tmp.time_this_mag = _total_time;
         tmp.time_total = _total_time;
-        tmp.shots_fired_this_mag = _total_shots_fired;
-        tmp.total_shots_fired = _total_shots_fired;
+        tmp.ammo_fired_this_mag = _total_shots_fired;
+        tmp.total_ammo_fired = _total_shots_fired;
         tmp.total_shots_hit = _total_shots_hit;
         tmp
     }

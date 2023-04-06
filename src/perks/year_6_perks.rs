@@ -1,13 +1,13 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{StatHashes, WeaponType, AmmoType};
+use crate::d2_enums::{AmmoType, StatHashes, WeaponType};
 
 use super::{
     clamp,
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
-        HandlingModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
-        ReloadOverrideResponse, MagazineModifierResponse,
+        HandlingModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
+        ReloadModifierResponse, ReloadOverrideResponse,
     },
 };
 
@@ -142,7 +142,7 @@ pub(super) fn mmr_envious_assassin(
     _cached_data: &mut HashMap<String, f64>,
 ) -> MagazineModifierResponse {
     let val = clamp(_value, 0, 15) as f64;
-    if _input.total_shots_fired == 0.0 {
+    if _input.total_ammo_fired == 0.0 {
         let mut mag_mult = 1.0;
         if *_input.ammo_type == AmmoType::PRIMARY {
             mag_mult += 0.1 * val;
