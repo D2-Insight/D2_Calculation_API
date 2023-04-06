@@ -145,9 +145,9 @@ pub(super) fn mmr_envious_assassin(
     if _input.total_shots_fired == 0.0 {
         let mut mag_mult = 1.0;
         if *_input.ammo_type == AmmoType::PRIMARY {
-            mag_mult += 0.2 * val;
-        } else {
             mag_mult += 0.1 * val;
+        } else {
+            mag_mult += 0.2 * val;
         };
         return MagazineModifierResponse {
             magazine_stat_add: 0,
