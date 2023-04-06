@@ -85,18 +85,18 @@ pub(super) fn rsmr_feeding_frenzy(
     let mut reload_mult = 1.0;
     let mut reload = 0;
     if val == 1 {
-        reload = 10;
-        reload_mult = 1.0;
+        reload = 8;
+        reload_mult = 0.975;
     } else if val == 2 {
-        reload = 45;
+        reload = 50;
         reload_mult = 0.9;
     } else if val == 3 {
-        reload = 55;
-        reload_mult = 0.88;
+        reload = 60;
+        reload_mult = 0.868;
     } else if val == 4 {
-        reload = 70;
-        reload_mult = 0.85;
-    } else if val == 5 {
+        reload = 75;
+        reload_mult = 0.837;
+    } else if val >= 5 {
         reload = 100;
         reload_mult = 0.8;
     };
