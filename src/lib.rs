@@ -368,17 +368,18 @@ pub fn get_misc_data(_dynamic_traits: bool, _pvp: bool) -> Result<JsValue, JsVal
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "setEncounter")]
 pub fn set_encounter(
-    _rpl: u32,
+    _reccomended_pl: u32,
+    _player_pl: u32,
     _override_cap: i32,
     _difficulty: JsDifficultyOptions,
     _enemy_type: JsEnemyType,
 ) -> Result<(), JsValue> {
     PERS_DATA.with(|perm_data| {
         let mut activity = &mut perm_data.borrow_mut().activity;
-        activity.rpl = _rpl;
+        activity.rpl = _reccomended_pl;
         activity.cap = _override_cap;
         activity.difficulty = _difficulty.into();
-        activity.player.pl = 2000;
+        activity.player.pl = _player_pl;
     });
     PERS_DATA.with(|perm_data| {
         let mut enemy = &mut perm_data.borrow_mut().enemy;
