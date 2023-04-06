@@ -3,7 +3,7 @@ use std::collections::{btree_map::Range, HashMap};
 use serde::de::value;
 
 use crate::{
-    d2_enums::{DamageType, StatHashes, WeaponType},
+    d2_enums::{AmmoType, DamageType, StatHashes, WeaponType, StatBump, BungieHash},
     enemies::EnemyType,
 };
 
@@ -604,5 +604,57 @@ pub(super) fn fmr_assault_mag(
         }
     } else {
         FiringModifierResponse::default()
+    }
+}
+
+pub(super) fn sbr_thread_of_ascent(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HashMap<BungieHash, StatBump> {
+    let mut map = HashMap::new();
+    if _value > 0 {
+        map.insert(StatHashes::AIRBORNE.into(), 30);
+        map.insert(StatHashes::RELOAD.into(), 40);
+        map.insert(StatHashes::HANDLING.into(), 40);
+    }
+    map
+}
+
+pub(super) fn rsmr_thread_of_ascent(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> ReloadModifierResponse {
+    if _value > 0 {
+        ReloadModifierResponse {
+            reload_time_scale: 0.925,
+            reload_stat_add: 40,
+        }
+    } else {
+        ReloadModifierResponse::default()
+    }
+}
+
+pub(super) fn hmr_thread_of_ascent(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> HandlingModifierResponse {
+    if _value > 0 {
+        HandlingModifierResponse {
+            stat_add: 40,
+            draw_scale: 0.925,
+            stow_scale: 0.925,
+            ..Default::default()
+        }
+    } else {
+        HandlingModifierResponse::default()
     }
 }

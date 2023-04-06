@@ -571,6 +571,9 @@ fn dyanmic_perk_stats(
         Perks::SpeedloaderSlacks => {
             sbr_speedloader_slacks(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::ThreadOfAscent => {
+            sbr_thread_of_ascent(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => HashMap::new(),
     }
 }
@@ -818,6 +821,9 @@ fn get_perk_rsmr(
         Perks::LunaFaction => {
             rsmr_lunafaction_boots(_input_data, val, enhanced, _pvp, _cached_data)
         }
+        Perks::ThreadOfAscent => {
+            rsmr_thread_of_ascent(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => ReloadModifierResponse::default(),
     }
 }
@@ -981,6 +987,9 @@ fn get_perk_hmr(
         Perks::Peacekeepers => hmr_peacekeepers(_input_data, val, enhanced, _pvp, _cached_data),
         // Perks::FieldTested => hmr_field_tested(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::FreehandGrip => hmr_freehand_grip(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::ThreadOfAscent => {
+            hmr_thread_of_ascent(_input_data, val, enhanced, _pvp, _cached_data)
+        }
         _ => HandlingModifierResponse::default(),
     }
 }
