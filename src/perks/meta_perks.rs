@@ -13,45 +13,42 @@ use super::{
         InventoryModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
         ReloadModifierResponse,
     },
-    other_perks::{fmr_accelerated_coils, fmr_faster_string_t1},
+    other_perks::{fmr_accelerated_coils, fmr_faster_string_t1}, ModifierResponsInput,
 };
 
-pub(super) fn dmr_builtin(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
+pub(super) fn dmr_builtin(_input: ModifierResponsInput) -> DamageModifierResponse {
     let mut crit_scale = 1.0;
     let mut dmg_scale = 1.0;
-    if *_input.weapon_type == WeaponType::LINEARFUSIONRIFLE && !_pvp {
+    if *_input.calc_data.weapon_type == WeaponType::LINEARFUSIONRIFLE && !_input.pvp {
         crit_scale *= 1.15;
     };
-    if *_input.damage_type == DamageType::KINETIC && !_pvp {
-        if _input.ammo_type == &AmmoType::PRIMARY {
+    if *_input.calc_data.damage_type == DamageType::KINETIC && !_input.pvp {
+        if _input.calc_data.ammo_type == &AmmoType::PRIMARY {
             dmg_scale *= 1.1;
-        } else if _input.ammo_type == &AmmoType::SPECIAL {
+        } else if _input.calc_data.ammo_type == &AmmoType::SPECIAL {
             dmg_scale *= 1.15;
         };
     };
     if *_input
+        .calc_data
         .perk_value_map
-        .get(&_input.intrinsic_hash)
+        .get(&_input.calc_data.intrinsic_hash)
         .unwrap_or(&0)
         > 1
-        && _input.intrinsic_hash < 1000
+        && _input.calc_data.intrinsic_hash < 1000
     {
         let stat_bump_id: StatHashes = _input
+            .calc_data
             .perk_value_map
-            .get(&_input.intrinsic_hash)
+            .get(&_input.calc_data.intrinsic_hash)
             .unwrap()
             .to_owned()
             .into();
-        if stat_bump_id == StatHashes::CHARGE_TIME && _input.weapon_type == &WeaponType::FUSIONRIFLE
+        if stat_bump_id == StatHashes::CHARGE_TIME
+            && _input.calc_data.weapon_type == &WeaponType::FUSIONRIFLE
         {
-            dmg_scale *= dmr_chargetime_mw(_input, _value, _is_enhanced, _pvp, _cached_data)
-                .impact_dmg_scale;
+            // dmg_scale *=
+            //     dmr_chargetime_mw(_input, _input.value, is_enhanced, _pvp, _cached_data).impact_dmg_scale;
         }
     }
     DamageModifierResponse {
@@ -61,34 +58,31 @@ pub(super) fn dmr_builtin(
     }
 }
 
-pub(super) fn fmr_builtin(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> FiringModifierResponse {
+pub(super) fn fmr_builtin(_input: ModifierResponsInput) -> FiringModifierResponse {
     let mut delay_add = 0.0;
     if *_input
+        .calc_data
         .perk_value_map
-        .get(&_input.intrinsic_hash)
+        .get(&_input.calc_data.intrinsic_hash)
         .unwrap_or(&0)
         > 1
-        && _input.intrinsic_hash < 1000
+        && _input.calc_data.intrinsic_hash < 1000
     {
         let stat_bump_id: StatHashes = _input
+            .calc_data
             .perk_value_map
-            .get(&_input.intrinsic_hash)
+            .get(&_input.calc_data.intrinsic_hash)
             .unwrap()
             .to_owned()
             .into();
         if stat_bump_id == StatHashes::CHARGE_TIME {
-            delay_add += fmr_accelerated_coils(_input, _value, _is_enhanced, _pvp, _cached_data)
-                .burst_delay_add;
+            // delay_add += fmr_accelerated_coils(_input, _input.value, is_enhanced, _pvp, _cached_data)
+            //     .burst_delay_add;
         }
-        if stat_bump_id == StatHashes::DRAW_TIME && _input.weapon_type == &WeaponType::BOW {
-            delay_add += fmr_faster_string_t1(_input, _value, _is_enhanced, _pvp, _cached_data)
-                .burst_delay_add;
+        if stat_bump_id == StatHashes::DRAW_TIME && _input.calc_data.weapon_type == &WeaponType::BOW
+        {
+            // delay_add += fmr_faster_string_t1(_input, _input.value, is_enhanced, _pvp, _cached_data)
+            //     .burst_delay_add;
         }
     }
     FiringModifierResponse {
@@ -97,28 +91,22 @@ pub(super) fn fmr_builtin(
     }
 }
 
-pub(super) fn epr_builtin(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> ExplosivePercentResponse {
-    if *_input.weapon_type == WeaponType::GRENADELAUNCHER {
-        let blast_radius_struct = _input.stats.get(&StatHashes::BLAST_RADIUS.into());
+pub(super) fn epr_builtin(_input: ModifierResponsInput) -> ExplosivePercentResponse {
+    if *_input.calc_data.weapon_type == WeaponType::GRENADELAUNCHER {
+        let blast_radius_struct = _input.calc_data.stats.get(&StatHashes::BLAST_RADIUS.into());
         let blast_radius;
         if blast_radius_struct.is_none() {
             blast_radius = 0;
         } else {
             blast_radius = blast_radius_struct.unwrap().val();
         };
-        if _input.ammo_type == &AmmoType::SPECIAL {
+        if _input.calc_data.ammo_type == &AmmoType::SPECIAL {
             return ExplosivePercentResponse {
                 percent: 0.5 + 0.0025 * blast_radius as f64,
                 delyed: 0.0,
                 retain_base_total: true,
             };
-        } else if _input.ammo_type == &AmmoType::HEAVY {
+        } else if _input.calc_data.ammo_type == &AmmoType::HEAVY {
             return ExplosivePercentResponse {
                 percent: 0.7 + 0.00175 * blast_radius as f64,
                 delyed: 0.0,
@@ -126,7 +114,7 @@ pub(super) fn epr_builtin(
             };
         };
     }
-    if *_input.weapon_type == WeaponType::ROCKET && _input.intrinsic_hash < 1000
+    if *_input.calc_data.weapon_type == WeaponType::ROCKET && _input.calc_data.intrinsic_hash < 1000
     //ensures not exotic
     {
         return ExplosivePercentResponse {
@@ -142,15 +130,9 @@ pub(super) fn epr_builtin(
     }
 }
 
-pub(super) fn hmr_dexterity_mods(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HandlingModifierResponse {
-    let swap_scale = if _value > 0 {
-        0.85 - clamp(_value, 1, 3) as f64 * 0.05
+pub(super) fn hmr_dexterity_mods(_input: ModifierResponsInput) -> HandlingModifierResponse {
+    let swap_scale = if _input.value > 0 {
+        0.85 - clamp(_input.value, 1, 3) as f64 * 0.05
     } else {
         1.0
     };
@@ -161,49 +143,31 @@ pub(super) fn hmr_dexterity_mods(
     }
 }
 
-pub(super) fn hmr_targeting_mods(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HandlingModifierResponse {
+pub(super) fn hmr_targeting_mods(_input: ModifierResponsInput) -> HandlingModifierResponse {
     HandlingModifierResponse {
-        ads_scale: if _value > 0 { 0.75 } else { 1.0 },
+        ads_scale: if _input.value > 0 { 0.75 } else { 1.0 },
         ..Default::default()
     }
 }
 
-pub(super) fn sbr_targeting_mods(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+pub(super) fn sbr_targeting_mods(_input: ModifierResponsInput) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
-    if _value == 1 {
+    if _input.value == 1 {
         stats.insert(StatHashes::AIM_ASSIST.into(), 10);
-    } else if _value == 2 {
+    } else if _input.value == 2 {
         stats.insert(StatHashes::AIM_ASSIST.into(), 15);
-    } else if _value > 2 {
+    } else if _input.value > 2 {
         stats.insert(StatHashes::AIM_ASSIST.into(), 20);
     }
     stats
 }
 
-pub(super) fn imr_reserve_mods(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> InventoryModifierResponse {
-    let mut inv_buff = if _value > 0 { 20 } else { 0 };
-    if _value == 2 {
+pub(super) fn imr_reserve_mods(_input: ModifierResponsInput) -> InventoryModifierResponse {
+    let mut inv_buff = if _input.value > 0 { 20 } else { 0 };
+    if _input.value == 2 {
         inv_buff += 15;
     }
-    if _value > 2 {
+    if _input.value > 2 {
         inv_buff += 20;
     }
     InventoryModifierResponse {
@@ -213,18 +177,12 @@ pub(super) fn imr_reserve_mods(
     }
 }
 
-pub(super) fn sbr_reserve_mods(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
-    let mut inv_buff = if _value > 0 { 20 } else { 0 };
-    if _value == 2 {
+pub(super) fn sbr_reserve_mods(_input: ModifierResponsInput) -> HashMap<u32, i32> {
+    let mut inv_buff = if _input.value > 0 { 20 } else { 0 };
+    if _input.value == 2 {
         inv_buff += 15;
     }
-    if _value > 2 {
+    if _input.value > 2 {
         inv_buff += 20;
     }
     let mut stats = HashMap::new();
@@ -232,19 +190,13 @@ pub(super) fn sbr_reserve_mods(
     stats
 }
 
-pub(super) fn rsmr_loader_mods(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> ReloadModifierResponse {
-    if _value > 0 {
+pub(super) fn rsmr_loader_mods(_input: ModifierResponsInput) -> ReloadModifierResponse {
+    if _input.value > 0 {
         let mut reload_stat_buff = 10;
-        if _value > 1 {
+        if _input.value > 1 {
             reload_stat_buff += 5;
         };
-        if _value > 2 {
+        if _input.value > 2 {
             reload_stat_buff += 5;
         };
         return ReloadModifierResponse {
@@ -256,20 +208,14 @@ pub(super) fn rsmr_loader_mods(
     };
 }
 
-pub(super) fn sbr_loader_mods(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+pub(super) fn sbr_loader_mods(_input: ModifierResponsInput) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
-    if _value > 0 {
+    if _input.value > 0 {
         let mut reload_stat_buff = 10;
-        if _value > 1 {
+        if _input.value > 1 {
             reload_stat_buff += 5;
         };
-        if _value > 2 {
+        if _input.value > 2 {
             reload_stat_buff += 5;
         };
         stats.insert(StatHashes::RELOAD.into(), reload_stat_buff);
@@ -277,84 +223,48 @@ pub(super) fn sbr_loader_mods(
     stats
 }
 
-pub(super) fn flmr_unflinching_mod(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> FlinchModifierResponse {
-    if _value > 2 {
+pub(super) fn flmr_unflinching_mod(_input: ModifierResponsInput) -> FlinchModifierResponse {
+    if _input.value > 2 {
         FlinchModifierResponse { flinch_scale: 0.6 }
-    } else if _value == 2 {
+    } else if _input.value == 2 {
         FlinchModifierResponse { flinch_scale: 0.7 }
-    } else if _value == 1 {
+    } else if _input.value == 1 {
         FlinchModifierResponse { flinch_scale: 0.75 }
     } else {
         FlinchModifierResponse::default()
     }
 }
 
-pub(super) fn sbr_rally_barricade(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<u32, i32> {
+pub(super) fn sbr_rally_barricade(_input: ModifierResponsInput) -> HashMap<u32, i32> {
     let mut stats = HashMap::new();
     stats.insert(StatHashes::STABILITY.into(), 30);
     stats.insert(StatHashes::RELOAD.into(), 100);
     stats
 }
 
-pub(super) fn flmr_rally_barricade(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> FlinchModifierResponse {
+pub(super) fn flmr_rally_barricade(_input: ModifierResponsInput) -> FlinchModifierResponse {
     FlinchModifierResponse { flinch_scale: 0.5 }
 }
 
-pub(super) fn rsmr_rally_barricade(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> ReloadModifierResponse {
+pub(super) fn rsmr_rally_barricade(_input: ModifierResponsInput) -> ReloadModifierResponse {
     ReloadModifierResponse {
         reload_stat_add: 100,
         reload_time_scale: 0.9,
     }
 }
 
-pub(super) fn rmr_rally_barricade(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> RangeModifierResponse {
+pub(super) fn rmr_rally_barricade(_input: ModifierResponsInput) -> RangeModifierResponse {
     RangeModifierResponse {
         range_all_scale: 1.1,
         ..Default::default()
     }
 }
 
-pub(super) fn dmr_chargetime_mw(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
+pub(super) fn dmr_chargetime_mw(_input: ModifierResponsInput) -> DamageModifierResponse {
     fn down5(x: i32) -> f64 {
         (x as f64 - 5.0) / x as f64
     }
-    let damage_mod = match _input.intrinsic_hash {
+    let damage_mod = match _input.calc_data.intrinsic_hash {
         901 => down5(330), //high impact
         906 => down5(280),
         903 => down5(270),
@@ -368,30 +278,24 @@ pub(super) fn dmr_chargetime_mw(
     }
 }
 
-pub(super) fn dmr_surge_mods(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
+pub(super) fn dmr_surge_mods(_input: ModifierResponsInput) -> DamageModifierResponse {
     let damage_mod;
-    if _pvp {
-        if _value == 1 {
+    if _input.pvp {
+        if _input.value == 1 {
             damage_mod = 1.03;
-        } else if _value == 2 {
+        } else if _input.value == 2 {
             damage_mod = 1.044;
-        } else if _value > 2 {
+        } else if _input.value > 2 {
             damage_mod = 1.055;
         } else {
             damage_mod = 1.0;
         }
     } else {
-        if _value == 1 {
+        if _input.value == 1 {
             damage_mod = 1.10;
-        } else if _value == 2 {
+        } else if _input.value == 2 {
             damage_mod = 1.17;
-        } else if _value > 2 {
+        } else if _input.value > 2 {
             damage_mod = 1.22;
         } else {
             damage_mod = 1.0;

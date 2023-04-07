@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 use crate::d2_enums::{AmmoType, DamageType, StatHashes, WeaponType};
 use crate::enemies::Enemy;
 use crate::perks::{
-    get_magazine_modifier, get_perk_stats, get_reserve_modifier, lib::CalculationInput, Perk,
+    get_magazine_modifier, get_reserve_modifier, get_stat_bumps, lib::CalculationInput, Perk,
 };
 
 use crate::types::rs_types::{
@@ -195,7 +195,7 @@ impl Weapon {
             &self.ammo_type,
             self.firing_data.crit_mult,
         );
-        let inter_var = get_perk_stats(self.list_perks(), input, false, &mut HashMap::new());
+        let inter_var = get_stat_bumps(self.list_perks(), input, false, &mut HashMap::new());
         let dynamic_stats = &inter_var[0];
         let static_stats = &inter_var[1];
         for (key, stat) in &mut self.stats {

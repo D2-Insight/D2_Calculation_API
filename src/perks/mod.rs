@@ -15,6 +15,7 @@ pub mod year_4_perks;
 pub mod year_5_perks;
 pub mod year_6_perks;
 
+use std::borrow::BorrowMut;
 use std::collections::HashMap;
 
 use num_enum::FromPrimitive;
@@ -188,7 +189,7 @@ pub enum Perks {
     Outlaw = 1168162263,
     BackupPlan = 1600092898,
     FieldPrep = 2869569095,
-    #[num_enum(alternatives = [3551326236, ])]//huckleberry
+    #[num_enum(alternatives = [3551326236, ])] //huckleberry
     Rampage = 3425386926,
     OpeningShot = 47981717,
     MovingTarget = 588594999,
@@ -207,7 +208,7 @@ pub enum Perks {
     TimedPayload = 1954620775,
     ThreatDetector = 4071163871,
     SlideShot = 3161816588,
-    #[num_enum(alternatives = [1409312565, ])]//cloudstrike
+    #[num_enum(alternatives = [1409312565, ])] //cloudstrike
     TripleTap = 3400784728,
     UnderPressure = 1645158859,
     PulseMonitor = 972757866,
@@ -217,9 +218,9 @@ pub enum Perks {
 
     //season 3 | year 1
     RangeFinder = 2846385770,
-    #[num_enum(alternatives = [1683379515, ])]//Arbalest
+    #[num_enum(alternatives = [1683379515, ])] //Arbalest
     DisruptionBreak = 3871884143,
-    #[num_enum(alternatives = [2360754333, ])]//Acrius
+    #[num_enum(alternatives = [2360754333, ])] //Acrius
     TrenchBarrel = 806159697,
     Desperado = 3047969693,
     BoxBreathing = 2551157718,
@@ -227,9 +228,9 @@ pub enum Perks {
     //season 4 | year 2
     ArchersTempo = 201365942,
     ExplosiveHead = 3365897133,
-    #[num_enum(alternatives = [1266037485, ])]//R0
+    #[num_enum(alternatives = [1266037485, ])] //R0
     FeedingFrenzy = 2779035018,
-    #[num_enum(alternatives = [1266037486, ])]//R0
+    #[num_enum(alternatives = [1266037486, ])] //R0
     FourthTimesTheCharm = 1354429876,
     RapidHit = 247725512,
 
@@ -242,7 +243,7 @@ pub enum Perks {
     //season 6 | year 2
     FiringLine = 1771339417,
     FullCourt = 2888557110,
-    #[num_enum(alternatives = [557221067, ])]// delirium
+    #[num_enum(alternatives = [557221067, ])] // delirium
     KillingTally = 2782457288,
     Demolitionist = 3523296417,
     MultikillClip = 2458213969,
@@ -403,10 +404,40 @@ pub enum Perks {
     SleeperCatalyst = 2142466730,
 
     #[num_enum(default)]
-    Ignore = 69420
+    Ignore = 69420,
 }
 
-pub fn get_perk_stats(
+pub struct ModifierResponsInput<'a> {
+    calc_data: &'a CalculationInput<'a>,
+    value: u32,
+    is_enhanced: bool,
+    pvp: bool,
+    cached_data: &'a mut HashMap<String, f64>,
+}
+#[derive(Default)]
+pub struct PersistentModifierResponses {
+    pub sbr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> HashMap<BungieHash, StatBump>>>,
+    pub dmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> DamageModifierResponse>>,
+    pub hmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> HandlingModifierResponse>>,
+    pub rmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> RangeModifierResponse>>,
+    pub rsmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> ReloadModifierResponse>>,
+    pub fmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> FiringModifierResponse>>,
+    pub flmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> FlinchModifierResponse>>,
+    pub edr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> ExtraDamageResponse>>,
+    pub rr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> RefundResponse>>,
+    pub vmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> VelocityModifierResponse>>,
+}
+
+thread_local! {
+    static PERK_FUNC_MAP: std::cell::RefCell<PersistentModifierResponses>  = std::cell::RefCell::new(PersistentModifierResponses::default());
+}
+
+pub fn add_sbr(perk: Perks, func: Box<dyn Fn(ModifierResponsInput) -> HashMap<BungieHash, StatBump>>) {
+    PERK_FUNC_MAP.with(|map| {
+        map.borrow_mut().sbr.insert(perk, func);
+    });
+}
+pub fn get_stat_bumps(
     _perks: Vec<Perk>,
     _input_data: CalculationInput,
     _pvp: bool,

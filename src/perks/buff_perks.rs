@@ -8,7 +8,7 @@ use super::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
         HandlingModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
         ReloadOverrideResponse,
-    },
+    }, ModifierResponsInput,
 };
 
 fn emp_buff(_cached_data: &mut HashMap<String, f64>, _desired_buff: f64) -> f64 {
@@ -36,14 +36,8 @@ fn gbl_debuff(_cached_data: &mut HashMap<String, f64>, _desired_buff: f64) -> f6
 //
 // BUFFS
 //
-pub(super) fn dmr_well_of_radiance(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let buff = emp_buff(_cached_data, 1.25);
+pub(super) fn dmr_well_of_radiance(_input: ModifierResponsInput) -> DamageModifierResponse {
+    let buff = emp_buff(_input.cached_data, 1.25);
     DamageModifierResponse {
         impact_dmg_scale: buff,
         explosive_dmg_scale: buff,
@@ -51,18 +45,12 @@ pub(super) fn dmr_well_of_radiance(
     }
 }
 
-pub(super) fn dmr_blessing_of_the_sky(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    if _value == 0 {
+pub(super) fn dmr_blessing_of_the_sky(_input: ModifierResponsInput) -> DamageModifierResponse {
+    if _input.value == 0 {
         return DamageModifierResponse::default();
     }
-    let des_buff = if _pvp { 1.15 } else { 1.35 };
-    let buff = emp_buff(_cached_data, des_buff);
+    let des_buff = if _input.pvp { 1.15 } else { 1.35 };
+    let buff = emp_buff(_input.cached_data, des_buff);
     DamageModifierResponse {
         impact_dmg_scale: buff,
         explosive_dmg_scale: buff,
@@ -70,16 +58,10 @@ pub(super) fn dmr_blessing_of_the_sky(
     }
 }
 
-pub(super) fn dmr_radiant(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let des_buff = if _pvp { 1.1 } else { 1.25 };
-    let buff = emp_buff(_cached_data, des_buff);
-    _cached_data.insert("radiant".to_string(), 1.0);
+pub(super) fn dmr_radiant(_input: ModifierResponsInput) -> DamageModifierResponse {
+    let des_buff = if _input.pvp { 1.1 } else { 1.25 };
+    let buff = emp_buff(_input.cached_data, des_buff);
+    _input.cached_data.insert("radiant".to_string(), 1.0);
     DamageModifierResponse {
         impact_dmg_scale: buff,
         explosive_dmg_scale: buff,
@@ -87,24 +69,18 @@ pub(super) fn dmr_radiant(
     }
 }
 
-pub(super) fn dmr_path_of_burning_steps(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    if _value == 0 {
+pub(super) fn dmr_path_of_burning_steps(_input: ModifierResponsInput) -> DamageModifierResponse {
+    if _input.value == 0 {
         return DamageModifierResponse::default();
     }
     let pvp_values = [1.15, 1.25, 1.2, 1.35];
     let pve_values = [1.2, 1.25, 1.35, 1.4];
-    let des_buff = if _pvp {
-        pvp_values[clamp(_value - 1, 0, 3) as usize]
+    let des_buff = if _input.pvp {
+        pvp_values[clamp(_input.value - 1, 0, 3) as usize]
     } else {
-        pve_values[clamp(_value - 1, 0, 3) as usize]
+        pve_values[clamp(_input.value - 1, 0, 3) as usize]
     };
-    let buff = emp_buff(_cached_data, des_buff);
+    let buff = emp_buff(_input.cached_data, des_buff);
     DamageModifierResponse {
         impact_dmg_scale: buff,
         explosive_dmg_scale: buff,
@@ -112,15 +88,9 @@ pub(super) fn dmr_path_of_burning_steps(
     }
 }
 
-pub(super) fn dmr_banner_shield(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let des_buff = if _pvp { 1.35 } else { 1.4 };
-    let buff = emp_buff(_cached_data, des_buff);
+pub(super) fn dmr_banner_shield(_input: ModifierResponsInput) -> DamageModifierResponse {
+    let des_buff = if _input.pvp { 1.35 } else { 1.4 };
+    let buff = emp_buff(_input.cached_data, des_buff);
     DamageModifierResponse {
         impact_dmg_scale: buff,
         explosive_dmg_scale: buff,
@@ -128,15 +98,9 @@ pub(super) fn dmr_banner_shield(
     }
 }
 
-pub(super) fn dmr_empowering_rift(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let des_buff = if _pvp { 1.15 } else { 1.2 };
-    let buff = emp_buff(_cached_data, des_buff);
+pub(super) fn dmr_empowering_rift(_input: ModifierResponsInput) -> DamageModifierResponse {
+    let des_buff = if _input.pvp { 1.15 } else { 1.2 };
+    let buff = emp_buff(_input.cached_data, des_buff);
     DamageModifierResponse {
         impact_dmg_scale: buff,
         explosive_dmg_scale: buff,
@@ -144,15 +108,9 @@ pub(super) fn dmr_empowering_rift(
     }
 }
 
-pub(super) fn dmr_mantle_of_battle_harmony(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let des_buff = if _pvp { 1.15 } else { 1.2 };
-    let buff = emp_buff(_cached_data, des_buff);
+pub(super) fn dmr_mantle_of_battle_harmony(_input: ModifierResponsInput) -> DamageModifierResponse {
+    let des_buff = if _input.pvp { 1.15 } else { 1.2 };
+    let buff = emp_buff(_input.cached_data, des_buff);
     DamageModifierResponse {
         impact_dmg_scale: buff,
         explosive_dmg_scale: buff,
@@ -160,14 +118,8 @@ pub(super) fn dmr_mantle_of_battle_harmony(
     }
 }
 
-pub(super) fn dmr_ward_of_dawn(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let buff = emp_buff(_cached_data, 1.25);
+pub(super) fn dmr_ward_of_dawn(_input: ModifierResponsInput) -> DamageModifierResponse {
+    let buff = emp_buff(_input.cached_data, 1.25);
     DamageModifierResponse {
         impact_dmg_scale: buff,
         explosive_dmg_scale: buff,
@@ -175,15 +127,9 @@ pub(super) fn dmr_ward_of_dawn(
     }
 }
 
-pub(super) fn dmr_gyrfalcon(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let des_buff = if _pvp { 1.0 } else { 1.35 };
-    let buff = emp_buff(_cached_data, des_buff);
+pub(super) fn dmr_gyrfalcon(_input: ModifierResponsInput) -> DamageModifierResponse {
+    let des_buff = if _input.pvp { 1.0 } else { 1.35 };
+    let buff = emp_buff(_input.cached_data, des_buff);
     DamageModifierResponse {
         impact_dmg_scale: buff,
         explosive_dmg_scale: buff,
@@ -191,15 +137,9 @@ pub(super) fn dmr_gyrfalcon(
     }
 }
 
-pub(super) fn dmr_aeon_insight(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let des_buff = if _pvp { 1.0 } else { 1.35 };
-    let buff = emp_buff(_cached_data, des_buff);
+pub(super) fn dmr_aeon_insight(_input: ModifierResponsInput) -> DamageModifierResponse {
+    let des_buff = if _input.pvp { 1.0 } else { 1.35 };
+    let buff = emp_buff(_input.cached_data, des_buff);
     DamageModifierResponse {
         impact_dmg_scale: buff,
         explosive_dmg_scale: buff,
@@ -207,20 +147,14 @@ pub(super) fn dmr_aeon_insight(
     }
 }
 
-pub(super) fn dmr_umbral_vow_mod(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
+pub(super) fn dmr_umbral_vow_mod(_input: ModifierResponsInput) -> DamageModifierResponse {
     let pve_values = [1.2, 1.25, 1.35, 1.4];
-    let des_buff = if _pvp {
+    let des_buff = if _input.pvp {
         1.0
     } else {
-        pve_values[clamp(_value, 0, 3) as usize]
+        pve_values[clamp(_input.value, 0, 3) as usize]
     };
-    let buff = emp_buff(_cached_data, des_buff);
+    let buff = emp_buff(_input.cached_data, des_buff);
     DamageModifierResponse {
         impact_dmg_scale: buff,
         explosive_dmg_scale: buff,
@@ -232,15 +166,9 @@ pub(super) fn dmr_umbral_vow_mod(
 // DEBUFFS
 //
 
-pub(super) fn dmr_weaken(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let des_debuff = if _pvp { 1.075 } else { 1.15 };
-    let debuff = gbl_debuff(_cached_data, des_debuff);
+pub(super) fn dmr_weaken(_input: ModifierResponsInput) -> DamageModifierResponse {
+    let des_debuff = if _input.pvp { 1.075 } else { 1.15 };
+    let debuff = gbl_debuff(_input.cached_data, des_debuff);
     DamageModifierResponse {
         impact_dmg_scale: debuff,
         explosive_dmg_scale: debuff,
@@ -248,15 +176,9 @@ pub(super) fn dmr_weaken(
     }
 }
 
-pub(super) fn dmr_tractor_cannon(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let des_debuff = if _pvp { 1.5 } else { 1.3 };
-    let debuff = gbl_debuff(_cached_data, des_debuff);
+pub(super) fn dmr_tractor_cannon(_input: ModifierResponsInput) -> DamageModifierResponse {
+    let des_debuff = if _input.pvp { 1.5 } else { 1.3 };
+    let debuff = gbl_debuff(_input.cached_data, des_debuff);
     DamageModifierResponse {
         impact_dmg_scale: debuff,
         explosive_dmg_scale: debuff,
@@ -264,15 +186,9 @@ pub(super) fn dmr_tractor_cannon(
     }
 }
 
-pub(super) fn dmr_tether(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let des_debuff = if _pvp { 1.5 } else { 1.3 };
-    let debuff = gbl_debuff(_cached_data, des_debuff);
+pub(super) fn dmr_tether(_input: ModifierResponsInput) -> DamageModifierResponse {
+    let des_debuff = if _input.pvp { 1.5 } else { 1.3 };
+    let debuff = gbl_debuff(_input.cached_data, des_debuff);
     DamageModifierResponse {
         impact_dmg_scale: debuff,
         explosive_dmg_scale: debuff,
@@ -280,14 +196,8 @@ pub(super) fn dmr_tether(
     }
 }
 
-pub(super) fn dmr_felwinters_helm(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let debuff = gbl_debuff(_cached_data, 1.3);
+pub(super) fn dmr_felwinters_helm(_input: ModifierResponsInput) -> DamageModifierResponse {
+    let debuff = gbl_debuff(_input.cached_data, 1.3);
     DamageModifierResponse {
         impact_dmg_scale: debuff,
         explosive_dmg_scale: debuff,
@@ -295,20 +205,14 @@ pub(super) fn dmr_felwinters_helm(
     }
 }
 
-pub(super) fn dmr_dsc_scanner_mod(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
+pub(super) fn dmr_dsc_scanner_mod(_input: ModifierResponsInput) -> DamageModifierResponse {
     let pve_values = [1.08, 1.137, 1.173, 1.193, 1.2];
-    let des_debuff = if _pvp {
+    let des_debuff = if _input.pvp {
         1.0
     } else {
-        pve_values[clamp(_value, 0, 4) as usize]
+        pve_values[clamp(_input.value, 0, 4) as usize]
     };
-    let debuff = gbl_debuff(_cached_data, des_debuff);
+    let debuff = gbl_debuff(_input.cached_data, des_debuff);
     DamageModifierResponse {
         impact_dmg_scale: debuff,
         explosive_dmg_scale: debuff,
