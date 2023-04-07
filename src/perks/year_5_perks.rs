@@ -466,33 +466,6 @@ pub(super) fn dmr_bait_and_switch(
     }
 }
 
-pub(super) fn edr_bait_and_switch(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> ExtraDamageResponse {
-    let time = _input.handling_data.ready_time * 2.0 + _input.handling_data.stow_time * 2.0;
-    let last_proc = _cached_data
-        .get("bait_and_switch_last_proc")
-        .unwrap_or(&0.0);
-    if _input.time_total - last_proc < 10.0 {
-        return ExtraDamageResponse::default();
-    }
-    ExtraDamageResponse {
-        additive_damage: 200.0,
-        combatant_scale: true,
-        crit_scale: true,
-        increment_total_time: true,
-        time_for_additive_damage: time,
-        times_to_hit: 1,
-        weapon_scale: true,
-        hit_at_same_time: true,
-        is_dot: false,
-    }
-}
-
 pub(super) fn rsmr_compulsive_reloader(
     _input: &CalculationInput,
     _value: u32,

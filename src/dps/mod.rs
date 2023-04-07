@@ -36,6 +36,8 @@ pub struct CachedWeaponDpsData {
     pub ammo_fired: u32,
     pub bullets_fired: u32,
     pub num_reloads: u32,
+    pub ammo_fired_this_mag: u32,
+    pub reserves_left: u32,
 }
 // impl Default for CachedWeaponDpsData {
 //     fn default() -> Self {

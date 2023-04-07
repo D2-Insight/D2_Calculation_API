@@ -28,11 +28,11 @@ pub(super) fn dmr_paracausal_shot(
         let bufflist = if _pvp { &bufflist_pvp } else { &bufflist_pve };
         damage_buff = bufflist[num_of_crits as usize];
     };
-    if _input.time_this_mag < 0.0 {
-        let num_of_crits = clamp(_value as i32, 0, 7);
-        let bufflist = if _pvp { &bufflist_pvp } else { &bufflist_pve };
-        damage_buff = bufflist[num_of_crits as usize];
-    }
+    // if _input.time_this_mag < 0.0 {
+    //     let num_of_crits = clamp(_value as i32, 0, 7);
+    //     let bufflist = if _pvp { &bufflist_pvp } else { &bufflist_pve };
+    //     damage_buff = bufflist[num_of_crits as usize];
+    // }
     DamageModifierResponse {
         impact_dmg_scale: damage_buff,
         explosive_dmg_scale: damage_buff,

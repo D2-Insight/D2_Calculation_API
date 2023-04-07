@@ -177,7 +177,6 @@ impl Weapon {
             _overshield,
             self.calc_handling_times(None, None, true),
         );
-        tmp.time_this_mag = _total_time;
         tmp.time_total = _total_time;
         tmp.ammo_fired_this_mag = _total_shots_fired;
         tmp.total_ammo_fired = _total_shots_fired;

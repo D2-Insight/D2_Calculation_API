@@ -75,34 +75,37 @@ impl DpsSimulationInstance {
         self.total_time += event.pre_time+event.post_time;
         self.event_timeline.push(event);
     }
-    // fn calc_input_for(&self, slot: WeaponSlot) {
-    //     //WARNING: can be unsafe if called for a weapon that is not in the loadout
-    //     let weapon = match slot {
-    //         WeaponSlot::Kinetic => self.loadout.kinetic_weapon.clone().unwrap(),
-    //         WeaponSlot::Energy => self.loadout.energy_weapon.clone().unwrap(),
-    //         WeaponSlot::Power => self.loadout.power_weapon.clone().unwrap(),
-    //     };
-    //     let cache = match slot {
-    //         WeaponSlot::Kinetic => self.dps_data.kinetic.as_mut().unwrap(),
-    //         WeaponSlot::Energy => self.dps_data.energy.as_mut().unwrap(),
-    //         WeaponSlot::Power => self.dps_data.power.as_mut().unwrap(),
-    //     };
-    //     CalculationInput {
-    //         intrinsic_hash: weapon.intrinsic_hash,
-    //         ammo_type: &weapon.ammo_type,
-    //         curr_firing_data: &weapon.firing_data,
-    //         curr_mag: cache.magazine,
-    //         base_mag: cache.base_magazine,
-    //         base_crit_mult: weapon.firing_data.crit_mult,
-    //         damage_type: &weapon.damage_type,
-    //         enemy_type: &self.enemy.type_,
-    //         stats: &weapon.get_stats(),
-    //         has_overshield: false,
-    //         num_reloads: cache.num_reloads,
-    //         perk_value_map: &weapon.perk_value_map,
-
-    //     }
-
+    fn calc_input_for(&self, slot: WeaponSlot) -> CalculationInput {
+        //WARNING: can be unsafe if called for a weapon that is not in the loadout
+        let mut weapon = match slot {
+            WeaponSlot::Kinetic => self.loadout.kinetic_weapon.clone().unwrap(),
+            WeaponSlot::Energy => self.loadout.energy_weapon.clone().unwrap(),
+            WeaponSlot::Power => self.loadout.power_weapon.clone().unwrap(),
+        };
+        let cache = match slot {
+            WeaponSlot::Kinetic => self.dps_data.kinetic.as_mut().unwrap(),
+            WeaponSlot::Energy => self.dps_data.energy.as_mut().unwrap(),
+            WeaponSlot::Power => self.dps_data.power.as_mut().unwrap(),
+        };
+        CalculationInput {
+            intrinsic_hash: weapon.intrinsic_hash,
+            ammo_type: &weapon.ammo_type,
+            curr_mag: cache.magazine,
+            base_mag: cache.base_magazine,
+            base_crit_mult: weapon.firing_data.crit_mult,
+            damage_type: &weapon.damage_type,
+            enemy_type: &self.enemy.type_,
+            stats: &weapon.get_stats(),
+            has_overshield: false,
+            num_reloads: cache.num_reloads as f64,
+            perk_value_map: &weapon.perk_value_map,
+            ammo_fired_this_mag: cache.ammo_fired_this_mag as f64,
+            reserves_left: cache.reserves_left as f64,
+            time_total: self.total_time,
+            total_ammo_fired: cache.ammo_fired as f64,
+            total_shots_hit: cache.bullets_fired as f64,
+            weapon_type: &weapon.weapon_type,
+        }
     }
     fn current_weapon(&self) -> Weapon {
         match self.active_weapon {
@@ -125,14 +128,16 @@ impl DpsSimulationInstance {
         let shoot_delay = (
             (cache.last_shot_time + cache.required_shot_delay)
             - self.total_time).min(0.0);
-        
         let mods = get_dmg_modifier(
-            weapon.list_perks(), None, false, &mut cache.untyped);
+            weapon.list_perks(),
+            &self.calc_input_for(self.active_weapon),
+            false,
+            &mut cache.untyped
+        );
         let damage = weapon.firing_data.damage
             * self.activity.get_rpl_mult()
             * self.activity.get_pl_delta()
-            * weapon.damage_mods.get_mod(&self.enemy)
-            * 
+            * weapon.damage_mods.get_mod(&self.enemy.type_);
     }
     pub fn swap_weapon(&mut self, slot: WeaponSlot) {
         self.active_weapon = slot;

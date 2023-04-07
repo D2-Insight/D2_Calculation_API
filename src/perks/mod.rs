@@ -1184,7 +1184,6 @@ fn get_perk_edr(
     match perk_enum {
         Perks::ReignHavoc => edr_reign_havoc(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::ClusterBomb => edr_cluster_bomb(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::BaitAndSwitch => edr_bait_and_switch(_input_data, val, enhanced, _pvp, _cached_data),
         _ => ExtraDamageResponse::default(),
     }
 }

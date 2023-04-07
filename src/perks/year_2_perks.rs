@@ -311,7 +311,7 @@ pub(super) fn ror_demolitionist(
     if _value == 1 {
         return ReloadOverrideResponse {
             valid: true,
-            reload_time: _input.handling_data.ready_time + grenade_throw_time,
+            reload_time: 0.0,
             ammo_to_reload: _input.base_mag as i32,
             priority: 0,
             count_as_reload: false,
