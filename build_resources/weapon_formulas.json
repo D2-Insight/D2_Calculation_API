@@ -186,7 +186,7 @@
         "1657056865": {"name": "One Thousand Voices", "cat": "1KV",     "subFam": "1KV",         "magProf": "default"  },
         "1927916065": {"name": "Telesto",             "cat": "Telesto", "subFam": "Precision",   "magProf": "default"  },
         "2518716062": {"name": "Aggressive Frame",    "cat": "default", "subFam": "Aggressive",  "magProf": "default"  },
-        "3610750208": {"name": "Vex Mythoclast",      "cat": "Vex",     "subFam": "Vex",         "magProf": "default"  },
+        "3610750208": {"name": "Vex Mythoclast",      "cat": "Vex",     "subFam": "Vex",         "magProf": "Vex"      },
         "2585427437": {"name": "Delicate Tomb",       "cat": "default", "subFam": "Rapid-Fire",  "magProf": "default"  },
         "cat": {
             "default": {
@@ -255,6 +255,10 @@
             "default": {
                 "mag": {"evpp": 0.0 ,"vpp": 0.05, "offset": 2.51},
                 "reserve_id": 111
+            },
+            "Vex": {
+                "mag": {"evpp": 0.0 ,"vpp": 0.2, "offset": 25.0},
+                "reserve_id": 0
             }
         }
     },

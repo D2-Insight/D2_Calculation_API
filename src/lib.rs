@@ -41,6 +41,9 @@ use crate::types::js_types::{
 #[cfg(feature = "wasm")]
 use wasm_bindgen::prelude::*;
 
+#[cfg(all(feature = "wasm", feature = "foundry"))]
+use crate::types::js_types::JsScalarResponse;
+
 //python
 #[cfg(feature = "python")]
 use crate::types::py_types::{
@@ -365,17 +368,18 @@ pub fn get_misc_data(_dynamic_traits: bool, _pvp: bool) -> Result<JsValue, JsVal
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "setEncounter")]
 pub fn set_encounter(
-    _rpl: u32,
+    _reccomended_pl: u32,
+    _player_pl: u32,
     _override_cap: i32,
     _difficulty: JsDifficultyOptions,
     _enemy_type: JsEnemyType,
 ) -> Result<(), JsValue> {
     PERS_DATA.with(|perm_data| {
         let mut activity = &mut perm_data.borrow_mut().activity;
-        activity.rpl = _rpl;
+        activity.rpl = _reccomended_pl;
         activity.cap = _override_cap;
         activity.difficulty = _difficulty.into();
-        activity.player.pl = 2000;
+        activity.player.pl = _player_pl;
     });
     PERS_DATA.with(|perm_data| {
         let mut enemy = &mut perm_data.borrow_mut().enemy;
@@ -403,6 +407,30 @@ pub fn get_modifier_response(_dynamic_traits: bool, _pvp: bool) -> Result<JsValu
         None,
     );
     Ok(serde_wasm_bindgen::to_value(&modifier).unwrap())
+}
+
+#[cfg(all(feature = "wasm", feature = "foundry"))]
+#[wasm_bindgen(js_name = "getScalarResponseSummary")]
+pub fn get_scalar_response(_pvp: bool) -> Result<JsScalarResponse, JsValue> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    let input_data = weapon.static_calc_input();
+    let mut cached_data = HashMap::new();
+    let rmr = perks::get_range_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
+    let rsmr = perks::get_reload_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
+    let mmr = perks::get_magazine_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
+    let hmr = perks::get_handling_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
+    let imr = perks::get_reserve_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
+    Ok(JsScalarResponse{
+        ads_range_scalar: rmr.range_zoom_scale,
+        global_range_scalar: rmr.range_all_scale,
+        hipfire_range_scalar: rmr.range_hip_scale,
+        ads_scalar: hmr.ads_scale,
+        draw_scalar: hmr.draw_scale,
+        stow_scalar: hmr.stow_scale,
+        reload_scalar: rsmr.reload_time_scale,
+        mag_size_scalar: mmr.magazine_scale,
+        reserve_size_scalar: imr.inv_scale,
+    })
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

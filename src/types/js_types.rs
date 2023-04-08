@@ -320,6 +320,30 @@ pub struct JsMetaData {
     pub api_branch: &'static str,
 }
 
+#[derive(Debug, Clone, Default)]
+#[cfg(feature = "foundry")]
+#[wasm_bindgen(js_name = "ScalarResponseSummary", inspectable)]
+pub struct JsScalarResponse {
+    #[wasm_bindgen(js_name = "reloadScalar", readonly)]
+    pub reload_scalar: f64,
+    #[wasm_bindgen(js_name = "drawScalar", readonly)]
+    pub draw_scalar: f64,
+    #[wasm_bindgen(js_name = "adsScalar", readonly)]
+    pub ads_scalar: f64,
+    #[wasm_bindgen(js_name = "stowScalar", readonly)]
+    pub stow_scalar: f64,
+    #[wasm_bindgen(js_name = "globalRangeScalar", readonly)]
+    pub global_range_scalar: f64,
+    #[wasm_bindgen(js_name = "hipfireRangeScalar", readonly)]
+    pub hipfire_range_scalar: f64,
+    #[wasm_bindgen(js_name = "adsRangeScalar", readonly)]
+    pub ads_range_scalar: f64,
+    #[wasm_bindgen(js_name = "magSizeScalar", readonly)]
+    pub mag_size_scalar: f64,
+    #[wasm_bindgen(js_name = "reserveSizeScalar", readonly)]
+    pub reserve_size_scalar: f64,
+}
+
 #[derive(Debug, Clone)]
 #[wasm_bindgen(js_name = "DifficultyOptions")]
 pub enum JsDifficultyOptions {

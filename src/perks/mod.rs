@@ -346,6 +346,7 @@ pub enum Perks {
     //season 20 | year 6
     KeepAway = 3619207468,
     ParacausalAffinity = 3215448563,
+    EnviousAssasin = 968510818,
 
     //subclass
     OnYourMark = 3066103999,
@@ -693,22 +694,6 @@ pub fn get_handling_modifier(
         handling_modifier.ads_scale *= tmp.ads_scale;
     }
     handling_modifier
-}
-
-pub fn get_magazine_modifier(
-    _perks: Vec<Perk>,
-    _input_data: &CalculationInput,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> MagazineModifierResponse {
-    let mut magazine_modifier = MagazineModifierResponse::default();
-    for perk in _perks {
-        let tmp = get_perk_mmr(perk, _input_data, _pvp, _cached_data);
-        magazine_modifier.magazine_stat_add += tmp.magazine_stat_add;
-        magazine_modifier.magazine_add += tmp.magazine_add;
-        magazine_modifier.magazine_scale *= tmp.magazine_scale;
-    }
-    magazine_modifier
 }
 
 pub fn get_reserve_modifier(

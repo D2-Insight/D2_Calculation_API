@@ -127,4 +127,31 @@ pub fn year_6_perks() {
             }
         )
     );
+
+    add_mmr(
+        Perks::EnviousAssasin,
+        Box::new(
+            |_input: ModifierResponsInput| -> MagazineModifierResponse {
+                let val = clamp(_input.value, 0, 15) as f64;
+                if _input.calc_data.total_shots_fired == 0.0 {
+                    let mut mag_mult = 1.0;
+                    if *_input.calc_data.ammo_type == AmmoType::PRIMARY {
+                        mag_mult += 0.1 * val;
+                    } else {
+                        mag_mult += 0.2 * val;
+                    };
+                    return MagazineModifierResponse {
+                        magazine_stat_add: 0,
+                        magazine_scale: clamp(mag_mult, 1.0, 2.5),
+                        magazine_add: 0.0,
+                    };
+                };
+                MagazineModifierResponse {
+                    magazine_stat_add: 0,
+                    magazine_scale: 1.0,
+                    magazine_add: 0.0,
+                }
+            }
+        )
+    );
 }

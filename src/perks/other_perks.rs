@@ -3,7 +3,7 @@ use std::collections::{btree_map::Range, HashMap};
 use serde::de::value;
 
 use crate::{
-    d2_enums::{DamageType, StatHashes, WeaponType},
+    d2_enums::{AmmoType, DamageType, StatHashes, WeaponType, StatBump, BungieHash},
     enemies::EnemyType,
 };
 
