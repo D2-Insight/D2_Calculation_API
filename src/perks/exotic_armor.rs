@@ -164,11 +164,26 @@ pub fn exotic_armor() {
                 let mut stats = HashMap::new();
                 if _input.calc_data.weapon_type == &WeaponType::BOW {
                     stats.insert(StatHashes::AIRBORNE.into(), 40);
+                    stats.insert(StatHashes::DRAW_TIME.into(), 10);
                 };
                 stats
             },
         ),
     );
+
+    /*add_fmr(
+        Perks::Oathkeeper,
+        Box::new(|_input: ModifierResponsInput| -> FiringModifierResponse {
+            FiringModifierResponse {
+                burst_delay_add: match _input.calc_data.intrinsic_hash {
+                    906 => -36.0 / 1100.0,
+                    905 => -40.0 / 1100.0,
+                    _ => 0.0,
+                },
+                ..Default::default()
+            }
+        }),
+    );*/
 
     add_sbr(
         Perks::SealedAhamkaraGrasps,

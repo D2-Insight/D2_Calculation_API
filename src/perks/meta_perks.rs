@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::{
-    d2_enums::{AmmoType, DamageType, StatHashes, WeaponType},
+    d2_enums::{AmmoType, DamageType, Seconds, StatHashes, WeaponType},
     weapons::Stat,
 };
 
@@ -87,11 +87,24 @@ pub fn meta_perks() {
                     // delay_add += fmr_accelerated_coils(_input, _input.value, is_enhanced, _pvp, _cached_data)
                     //     .burst_delay_add;
                 }
-                if stat_bump_id == StatHashes::DRAW_TIME
-                    && _input.calc_data.weapon_type == &WeaponType::BOW
-                {
-                    // delay_add += fmr_faster_string_t1(_input, _input.value, is_enhanced, _pvp, _cached_data)
-                    //     .burst_delay_add;
+            }
+            if _input.calc_data.weapon_type == &WeaponType::BOW {
+                let draw_time = _input
+                    .calc_data
+                    .stats
+                    .get(&StatHashes::DRAW_TIME.into())
+                    .unwrap()
+                    .clone();
+                delay_add += match _input.calc_data.intrinsic_hash {
+                    905 => {
+                        (draw_time.perk_val() as f64 * -4.0 + 900.0) / 1100.0
+                            - _input.calc_data.curr_firing_data.burst_delay
+                    }
+                    906 => {
+                        (draw_time.perk_val() as f64 * -3.6 + 900.0) / 1100.0
+                            - _input.calc_data.curr_firing_data.burst_delay
+                    }
+                    _ => 0.0,
                 }
             }
             FiringModifierResponse {

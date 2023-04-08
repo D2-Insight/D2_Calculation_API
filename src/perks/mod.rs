@@ -83,8 +83,6 @@ pub fn enhanced_check(_hash: u32) -> (u32, bool) {
     (result, found)
 }
 
-
-
 // all armor pekrs are for the future but wanted to started to compile them now
 
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, FromPrimitive)]
@@ -423,7 +421,7 @@ pub enum Perks {
     Ignore = 69420,
 }
 
-#[derive(Debug,)]
+#[derive(Debug)]
 pub struct ModifierResponsInput<'a> {
     calc_data: &'a CalculationInput<'a>,
     value: u32,

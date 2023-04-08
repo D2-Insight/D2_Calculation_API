@@ -42,26 +42,32 @@ impl Weapon {
         _cached_data: Option<&mut HashMap<String, f64>>,
         _pvp: bool,
     ) -> ReloadResponse {
-        let reload_stat = self
+        let mut reload_stat = self
             .stats
             .get(&StatHashes::RELOAD.into())
             .unwrap_or(&Stat::new())
             .val();
         let mut default_chd_dt = HashMap::new();
         let cached_data = _cached_data.unwrap_or(&mut default_chd_dt);
+        if self.weapon_type == WeaponType::BOW {
+            reload_stat = reload_stat.clamp(0, 80);
+        }
         let mut out;
         if _calc_input.is_some() {
             let modifiers =
                 get_reload_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data);
-            out = self.reload_formula
+            out = self
+                .reload_formula
                 .calc_reload_time_formula(reload_stat, modifiers);
         } else {
-            out = self.reload_formula
+            out = self
+                .reload_formula
                 .calc_reload_time_formula(reload_stat, ReloadModifierResponse::default());
         }
         if self.weapon_type == WeaponType::BOW {
-            out.reload_time = out.reload_time.clamp(0.6, 5.0);
+            out.reload_time = out.reload_time.clamp(0.6707, 5.0);
         }
+
         out
     }
 }
