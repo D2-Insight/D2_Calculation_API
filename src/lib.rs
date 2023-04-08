@@ -397,17 +397,17 @@ pub fn set_logging_level(_level: usize) -> Result<(), JsValue> {
     Ok(())
 }
 
-#[cfg(feature = "wasm")]
-#[wasm_bindgen(js_name = "getModifierResponseSummary")]
-pub fn get_modifier_response(_dynamic_traits: bool, _pvp: bool) -> Result<JsValue, JsValue> {
-    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
-    let modifier = weapon.get_modifier_summary(
-        _dynamic_traits.then_some(weapon.static_calc_input()),
-        _pvp,
-        None,
-    );
-    Ok(serde_wasm_bindgen::to_value(&modifier).unwrap())
-}
+// #[cfg(feature = "wasm")]
+// #[wasm_bindgen(js_name = "getModifierResponseSummary")]
+// pub fn get_modifier_response(_dynamic_traits: bool, _pvp: bool) -> Result<JsValue, JsValue> {
+//     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+//     let modifier = weapon.get_modifier_summary(
+//         _dynamic_traits.then_some(weapon.static_calc_input()),
+//         _pvp,
+//         None,
+//     );
+//     Ok(serde_wasm_bindgen::to_value(&modifier).unwrap())
+// }
 
 #[cfg(all(feature = "wasm", feature = "foundry"))]
 #[wasm_bindgen(js_name = "getScalarResponseSummary")]

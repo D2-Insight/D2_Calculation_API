@@ -83,6 +83,8 @@ pub fn enhanced_check(_hash: u32) -> (u32, bool) {
     (result, found)
 }
 
+
+
 // all armor pekrs are for the future but wanted to started to compile them now
 
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, FromPrimitive)]
@@ -421,6 +423,7 @@ pub enum Perks {
     Ignore = 69420,
 }
 
+#[derive(Debug,)]
 pub struct ModifierResponsInput<'a> {
     calc_data: &'a CalculationInput<'a>,
     value: u32,
@@ -618,7 +621,16 @@ pub fn get_stat_bumps(
     let mut dynamic_stats: HashMap<u32, i32> = HashMap::new();
     let mut static_stats: HashMap<u32, i32> = HashMap::new();
     for perk in _perks {
-        let perk_stats = dyanmic_perk_stats(&perk, &_input_data, _pvp, _cached_data);
+        let perk_stats = PERK_FUNC_MAP.with(|pers_modifier| {
+            let inp = ModifierResponsInput {
+                is_enhanced: perk.enhanced,
+                value: perk.value,
+                calc_data: &_input_data,
+                pvp: _pvp,
+                cached_data: _cached_data,
+            };
+            pers_modifier.borrow().get_sbr(perk.hash.into(), inp)
+        });
         for (key, value) in perk_stats {
             let entry = dynamic_stats.entry(key).or_insert(0);
             *entry += value;
@@ -639,7 +651,16 @@ pub fn get_dmg_modifier(
 ) -> DamageModifierResponse {
     let mut dmg_modifier = DamageModifierResponse::default();
     for perk in _perks {
-        let tmp = get_perk_dmr(perk.clone(), _input_data, _pvp, _cached_data);
+        let tmp = PERK_FUNC_MAP.with(|pers_modifier| {
+            let inp = ModifierResponsInput {
+                is_enhanced: perk.enhanced,
+                value: perk.value,
+                calc_data: &_input_data,
+                pvp: _pvp,
+                cached_data: _cached_data,
+            };
+            pers_modifier.borrow().get_dmr(perk.hash.into(), inp)
+        });
         dmg_modifier.impact_dmg_scale *= tmp.impact_dmg_scale;
         dmg_modifier.explosive_dmg_scale *= tmp.explosive_dmg_scale;
         dmg_modifier.crit_scale *= tmp.crit_scale;
@@ -655,7 +676,16 @@ pub fn get_reload_modifier(
 ) -> ReloadModifierResponse {
     let mut reload_modifier = ReloadModifierResponse::default();
     for perk in _perks {
-        let tmp = get_perk_rsmr(perk, _input_data, _pvp, _cached_data);
+        let tmp = PERK_FUNC_MAP.with(|pers_modifier| {
+            let inp = ModifierResponsInput {
+                is_enhanced: perk.enhanced,
+                value: perk.value,
+                calc_data: &_input_data,
+                pvp: _pvp,
+                cached_data: _cached_data,
+            };
+            pers_modifier.borrow().get_rsmr(perk.hash.into(), inp)
+        });
         reload_modifier.reload_stat_add += tmp.reload_stat_add;
         reload_modifier.reload_time_scale *= tmp.reload_time_scale;
     }
@@ -670,7 +700,16 @@ pub fn get_firing_modifier(
 ) -> FiringModifierResponse {
     let mut firing_modifier = FiringModifierResponse::default();
     for perk in _perks {
-        let tmp = get_perk_fmr(perk, _input_data, _pvp, _cached_data);
+        let tmp = PERK_FUNC_MAP.with(|pers_modifier| {
+            let inp = ModifierResponsInput {
+                is_enhanced: perk.enhanced,
+                value: perk.value,
+                calc_data: &_input_data,
+                pvp: _pvp,
+                cached_data: _cached_data,
+            };
+            pers_modifier.borrow().get_fmr(perk.hash.into(), inp)
+        });
         firing_modifier.burst_delay_scale *= tmp.burst_delay_scale;
         firing_modifier.burst_delay_add += tmp.burst_delay_add;
         firing_modifier.inner_burst_scale *= tmp.inner_burst_scale;
@@ -687,13 +726,47 @@ pub fn get_handling_modifier(
 ) -> HandlingModifierResponse {
     let mut handling_modifier = HandlingModifierResponse::default();
     for perk in _perks {
-        let tmp = get_perk_hmr(perk, _input_data, _pvp, _cached_data);
+        let tmp = PERK_FUNC_MAP.with(|pers_modifier| {
+            let inp = ModifierResponsInput {
+                is_enhanced: perk.enhanced,
+                value: perk.value,
+                calc_data: &_input_data,
+                pvp: _pvp,
+                cached_data: _cached_data,
+            };
+            pers_modifier.borrow().get_hmr(perk.hash.into(), inp)
+        });
         handling_modifier.stat_add += tmp.stat_add;
         handling_modifier.stow_scale *= tmp.stow_scale;
         handling_modifier.draw_scale *= tmp.draw_scale;
         handling_modifier.ads_scale *= tmp.ads_scale;
     }
     handling_modifier
+}
+
+pub fn get_magazine_modifier(
+    _perks: Vec<Perk>,
+    _input_data: &CalculationInput,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> MagazineModifierResponse {
+    let mut magazine_modifier = MagazineModifierResponse::default();
+    for perk in _perks {
+        let tmp = PERK_FUNC_MAP.with(|pers_modifier| {
+            let inp = ModifierResponsInput {
+                is_enhanced: perk.enhanced,
+                value: perk.value,
+                calc_data: &_input_data,
+                pvp: _pvp,
+                cached_data: _cached_data,
+            };
+            pers_modifier.borrow().get_mmr(perk.hash.into(), inp)
+        });
+        magazine_modifier.magazine_stat_add += tmp.magazine_stat_add;
+        magazine_modifier.magazine_add += tmp.magazine_add;
+        magazine_modifier.magazine_scale *= tmp.magazine_scale;
+    }
+    magazine_modifier
 }
 
 pub fn get_reserve_modifier(
@@ -704,7 +777,16 @@ pub fn get_reserve_modifier(
 ) -> InventoryModifierResponse {
     let mut reserve_modifier = InventoryModifierResponse::default();
     for perk in _perks {
-        let tmp = get_perk_imr(perk, _input_data, _pvp, _cached_data);
+        let tmp = PERK_FUNC_MAP.with(|pers_modifier| {
+            let inp = ModifierResponsInput {
+                is_enhanced: perk.enhanced,
+                value: perk.value,
+                calc_data: &_input_data,
+                pvp: _pvp,
+                cached_data: _cached_data,
+            };
+            pers_modifier.borrow().get_imr(perk.hash.into(), inp)
+        });
         reserve_modifier.inv_stat_add += tmp.inv_stat_add;
         reserve_modifier.inv_add += tmp.inv_add;
         reserve_modifier.inv_scale *= tmp.inv_scale;
@@ -720,7 +802,16 @@ pub fn get_range_modifier(
 ) -> RangeModifierResponse {
     let mut range_modifier = RangeModifierResponse::default();
     for perk in _perks {
-        let tmp = get_perk_rmr(perk, _input_data, _pvp, _cached_data);
+        let tmp = PERK_FUNC_MAP.with(|pers_modifier| {
+            let inp = ModifierResponsInput {
+                is_enhanced: perk.enhanced,
+                value: perk.value,
+                calc_data: &_input_data,
+                pvp: _pvp,
+                cached_data: _cached_data,
+            };
+            pers_modifier.borrow().get_rmr(perk.hash.into(), inp)
+        });
         range_modifier.range_stat_add += tmp.range_stat_add;
         range_modifier.range_all_scale *= tmp.range_all_scale;
         range_modifier.range_hip_scale *= tmp.range_hip_scale;
@@ -737,7 +828,16 @@ pub fn get_refund_modifier(
 ) -> Vec<RefundResponse> {
     let mut refund_modifier = vec![];
     for perk in _perks {
-        let tmp = get_perk_refund(perk, _input_data, _pvp, _cached_data);
+        let tmp = PERK_FUNC_MAP.with(|pers_modifier| {
+            let inp = ModifierResponsInput {
+                is_enhanced: perk.enhanced,
+                value: perk.value,
+                calc_data: &_input_data,
+                pvp: _pvp,
+                cached_data: _cached_data,
+            };
+            pers_modifier.borrow().get_rr(perk.hash.into(), inp)
+        });
         if tmp.requirement > 0 {
             refund_modifier.push(tmp);
         }
@@ -753,7 +853,16 @@ pub fn get_extra_damage(
 ) -> Vec<ExtraDamageResponse> {
     let mut extra_damage = vec![];
     for perk in _perks {
-        let tmp = get_perk_edr(perk, _input_data, _pvp, _cached_data);
+        let tmp = PERK_FUNC_MAP.with(|pers_modifier| {
+            let inp = ModifierResponsInput {
+                is_enhanced: perk.enhanced,
+                value: perk.value,
+                calc_data: &_input_data,
+                pvp: _pvp,
+                cached_data: _cached_data,
+            };
+            pers_modifier.borrow().get_edr(perk.hash.into(), inp)
+        });
         if tmp.additive_damage > 0.0 {
             extra_damage.push(tmp);
         }
@@ -761,21 +870,30 @@ pub fn get_extra_damage(
     extra_damage
 }
 
-pub fn get_reload_overrides(
-    _perks: Vec<Perk>,
-    _input_data: &CalculationInput,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> Vec<ReloadOverrideResponse> {
-    let mut reload_overrides = vec![];
-    for perk in _perks {
-        let tmp = get_perk_ror(perk, _input_data, _pvp, _cached_data);
-        if tmp.valid {
-            reload_overrides.push(tmp);
-        }
-    }
-    reload_overrides
-}
+// pub fn get_reload_overrides(
+//     _perks: Vec<Perk>,
+//     _input_data: &CalculationInput,
+//     _pvp: bool,
+//     _cached_data: &mut HashMap<String, f64>,
+// ) -> Vec<ReloadOverrideResponse> {
+//     let mut reload_overrides = vec![];
+//     for perk in _perks {
+//         let tmp = PERK_FUNC_MAP.with(|pers_modifier| {
+//             let inp = ModifierResponsInput {
+//                 is_enhanced: perk.enhanced,
+//                 value: perk.value,
+//                 calc_data: &_input_data,
+//                 pvp: _pvp,
+//                 cached_data: _cached_data,
+//             };
+//             pers_modifier.borrow().get_ror(perk.hash.into(), inp)
+//         });
+//         if tmp.valid {
+//             reload_overrides.push(tmp);
+//         }
+//     }
+//     reload_overrides
+// }
 
 pub fn get_explosion_data(
     _perks: Vec<Perk>,
@@ -784,7 +902,16 @@ pub fn get_explosion_data(
 ) -> ExplosivePercentResponse {
     let mut highest_so_far = ExplosivePercentResponse::default();
     for perk in _perks {
-        let tmp = get_perk_epr(perk, _input_data, _pvp);
+        let tmp = PERK_FUNC_MAP.with(|pers_modifier| {
+            let inp = ModifierResponsInput {
+                is_enhanced: perk.enhanced,
+                value: perk.value,
+                calc_data: &_input_data,
+                pvp: _pvp,
+                cached_data: &mut HashMap::new(),
+            };
+            pers_modifier.borrow().get_epr(perk.hash.into(), inp)
+        });
         if tmp.percent > highest_so_far.percent {
             highest_so_far = tmp;
         }
@@ -798,40 +925,21 @@ pub fn get_flinch_modifier(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> FlinchModifierResponse {
-    let mut tmp = FlinchModifierResponse::default();
+    let mut flinch = FlinchModifierResponse::default();
     for perk in _perks {
-        tmp.flinch_scale *= get_perk_flmr(perk, _input_data, _pvp).flinch_scale;
+        let tmp = PERK_FUNC_MAP.with(|pers_modifier| {
+            let inp = ModifierResponsInput {
+                is_enhanced: perk.enhanced,
+                value: perk.value,
+                calc_data: &_input_data,
+                pvp: _pvp,
+                cached_data: _cached_data,
+            };
+            pers_modifier.borrow().get_flmr(perk.hash.into(), inp)
+        });
+        flinch.flinch_scale *= tmp.flinch_scale;
     }
-    tmp
-}
-
-fn get_perk_flmr(
-    _perk: Perk,
-    _input_data: &CalculationInput,
-    _pvp: bool,
-) -> FlinchModifierResponse {
-    let perk_enum = _perk.hash.into();
-    let val = _perk.value;
-    let enhanced = _perk.enhanced;
-    match perk_enum {
-        Perks::SurosSynergy => {
-            flmr_suros_synergy(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::NoDistractions => {
-            flmr_no_distractions(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::UnflinchingMod => {
-            flmr_unflinching_mod(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::RallyBarricade => {
-            flmr_rally_barricade(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::TomeOfDawn => {
-            flmr_tome_of_dawn(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        //Perks::PerfectFloat => todo!(), //Perfect floats flinch resist value is unknown atm
-        _ => FlinchModifierResponse::default(),
-    }
+    flinch
 }
 
 pub fn get_velocity_modifier(
@@ -840,107 +948,98 @@ pub fn get_velocity_modifier(
     _pvp: bool,
     _cached_data: &mut HashMap<String, f64>,
 ) -> VelocityModifierResponse {
-    let mut tmp = VelocityModifierResponse::default();
+    let mut velocity = VelocityModifierResponse::default();
     for perk in _perks {
-        tmp.velocity_scaler *= get_perk_vmr(perk, _input_data, _pvp).velocity_scaler;
+        let tmp = PERK_FUNC_MAP.with(|pers_modifier| {
+            let inp = ModifierResponsInput {
+                is_enhanced: perk.enhanced,
+                value: perk.value,
+                calc_data: &_input_data,
+                pvp: _pvp,
+                cached_data: _cached_data,
+            };
+            pers_modifier.borrow().get_vmr(perk.hash.into(), inp)
+        });
+        velocity.velocity_scaler *= tmp.velocity_scaler;
     }
-    tmp
+    velocity
 }
 
-fn get_perk_vmr(
-    _perk: Perk,
-    _input_data: &CalculationInput,
-    _pvp: bool,
-) -> VelocityModifierResponse {
-    let perk_enum: Perks = _perk.hash.into();
-    let val = _perk.value;
-    let enhanced = _perk.enhanced;
-    match perk_enum {
-        Perks::RangeFinder => {
-            vmr_range_finder(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        Perks::ImpulseAmplifier => {
-            vmr_impulse_amplifier(_input_data, val, enhanced, _pvp, &mut HashMap::new())
-        }
-        _ => VelocityModifierResponse::default(),
-    }
-}
+// impl Weapon {
+//     pub fn get_modifier_summary(
+//         &self,
+//         _calc_input: Option<CalculationInput>,
+//         _pvp: bool,
+//         _cached_data: Option<&mut HashMap<String, f64>>,
+//     ) -> HashMap<BungieHash, ModifierResponseSummary> {
+//         let mut default_cached_data = HashMap::new();
+//         let cached_data = _cached_data.unwrap_or(&mut default_cached_data);
+//         let mut buffer: HashMap<u32, ModifierResponseSummary> = HashMap::new();
+//         if _calc_input.is_none() {
+//             return buffer;
+//         }
 
-impl Weapon {
-    pub fn get_modifier_summary(
-        &self,
-        _calc_input: Option<CalculationInput>,
-        _pvp: bool,
-        _cached_data: Option<&mut HashMap<String, f64>>,
-    ) -> HashMap<BungieHash, ModifierResponseSummary> {
-        let mut default_cached_data = HashMap::new();
-        let cached_data = _cached_data.unwrap_or(&mut default_cached_data);
-        let mut buffer: HashMap<u32, ModifierResponseSummary> = HashMap::new();
-        if _calc_input.is_none() {
-            return buffer;
-        }
+//         let calc_input = _calc_input.unwrap();
 
-        let calc_input = _calc_input.unwrap();
+//         for perk in self.list_perks() {
+//             let mut mod_buffer = ModifierResponseSummary::default();
 
-        for perk in self.list_perks() {
-            let mut mod_buffer = ModifierResponseSummary::default();
+//             let modifier = get_perk_rmr(perk.clone(), &calc_input, _pvp, cached_data);
+//             if modifier != RangeModifierResponse::default() {
+//                 mod_buffer.rmr = Some(modifier);
+//             }
 
-            let modifier = get_perk_rmr(perk.clone(), &calc_input, _pvp, cached_data);
-            if modifier != RangeModifierResponse::default() {
-                mod_buffer.rmr = Some(modifier);
-            }
+//             let modifier = get_perk_dmr(perk.clone(), &calc_input, _pvp, cached_data);
+//             if modifier != DamageModifierResponse::default() {
+//                 mod_buffer.dmr = Some(modifier);
+//             }
 
-            let modifier = get_perk_dmr(perk.clone(), &calc_input, _pvp, cached_data);
-            if modifier != DamageModifierResponse::default() {
-                mod_buffer.dmr = Some(modifier);
-            }
+//             let modifier = get_perk_hmr(perk.clone(), &calc_input, _pvp, cached_data);
+//             if modifier != HandlingModifierResponse::default() {
+//                 mod_buffer.hmr = Some(modifier);
+//             }
 
-            let modifier = get_perk_hmr(perk.clone(), &calc_input, _pvp, cached_data);
-            if modifier != HandlingModifierResponse::default() {
-                mod_buffer.hmr = Some(modifier);
-            }
+//             let modifier = get_perk_fmr(perk.clone(), &calc_input, _pvp, cached_data);
+//             if modifier != FiringModifierResponse::default() {
+//                 mod_buffer.fmr = Some(modifier);
+//             }
 
-            let modifier = get_perk_fmr(perk.clone(), &calc_input, _pvp, cached_data);
-            if modifier != FiringModifierResponse::default() {
-                mod_buffer.fmr = Some(modifier);
-            }
+//             let modifier = get_perk_flmr(perk.clone(), &calc_input, _pvp);
+//             if modifier != FlinchModifierResponse::default() {
+//                 mod_buffer.flmr = Some(modifier);
+//             }
 
-            let modifier = get_perk_flmr(perk.clone(), &calc_input, _pvp);
-            if modifier != FlinchModifierResponse::default() {
-                mod_buffer.flmr = Some(modifier);
-            }
+//             let modifier = get_perk_rsmr(perk.clone(), &calc_input, _pvp, cached_data);
+//             if modifier != ReloadModifierResponse::default() {
+//                 mod_buffer.rsmr = Some(modifier);
+//             }
 
-            let modifier = get_perk_rsmr(perk.clone(), &calc_input, _pvp, cached_data);
-            if modifier != ReloadModifierResponse::default() {
-                mod_buffer.rsmr = Some(modifier);
-            }
+//             let modifier = get_perk_mmr(perk.clone(), &calc_input, _pvp, cached_data);
+//             if modifier != MagazineModifierResponse::default() {
+//                 mod_buffer.mmr = Some(modifier);
+//             }
 
-            let modifier = get_perk_mmr(perk.clone(), &calc_input, _pvp, cached_data);
-            if modifier != MagazineModifierResponse::default() {
-                mod_buffer.mmr = Some(modifier);
-            }
+//             let modifier = get_perk_imr(perk.clone(), &calc_input, _pvp, cached_data);
+//             if modifier != InventoryModifierResponse::default() {
+//                 mod_buffer.imr = Some(modifier);
+//             }
 
-            let modifier = get_perk_imr(perk.clone(), &calc_input, _pvp, cached_data);
-            if modifier != InventoryModifierResponse::default() {
-                mod_buffer.imr = Some(modifier);
-            }
+//             let stat_mod = dyanmic_perk_stats(&perk.clone(), &calc_input, _pvp, cached_data);
+//             let mut stat_buffer: HashMap<BungieHash, StatBump> = HashMap::new();
+//             for (key, value) in stat_mod {
+//                 stat_buffer.insert(key, value);
+//             }
 
-            let stat_mod = dyanmic_perk_stats(&perk.clone(), &calc_input, _pvp, cached_data);
-            let mut stat_buffer: HashMap<BungieHash, StatBump> = HashMap::new();
-            for (key, value) in stat_mod {
-                stat_buffer.insert(key, value);
-            }
+//             for (key, value) in perk.stat_buffs {
+//                 stat_buffer
+//                     .entry(key)
+//                     .and_modify(|stat| *stat += value)
+//                     .or_insert(value);
+//             }
+//             mod_buffer.statbump = Some(stat_buffer);
+//             buffer.insert(perk.hash, mod_buffer);
+//         }
 
-            for (key, value) in perk.stat_buffs {
-                stat_buffer
-                    .entry(key)
-                    .and_modify(|stat| *stat += value)
-                    .or_insert(value);
-            }
-            mod_buffer.statbump = Some(stat_buffer);
-            buffer.insert(perk.hash, mod_buffer);
-        }
-
-        buffer
-    }
-}
+//         buffer
+//     }
+// }
