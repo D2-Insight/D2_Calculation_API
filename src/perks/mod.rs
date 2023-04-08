@@ -206,6 +206,7 @@ pub enum Perks {
     MovingTarget = 588594999,
     AmbitiousAssassin = 2010801679,
     ClusterBomb = 1275731761,
+    #[num_enum(alternatives = [2907129557, ])] //sunshot
     ExplosivePayload = 3038247973,
     FirmlyPlanted = 280464955,
     FullAutoTrigger = 2117683199,
@@ -237,6 +238,7 @@ pub enum Perks {
     BoxBreathing = 2551157718,
 
     //season 4 | year 2
+    #[num_enum(alternatives = [2362217257, ])] //levi cat
     ArchersTempo = 201365942,
     ExplosiveHead = 3365897133,
     #[num_enum(alternatives = [1266037485, ])] //R0
