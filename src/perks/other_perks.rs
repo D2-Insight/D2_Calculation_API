@@ -339,8 +339,8 @@ pub fn other_perks() {
         )
     );
 
-    add_dmr_big_ones_spec(
-        Perks::,
+    add_dmr(
+        Perks::BigOnesSpec,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
                 let damage_mult;
@@ -362,186 +362,202 @@ pub fn other_perks() {
         )
     );
 
-    add_dmr_minor_spec(
-        Perks::,
+    add_dmr(
+        Perks::MinorSpec,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
-        let damage_mult = if *_input.calc_data.enemy_type == EnemyType::MINOR {
-            1.077
-        } else {
-            1.0
-        };
-        DamageModifierResponse {
-            impact_dmg_scale: damage_mult,
-            explosive_dmg_scale: damage_mult,
-            crit_scale: 1.0,
-        }
-    }
-
-    add_dmr_taken_spec(
-        Perks::,
-        Box::new(
-            |_input: ModifierResponsInput| -> DamageModifierResponse {
-        let damage_mult = if _input.value > 0 && !_input.pvp { 1.1 } else { 1.0 };
-        DamageModifierResponse {
-            impact_dmg_scale: damage_mult,
-            explosive_dmg_scale: damage_mult,
-            crit_scale: 1.0,
-        }
-    }
-
-    add_dmr_spike_grenades(
-        Perks::,
-        Box::new(
-            |_input: ModifierResponsInput| -> DamageModifierResponse {
-        DamageModifierResponse {
-            impact_dmg_scale: 1.5,
-            explosive_dmg_scale: 1.0,
-            crit_scale: 1.0,
-        }
-    }
-
-    add_dmr_disorienting_grenades(
-        Perks::,
-        Box::new(
-            |_input: ModifierResponsInput| -> DamageModifierResponse {
-        DamageModifierResponse {
-            impact_dmg_scale: 0.75,
-            explosive_dmg_scale: 0.75,
-            crit_scale: 1.0,
-        }
-    }
-
-    add_dmr_full_choke(
-        Perks::,
-        Box::new(
-            |_input: ModifierResponsInput| -> DamageModifierResponse {
-        if _input.calc_data.weapon_type == &WeaponType::SHOTGUN
-            && _input.calc_data.base_crit_mult < 1.15
-        {
-            DamageModifierResponse {
-                impact_dmg_scale: 1.0,
-                explosive_dmg_scale: 1.0,
-                crit_scale: 0.92,
+                let damage_mult = if *_input.calc_data.enemy_type == EnemyType::MINOR {
+                    1.077
+                } else {
+                    1.0
+                };
+                DamageModifierResponse {
+                    impact_dmg_scale: damage_mult,
+                    explosive_dmg_scale: damage_mult,
+                    crit_scale: 1.0,
+                }
             }
-        } else {
-            DamageModifierResponse::default()
-        }
-    }
+        )
+    );
 
-    add_fmr_accelerated_coils(
-        Perks::,
-        Box::new(
-            |_input: ModifierResponsInput| -> FiringModifierResponse {
-        if _input.calc_data.weapon_type == &WeaponType::LINEARFUSIONRIFLE {
-            return FiringModifierResponse {
-                burst_delay_add: -0.033,
-                ..Default::default()
-            };
-        }
-        FiringModifierResponse {
-            burst_delay_add: -0.040,
-            ..Default::default()
-        }
-    }
-
-    add_fmr_liquid_coils(
-        Perks::,
-        Box::new(
-            |_input: ModifierResponsInput| -> FiringModifierResponse {
-        if _input.calc_data.weapon_type == &WeaponType::LINEARFUSIONRIFLE {
-            return FiringModifierResponse {
-                burst_delay_add: 0.033,
-                ..Default::default()
-            };
-        }
-        FiringModifierResponse {
-            burst_delay_add: 0.040,
-            ..Default::default()
-        }
-    }
-
-    add_dmr_liquid_coils(
-        Perks::,
+    add_dmr(
+        Perks::TakenSpec,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
-        DamageModifierResponse {
-            impact_dmg_scale: 1.02,
-            explosive_dmg_scale: 1.02,
-            crit_scale: 1.0,
-        }
-    }
-
-    add_dmr_accelerated_coils(
-        Perks::,
-        Box::new(
-            |_input: ModifierResponsInput| -> DamageModifierResponse {
-        DamageModifierResponse {
-            impact_dmg_scale: 0.982,
-            explosive_dmg_scale: 0.982,
-            crit_scale: 1.0,
-        }
-    }
-
-    add_fmr_faster_string_t2(
-        Perks::,
-        Box::new(
-            |_input: ModifierResponsInput| -> FiringModifierResponse {
-        FiringModifierResponse {
-            burst_delay_add: -2.0 / 30.0,
-            ..Default::default()
-        }
-    }
-
-    add_fmr_faster_string_t1(
-        Perks::,
-        Box::new(
-            |_input: ModifierResponsInput| -> FiringModifierResponse {
-        FiringModifierResponse {
-            burst_delay_add: -1.0 / 30.0,
-            ..Default::default()
-        }
-    }
-
-    add_fmr_slower_string_t1(
-        Perks::,
-        Box::new(
-            |_input: ModifierResponsInput| -> FiringModifierResponse {
-        FiringModifierResponse {
-            burst_delay_add: 1.0 / 30.0,
-            ..Default::default()
-        }
-    }
-
-    add_fmr_slower_string_t2(
-        Perks::,
-        Box::new(
-            |_input: ModifierResponsInput| -> FiringModifierResponse {
-        FiringModifierResponse {
-            burst_delay_add: 2.0 / 30.0,
-            ..Default::default()
-        }
-    }
-
-    add_fmr_assault_mag(
-        Perks::,
-        Box::new(
-            |_input: ModifierResponsInput| -> FiringModifierResponse {
-        let hash = _input.calc_data.intrinsic_hash;
-        let tick_amount = if hash == 904 {
-            3.0
-        } else if hash == 906 {
-            2.0
-        } else {
-            1.0
-        };
-        if _input.calc_data.weapon_type == &WeaponType::SHOTGUN {
-            FiringModifierResponse {
-                burst_delay_add: -(tick_amount / 30.0),
-                ..Default::default()
+                let damage_mult = if _input.value > 0 && !_input.pvp { 1.1 } else { 1.0 };
+                DamageModifierResponse {
+                    impact_dmg_scale: damage_mult,
+                    explosive_dmg_scale: damage_mult,
+                    crit_scale: 1.0,
+                }
             }
-        } else {
-            FiringModifierResponse::default()
-        }
-    }
+        )
+    );
+
+    add_dmr(
+        Perks::SpikeGrenades,
+        Box::new(
+            |_input: ModifierResponsInput| -> DamageModifierResponse {
+                DamageModifierResponse {
+                    impact_dmg_scale: 1.5,
+                    explosive_dmg_scale: 1.0,
+                    crit_scale: 1.0,
+                }
+            }
+        )
+    );
+
+    add_dmr(
+        Perks::DisorientingGrenades,
+        Box::new(
+            |_input: ModifierResponsInput| -> DamageModifierResponse {
+                DamageModifierResponse {
+                    impact_dmg_scale: 0.75,
+                    explosive_dmg_scale: 0.75,
+                    crit_scale: 1.0,
+                }
+            }
+        )
+    );
+
+    add_dmr(
+        Perks::FullChoke,
+        Box::new(
+            |_input: ModifierResponsInput| -> DamageModifierResponse {
+                if _input.calc_data.weapon_type == &WeaponType::SHOTGUN
+                    && _input.calc_data.base_crit_mult < 1.15
+                {
+                    DamageModifierResponse {
+                        impact_dmg_scale: 1.0,
+                        explosive_dmg_scale: 1.0,
+                        crit_scale: 0.92,
+                    }
+                } else {
+                    DamageModifierResponse::default()
+                }
+            }
+        )
+    );
+
+    add_fmr(
+        Perks::AcceleratedCoils,
+        Box::new(
+            |_input: ModifierResponsInput| -> FiringModifierResponse {
+                if _input.calc_data.weapon_type == &WeaponType::LINEARFUSIONRIFLE {
+                    return FiringModifierResponse {
+                        burst_delay_add: -0.033,
+                        ..Default::default()
+                    };
+                }
+                FiringModifierResponse {
+                    burst_delay_add: -0.040,
+                    ..Default::default()
+                }
+            }
+        )
+    );
+
+    add_fmr(
+        Perks::LiquidCoils,
+        Box::new(
+            |_input: ModifierResponsInput| -> FiringModifierResponse {
+                if _input.calc_data.weapon_type == &WeaponType::LINEARFUSIONRIFLE {
+                    return FiringModifierResponse {
+                        burst_delay_add: 0.033,
+                        ..Default::default()
+                    };
+                }
+                FiringModifierResponse {
+                    burst_delay_add: 0.040,
+                    ..Default::default()
+                }
+            }
+        )
+    );
+
+    add_dmr(
+        Perks::LiquidCoils,
+        Box::new(
+            |_input: ModifierResponsInput| -> DamageModifierResponse {
+                DamageModifierResponse {
+                    impact_dmg_scale: 1.02,
+                    explosive_dmg_scale: 1.02,
+                    crit_scale: 1.0,
+                }
+            }
+        )
+    );
+
+    add_dmr(
+        Perks::AcceleratedCoils,
+        Box::new(
+            |_input: ModifierResponsInput| -> DamageModifierResponse {
+                DamageModifierResponse {
+                    impact_dmg_scale: 0.982,
+                    explosive_dmg_scale: 0.982,
+                    crit_scale: 1.0,
+                }
+            }
+        )
+    );
+
+    add_fmr(
+        Perks::FasterStringT2,
+        Box::new(
+            |_input: ModifierResponsInput| -> FiringModifierResponse {
+                FiringModifierResponse {
+                    burst_delay_add: -2.0 / 30.0,
+                    ..Default::default()
+                }
+            }
+        )
+    );
+
+    add_fmr(
+        Perks::FasterStringT1,
+        Box::new(
+            |_input: ModifierResponsInput| -> FiringModifierResponse {
+                FiringModifierResponse {
+                    burst_delay_add: -1.0 / 30.0,
+                    ..Default::default()
+                }
+            }
+        )
+    );
+
+    add_fmr(
+        Perks::SlowerStringT1,
+        Box::new(
+            |_input: ModifierResponsInput| -> FiringModifierResponse {
+                FiringModifierResponse {
+                    burst_delay_add: 1.0 / 30.0,
+                    ..Default::default()
+                }
+            }
+        )
+    );
+
+    add_fmr(
+        Perks::AssaultMag,
+        Box::new(
+            |_input: ModifierResponsInput| -> FiringModifierResponse {
+                let hash = _input.calc_data.intrinsic_hash;
+                let tick_amount = if hash == 904 {
+                    3.0
+                } else if hash == 906 {
+                    2.0
+                } else {
+                    1.0
+                };
+                if _input.calc_data.weapon_type == &WeaponType::SHOTGUN {
+                    FiringModifierResponse {
+                        burst_delay_add: -(tick_amount / 30.0),
+                        ..Default::default()
+                    }
+                } else {
+                    FiringModifierResponse::default()
+                }
+            }
+        )
+    );
 }
