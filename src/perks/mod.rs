@@ -98,6 +98,8 @@ pub enum Perks {
     WellOfRadiance = 2274196887,
     WardOfDawn = 4260353953,
     BannerShield = 4260353952,
+    DeadFall = 2722573683,
+    MoebiusQuiver = 2722573681,
 
     //intrinsics
     RapidFireFrame = 902,
@@ -135,6 +137,9 @@ pub enum Perks {
     MantleOfBattleHarmony = 2618534366,
     MaskOfBakris = 692285813,
     BallindorseWrathweavers = 2894608781,
+    Gyrfalcon = 3809192347,
+    AeonInsight = 3651607301,
+    Felwinters = 622433369,
 
     //parts
     ImpactCasing = 3796465595,
@@ -166,6 +171,8 @@ pub enum Perks {
     TakenSpec = 1513326571,
     AdeptChargeTime = 744770875,
     FreehandGrip = 736000386,
+    UmbralSharpening = 2804214704,
+    EnhancedScannerAugment = 1578165808,
 
     //origin | year 5+
     VeistStinger = 3988215619,
@@ -375,12 +382,13 @@ pub enum Perks {
     StormAndStress = 2238035098,
     Roadborn = 3413860062,
     MarkovChain = 2814973067,
+    MementoMori = 647617635,
 
     //energy exotic
     LagragianSight = 2881100038,
     IgnitionTrigger = 961505134,
     GuidanceRing = 2226793914,
-    LooksCanKill = 3174300811,
+    FirstGlance = 3174300811,
     ConserveMomentum = 656200654,
     Broadside = 407549716,
     Impetus = 2333607307,
@@ -406,6 +414,7 @@ pub enum Perks {
     DarkDescent = 3333994164,
     TargetAquired = 939227542,
     SleeperCatalyst = 2142466730,
+    TractorCannon = 1210807262,
 
     #[num_enum(default)]
     Ignore = 69420,
@@ -420,19 +429,19 @@ pub struct ModifierResponsInput<'a> {
 }
 #[derive(Default)]
 pub struct PersistentModifierResponses {
-    pub sbr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) ->  HashMap<BungieHash, StatBump>>>,
-    pub dmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) ->  DamageModifierResponse>>,
-    pub hmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) ->  HandlingModifierResponse>>,
-    pub rmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) ->  RangeModifierResponse>>,
+    pub sbr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> HashMap<BungieHash, StatBump>>>,
+    pub dmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> DamageModifierResponse>>,
+    pub hmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> HandlingModifierResponse>>,
+    pub rmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> RangeModifierResponse>>,
     pub rsmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> ReloadModifierResponse>>,
-    pub fmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) ->  FiringModifierResponse>>,
+    pub fmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> FiringModifierResponse>>,
     pub flmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> FlinchModifierResponse>>,
-    pub edr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) ->  ExtraDamageResponse>>,
-    pub rr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) ->   RefundResponse>>,
-    pub vmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) ->  VelocityModifierResponse>>,
-    pub epr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) ->  ExplosivePercentResponse>>,
-    pub mmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) ->  MagazineModifierResponse>>,
-    pub imr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) ->  InventoryModifierResponse>>,
+    pub edr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> ExtraDamageResponse>>,
+    pub rr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> RefundResponse>>,
+    pub vmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> VelocityModifierResponse>>,
+    pub epr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> ExplosivePercentResponse>>,
+    pub mmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> MagazineModifierResponse>>,
+    pub imr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> InventoryModifierResponse>>,
 }
 
 thread_local! {
@@ -586,8 +595,6 @@ fn add_mmr(perk: Perks, func: Box<dyn Fn(ModifierResponsInput) -> MagazineModifi
         map.borrow_mut().mmr.insert(perk, func);
     });
 }
-
-
 
 pub fn get_stat_bumps(
     _perks: Vec<Perk>,

@@ -9,12 +9,12 @@ use super::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
         HandlingModifierResponse, InventoryModifierResponse, MagazineModifierResponse,
         RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse,
-    }, ModifierResponsInput, Perks, add_dmr, add_hmr, add_rsmr, add_vmr, add_fmr, add_rmr, add_mmr, add_epr, add_sbr
+    }, ModifierResponsInput, Perks, add_dmr, add_hmr, add_rsmr, add_vmr, add_fmr, add_rmr, add_mmr, add_epr, add_sbr, add_rr, add_edr,
 };
 
 pub fn exotic_perks() {
-    add_dmr_paracausal_shot(
-        Perks::,
+    add_dmr(
+        Perks::ParacausalShot,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let bufflist_pve = vec![1.0, 3.92, 4.0, 4.4, 5.25, 7.67, 11.71, 18.36];
@@ -43,10 +43,10 @@ pub fn exotic_perks() {
             explosive_dmg_scale: damage_buff,
             crit_scale: 1.0,
         }
-    }
+    }));
 
-    add_sbr_hunters_trance(
-        Perks::,
+    add_sbr(
+        Perks::HuntersTrance,
         Box::new(
             |_input: ModifierResponsInput| -> HashMap<u32, i32> {
         let mut out = HashMap::new();
@@ -56,10 +56,10 @@ pub fn exotic_perks() {
         out.insert(StatHashes::RANGE.into(), buff_val);
         out.insert(StatHashes::HANDLING.into(), buff_val);
         out
-    }
+    }));
 
-    add_rsmr_hunters_trance(
-        Perks::,
+    add_rsmr(
+        Perks::HuntersTrance,
         Box::new(
             |_input: ModifierResponsInput| -> ReloadModifierResponse {
         let inter_val = *_input.calc_data.perk_value_map.get(&213689231).unwrap_or(&0);
@@ -68,10 +68,10 @@ pub fn exotic_perks() {
             reload_stat_add: buff_val,
             ..Default::default()
         }
-    }
+    }));
 
-    add_rmr_hunters_trance(
-        Perks::,
+    add_rmr(
+        Perks::HuntersTrance,
         Box::new(
             |_input: ModifierResponsInput| -> RangeModifierResponse {
         let inter_val = *_input.calc_data.perk_value_map.get(&213689231).unwrap_or(&0);
@@ -80,10 +80,10 @@ pub fn exotic_perks() {
             range_stat_add: buff_val,
             ..Default::default()
         }
-    }
+    }));
 
-    add_hmr_hunters_trance(
-        Perks::,
+    add_hmr(
+        Perks::HuntersTrance,
         Box::new(
             |_input: ModifierResponsInput| -> HandlingModifierResponse {
         let inter_val = *_input.calc_data.perk_value_map.get(&213689231).unwrap_or(&0);
@@ -92,10 +92,10 @@ pub fn exotic_perks() {
             stat_add: buff_val,
             ..Default::default()
         }
-    }
+    }));
 
-    add_dmr_momento_mori(
-        Perks::,
+    add_dmr(
+        Perks::MementoMori,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let mut damage_buff = 1.0;
@@ -107,10 +107,10 @@ pub fn exotic_perks() {
             explosive_dmg_scale: damage_buff,
             crit_scale: 1.0,
         }
-    }
+    }));
 
-    add_dmr_agers_call(
-        Perks::,
+    add_dmr(
+        Perks::AgersCall,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let mut damage_buff = 1.0;
@@ -123,9 +123,9 @@ pub fn exotic_perks() {
             crit_scale: 1.0,
         }
     }
-
-    add_mmr_agers_call(
-        Perks::,
+        ));
+    add_mmr(
+        Perks::AgersCall,
         Box::new(
             |_input: ModifierResponsInput| -> MagazineModifierResponse {
         let mut mag_buff = 1.0;
@@ -136,10 +136,10 @@ pub fn exotic_perks() {
             magazine_scale: mag_buff,
             ..Default::default()
         }
-    }
+    }));
 
-    add_sbr_roadborn(
-        Perks::,
+    add_sbr(
+        Perks::Roadborn,
         Box::new(
             |_input: ModifierResponsInput| -> HashMap<u32, i32> {
         let mut out = HashMap::new();
@@ -148,10 +148,10 @@ pub fn exotic_perks() {
             out.insert(StatHashes::RELOAD.into(), 40);
         };
         out
-    }
+    }));
 
-    add_dmr_roadborn(
-        Perks::,
+    add_dmr(
+        Perks::Roadborn,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let mut crit_mult = 1.0;
@@ -163,10 +163,10 @@ pub fn exotic_perks() {
             explosive_dmg_scale: 1.0,
             impact_dmg_scale: 1.0,
         }
-    }
+    }));
 
-    add_fmr_roadborn(
-        Perks::,
+    add_fmr(
+        Perks::Roadborn,
         Box::new(
             |_input: ModifierResponsInput| -> FiringModifierResponse {
         let mut delay_mult = 1.0;
@@ -179,10 +179,10 @@ pub fn exotic_perks() {
             inner_burst_scale: 1.0,
             burst_size_add: 0.0,
         }
-    }
+    }));
 
-    add_rmr_roadborn(
-        Perks::,
+    add_rmr(
+        Perks::Roadborn,
         Box::new(
             |_input: ModifierResponsInput| -> RangeModifierResponse {
         let mut range_scale = 1.05;
@@ -195,10 +195,10 @@ pub fn exotic_perks() {
             range_hip_scale: 1.0,
             range_zoom_scale: 1.0,
         }
-    }
+    }));
 
-    add_rsmr_roadborn(
-        Perks::,
+    add_rsmr(
+        Perks::Roadborn,
         Box::new(
             |_input: ModifierResponsInput| -> ReloadModifierResponse {
         let mut reload = 0;
@@ -209,10 +209,10 @@ pub fn exotic_perks() {
             reload_stat_add: reload,
             reload_time_scale: 1.0,
         }
-    }
+    }));
 
-    add_fmr_reign_havoc(
-        Perks::,
+    add_fmr(
+        Perks::ReignHavoc,
         Box::new(
             |_input: ModifierResponsInput| -> FiringModifierResponse {
         let mut delay_mult = 1.0;
@@ -228,10 +228,10 @@ pub fn exotic_perks() {
             inner_burst_scale: 1.0,
             burst_size_add: 0.0,
         }
-    }
+    }));
 
-    add_edr_reign_havoc(
-        Perks::,
+    add_edr(
+        Perks::ReignHavoc,
         Box::new(
             |_input: ModifierResponsInput| -> ExtraDamageResponse {
         let dmg = if _input.pvp { 65.0 } else { 65.0 * 1.3 };
@@ -246,10 +246,10 @@ pub fn exotic_perks() {
             crit_scale: false,
             combatant_scale: true,
         }
-    }
+    }));
 
-    add_dmr_worms_hunger(
-        Perks::,
+    add_dmr(
+        Perks::WormsHunger,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let val = clamp(_input.value, 0, 20);
@@ -258,10 +258,10 @@ pub fn exotic_perks() {
             explosive_dmg_scale: 1.0 + (val as f64) * 0.1,
             crit_scale: 1.0,
         }
-    }
+    }));
 
-    add_dmr_lagragian_sight(
-        Perks::,
+    add_dmr(
+        Perks::LagragianSight,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let mut damage_buff = 1.0;
@@ -273,10 +273,10 @@ pub fn exotic_perks() {
             explosive_dmg_scale: damage_buff,
             crit_scale: 1.0,
         }
-    }
+    }));
 
-    add_dmr_tom(
-        Perks::,
+    add_dmr(
+        Perks::ToM,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let mut damage_buff = 1.0;
@@ -288,10 +288,10 @@ pub fn exotic_perks() {
             explosive_dmg_scale: damage_buff,
             crit_scale: 1.0,
         }
-    }
+    }));
 
-    add_refund_tom(
-        Perks::,
+    add_rr(
+        Perks::ToM,
         Box::new(
             |_input: ModifierResponsInput| -> RefundResponse {
         RefundResponse {
@@ -304,10 +304,10 @@ pub fn exotic_perks() {
             crit: false,
             requirement: 1,
         }
-    }
+    }));
 
-    add_edr_rocket_tracers(
-        Perks::,
+    add_edr(
+        Perks::RocketTracers,
         Box::new(
             |_input: ModifierResponsInput| -> ExtraDamageResponse {
         let dmg = if _input.pvp { 24.0 } else { 105.0 };
@@ -322,7 +322,7 @@ pub fn exotic_perks() {
             crit_scale: false,
             combatant_scale: true,
         }
-    }
+    }));
 
     // add_edr_guidance_ring(
     //     _input: &CalculationInput,
@@ -374,8 +374,8 @@ pub fn exotic_perks() {
     //     };
     // }
 
-    add_fmr_hakke_heavy_burst(
-        Perks::,
+    add_fmr(
+        Perks::HakkeHeavyBurst,
         Box::new(
             |_input: ModifierResponsInput| -> FiringModifierResponse {
         FiringModifierResponse {
@@ -383,10 +383,10 @@ pub fn exotic_perks() {
             burst_delay_add: -1.0 / 30.0,
             ..Default::default()
         }
-    }
+    }));
 
-    add_dmr_hakke_heavy_burst(
-        Perks::,
+    add_dmr(
+        Perks::HakkeHeavyBurst,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let crit_scale = (1.5 + 5.0 / 51.0) / _input.calc_data.base_crit_mult;
@@ -395,10 +395,10 @@ pub fn exotic_perks() {
             impact_dmg_scale: 1.48,
             crit_scale,
         }
-    }
+    }));
 
-    add_dmr_swooping_talons(
-        Perks::,
+    add_dmr(
+        Perks::SwoopingTalons,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let mut dmg_mult = 1.0;
@@ -413,9 +413,9 @@ pub fn exotic_perks() {
             crit_scale: 1.0,
         }
     }
-
-    add_dmr_ignition_trigger(
-        Perks::,
+        ));
+    add_dmr(
+        Perks::IgnitionTrigger,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let mut dmg_mult = 1.0;
@@ -427,10 +427,10 @@ pub fn exotic_perks() {
             explosive_dmg_scale: dmg_mult,
             crit_scale: 1.0,
         }
-    }
+    }));
 
-    add_dmr_vex_catalyst(
-        Perks::,
+    add_dmr(
+        Perks::CalculatedBalance,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let mut damage_mult = if _input.value > 0 { 0.2 } else { 0.0 };
@@ -443,10 +443,10 @@ pub fn exotic_perks() {
             explosive_dmg_scale: 1.0 + damage_mult,
             crit_scale: 1.0,
         }
-    }
+    }));
 
-    add_fmr_ravenous_beast(
-        Perks::,
+    add_fmr(
+        Perks::RavenousBeast,
         Box::new(
             |_input: ModifierResponsInput| -> FiringModifierResponse {
         if _input.value > 0 {
@@ -457,10 +457,10 @@ pub fn exotic_perks() {
         } else {
             FiringModifierResponse::default()
         }
-    }
+    }));
 
-    add_dmr_ravenous_beast(
-        Perks::,
+    add_dmr(
+        Perks::RavenousBeast,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let mut damage_mult = 1.0;
@@ -478,10 +478,10 @@ pub fn exotic_perks() {
             explosive_dmg_scale: damage_mult,
             crit_scale: crit_mult,
         }
-    }
+    }));
 
-    add_sbr_release_the_wolves(
-        Perks::,
+    add_sbr(
+        Perks::ReleaseTheWolves,
         Box::new(
             |_input: ModifierResponsInput| -> HashMap<u32, i32> {
         let has_cat = _input.calc_data.perk_value_map.contains_key(&431220296);
@@ -494,10 +494,10 @@ pub fn exotic_perks() {
             }
         }
         out
-    }
+    }));
 
-    add_rsmr_release_the_wolves(
-        Perks::,
+    add_rsmr(
+        Perks::ReleaseTheWolves,
         Box::new(
             |_input: ModifierResponsInput| -> ReloadModifierResponse {
         let has_cat = _input.calc_data.perk_value_map.contains_key(&431220296);
@@ -509,10 +509,10 @@ pub fn exotic_perks() {
         } else {
             ReloadModifierResponse::default()
         }
-    }
+    }));
 
-    add_fmr_release_the_wolves(
-        Perks::,
+    add_fmr(
+        Perks::ReleaseTheWolves,
         Box::new(
             |_input: ModifierResponsInput| -> FiringModifierResponse {
         if _input.value > 0 {
@@ -523,10 +523,10 @@ pub fn exotic_perks() {
         } else {
             FiringModifierResponse::default()
         }
-    }
+    }));
 
-    add_dmr_release_the_wolves(
-        Perks::,
+    add_dmr(
+        Perks::ReleaseTheWolves,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let damage_mult = if _input.value > 0 { 1.4 } else { 1.0 };
@@ -535,10 +535,10 @@ pub fn exotic_perks() {
             explosive_dmg_scale: damage_mult,
             crit_scale: 1.0,
         }
-    }
+    }));
 
-    add_sbr_fundamentals(
-        Perks::,
+    add_sbr(
+        Perks::Fundamentals,
         Box::new(
             |_input: ModifierResponsInput| -> HashMap<u32, i32> {
         let mut stats = HashMap::new();
@@ -553,10 +553,10 @@ pub fn exotic_perks() {
             stats.insert(StatHashes::HANDLING.into(), 25);
         };
         stats
-    }
+    }));
 
-    add_hmr_fundamentals(
-        Perks::,
+    add_hmr(
+        Perks::Fundamentals,
         Box::new(
             |_input: ModifierResponsInput| -> HandlingModifierResponse {
         let mut handling = 0;
@@ -567,10 +567,10 @@ pub fn exotic_perks() {
             stat_add: handling,
             ..Default::default()
         }
-    }
+    }));
 
-    add_rsmr_fundamentals(
-        Perks::,
+    add_rsmr(
+        Perks::Fundamentals,
         Box::new(
             |_input: ModifierResponsInput| -> ReloadModifierResponse {
         let mut reload = 0;
@@ -581,10 +581,10 @@ pub fn exotic_perks() {
             reload_stat_add: reload,
             ..Default::default()
         }
-    }
+    }));
 
-    add_rmr_fundamentals(
-        Perks::,
+    add_rmr(
+        Perks::Fundamentals,
         Box::new(
             |_input: ModifierResponsInput| -> RangeModifierResponse {
         let mut range = 0;
@@ -595,10 +595,10 @@ pub fn exotic_perks() {
             range_stat_add: range,
             ..Default::default()
         }
-    }
+    }));
 
-    add_sbr_thin_the_herd(
-        Perks::,
+    add_sbr(
+        Perks::ThinTheHerd,
         Box::new(
             |_input: ModifierResponsInput| -> HashMap<u32, i32> {
         let mut out = HashMap::new();
@@ -606,10 +606,10 @@ pub fn exotic_perks() {
             out.insert(StatHashes::RELOAD.into(), 70);
         }
         out
-    }
+    }));
 
-    add_rsmr_thin_the_herd(
-        Perks::,
+    add_rsmr(
+        Perks::ThinTheHerd,
         Box::new(
             |_input: ModifierResponsInput| -> ReloadModifierResponse {
         if _input.value > 0 {
@@ -620,10 +620,10 @@ pub fn exotic_perks() {
         } else {
             ReloadModifierResponse::default()
         }
-    }
+    }));
 
-    add_hmr_chimera(
-        Perks::,
+    add_hmr(
+        Perks::Chimera,
         Box::new(
             |_input: ModifierResponsInput| -> HandlingModifierResponse {
         if _input.value > 0 {
@@ -634,10 +634,10 @@ pub fn exotic_perks() {
         } else {
             HandlingModifierResponse::default()
         }
-    }
+    }));
 
-    add_sbr_chimera(
-        Perks::,
+    add_sbr(
+        Perks::Chimera,
         Box::new(
             |_input: ModifierResponsInput| -> HashMap<u32, i32> {
         let mut out = HashMap::new();
@@ -645,10 +645,10 @@ pub fn exotic_perks() {
             out.insert(StatHashes::RELOAD.into(), 100);
         }
         out
-    }
+    }));
 
-    add_dmr_first_glance(
-        Perks::,
+    add_dmr(
+        Perks::FirstGlance,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let mut damage_mult = 1.0;
@@ -665,10 +665,10 @@ pub fn exotic_perks() {
             impact_dmg_scale: damage_mult,
             crit_scale: crit_mult,
         }
-    }
+    }));
 
-    add_dmr_fate_of_all_fools(
-        Perks::,
+    add_dmr(
+        Perks::FateOfAllFools,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let mut damage_mult = 1.0;
@@ -683,10 +683,10 @@ pub fn exotic_perks() {
             impact_dmg_scale: damage_mult,
             crit_scale: crit_mult,
         }
-    }
+    }));
 
-    add_dmr_honed_edge(
-        Perks::,
+    add_dmr(
+        Perks::HonedEdge,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let mut damage_mult = 1.0;
@@ -705,10 +705,10 @@ pub fn exotic_perks() {
             impact_dmg_scale: damage_mult,
             crit_scale: 1.0,
         }
-    }
+    }));
 
-    add_dmr_taken_predator(
-        Perks::,
+    add_dmr(
+        Perks::TakenPredator,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let mut damage_mult = 1.0;
@@ -722,10 +722,10 @@ pub fn exotic_perks() {
             impact_dmg_scale: damage_mult,
             crit_scale: 1.0,
         }
-    }
+    }));
 
-    add_dmr_markov_chain(
-        Perks::,
+    add_dmr(
+        Perks::MarkovChain,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let val = clamp(_input.value, 0, 5);
@@ -735,10 +735,10 @@ pub fn exotic_perks() {
             impact_dmg_scale: 1.0 + damage_mult,
             crit_scale: 1.0,
         }
-    }
+    }));
 
-    add_dmr_storm_and_stress(
-        Perks::,
+    add_dmr(
+        Perks::StormAndStress,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         let mut damage_mult = 1.0;
@@ -750,10 +750,10 @@ pub fn exotic_perks() {
             impact_dmg_scale: damage_mult,
             crit_scale: 1.0,
         }
-    }
+    }));
 
-    add_rmr_dual_speed_receiver(
-        Perks::,
+    add_rmr(
+        Perks::DualSpeedReceiver,
         Box::new(
             |_input: ModifierResponsInput| -> RangeModifierResponse {
         let zoom_stat = _input
@@ -772,10 +772,10 @@ pub fn exotic_perks() {
         } else {
             RangeModifierResponse::default()
         }
-    }
+    }));
 
-    add_sbr_dual_speed_receiver(
-        Perks::,
+    add_sbr(
+        Perks::DualSpeedReceiver,
         Box::new(
             |_input: ModifierResponsInput| -> HashMap<u32, i32> {
         let mut out = HashMap::new();
@@ -784,10 +784,10 @@ pub fn exotic_perks() {
             out.insert(StatHashes::RANGE.into(), 30);
         }
         out
-    }
+    }));
 
-    add_dmr_full_stop(
-        Perks::,
+    add_dmr(
+        Perks::FullStop,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
         DamageModifierResponse {
@@ -795,10 +795,10 @@ pub fn exotic_perks() {
             impact_dmg_scale: 1.0,
             crit_scale: if !_input.pvp { 2.9 } else { 1.0 },
         }
-    }
+    }));
 
-    add_fmr_rat_pack(
-        Perks::,
+    add_fmr(
+        Perks::RatPack,
         Box::new(
             |_input: ModifierResponsInput| -> FiringModifierResponse {
         let val;
@@ -811,10 +811,10 @@ pub fn exotic_perks() {
             burst_delay_add: val as f64 * (-0.625 / 30.0),
             ..Default::default()
         }
-    }
+    }));
 
-    add_mmr_rat_pack(
-        Perks::,
+    add_mmr(
+        Perks::RatPack,
         Box::new(
             |_input: ModifierResponsInput| -> MagazineModifierResponse {
         let val = clamp(_input.value - 1, 0, 4);
@@ -822,10 +822,10 @@ pub fn exotic_perks() {
             magazine_add: val as f64 * if val == 4 { 2.25 } else { 2.0 },
             ..Default::default()
         }
-    }
+    }));
 
-    add_fmr_ride_the_bull(
-        Perks::,
+    add_fmr(
+        Perks::RideTheBull,
         Box::new(
             |_input: ModifierResponsInput| -> FiringModifierResponse {
         let extra_value = _input.calc_data.shots_fired_this_mag as f64 / 10.0;
@@ -834,10 +834,10 @@ pub fn exotic_perks() {
             burst_delay_add: val as f64 * (-0.25 / 30.0),
             ..Default::default()
         }
-    }
+    }));
 
-    add_fmr_spinning_up(
-        Perks::,
+    add_fmr(
+        Perks::SpinningUp,
         Box::new(
             |_input: ModifierResponsInput| -> FiringModifierResponse {
         let extra_value = _input.calc_data.shots_fired_this_mag as f64 / 12.0;
@@ -846,12 +846,12 @@ pub fn exotic_perks() {
             burst_delay_add: val as f64 * (-0.5 / 30.0),
             ..Default::default()
         }
-    }
+    }));
 
     // add_dmr_noble_rounds(
-        Perks::,
-        Box::new(
-            |_input: ModifierResponsInput| -> DamageModifierResponse {
+    //    Perks::,
+    //    Box::new(
+    //        |_input: ModifierResponsInput| -> DamageModifierResponse {
     //     if _input.value > 0 {
     //         dmr_blessing_of_the_sky(_input, 1, false, _pvp, _cached_data)
     //     } else {
