@@ -17,7 +17,10 @@ use super::{
 };
 
 pub fn meta_perks() {
-    add_dmr_builtin(_input: ModifierResponsInput) -> DamageModifierResponse {
+    add_dmr_builtin(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> DamageModifierResponse {
         let mut crit_scale = 1.0;
         let mut dmg_scale = 1.0;
         if *_input.calc_data.weapon_type == WeaponType::LINEARFUSIONRIFLE && !_input.pvp {
@@ -59,7 +62,10 @@ pub fn meta_perks() {
         }
     }
 
-    add_fmr_builtin(_input: ModifierResponsInput) -> FiringModifierResponse {
+    add_fmr_builtin(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> FiringModifierResponse {
         let mut delay_add = 0.0;
         if *_input
             .calc_data
@@ -92,7 +98,10 @@ pub fn meta_perks() {
         }
     }
 
-    add_epr_builtin(_input: ModifierResponsInput) -> ExplosivePercentResponse {
+    add_epr_builtin(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> ExplosivePercentResponse {
         if *_input.calc_data.weapon_type == WeaponType::GRENADELAUNCHER {
             let blast_radius_struct = _input.calc_data.stats.get(&StatHashes::BLAST_RADIUS.into());
             let blast_radius;
@@ -131,7 +140,10 @@ pub fn meta_perks() {
         }
     }
 
-    add_hmr_dexterity_mods(_input: ModifierResponsInput) -> HandlingModifierResponse {
+    add_hmr_dexterity_mods(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> HandlingModifierResponse {
         let swap_scale = if _input.value > 0 {
             0.85 - clamp(_input.value, 1, 3) as f64 * 0.05
         } else {
@@ -144,14 +156,20 @@ pub fn meta_perks() {
         }
     }
 
-    add_hmr_targeting_mods(_input: ModifierResponsInput) -> HandlingModifierResponse {
+    add_hmr_targeting_mods(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> HandlingModifierResponse {
         HandlingModifierResponse {
             ads_scale: if _input.value > 0 { 0.75 } else { 1.0 },
             ..Default::default()
         }
     }
 
-    add_sbr_targeting_mods(_input: ModifierResponsInput) -> HashMap<u32, i32> {
+    add_sbr_targeting_mods(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> HashMap<u32, i32> {
         let mut stats = HashMap::new();
         if _input.value == 1 {
             stats.insert(StatHashes::AIM_ASSIST.into(), 10);
@@ -163,7 +181,10 @@ pub fn meta_perks() {
         stats
     }
 
-    add_imr_reserve_mods(_input: ModifierResponsInput) -> InventoryModifierResponse {
+    add_imr_reserve_mods(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> InventoryModifierResponse {
         let mut inv_buff = if _input.value > 0 { 20 } else { 0 };
         if _input.value == 2 {
             inv_buff += 15;
@@ -178,7 +199,10 @@ pub fn meta_perks() {
         }
     }
 
-    add_sbr_reserve_mods(_input: ModifierResponsInput) -> HashMap<u32, i32> {
+    add_sbr_reserve_mods(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> HashMap<u32, i32> {
         let mut inv_buff = if _input.value > 0 { 20 } else { 0 };
         if _input.value == 2 {
             inv_buff += 15;
@@ -191,7 +215,10 @@ pub fn meta_perks() {
         stats
     }
 
-    add_rsmr_loader_mods(_input: ModifierResponsInput) -> ReloadModifierResponse {
+    add_rsmr_loader_mods(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> ReloadModifierResponse {
         if _input.value > 0 {
             let mut reload_stat_buff = 10;
             if _input.value > 1 {
@@ -209,7 +236,10 @@ pub fn meta_perks() {
         };
     }
 
-    add_sbr_loader_mods(_input: ModifierResponsInput) -> HashMap<u32, i32> {
+    add_sbr_loader_mods(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> HashMap<u32, i32> {
         let mut stats = HashMap::new();
         if _input.value > 0 {
             let mut reload_stat_buff = 10;
@@ -224,7 +254,10 @@ pub fn meta_perks() {
         stats
     }
 
-    add_flmr_unflinching_mod(_input: ModifierResponsInput) -> FlinchModifierResponse {
+    add_flmr_unflinching_mod(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> FlinchModifierResponse {
         if _input.value > 2 {
             FlinchModifierResponse { flinch_scale: 0.6 }
         } else if _input.value == 2 {
@@ -236,32 +269,47 @@ pub fn meta_perks() {
         }
     }
 
-    add_sbr_rally_barricade(_input: ModifierResponsInput) -> HashMap<u32, i32> {
+    add_sbr_rally_barricade(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> HashMap<u32, i32> {
         let mut stats = HashMap::new();
         stats.insert(StatHashes::STABILITY.into(), 30);
         stats.insert(StatHashes::RELOAD.into(), 100);
         stats
     }
 
-    add_flmr_rally_barricade(_input: ModifierResponsInput) -> FlinchModifierResponse {
+    add_flmr_rally_barricade(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> FlinchModifierResponse {
         FlinchModifierResponse { flinch_scale: 0.5 }
     }
 
-    add_rsmr_rally_barricade(_input: ModifierResponsInput) -> ReloadModifierResponse {
+    add_rsmr_rally_barricade(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> ReloadModifierResponse {
         ReloadModifierResponse {
             reload_stat_add: 100,
             reload_time_scale: 0.9,
         }
     }
 
-    add_rmr_rally_barricade(_input: ModifierResponsInput) -> RangeModifierResponse {
+    add_rmr_rally_barricade(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> RangeModifierResponse {
         RangeModifierResponse {
             range_all_scale: 1.1,
             ..Default::default()
         }
     }
 
-    add_dmr_chargetime_mw(_input: ModifierResponsInput) -> DamageModifierResponse {
+    add_dmr_chargetime_mw(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> DamageModifierResponse {
         fn down5(x: i32) -> f64 {
             (x as f64 - 5.0) / x as f64
         }
@@ -279,7 +327,10 @@ pub fn meta_perks() {
         }
     }
 
-    add_dmr_surge_mods(_input: ModifierResponsInput) -> DamageModifierResponse {
+    add_dmr_surge_mods(
+        Perks::,
+        Box::new(
+            |_input: ModifierResponsInput| -> DamageModifierResponse {
         let damage_mod;
         if _input.pvp {
             if _input.value == 1 {
