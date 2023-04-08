@@ -13,13 +13,13 @@ use super::{
         FlinchModifierResponse, HandlingModifierResponse, RangeModifierResponse, RefundResponse,
         ReloadModifierResponse, ReloadOverrideResponse,
     },
-    ModifierResponsInput, Perks,
+    ModifierResponseInput, Perks,
 };
 
 pub fn exotic_armor() {
     add_dmr(
         Perks::BallindorseWrathweavers,
-        Box::new(|_input: ModifierResponsInput| -> DamageModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
             let mut modifier = DamageModifierResponse::default();
             let value = if _input.pvp { 1.05 } else { 1.15 };
             if _input.calc_data.damage_type == &DamageType::STASIS && _input.value >= 1 {
@@ -32,7 +32,7 @@ pub fn exotic_armor() {
 
     add_dmr(
         Perks::MechaneersTricksleeves,
-        Box::new(|_input: ModifierResponsInput| -> DamageModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
             let mut dmr = DamageModifierResponse::default();
             if _input.value <= 0 || _input.calc_data.weapon_type != &WeaponType::SIDEARM {
                 return dmr;
@@ -47,7 +47,7 @@ pub fn exotic_armor() {
     //doesnt work for sturm overcharge, (maybe) memento
     add_dmr(
         Perks::LuckyPants,
-        Box::new(|_input: ModifierResponsInput| -> DamageModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
             let mut modifier = 1.0;
             let special_multiplier = if _input.calc_data.ammo_type == &AmmoType::SPECIAL {
                 0.5
@@ -69,7 +69,7 @@ pub fn exotic_armor() {
 
     add_dmr(
         Perks::MaskOfBakris,
-        Box::new(|_input: ModifierResponsInput| -> DamageModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
             let mut dmr = DamageModifierResponse::default();
             let modifier = if _input.value > 0 && !_input.pvp {
                 1.1
@@ -91,7 +91,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::TomeOfDawn,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut stats = HashMap::new();
                 if _input.value > 0 {
                     stats.insert(StatHashes::AIRBORNE.into(), 50);
@@ -103,7 +103,7 @@ pub fn exotic_armor() {
 
     add_flmr(
         Perks::TomeOfDawn,
-        Box::new(|_input: ModifierResponsInput| -> FlinchModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> FlinchModifierResponse {
             if _input.value > 0 {
                 FlinchModifierResponse { flinch_scale: 0.80 }
             } else {
@@ -115,7 +115,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::Foetracer,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
             },
         ),
@@ -123,7 +123,7 @@ pub fn exotic_armor() {
 
     add_dmr(
         Perks::Foetracer,
-        Box::new(|_input: ModifierResponsInput| -> DamageModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
             if _input.value == 0 {
                 return DamageModifierResponse::default();
             }
@@ -145,7 +145,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::MechaneersTricksleeves,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut stats = HashMap::new();
                 if _input.calc_data.weapon_type == &WeaponType::SIDEARM {
                     stats.insert(StatHashes::AIRBORNE.into(), 50);
@@ -160,7 +160,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::Oathkeeper,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut stats = HashMap::new();
                 if _input.calc_data.weapon_type == &WeaponType::BOW {
                     stats.insert(StatHashes::AIRBORNE.into(), 40);
@@ -188,7 +188,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::SealedAhamkaraGrasps,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut stats = HashMap::new();
                 if _input.value > 0 {
                     stats.insert(StatHashes::AIRBORNE.into(), 50);
@@ -204,7 +204,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::LuckyPants,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut stat = HashMap::new();
                 if _input.value > 0 && _input.calc_data.weapon_type == &WeaponType::HANDCANNON {
                     stat.insert(StatHashes::AIRBORNE.into(), 20);
@@ -217,23 +217,25 @@ pub fn exotic_armor() {
 
     add_hmr(
         Perks::LuckyPants,
-        Box::new(|_input: ModifierResponsInput| -> HandlingModifierResponse {
-            if _input.value > 0 && _input.calc_data.weapon_type == &WeaponType::HANDCANNON {
-                return HandlingModifierResponse {
-                    stat_add: 100,
-                    ads_scale: 1.0,
-                    draw_scale: 0.6,
-                    ..Default::default()
-                };
-            }
-            return HandlingModifierResponse::default();
-        }),
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                if _input.value > 0 && _input.calc_data.weapon_type == &WeaponType::HANDCANNON {
+                    return HandlingModifierResponse {
+                        stat_add: 100,
+                        ads_scale: 1.0,
+                        draw_scale: 0.6,
+                        ..Default::default()
+                    };
+                }
+                return HandlingModifierResponse::default();
+            },
+        ),
     );
 
     add_sbr(
         Perks::Stompees,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 HashMap::from([(StatHashes::AIRBORNE.into(), -50)])
             },
         ),
@@ -242,7 +244,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::NoBackupPlans,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut stats = HashMap::new();
                 if _input.calc_data.weapon_type == &WeaponType::SHOTGUN {
                     stats.insert(StatHashes::AIRBORNE.into(), 30);
@@ -255,7 +257,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::ActiumWarRig,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut stats = HashMap::new();
                 if _input.calc_data.weapon_type == &WeaponType::AUTORIFLE
                     || _input.calc_data.weapon_type == &WeaponType::MACHINEGUN
@@ -272,7 +274,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::HallowfireHeart,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
             },
         ),
@@ -281,7 +283,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::LionRampart,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut stats = HashMap::new();
                 if _input.value > 0 {
                     stats.insert(StatHashes::AIRBORNE.into(), 50);
@@ -294,7 +296,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::Peacekeepers,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut stats = HashMap::new();
                 if _input.calc_data.weapon_type == &WeaponType::SUBMACHINEGUN {
                     stats.insert(StatHashes::AIRBORNE.into(), 40);
@@ -307,23 +309,25 @@ pub fn exotic_armor() {
 
     add_hmr(
         Perks::Peacekeepers,
-        Box::new(|_input: ModifierResponsInput| -> HandlingModifierResponse {
-            if _input.calc_data.weapon_type == &WeaponType::SUBMACHINEGUN {
-                return HandlingModifierResponse {
-                    stat_add: 100,
-                    ads_scale: 1.0,
-                    draw_scale: 0.6,
-                    stow_scale: 0.6,
-                };
-            }
-            return HandlingModifierResponse::default();
-        }),
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                if _input.calc_data.weapon_type == &WeaponType::SUBMACHINEGUN {
+                    return HandlingModifierResponse {
+                        stat_add: 100,
+                        ads_scale: 1.0,
+                        draw_scale: 0.6,
+                        stow_scale: 0.6,
+                    };
+                }
+                return HandlingModifierResponse::default();
+            },
+        ),
     );
 
     add_sbr(
         Perks::PeregrineGreaves,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
             },
         ),
@@ -332,7 +336,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::EyeOfAnotherWorld,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 HashMap::from([(StatHashes::AIRBORNE.into(), 15)])
             },
         ),
@@ -341,7 +345,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::AstrocyteVerse,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut stats = HashMap::new();
                 stats.insert(StatHashes::AIRBORNE.into(), 30);
                 if _input.value > 0 {
@@ -355,7 +359,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::NecroticGrips,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut stats = HashMap::new();
                 if _input.calc_data.intrinsic_hash == 1863355414
                     || _input.calc_data.intrinsic_hash == 2965975126
@@ -372,7 +376,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::BootsOfTheAssembler,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut stats = HashMap::new();
                 if _input.calc_data.intrinsic_hash == 2144092201 {
                     //Lumina
@@ -386,7 +390,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::RainOfFire,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut stats = HashMap::new();
                 if _input.calc_data.weapon_type == &WeaponType::FUSIONRIFLE
                     || _input.calc_data.weapon_type == &WeaponType::LINEARFUSIONRIFLE
@@ -401,7 +405,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::SpeedloaderSlacks,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let modifiers = match _input.value {
                     0 => (0, 0, 0),
                     1 => (40, 40, 30),
@@ -423,7 +427,7 @@ pub fn exotic_armor() {
 
     add_rsmr(
         Perks::SpeedloaderSlacks,
-        Box::new(|_input: ModifierResponsInput| -> ReloadModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
             let modifiers = match _input.value {
                 0 => (0, 1.0),
                 1 => (40, 1.0),
@@ -444,7 +448,7 @@ pub fn exotic_armor() {
     add_sbr(
         Perks::LunaFaction,
         Box::new(
-            |_input: ModifierResponsInput| -> HashMap<BungieHash, StatBump> {
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut stat = HashMap::new();
                 if _input.value >= 1 {
                     stat.insert(StatHashes::RELOAD.into(), 100);
@@ -456,7 +460,7 @@ pub fn exotic_armor() {
 
     add_rsmr(
         Perks::LunaFaction,
-        Box::new(|_input: ModifierResponsInput| -> ReloadModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
             if _input.value >= 1 {
                 ReloadModifierResponse {
                     reload_stat_add: 100,
@@ -470,7 +474,7 @@ pub fn exotic_armor() {
 
     add_rmr(
         Perks::LunaFaction,
-        Box::new(|_input: ModifierResponsInput| -> RangeModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> RangeModifierResponse {
             if _input.value >= 2 {
                 return RangeModifierResponse {
                     range_all_scale: 2.0,

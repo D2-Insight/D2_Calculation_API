@@ -10,13 +10,16 @@ use super::{
         FlinchModifierResponse, HandlingModifierResponse, MagazineModifierResponse,
         RangeModifierResponse, RefundResponse, ReloadModifierResponse, ReloadOverrideResponse,
     },
-    ModifierResponsInput, Perks,
+    ModifierResponseInput, Perks,
 };
 
 pub fn origin_perks() {
     add_rr(
         Perks::VeistStinger,
-        Box::new(|_input: ModifierResponsInput| -> RefundResponse {
+        Box::new(|_input: ModifierResponseInput| -> RefundResponse {
+            if !(_input.value > 0) {
+                return RefundResponse::default();
+            };
             let data = _input.cached_data.get("veist_stinger");
             let last_proc;
             if data.is_none() {
@@ -48,9 +51,19 @@ pub fn origin_perks() {
         }),
     );
 
+    add_fmr(
+        Perks::VeistStinger,
+        Box::new(|_input: ModifierResponseInput| -> FiringModifierResponse {
+            FiringModifierResponse {
+                burst_delay_scale: if _input.calc_data.weapon_type == &WeaponType::BOW && _input.value > 0 { 0.85 } else { 1.0 },
+                ..Default::default()
+            }
+        }),
+    );
+
     add_dmr(
         Perks::HakkeBreach,
-        Box::new(|_input: ModifierResponsInput| -> DamageModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
             let damage_mult = if _input.value > 0 { 0.3 } else { 0.0 };
             DamageModifierResponse {
                 impact_dmg_scale: 1.0 + damage_mult,
@@ -62,7 +75,7 @@ pub fn origin_perks() {
 
     add_rmr(
         Perks::Alacrity,
-        Box::new(|_input: ModifierResponsInput| -> RangeModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> RangeModifierResponse {
             let range_add = if _input.value > 0 { 20 } else { 0 };
             RangeModifierResponse {
                 range_stat_add: range_add,
@@ -73,7 +86,7 @@ pub fn origin_perks() {
 
     add_rsmr(
         Perks::Alacrity,
-        Box::new(|_input: ModifierResponsInput| -> ReloadModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
             let reload_add = if _input.value > 0 { 50 } else { 0 };
             ReloadModifierResponse {
                 reload_stat_add: reload_add,
@@ -84,7 +97,7 @@ pub fn origin_perks() {
 
     add_sbr(
         Perks::Alacrity,
-        Box::new(|_input: ModifierResponsInput| -> HashMap<u32, i32> {
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut map = HashMap::new();
             let range = if _input.value > 0 { 20 } else { 0 };
             let reload = if _input.value > 0 { 50 } else { 0 };
@@ -100,7 +113,7 @@ pub fn origin_perks() {
 
     add_sbr(
         Perks::Ambush,
-        Box::new(|_input: ModifierResponsInput| -> HashMap<u32, i32> {
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut map = HashMap::new();
             let range = if _input.is_enhanced { 30 } else { 20 };
             let handling = if _input.is_enhanced { 40 } else { 20 };
@@ -114,7 +127,7 @@ pub fn origin_perks() {
 
     add_dmr(
         Perks::Ambush,
-        Box::new(|_input: ModifierResponsInput| -> DamageModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
             let damage_mult = if _input.value > 0 { 0.095 } else { 0.0 };
             DamageModifierResponse {
                 impact_dmg_scale: 1.0 + damage_mult,
@@ -124,24 +137,36 @@ pub fn origin_perks() {
         }),
     );
 
-    add_hmr(
-        Perks::HotSwap,
-        Box::new(|_input: ModifierResponsInput| -> HandlingModifierResponse {
-            let handling_add = if _input.is_enhanced { 60 } else { 30 };
-            if _input.value > 0 {
-                HandlingModifierResponse {
-                    stat_add: handling_add,
-                    ..Default::default()
-                }
-            } else {
-                HandlingModifierResponse::default()
+    add_fmr(
+        Perks::Ambush,
+        Box::new(|_input: ModifierResponseInput| -> FiringModifierResponse {
+            FiringModifierResponse {
+                burst_delay_scale: if _input.calc_data.weapon_type == &WeaponType::BOW && _input.value > 0 { 0.9 } else { 1.0 },
+                ..Default::default()
             }
         }),
     );
 
+    add_hmr(
+        Perks::HotSwap,
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                let handling_add = if _input.is_enhanced { 60 } else { 30 };
+                if _input.value > 0 {
+                    HandlingModifierResponse {
+                        stat_add: handling_add,
+                        ..Default::default()
+                    }
+                } else {
+                    HandlingModifierResponse::default()
+                }
+            },
+        ),
+    );
+
     add_rsmr(
         Perks::FluidDynamics,
-        Box::new(|_input: ModifierResponsInput| -> ReloadModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
             let reload_add = if _input.is_enhanced { 35 } else { 30 };
             if _input.calc_data.shots_fired_this_mag <= _input.calc_data.base_mag / 2.0 {
                 ReloadModifierResponse {
@@ -156,7 +181,7 @@ pub fn origin_perks() {
 
     add_sbr(
         Perks::FluidDynamics,
-        Box::new(|_input: ModifierResponsInput| -> HashMap<u32, i32> {
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut map = HashMap::new();
             let reload = if _input.is_enhanced { 35 } else { 30 };
             let stability = if _input.is_enhanced { 25 } else { 20 };
@@ -172,7 +197,7 @@ pub fn origin_perks() {
 
     add_rsmr(
         Perks::QuietMoment,
-        Box::new(|_input: ModifierResponsInput| -> ReloadModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
             if _input.value > 0 {
                 ReloadModifierResponse {
                     reload_stat_add: 40,
@@ -186,7 +211,7 @@ pub fn origin_perks() {
 
     add_sbr(
         Perks::QuietMoment,
-        Box::new(|_input: ModifierResponsInput| -> HashMap<u32, i32> {
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut map = HashMap::new();
             if _input.value > 0 {
                 map.insert(StatHashes::RELOAD.into(), 40);
@@ -197,7 +222,7 @@ pub fn origin_perks() {
 
     add_rsmr(
         Perks::BitterSpite,
-        Box::new(|_input: ModifierResponsInput| -> ReloadModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
             let val = clamp(_input.value, 0, 5) as i32;
             let mult = match val {
                 0 => 1.0,
@@ -217,7 +242,7 @@ pub fn origin_perks() {
 
     add_sbr(
         Perks::BitterSpite,
-        Box::new(|_input: ModifierResponsInput| -> HashMap<u32, i32> {
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut map = HashMap::new();
             let val = clamp(_input.value, 0, 5) as i32;
             map.insert(StatHashes::RELOAD.into(), val * 10);
@@ -227,7 +252,7 @@ pub fn origin_perks() {
 
     add_rmr(
         Perks::RightHook,
-        Box::new(|_input: ModifierResponsInput| -> RangeModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> RangeModifierResponse {
             let range_add = if _input.is_enhanced { 20 } else { 10 };
             if _input.value > 0 {
                 RangeModifierResponse {
@@ -242,7 +267,7 @@ pub fn origin_perks() {
 
     add_sbr(
         Perks::RightHook,
-        Box::new(|_input: ModifierResponsInput| -> HashMap<u32, i32> {
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut map = HashMap::new();
             let stat_bump = if _input.is_enhanced { 20 } else { 10 };
             if _input.value > 0 {
@@ -255,28 +280,32 @@ pub fn origin_perks() {
 
     add_hmr(
         Perks::SearchParty,
-        Box::new(|_input: ModifierResponsInput| -> HandlingModifierResponse {
-            HandlingModifierResponse {
-                ads_scale: 0.85,
-                ..Default::default()
-            }
-        }),
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                HandlingModifierResponse {
+                    ads_scale: 0.85,
+                    ..Default::default()
+                }
+            },
+        ),
     );
 
     add_mmr(
         Perks::RunnethOver,
-        Box::new(|_input: ModifierResponsInput| -> MagazineModifierResponse {
-            let val = clamp(_input.value, 0, 5) as f64;
-            MagazineModifierResponse {
-                magazine_scale: 1.0 + val * 0.1,
-                ..Default::default()
-            }
-        }),
+        Box::new(
+            |_input: ModifierResponseInput| -> MagazineModifierResponse {
+                let val = clamp(_input.value, 0, 5) as f64;
+                MagazineModifierResponse {
+                    magazine_scale: 1.0 + val * 0.1,
+                    ..Default::default()
+                }
+            },
+        ),
     );
 
     add_sbr(
         Perks::TexBalancedStock,
-        Box::new(|_input: ModifierResponsInput| -> HashMap<u32, i32> {
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut map = HashMap::new();
             if _input.value > 0 {
                 map.insert(StatHashes::HANDLING.into(), 20);
@@ -288,21 +317,23 @@ pub fn origin_perks() {
 
     add_hmr(
         Perks::TexBalancedStock,
-        Box::new(|_input: ModifierResponsInput| -> HandlingModifierResponse {
-            if _input.value > 0 {
-                HandlingModifierResponse {
-                    stat_add: 50,
-                    ..Default::default()
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                if _input.value > 0 {
+                    HandlingModifierResponse {
+                        stat_add: 50,
+                        ..Default::default()
+                    }
+                } else {
+                    HandlingModifierResponse::default()
                 }
-            } else {
-                HandlingModifierResponse::default()
-            }
-        }),
+            },
+        ),
     );
 
     add_rsmr(
         Perks::TexBalancedStock,
-        Box::new(|_input: ModifierResponsInput| -> ReloadModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
             if _input.value > 0 {
                 ReloadModifierResponse {
                     reload_stat_add: 20,
@@ -317,7 +348,7 @@ pub fn origin_perks() {
 
     add_sbr(
         Perks::SurosSynergy,
-        Box::new(|_input: ModifierResponsInput| -> HashMap<u32, i32> {
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut out = HashMap::new();
             if _input.value > 0 {
                 out.insert(StatHashes::HANDLING.into(), 40);
@@ -328,21 +359,23 @@ pub fn origin_perks() {
 
     add_hmr(
         Perks::SurosSynergy,
-        Box::new(|_input: ModifierResponsInput| -> HandlingModifierResponse {
-            if _input.value > 0 {
-                HandlingModifierResponse {
-                    stat_add: 40,
-                    ..Default::default()
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                if _input.value > 0 {
+                    HandlingModifierResponse {
+                        stat_add: 40,
+                        ..Default::default()
+                    }
+                } else {
+                    HandlingModifierResponse::default()
                 }
-            } else {
-                HandlingModifierResponse::default()
-            }
-        }),
+            },
+        ),
     );
 
     add_flmr(
         Perks::SurosSynergy,
-        Box::new(|_input: ModifierResponsInput| -> FlinchModifierResponse {
+        Box::new(|_input: ModifierResponseInput| -> FlinchModifierResponse {
             if _input.value > 0 {
                 FlinchModifierResponse { flinch_scale: 0.80 }
             } else {
