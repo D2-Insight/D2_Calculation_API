@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, default};
 
 use crate::{
     d2_enums::{AmmoType, BungieHash, DamageType, StatBump, StatHashes, WeaponType},
@@ -184,6 +184,23 @@ pub(super) fn sbr_oathkeeper(
         stats.insert(StatHashes::AIRBORNE.into(), 40);
     };
     stats
+}
+
+pub(super) fn fmr_oathkeeper(
+    _input: &CalculationInput,
+    _value: u32,
+    _is_enhanced: bool,
+    _pvp: bool,
+    _cached_data: &mut HashMap<String, f64>,
+) -> FiringModifierResponse {
+    if _input.weapon_type == &WeaponType::BOW {
+        FiringModifierResponse {
+            burst_delay_add: -2.0 / 60.0,
+            ..Default::default()
+        }
+    } else {
+        FiringModifierResponse::default()
+    }
 }
 
 pub(super) fn sbr_sealed_ahamkara_grasps(

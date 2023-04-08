@@ -188,7 +188,7 @@ pub enum Perks {
     Outlaw = 1168162263,
     BackupPlan = 1600092898,
     FieldPrep = 2869569095,
-    #[num_enum(alternatives = [3551326236, ])]//huckleberry
+    #[num_enum(alternatives = [3551326236, ])] //huckleberry
     Rampage = 3425386926,
     OpeningShot = 47981717,
     MovingTarget = 588594999,
@@ -207,7 +207,7 @@ pub enum Perks {
     TimedPayload = 1954620775,
     ThreatDetector = 4071163871,
     SlideShot = 3161816588,
-    #[num_enum(alternatives = [1409312565, ])]//cloudstrike
+    #[num_enum(alternatives = [1409312565, ])] //cloudstrike
     TripleTap = 3400784728,
     UnderPressure = 1645158859,
     PulseMonitor = 972757866,
@@ -217,9 +217,9 @@ pub enum Perks {
 
     //season 3 | year 1
     RangeFinder = 2846385770,
-    #[num_enum(alternatives = [1683379515, ])]//Arbalest
+    #[num_enum(alternatives = [1683379515, ])] //Arbalest
     DisruptionBreak = 3871884143,
-    #[num_enum(alternatives = [2360754333, ])]//Acrius
+    #[num_enum(alternatives = [2360754333, ])] //Acrius
     TrenchBarrel = 806159697,
     Desperado = 3047969693,
     BoxBreathing = 2551157718,
@@ -227,9 +227,9 @@ pub enum Perks {
     //season 4 | year 2
     ArchersTempo = 201365942,
     ExplosiveHead = 3365897133,
-    #[num_enum(alternatives = [1266037485, ])]//R0
+    #[num_enum(alternatives = [1266037485, ])] //R0
     FeedingFrenzy = 2779035018,
-    #[num_enum(alternatives = [1266037486, ])]//R0
+    #[num_enum(alternatives = [1266037486, ])] //R0
     FourthTimesTheCharm = 1354429876,
     RapidHit = 247725512,
 
@@ -242,7 +242,7 @@ pub enum Perks {
     //season 6 | year 2
     FiringLine = 1771339417,
     FullCourt = 2888557110,
-    #[num_enum(alternatives = [557221067, ])]// delirium
+    #[num_enum(alternatives = [557221067, ])] // delirium
     KillingTally = 2782457288,
     Demolitionist = 3523296417,
     MultikillClip = 2458213969,
@@ -404,7 +404,7 @@ pub enum Perks {
     SleeperCatalyst = 2142466730,
 
     #[num_enum(default)]
-    Ignore = 69420
+    Ignore = 69420,
 }
 
 pub fn get_perk_stats(
@@ -901,7 +901,7 @@ fn get_perk_fmr(
         }
         Perks::KickStart => fmr_kickstart(_input_data, val, enhanced, _pvp, _cached_data),
         Perks::BuiltIn => fmr_builtin(_input_data, val, enhanced, _pvp, _cached_data),
-        Perks::Oathkeeper => fmr_faster_string_t1(_input_data, val, enhanced, _pvp, _cached_data),
+        Perks::Oathkeeper => fmr_oathkeeper(_input_data, val, enhanced, _pvp, _cached_data),
         _ => FiringModifierResponse::default(),
     }
 }
