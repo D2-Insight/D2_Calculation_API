@@ -123,11 +123,11 @@ impl From<i32> for DifficultyOptions {
     }
 }
 
-pub(super) fn rpl_mult(_rpl: f64) -> f64 {
+add_rpl_mult(_rpl: f64) -> f64 {
     return (1.0 + ((1.0 / 30.0) * _rpl)) / (1.0 + 1.0 / 3.0);
 }
 
-pub(super) fn gpl_delta(_activity: &Activity) -> f64 {
+add_gpl_delta(_activity: &Activity) -> f64 {
     let difficulty_data = _activity.difficulty.get_difficulty_data();
     let curve = difficulty_data.table;
     let rpl = _activity.rpl;
@@ -147,7 +147,7 @@ pub(super) fn gpl_delta(_activity: &Activity) -> f64 {
     wep_delta_mult * gear_delta_mult
 }
 
-// pub(super) fn remove_pve_bonuses(
+// add_remove_pve_bonuses(
 //     _rpl: f64,
 //     _pl: u32,
 //     _combatant_mult: f64,
