@@ -241,7 +241,7 @@ pub fn other_perks() {
             let val = clamp(_input.value, 0, 3) as i32;
             ReloadModifierResponse {
                 reload_stat_add: 20 * val,
-                reload_time_scale: 0.93,
+                reload_time_scale: if _input.value > 0 { 0.93 } else { 1.0 },
             }
         }),
     );
