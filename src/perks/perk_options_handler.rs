@@ -279,7 +279,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::GuidanceRing => Some(PerkOptionData::toggle()),
         Perks::ConserveMomentum => Some(PerkOptionData::stacking(15)),
         Perks::Impetus => Some(PerkOptionData::toggle()),
-        Perks::LooksCanKill => Some(PerkOptionData::toggle()),
+        Perks::FirstGlance => Some(PerkOptionData::toggle()),
         Perks::PerfectFith => Some(PerkOptionData::static_()),
         Perks::Broadside => Some(PerkOptionData::stacking(4)),
         Perks::Stormbringer => Some(PerkOptionData::static_()),
