@@ -57,7 +57,7 @@ pub fn year_6_perks() {
         )
     );
 
-    add_sbr_field_tested(
+    add_sbr(
         Perks::FieldTested,
         Box::new(
             |_input: ModifierResponsInput| -> HashMap<u32, i32> {
@@ -85,40 +85,46 @@ pub fn year_6_perks() {
         )
     );
 
-    add_rsmr_field_tested(
-        Perks::,
+    add_rsmr(
+        Perks::FieldTested,
         Box::new(
             |_input: ModifierResponsInput| -> ReloadModifierResponse {
-        let val = clamp(_input.value, 0, 5) as i32;
-        ReloadModifierResponse {
-            reload_stat_add: val * 5,
-            ..Default::default()
-        }
-    }
+                let val = clamp(_input.value, 0, 5) as i32;
+                ReloadModifierResponse {
+                    reload_stat_add: val * 5,
+                    ..Default::default()
+                }
+            }
+        )
+    );
 
-    add_rmr_field_tested(
-        Perks::,
+    add_rmr(
+        Perks::FieldTested,
         Box::new(
             |_input: ModifierResponsInput| -> RangeModifierResponse {
-        let val = clamp(_input.value, 0, 5) as i32;
-        RangeModifierResponse {
-            range_stat_add: val * 5,
-            ..Default::default()
-        }
-    }
+                let val = clamp(_input.value, 0, 5) as i32;
+                RangeModifierResponse {
+                    range_stat_add: val * 5,
+                    ..Default::default()
+                }
+            }
+        )
+    );
 
-    add_dmr_paracausal_affinity(
-        Perks::,
+    add_dmr(
+        Perks::ParacausalAffinity,
         Box::new(
             |_input: ModifierResponsInput| -> DamageModifierResponse {
-        if _input.value > 0 {
-            DamageModifierResponse {
-                explosive_dmg_scale: 1.2,
-                impact_dmg_scale: 1.2,
-                ..Default::default()
+                if _input.value > 0 {
+                    DamageModifierResponse {
+                        explosive_dmg_scale: 1.2,
+                        impact_dmg_scale: 1.2,
+                        ..Default::default()
+                    }
+                } else {
+                    DamageModifierResponse::default()
+                }
             }
-        } else {
-            DamageModifierResponse::default()
-        }
-    }
+        )
+    );
 }

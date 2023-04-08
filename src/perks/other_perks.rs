@@ -18,44 +18,50 @@ use super::{
 };
 
 pub fn other_perks() {
-    add_rsmr_alloy_mag(
-        Perks::,
+    add_rsmr(
+        Perks::AlloyMag,
         Box::new(
             |_input: ModifierResponsInput| -> ReloadModifierResponse {
-        if _input.value > 0 {
-            ReloadModifierResponse {
-                reload_stat_add: 0,
-                reload_time_scale: 0.85,
+                if _input.value > 0 {
+                    ReloadModifierResponse {
+                        reload_stat_add: 0,
+                        reload_time_scale: 0.85,
+                    }
+                } else {
+                    ReloadModifierResponse::default()
+                }
             }
-        } else {
-            ReloadModifierResponse::default()
-        }
-    }
+        )
+    );
 
-    add_rsmr_rapid_fire(
-        Perks::,
+    add_rsmr(
+        Perks::RapidFireFrame,
         Box::new(
             |_input: ModifierResponsInput| -> ReloadModifierResponse {
-        if _input.value > 0 {
-            ReloadModifierResponse {
-                reload_stat_add: 0,
-                reload_time_scale: 0.85,
+                if _input.value > 0 {
+                    ReloadModifierResponse {
+                        reload_stat_add: 0,
+                        reload_time_scale: 0.85,
+                    }
+                } else {
+                    ReloadModifierResponse::default()
+                }
             }
-        } else {
-            ReloadModifierResponse::default()
-        }
-    }
+        )
+    );
 
-    add_hmr_swap_mag(
-        Perks::,
+    add_hmr(
+        Perks::SwapMag,
         Box::new(
             |_input: ModifierResponsInput| -> HandlingModifierResponse {
-        HandlingModifierResponse {
-            draw_scale: 0.9,
-            stow_scale: 0.9,
-            ..Default::default()
-        }
-    }
+                HandlingModifierResponse {
+                    draw_scale: 0.9,
+                    stow_scale: 0.9,
+                    ..Default::default()
+                }
+            }
+        )
+    );
 
     add_hmr_freehand_grip(
         Perks::,

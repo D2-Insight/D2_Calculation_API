@@ -533,6 +533,13 @@ impl PersistentModifierResponses {
             MagazineModifierResponse::default()
         }
     }
+    fn get_imr(&self, perk: Perks, input: ModifierResponsInput) -> InventoryModifierResponse {
+        if let Some(func) = self.imr.get(&perk) {
+            func(input)
+        } else {
+            InventoryModifierResponse::default()
+        }
+    }
 }
 
 fn add_sbr(perk: Perks, func: Box<dyn Fn(ModifierResponsInput) -> HashMap<BungieHash, StatBump>>) {
@@ -593,6 +600,11 @@ fn add_epr(perk: Perks, func: Box<dyn Fn(ModifierResponsInput) -> ExplosivePerce
 fn add_mmr(perk: Perks, func: Box<dyn Fn(ModifierResponsInput) -> MagazineModifierResponse>) {
     PERK_FUNC_MAP.with(|map| {
         map.borrow_mut().mmr.insert(perk, func);
+    });
+}
+fn add_imr(perk: Perks, func: Box<dyn Fn(ModifierResponsInput) -> InventoryModifierResponse>) {
+    PERK_FUNC_MAP.with(|map| {
+        map.borrow_mut().imr.insert(perk, func);
     });
 }
 
