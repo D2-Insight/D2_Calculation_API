@@ -66,6 +66,7 @@ pub fn meta_perks() {
     add_fmr(
         Perks::BuiltIn,
         Box::new(|_input: ModifierResponsInput| -> FiringModifierResponse {
+            #[allow(unused_mut)]
             let mut delay_add = 0.0;
             if *_input
                 .calc_data

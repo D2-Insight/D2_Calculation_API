@@ -447,9 +447,32 @@ pub struct PersistentModifierResponses {
     pub mmr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> MagazineModifierResponse>>,
     pub imr: HashMap<Perks, Box<dyn Fn(ModifierResponsInput) -> InventoryModifierResponse>>,
 }
+impl PersistentModifierResponses {
+    fn is_empty(&self) -> bool {
+        self.sbr.is_empty()
+    }
+}
 
 thread_local! {
     static PERK_FUNC_MAP: std::cell::RefCell<PersistentModifierResponses>  = std::cell::RefCell::new(PersistentModifierResponses::default());
+}
+
+pub fn map_perks() {
+    let is_empty = PERK_FUNC_MAP.with(|p| p.borrow().is_empty());
+    if is_empty {
+        year_1_perks();
+        year_2_perks();
+        year_3_perks();
+        year_4_perks();
+        year_5_perks();
+        year_6_perks();
+        meta_perks();
+        exotic_perks();
+        exotic_armor();
+        buff_perks();
+        other_perks();
+        origin_perks();
+    }
 }
 
 impl PersistentModifierResponses {

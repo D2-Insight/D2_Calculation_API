@@ -88,6 +88,7 @@ macro_rules! console_log {
 #[wasm_bindgen(start)]
 pub fn start() {
     panic::set_hook(Box::new(console_error_panic_hook::hook));
+    perks::map_perks();
     console_log!("D2 Calculator Loaded");
 }
 
