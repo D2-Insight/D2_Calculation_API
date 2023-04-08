@@ -478,41 +478,6 @@ pub fn other_perks() {
         }),
     );
 
-    /*add_fmr(
-        Perks::FasterStringT2,
-        Box::new(|_input: ModifierResponsInput| -> FiringModifierResponse {
-            FiringModifierResponse {
-                burst_delay_add: match _input.calc_data.intrinsic_hash {
-                    906 => -72.0 / 1100.0,
-                    905 => -80.0 / 1100.0,
-                    _ => 0.0,
-                },
-                ..Default::default()
-            }
-        }),
-    );*/
-
-    add_sbr(
-        Perks::FasterStringT2,
-        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
-            HashMap::from([(StatHashes::DRAW_TIME.into(), 20)])
-        }),
-    );
-
-    add_sbr(
-        Perks::FasterStringT1,
-        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
-            HashMap::from([(StatHashes::DRAW_TIME.into(), 10)])
-        }),
-    );
-
-    add_sbr(
-        Perks::SlowerStringT1,
-        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
-            HashMap::from([(StatHashes::DRAW_TIME.into(), -10)])
-        }),
-    );
-
     add_fmr(
         Perks::BoxBreathing,
         Box::new(|_input: ModifierResponseInput| -> FiringModifierResponse {
