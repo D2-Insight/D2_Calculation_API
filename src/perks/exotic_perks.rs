@@ -873,15 +873,4 @@ pub fn exotic_perks() {
             }
         }),
     );
-
-    // add_dmr_noble_rounds(
-    //    Perks::,
-    //    Box::new(
-    //        |_input: ModifierResponsInput| -> DamageModifierResponse {
-    //     if _input.value > 0 {
-    //         dmr_blessing_of_the_sky(_input, 1, false, _pvp, _cached_data)
-    //     } else {
-    //         DamageModifierResponse::default()
-    //     }
-    // }
 }
