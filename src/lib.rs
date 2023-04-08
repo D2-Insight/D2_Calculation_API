@@ -155,7 +155,7 @@ pub fn set_weapon(
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getStats")]
-pub fn get_stats(_clamp: bool) -> Result<JsValue, JsValue> {
+pub fn get_stats() -> Result<JsValue, JsValue> {
     let stat_map = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.stats.clone());
     let mut js_stat_map = HashMap::new();
     for (key, value) in stat_map {
@@ -239,10 +239,7 @@ pub fn get_weapon_range(_dynamic_traits: bool, _pvp: bool) -> Result<JsRangeResp
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getWeaponHandlingTimes")]
-pub fn get_weapon_handling(
-    _dynamic_traits: bool,
-    _pvp: bool,
-) -> Result<JsHandlingResponse, JsValue> {
+pub fn get_weapon_handling(_dynamic_traits: bool, _pvp: bool,) -> Result<JsHandlingResponse, JsValue> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     if _dynamic_traits {
         Ok(weapon
@@ -398,17 +395,17 @@ pub fn set_logging_level(_level: usize) -> Result<(), JsValue> {
     Ok(())
 }
 
-// #[cfg(feature = "wasm")]
-// #[wasm_bindgen(js_name = "getModifierResponseSummary")]
-// pub fn get_modifier_response(_dynamic_traits: bool, _pvp: bool) -> Result<JsValue, JsValue> {
-//     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
-//     let modifier = weapon.get_modifier_summary(
-//         _dynamic_traits.then_some(weapon.static_calc_input()),
-//         _pvp,
-//         None,
-//     );
-//     Ok(serde_wasm_bindgen::to_value(&modifier).unwrap())
-// }
+#[cfg(feature = "wasm")]
+#[wasm_bindgen(js_name = "getModifierResponseSummary")]
+pub fn get_modifier_response(_dynamic_traits: bool, _pvp: bool) -> Result<JsValue, JsValue> {
+    let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
+    let modifier = weapon.get_modifier_summary(
+        _dynamic_traits.then_some(weapon.static_calc_input()),
+        _pvp,
+        None,
+    );
+    Ok(serde_wasm_bindgen::to_value(&modifier).unwrap())
+}
 
 #[cfg(all(feature = "wasm", feature = "foundry"))]
 #[wasm_bindgen(js_name = "getScalarResponseSummary")]
