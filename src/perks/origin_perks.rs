@@ -17,6 +17,9 @@ pub fn origin_perks() {
     add_rr(
         Perks::VeistStinger,
         Box::new(|_input: ModifierResponseInput| -> RefundResponse {
+            if !(_input.value > 0) {
+                return RefundResponse::default();
+            };
             let data = _input.cached_data.get("veist_stinger");
             let last_proc;
             if data.is_none() {
@@ -44,6 +47,16 @@ pub fn origin_perks() {
                 }
             } else {
                 RefundResponse::default()
+            }
+        }),
+    );
+
+    add_fmr(
+        Perks::VeistStinger,
+        Box::new(|_input: ModifierResponseInput| -> FiringModifierResponse {
+            FiringModifierResponse {
+                burst_delay_scale: if _input.calc_data.weapon_type == &WeaponType::BOW && _input.value > 0 { 0.85 } else { 1.0 },
+                ..Default::default()
             }
         }),
     );
@@ -120,6 +133,16 @@ pub fn origin_perks() {
                 impact_dmg_scale: 1.0 + damage_mult,
                 explosive_dmg_scale: 1.0 + damage_mult,
                 crit_scale: 1.0,
+            }
+        }),
+    );
+
+    add_fmr(
+        Perks::Ambush,
+        Box::new(|_input: ModifierResponseInput| -> FiringModifierResponse {
+            FiringModifierResponse {
+                burst_delay_scale: if _input.calc_data.weapon_type == &WeaponType::BOW && _input.value > 0 { 0.9 } else { 1.0 },
+                ..Default::default()
             }
         }),
     );

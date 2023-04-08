@@ -793,17 +793,19 @@ pub fn year_1_perks() {
 
     add_rsmr(
         Perks::UnderDog,
-        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
-            if _input.value > 0 {
-                ReloadModifierResponse {
-                    reload_stat_add: 100,
-                    reload_time_scale: 0.9,
-                    ..Default::default()
+        Box::new(
+            |_input: ModifierResponseInput| -> ReloadModifierResponse {
+                if _input.value > 0 {
+                    ReloadModifierResponse {
+                        reload_stat_add: 100,
+                        reload_time_scale: 0.9,
+                        ..Default::default()
+                    }
+                } else {
+                    ReloadModifierResponse::default()
                 }
-            } else {
-                ReloadModifierResponse::default()
             }
-        }),
+        ),
     );
 
     add_sbr(
