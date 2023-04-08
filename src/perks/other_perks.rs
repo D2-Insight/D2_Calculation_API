@@ -175,10 +175,9 @@ pub fn other_perks() {
     add_rsmr(
         Perks::Frequency,
         Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
-            //far far too lazy to do this properly
             if _input.value > 0 {
                 ReloadModifierResponse {
-                    reload_stat_add: 100,
+                    reload_stat_add: 50,
                     reload_time_scale: 0.8,
                 }
             } else {
@@ -187,14 +186,39 @@ pub fn other_perks() {
         }),
     );
 
+    add_sbr(
+        Perks::Tempering,
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
+            let mut stats = HashMap::new();
+            if _input.value > 0 {
+                stats.insert(StatHashes::RELOAD.into(), 50);
+            };
+            stats
+        }),
+    );
+
     add_rsmr(
         Perks::FlowState,
         Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
-            //far far too lazy to do this properly
-            ReloadModifierResponse {
-                reload_stat_add: 55,
-                reload_time_scale: 0.87,
+            if _input.value > 0 {
+                ReloadModifierResponse {
+                    reload_stat_add: 50,
+                    reload_time_scale: 0.8,
+                }
+            } else {
+                ReloadModifierResponse::default()
             }
+        }),
+    );
+
+    add_sbr(
+        Perks::FlowState,
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
+            let mut stats = HashMap::new();
+            if _input.value > 0 {
+                stats.insert(StatHashes::RELOAD.into(), 50);
+            };
+            stats
         }),
     );
 
