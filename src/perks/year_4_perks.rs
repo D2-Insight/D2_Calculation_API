@@ -142,8 +142,8 @@ pub fn year_4_perks() {
     add_sbr(
         Perks::Ensemble,
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
-            let handling = if _input.is_enhanced { 30 } else { 35 };
-            let reload = if _input.is_enhanced { 40 } else { 45 };
+            let handling = if _input.is_enhanced { 35 } else { 30 };
+            let reload = if _input.is_enhanced { 45 } else { 40 };
             if _input.value > 0 {
                 let mut out = HashMap::new();
                 out.insert(StatHashes::HANDLING.into(), handling);
@@ -159,7 +159,7 @@ pub fn year_4_perks() {
         Perks::Ensemble,
         Box::new(
             |_input: ModifierResponseInput| -> HandlingModifierResponse {
-                let handling = if _input.is_enhanced { 30 } else { 35 };
+                let handling = if _input.is_enhanced { 35 } else { 30 };
                 if _input.value > 0 {
                     HandlingModifierResponse {
                         stat_add: handling,
@@ -175,7 +175,7 @@ pub fn year_4_perks() {
     add_rsmr(
         Perks::Ensemble,
         Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
-            let reload = if _input.is_enhanced { 40 } else { 45 };
+            let reload = if _input.is_enhanced { 45 } else { 40 };
             if _input.value > 0 {
                 ReloadModifierResponse {
                     reload_stat_add: reload,
