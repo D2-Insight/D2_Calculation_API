@@ -175,8 +175,8 @@ pub fn year_5_perks() {
             |_input: ModifierResponseInput| -> HandlingModifierResponse {
                 HandlingModifierResponse {
                     stat_add: 100,
-                    stow_scale: 0.9,
-                    draw_scale: 0.9,
+                    stow_scale: 1.0,
+                    draw_scale: 0.95,
                     ..Default::default()
                 }
             },
