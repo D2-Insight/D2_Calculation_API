@@ -99,18 +99,13 @@ pub fn meta_perks() {
                     //Lightweights, Wishender, Ticcus, Verglas
                     905 | 1470121888 | 3260753130 | 3659414143 => {
                         (draw_time.perk_val() as f64 * -4.0 + 900.0) / 1100.0
-                            - _input.calc_data.curr_firing_data.burst_delay
                     }
                     //Precisions, Lemon, Trinity, Hierarchy
                     906 | 2186532310 | 814876685 | 4174431791 => {
                         (draw_time.perk_val() as f64 * -3.6 + 900.0) / 1100.0
-                            - _input.calc_data.curr_firing_data.burst_delay
                     }
                     //Levi Breath lol
-                    1699724249 => {
-                        (draw_time.perk_val() as f64 * -5.0 + 1428.0) / 1100.0
-                            - _input.calc_data.curr_firing_data.burst_delay
-                    }
+                    1699724249 => (draw_time.perk_val() as f64 * -5.0 + 1428.0) / 1100.0,
                     _ => 0.0,
                 }
             }
