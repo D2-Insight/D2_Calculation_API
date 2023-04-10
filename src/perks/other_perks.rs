@@ -36,10 +36,10 @@ pub fn other_perks() {
     add_rsmr(
         Perks::RapidFireFrame,
         Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
-            if _input.value > 0 {
+            if _input.value > 0 || _input.calc_data.weapon_type == &WeaponType::SHOTGUN {
                 ReloadModifierResponse {
                     reload_stat_add: 0,
-                    reload_time_scale: 0.85,
+                    reload_time_scale: 0.80,
                 }
             } else {
                 ReloadModifierResponse::default()
@@ -49,6 +49,19 @@ pub fn other_perks() {
 
     add_hmr(
         Perks::SwapMag,
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                HandlingModifierResponse {
+                    draw_scale: 0.9,
+                    stow_scale: 0.9,
+                    ..Default::default()
+                }
+            },
+        ),
+    );
+
+    add_hmr(
+        Perks::QuickAccessSling,
         Box::new(
             |_input: ModifierResponseInput| -> HandlingModifierResponse {
                 HandlingModifierResponse {

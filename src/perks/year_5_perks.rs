@@ -536,4 +536,15 @@ pub fn year_5_perks() {
             }
         }),
     );
+    add_dmr(
+        Perks::UnstoppableForce,
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
+            let scalar = if _input.value >= 1 { 1.20 } else { 1.0 };
+            DamageModifierResponse {
+                impact_dmg_scale: scalar,
+                explosive_dmg_scale: scalar,
+                crit_scale: 1.0,
+            }
+        }),
+    );
 }

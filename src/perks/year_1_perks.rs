@@ -1,6 +1,9 @@
 use std::collections::HashMap;
 
-use crate::d2_enums::{AmmoType, BungieHash, DamageType, StatBump, StatHashes, WeaponType};
+use crate::{
+    d2_enums::{AmmoType, BungieHash, DamageType, StatBump, StatHashes, WeaponType},
+    logging::extern_log,
+};
 
 use super::{
     add_dmr, add_edr, add_epr, add_fmr, add_hmr, add_imr, add_mmr, add_rmr, add_rr, add_rsmr,
@@ -705,7 +708,7 @@ pub fn year_1_perks() {
             let mut damage_mult = if _input.value > 0 { 0.5 } else { 0.0 };
             let duration = if _input.is_enhanced { 5.0 } else { 4.0 };
             if _input.calc_data.time_total > duration
-                || *_input.calc_data.damage_type != DamageType::KINETIC
+                || _input.calc_data.damage_type != &DamageType::KINETIC
             {
                 damage_mult = 0.0;
             };
@@ -793,19 +796,17 @@ pub fn year_1_perks() {
 
     add_rsmr(
         Perks::UnderDog,
-        Box::new(
-            |_input: ModifierResponseInput| -> ReloadModifierResponse {
-                if _input.value > 0 {
-                    ReloadModifierResponse {
-                        reload_stat_add: 100,
-                        reload_time_scale: 0.9,
-                        ..Default::default()
-                    }
-                } else {
-                    ReloadModifierResponse::default()
+        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
+            if _input.value > 0 {
+                ReloadModifierResponse {
+                    reload_stat_add: 100,
+                    reload_time_scale: 0.9,
+                    ..Default::default()
                 }
+            } else {
+                ReloadModifierResponse::default()
             }
-        ),
+        }),
     );
 
     add_sbr(

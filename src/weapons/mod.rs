@@ -136,6 +136,7 @@ impl Weapon {
             &self.perk_value_map,
             &self.weapon_type,
             &self.ammo_type,
+            &self.damage_type,
             self.firing_data.crit_mult,
         )
     }
@@ -193,6 +194,7 @@ impl Weapon {
             &self.perk_value_map,
             &self.weapon_type,
             &self.ammo_type,
+            &self.damage_type,
             self.firing_data.crit_mult,
         );
         let inter_var = get_stat_bumps(self.list_perks(), input, false, &mut HashMap::new());

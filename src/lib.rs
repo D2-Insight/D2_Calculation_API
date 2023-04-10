@@ -188,6 +188,7 @@ pub fn add_perk(_stats: JsValue, _value: u32, _hash: u32) -> Result<(), JsValue>
         stat_buffs: serde_wasm_bindgen::from_value(_stats).unwrap(),
         enhanced: data.1,
         value: _value,
+        raw_hash: _hash,
         hash: data.0,
     };
     PERS_DATA.with(|perm_data| perm_data.borrow_mut().weapon.add_perk(perk));
@@ -240,7 +241,10 @@ pub fn get_weapon_range(_dynamic_traits: bool, _pvp: bool) -> Result<JsRangeResp
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getWeaponHandlingTimes")]
-pub fn get_weapon_handling(_dynamic_traits: bool, _pvp: bool,) -> Result<JsHandlingResponse, JsValue> {
+pub fn get_weapon_handling(
+    _dynamic_traits: bool,
+    _pvp: bool,
+) -> Result<JsHandlingResponse, JsValue> {
     let weapon = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.clone());
     if _dynamic_traits {
         Ok(weapon
@@ -416,10 +420,12 @@ pub fn get_scalar_response(_pvp: bool) -> Result<JsScalarResponse, JsValue> {
     let mut cached_data = HashMap::new();
     let rmr = perks::get_range_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
     let rsmr = perks::get_reload_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
-    let mmr = perks::get_magazine_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
-    let hmr = perks::get_handling_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
+    let mmr =
+        perks::get_magazine_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
+    let hmr =
+        perks::get_handling_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
     let imr = perks::get_reserve_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
-    Ok(JsScalarResponse{
+    Ok(JsScalarResponse {
         ads_range_scalar: rmr.range_zoom_scale,
         global_range_scalar: rmr.range_all_scale,
         hipfire_range_scalar: rmr.range_hip_scale,
@@ -586,15 +592,26 @@ fn set_weapon_stats(_in: &PyDict) {
 
 #[cfg(feature = "python")]
 #[pyfunction(name = "reverse_pve_calc")]
-fn reverse_pve_calc(_damage: f64, _combatant_mult: Option<f64>, _pve_mult: Option<f64>) -> PyResult<f64> {
+fn reverse_pve_calc(
+    _damage: f64,
+    _combatant_mult: Option<f64>,
+    _pve_mult: Option<f64>,
+) -> PyResult<f64> {
     use logging::extern_log;
     let output = PERS_DATA.with(|perm_data| {
         let combatant_mult = _combatant_mult.unwrap_or(1.0);
         let pve_mult = _pve_mult.unwrap_or(1.0);
         if perm_data.borrow().activity.name == "Default" {
-            extern_log("Activity is default and can return bad values", LogLevel::Warning)
+            extern_log(
+                "Activity is default and can return bad values",
+                LogLevel::Warning,
+            )
         }
-        activity::damage_calc::remove_pve_bonuses(_damage, combatant_mult, &perm_data.borrow().activity) / pve_mult
+        activity::damage_calc::remove_pve_bonuses(
+            _damage,
+            combatant_mult,
+            &perm_data.borrow().activity,
+        ) / pve_mult
     });
     Ok(output)
 }

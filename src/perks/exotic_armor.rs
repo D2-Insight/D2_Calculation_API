@@ -124,11 +124,8 @@ pub fn exotic_armor() {
     add_dmr(
         Perks::Foetracer,
         Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
-            if _input.value == 0 {
-                return DamageModifierResponse::default();
-            }
             let health_percent = _input.cached_data.get("health%").unwrap_or(&0.0).clone();
-            if health_percent <= 0.7 {
+            if health_percent <= 0.7 || _input.value == 0 {
                 return DamageModifierResponse::default();
             }
             let modifier = 1.0 + (0.01 * (health_percent - 0.7) * 100.0);

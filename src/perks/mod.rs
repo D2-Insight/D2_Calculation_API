@@ -68,6 +68,7 @@ pub struct Perk {
     pub enhanced: bool,
     pub value: u32, //used for toggle and stacks
     pub hash: u32,
+    pub raw_hash: u32,
 }
 
 pub fn enhanced_check(_hash: u32) -> (u32, bool) {
@@ -1010,63 +1011,108 @@ impl Weapon {
                 let mut mod_response = ModifierResponseSummary::default();
 
                 let inp = ModifierResponseInput {
-                    is_enhanced: perk.enhanced,value: perk.value,calc_data: &calc_input,pvp: _pvp,cached_data};
+                    is_enhanced: perk.enhanced,
+                    value: perk.value,
+                    calc_data: &calc_input,
+                    pvp: _pvp,
+                    cached_data,
+                };
                 let modifier = perk_modifiers.get_rmr(perk.hash.into(), inp);
                 if modifier != RangeModifierResponse::default() {
                     mod_response.rmr = Some(modifier);
                 }
 
                 let inp = ModifierResponseInput {
-                    is_enhanced: perk.enhanced,value: perk.value,calc_data: &calc_input,pvp: _pvp,cached_data};
+                    is_enhanced: perk.enhanced,
+                    value: perk.value,
+                    calc_data: &calc_input,
+                    pvp: _pvp,
+                    cached_data,
+                };
                 let modifier = perk_modifiers.get_dmr(perk.hash.into(), inp);
                 if modifier != DamageModifierResponse::default() {
                     mod_response.dmr = Some(modifier);
                 }
 
                 let inp = ModifierResponseInput {
-                    is_enhanced: perk.enhanced,value: perk.value,calc_data: &calc_input,pvp: _pvp,cached_data};
+                    is_enhanced: perk.enhanced,
+                    value: perk.value,
+                    calc_data: &calc_input,
+                    pvp: _pvp,
+                    cached_data,
+                };
                 let modifier = perk_modifiers.get_hmr(perk.hash.into(), inp);
                 if modifier != HandlingModifierResponse::default() {
                     mod_response.hmr = Some(modifier);
                 }
 
                 let inp = ModifierResponseInput {
-                    is_enhanced: perk.enhanced,value: perk.value,calc_data: &calc_input,pvp: _pvp,cached_data};
+                    is_enhanced: perk.enhanced,
+                    value: perk.value,
+                    calc_data: &calc_input,
+                    pvp: _pvp,
+                    cached_data,
+                };
                 let modifier = perk_modifiers.get_fmr(perk.hash.into(), inp);
                 if modifier != FiringModifierResponse::default() {
                     mod_response.fmr = Some(modifier);
                 }
 
                 let inp = ModifierResponseInput {
-                    is_enhanced: perk.enhanced,value: perk.value,calc_data: &calc_input,pvp: _pvp,cached_data};
+                    is_enhanced: perk.enhanced,
+                    value: perk.value,
+                    calc_data: &calc_input,
+                    pvp: _pvp,
+                    cached_data,
+                };
                 let modifier = perk_modifiers.get_flmr(perk.hash.into(), inp);
                 if modifier != FlinchModifierResponse::default() {
                     mod_response.flmr = Some(modifier);
                 }
 
                 let inp = ModifierResponseInput {
-                    is_enhanced: perk.enhanced,value: perk.value,calc_data: &calc_input,pvp: _pvp,cached_data};
+                    is_enhanced: perk.enhanced,
+                    value: perk.value,
+                    calc_data: &calc_input,
+                    pvp: _pvp,
+                    cached_data,
+                };
                 let modifier = perk_modifiers.get_rsmr(perk.hash.into(), inp);
                 if modifier != ReloadModifierResponse::default() {
                     mod_response.rsmr = Some(modifier);
                 }
 
                 let inp = ModifierResponseInput {
-                    is_enhanced: perk.enhanced,value: perk.value,calc_data: &calc_input,pvp: _pvp,cached_data};
+                    is_enhanced: perk.enhanced,
+                    value: perk.value,
+                    calc_data: &calc_input,
+                    pvp: _pvp,
+                    cached_data,
+                };
                 let modifier = perk_modifiers.get_mmr(perk.hash.into(), inp);
                 if modifier != MagazineModifierResponse::default() {
                     mod_response.mmr = Some(modifier);
                 }
 
                 let inp = ModifierResponseInput {
-                    is_enhanced: perk.enhanced,value: perk.value,calc_data: &calc_input,pvp: _pvp,cached_data};
+                    is_enhanced: perk.enhanced,
+                    value: perk.value,
+                    calc_data: &calc_input,
+                    pvp: _pvp,
+                    cached_data,
+                };
                 let modifier = perk_modifiers.get_imr(perk.hash.into(), inp);
                 if modifier != InventoryModifierResponse::default() {
                     mod_response.imr = Some(modifier);
                 }
 
                 let inp = ModifierResponseInput {
-                    is_enhanced: perk.enhanced,value: perk.value,calc_data: &calc_input,pvp: _pvp,cached_data};
+                    is_enhanced: perk.enhanced,
+                    value: perk.value,
+                    calc_data: &calc_input,
+                    pvp: _pvp,
+                    cached_data,
+                };
                 let stat_mod = perk_modifiers.get_sbr(perk.hash.into(), inp);
                 let mut stat_buffer: HashMap<BungieHash, StatBump> = HashMap::new();
                 for (key, value) in stat_mod {
@@ -1082,7 +1128,7 @@ impl Weapon {
                 mod_response.statbump = Some(stat_buffer);
                 return mod_response;
             });
-            buffer.insert(perk.hash, mod_buffer);
+            buffer.insert(perk.raw_hash, mod_buffer);
         }
 
         buffer
