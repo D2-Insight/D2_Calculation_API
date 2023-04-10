@@ -19,7 +19,7 @@ pub fn year_2_perks() {
         Perks::AirAssault,
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut stats = HashMap::new();
-            let ae_per_stack = if _input.is_enhanced { 35 } else { 20 };
+            let ae_per_stack = if _input.is_enhanced { 35 } else { 30 };
             let ae = ae_per_stack * _input.value as i32;
             stats.insert(StatHashes::AIRBORNE.into(), ae);
             stats
