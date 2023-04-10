@@ -479,7 +479,7 @@ pub fn other_perks() {
     );
 
     add_fmr(
-        Perks::BoxBreathing,
+        Perks::AssaultMag,
         Box::new(|_input: ModifierResponseInput| -> FiringModifierResponse {
             let hash = _input.calc_data.intrinsic_hash;
             let tick_amount = if hash == 904 {
