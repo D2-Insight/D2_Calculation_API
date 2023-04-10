@@ -367,7 +367,7 @@ pub fn year_4_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut out = HashMap::new();
             if _input.value > 0 {
-                out.insert(StatHashes::HANDLING.into(), 30);
+                out.insert(StatHashes::HANDLING.into(), 35);
             };
             out
         }),
@@ -379,7 +379,7 @@ pub fn year_4_perks() {
             |_input: ModifierResponseInput| -> HandlingModifierResponse {
                 let mut handling = 0;
                 if _input.value > 0 {
-                    handling = 30;
+                    handling = 35;
                 };
                 HandlingModifierResponse {
                     stat_add: handling,
