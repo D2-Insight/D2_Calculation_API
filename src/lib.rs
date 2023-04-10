@@ -203,11 +203,12 @@ pub fn query_perks() -> Vec<u32> {
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "setTraitValue")]
 pub fn change_perk_value(perk_hash: u32, new_value: u32) {
+    let data = perks::enhanced_check(perk_hash);
     PERS_DATA.with(|perm_data| {
         perm_data
             .borrow_mut()
             .weapon
-            .change_perk_val(perk_hash, new_value)
+            .change_perk_val(data.0, new_value)
     });
 }
 
