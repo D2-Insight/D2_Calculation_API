@@ -154,6 +154,18 @@ pub fn exotic_armor() {
         ),
     );
 
+    add_hmr(
+        Perks::MechaneersTricksleeves,
+        Box::new(
+            |_intput: ModifierResponseInput| -> HandlingModifierResponse {
+                HandlingModifierResponse {
+                    stat_add: 100,
+                    ..Default::default()
+                }
+            },
+        ),
+    );
+
     add_sbr(
         Perks::Oathkeeper,
         Box::new(
