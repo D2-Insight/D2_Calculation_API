@@ -512,4 +512,48 @@ pub fn other_perks() {
             }
         }),
     );
+
+    add_sbr(
+        Perks::ThreadOfAscent,
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
+            let mut map = HashMap::new();
+            if _input.value > 0 {
+                map.insert(StatHashes::AIRBORNE.into(), 30);
+                map.insert(StatHashes::RELOAD.into(), 40);
+                map.insert(StatHashes::HANDLING.into(), 40);
+            }
+            map
+        }),
+    );
+
+    add_hmr(
+        Perks::ThreadOfAscent,
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                if _input.value > 0 {
+                    HandlingModifierResponse {
+                        stat_add: 40,
+                        draw_scale: 0.925,
+                        stow_scale: 0.925,
+                        ..Default::default()
+                    }
+                } else {
+                    HandlingModifierResponse::default()
+                }
+            },
+        ),
+    );
+    add_rsmr(
+        Perks::ThreadOfAscent,
+        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
+            if _input.value > 0 {
+                ReloadModifierResponse {
+                    reload_time_scale: 0.925,
+                    reload_stat_add: 40,
+                }
+            } else {
+                ReloadModifierResponse::default()
+            }
+        }),
+    );
 }
