@@ -88,6 +88,7 @@ macro_rules! console_log {
 #[wasm_bindgen(start)]
 pub fn start() {
     panic::set_hook(Box::new(console_error_panic_hook::hook));
+    perks::map_perks();
     console_log!("D2 Calculator Loaded");
 }
 
@@ -154,7 +155,7 @@ pub fn set_weapon(
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getStats")]
-pub fn get_stats(_clamp: bool) -> Result<JsValue, JsValue> {
+pub fn get_stats() -> Result<JsValue, JsValue> {
     let stat_map = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.stats.clone());
     let mut js_stat_map = HashMap::new();
     for (key, value) in stat_map {
@@ -187,6 +188,7 @@ pub fn add_perk(_stats: JsValue, _value: u32, _hash: u32) -> Result<(), JsValue>
         stat_buffs: serde_wasm_bindgen::from_value(_stats).unwrap(),
         enhanced: data.1,
         value: _value,
+        raw_hash: _hash,
         hash: data.0,
     };
     PERS_DATA.with(|perm_data| perm_data.borrow_mut().weapon.add_perk(perk));
@@ -202,11 +204,12 @@ pub fn query_perks() -> Vec<u32> {
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "setTraitValue")]
 pub fn change_perk_value(perk_hash: u32, new_value: u32) {
+    let data = perks::enhanced_check(perk_hash);
     PERS_DATA.with(|perm_data| {
         perm_data
             .borrow_mut()
             .weapon
-            .change_perk_val(perk_hash, new_value)
+            .change_perk_val(data.0, new_value)
     });
 }
 
@@ -417,10 +420,12 @@ pub fn get_scalar_response(_pvp: bool) -> Result<JsScalarResponse, JsValue> {
     let mut cached_data = HashMap::new();
     let rmr = perks::get_range_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
     let rsmr = perks::get_reload_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
-    let mmr = perks::get_magazine_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
-    let hmr = perks::get_handling_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
+    let mmr =
+        perks::get_magazine_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
+    let hmr =
+        perks::get_handling_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
     let imr = perks::get_reserve_modifier(weapon.list_perks(), &input_data, _pvp, &mut cached_data);
-    Ok(JsScalarResponse{
+    Ok(JsScalarResponse {
         ads_range_scalar: rmr.range_zoom_scale,
         global_range_scalar: rmr.range_all_scale,
         hipfire_range_scalar: rmr.range_hip_scale,
@@ -587,15 +592,26 @@ fn set_weapon_stats(_in: &PyDict) {
 
 #[cfg(feature = "python")]
 #[pyfunction(name = "reverse_pve_calc")]
-fn reverse_pve_calc(_damage: f64, _combatant_mult: Option<f64>, _pve_mult: Option<f64>) -> PyResult<f64> {
+fn reverse_pve_calc(
+    _damage: f64,
+    _combatant_mult: Option<f64>,
+    _pve_mult: Option<f64>,
+) -> PyResult<f64> {
     use logging::extern_log;
     let output = PERS_DATA.with(|perm_data| {
         let combatant_mult = _combatant_mult.unwrap_or(1.0);
         let pve_mult = _pve_mult.unwrap_or(1.0);
         if perm_data.borrow().activity.name == "Default" {
-            extern_log("Activity is default and can return bad values", LogLevel::Warning)
+            extern_log(
+                "Activity is default and can return bad values",
+                LogLevel::Warning,
+            )
         }
-        activity::damage_calc::remove_pve_bonuses(_damage, combatant_mult, &perm_data.borrow().activity) / pve_mult
+        activity::damage_calc::remove_pve_bonuses(
+            _damage,
+            combatant_mult,
+            &perm_data.borrow().activity,
+        ) / pve_mult
     });
     Ok(output)
 }

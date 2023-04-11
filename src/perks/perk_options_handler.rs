@@ -106,8 +106,8 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::FreehandGrip => Some(PerkOptionData::static_()),
 
         //origin | year 5+
-        Perks::VeistStinger => Some(PerkOptionData::static_()),
-        Perks::HakkeBreach => Some(PerkOptionData::static_()),
+        Perks::VeistStinger => Some(PerkOptionData::toggle()),
+        Perks::HakkeBreach => Some(PerkOptionData::toggle()),
         Perks::Alacrity => Some(PerkOptionData::toggle()),
         Perks::FluidDynamics => Some(PerkOptionData::toggle()),
         Perks::QuietMoment => Some(PerkOptionData::toggle()),
@@ -280,7 +280,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::GuidanceRing => Some(PerkOptionData::toggle()),
         Perks::ConserveMomentum => Some(PerkOptionData::stacking(15)),
         Perks::Impetus => Some(PerkOptionData::toggle()),
-        Perks::LooksCanKill => Some(PerkOptionData::toggle()),
+        Perks::FirstGlance => Some(PerkOptionData::toggle()),
         Perks::PerfectFith => Some(PerkOptionData::static_()),
         Perks::Broadside => Some(PerkOptionData::stacking(4)),
         Perks::Stormbringer => Some(PerkOptionData::static_()),
@@ -332,9 +332,12 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::TomeOfDawn => Some(PerkOptionData::toggle()),
         Perks::ThreadOfAscent => Some(PerkOptionData::toggle()),
         Perks::WellOfRadiance => Some(PerkOptionData::static_()),
-
+        Perks::Amplified => Some(PerkOptionData::static_()),
         Perks::Radiant => Some(PerkOptionData::static_()),
         Perks::Weaken => Some(PerkOptionData::static_()),
+        Perks::WardOfDawn => Some(PerkOptionData::static_()),
+        Perks::BannerShield => Some(PerkOptionData::static_()),
+
         Perks::PathOfTheBurningSteps => Some(PerkOptionData::stacking(4)),
         Perks::MantleOfBattleHarmony => Some(PerkOptionData::static_()),
         Perks::MaskOfBakris => Some(PerkOptionData::options(["one buff", "both buffs"].to_vec())),
@@ -345,7 +348,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::Foetracer => Some(PerkOptionData::toggle()),
         Perks::MechaneersTricksleeves => Some(PerkOptionData::toggle()),
         Perks::Oathkeeper => Some(PerkOptionData::static_()),
-        Perks::SealedAhamkaraGrasps => Some(PerkOptionData::static_()),
+        Perks::SealedAhamkaraGrasps => Some(PerkOptionData::toggle()),
         Perks::LuckyPants => Some(PerkOptionData::toggle()),
         Perks::Stompees => Some(PerkOptionData::static_()),
         Perks::NoBackupPlans => Some(PerkOptionData::static_()),
@@ -356,7 +359,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::EyeOfAnotherWorld => Some(PerkOptionData::static_()),
         Perks::AstrocyteVerse => Some(PerkOptionData::static_()),
         Perks::NecroticGrips => Some(PerkOptionData::static_()),
-        Perks::BootsOfTheAssembler => Some(PerkOptionData::toggle()),
+        Perks::BootsOfTheAssembler => Some(PerkOptionData::static_()),
         Perks::RainOfFire => Some(PerkOptionData::static_()),
         Perks::SpeedloaderSlacks => Some(PerkOptionData::stacking(5)),
         Perks::PeregrineGreaves => Some(PerkOptionData::static_()),
@@ -377,7 +380,7 @@ pub fn enh_hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
 pub fn get_perk_options(_perks: Vec<u32>) -> HashMap<u32, PerkOptionData> {
     let mut options = HashMap::new();
     for perk in _perks {
-        // let data = if _is_enhanced {enh_hash_to_perk_option_data(perk)} else {hash_to_perk_option_data(perk)};
+        // let data = if  _input._is_enhanced {enh_hash_to_perk_option_data(perk)} else {hash_to_perk_option_data(perk)};
         let data = hash_to_perk_option_data(perk);
         if data.is_some() {
             options.insert(perk, data.unwrap());
