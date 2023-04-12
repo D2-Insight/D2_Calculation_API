@@ -87,7 +87,7 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
         while opt_bullets_hit < 50.0 {
             //PERK CALCULATIONS////////////
 
-            persistent_data.insert("health%".to_string(), opt_damage_dealt / health);
+            persistent_data.insert("health%".to_string(), (health - opt_damage_dealt) / 70.0);
             persistent_data.insert("empowering".to_string(), 1.0);
             persistent_data.insert("debuff".to_string(), 1.0);
             let calc_input = _weapon.pvp_calc_input(
@@ -136,7 +136,8 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
             let shot_burst_size =
                 _weapon.firing_data.burst_size as f64 + firing_mods.burst_size_add;
 
-            let mut shot_delay = if opt_bullets_hit % shot_burst_size > 0.0 && opt_bullets_hit > 0.0 {
+            let mut shot_delay = if opt_bullets_hit % shot_burst_size > 0.0 && opt_bullets_hit > 0.0
+            {
                 shot_inner_burst_delay
             } else if opt_bullets_hit == 0.0 {
                 0.0
@@ -151,8 +152,15 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 shot_delay *= 1.45;
             }
 
-            if opt_bullets_fired >= _weapon.calc_ammo_sizes(Some(calc_input.clone()), Some(&mut persistent_data), true).mag_size.into() {
-                shot_delay += _weapon.calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data), true).reload_time;
+            if opt_bullets_fired
+                >= _weapon
+                    .calc_ammo_sizes(Some(calc_input.clone()), Some(&mut persistent_data), true)
+                    .mag_size
+                    .into()
+            {
+                shot_delay += _weapon
+                    .calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data), true)
+                    .reload_time;
             }
 
             if opt_bullets_hit % shot_burst_size == 0.0 {
@@ -223,7 +231,9 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
         let mut bdy_damage_dealt = 0.0;
         while bdy_bullets_hit < 50.0 {
             //PERK CALCULATIONS////////////
-            persistent_data.insert("health%".to_string(), bdy_damage_dealt / health);
+            persistent_data.insert("health%".to_string(), (health - bdy_damage_dealt) / 70.0);
+            persistent_data.insert("empowering".to_string(), 1.0);
+            persistent_data.insert("debuff".to_string(), 1.0);
             let calc_input = _weapon.pvp_calc_input(
                 bdy_bullets_fired,
                 bdy_bullets_hit,
@@ -258,7 +268,8 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
             let shot_burst_size =
                 _weapon.firing_data.burst_size as f64 + firing_mods.burst_size_add;
 
-            let mut shot_delay = if bdy_bullets_hit % shot_burst_size > 0.0 && bdy_bullets_hit > 0.0 {
+            let mut shot_delay = if bdy_bullets_hit % shot_burst_size > 0.0 && bdy_bullets_hit > 0.0
+            {
                 shot_inner_burst_delay
             } else if bdy_bullets_hit == 0.0 {
                 0.0
@@ -273,8 +284,15 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 shot_delay *= 1.45;
             }
 
-            if bdy_bullets_fired >= _weapon.calc_ammo_sizes(Some(calc_input.clone()), Some(&mut persistent_data), true).mag_size.into() {
-                shot_delay += _weapon.calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data), true).reload_time;
+            if bdy_bullets_fired
+                >= _weapon
+                    .calc_ammo_sizes(Some(calc_input.clone()), Some(&mut persistent_data), true)
+                    .mag_size
+                    .into()
+            {
+                shot_delay += _weapon
+                    .calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data), true)
+                    .reload_time;
             }
 
             bdy_time_taken += shot_delay;
