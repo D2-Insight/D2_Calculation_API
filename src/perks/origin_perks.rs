@@ -55,7 +55,13 @@ pub fn origin_perks() {
         Perks::VeistStinger,
         Box::new(|_input: ModifierResponseInput| -> FiringModifierResponse {
             FiringModifierResponse {
-                burst_delay_scale: if _input.calc_data.weapon_type == &WeaponType::BOW && _input.value > 0 { 0.85 } else { 1.0 },
+                burst_delay_scale: if _input.calc_data.weapon_type == &WeaponType::BOW
+                    && _input.value > 0
+                {
+                    0.85
+                } else {
+                    1.0
+                },
                 ..Default::default()
             }
         }),
@@ -102,11 +108,11 @@ pub fn origin_perks() {
             let range = if _input.value > 0 { 20 } else { 0 };
             let reload = if _input.value > 0 { 50 } else { 0 };
             let stability = if _input.value > 0 { 20 } else { 0 };
-            let aim_assit = if _input.value > 0 { 10 } else { 0 };
+            let aim_assist = if _input.value > 0 { 10 } else { 0 };
             map.insert(StatHashes::RANGE.into(), range);
             map.insert(StatHashes::RELOAD.into(), reload);
             map.insert(StatHashes::STABILITY.into(), stability);
-            map.insert(StatHashes::AIM_ASSIST.into(), aim_assit);
+            map.insert(StatHashes::AIM_ASSIST.into(), aim_assist);
             map
         }),
     );
@@ -128,10 +134,18 @@ pub fn origin_perks() {
     add_dmr(
         Perks::Ambush,
         Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
-            let damage_mult = if _input.value > 0 { 0.095 } else { 0.0 };
+            if _input.value == 0 || _input.pvp {
+                return DamageModifierResponse::default();
+            }
+            let damage_mult = if _input.calc_data.weapon_type == &WeaponType::LINEARFUSIONRIFLE {
+                1.0888
+            } else {
+                1.1078
+            };
+
             DamageModifierResponse {
-                impact_dmg_scale: 1.0 + damage_mult,
-                explosive_dmg_scale: 1.0 + damage_mult,
+                impact_dmg_scale: damage_mult,
+                explosive_dmg_scale: damage_mult,
                 crit_scale: 1.0,
             }
         }),
@@ -141,7 +155,13 @@ pub fn origin_perks() {
         Perks::Ambush,
         Box::new(|_input: ModifierResponseInput| -> FiringModifierResponse {
             FiringModifierResponse {
-                burst_delay_scale: if _input.calc_data.weapon_type == &WeaponType::BOW && _input.value > 0 { 0.9 } else { 1.0 },
+                burst_delay_scale: if _input.calc_data.weapon_type == &WeaponType::BOW
+                    && _input.value > 0
+                {
+                    0.9
+                } else {
+                    1.0
+                },
                 ..Default::default()
             }
         }),
