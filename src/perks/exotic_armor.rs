@@ -157,13 +157,46 @@ pub fn exotic_armor() {
     add_hmr(
         Perks::MechaneersTricksleeves,
         Box::new(
-            |_intput: ModifierResponseInput| -> HandlingModifierResponse {
-                HandlingModifierResponse {
-                    stat_add: 100,
-                    ..Default::default()
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                if _input.calc_data.weapon_type == &WeaponType::SIDEARM {
+                    HandlingModifierResponse {
+                        stat_add: 100,
+                        ..Default::default()
+                    }
+                } else {
+                    HandlingModifierResponse::default()
                 }
             },
         ),
+    );
+    add_rsmr(
+        Perks::MechaneersTricksleeves,
+        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
+            if _input.calc_data.weapon_type == &WeaponType::SIDEARM {
+                ReloadModifierResponse {
+                    reload_stat_add: 100,
+                    ..Default::default()
+                }
+            } else {
+                ReloadModifierResponse::default()
+            }
+        }),
+    );
+
+    add_dmr(
+        Perks::MechaneersTricksleeves,
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
+            let mult = if _input.pvp { 1.35 } else { 2.0 };
+            if _input.value > 0 && _input.calc_data.weapon_type == &WeaponType::SIDEARM {
+                DamageModifierResponse {
+                    explosive_dmg_scale: mult,
+                    impact_dmg_scale: mult,
+                    ..Default::default()
+                }
+            } else {
+                DamageModifierResponse::default()
+            }
+        }),
     );
 
     add_sbr(
@@ -365,6 +398,18 @@ pub fn exotic_armor() {
         ),
     );
 
+    add_hmr(
+        Perks::AstrocyteVerse,
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                HandlingModifierResponse {
+                    stat_add: 100,
+                    ..Default::default()
+                }
+            },
+        ),
+    );
+
     add_sbr(
         Perks::NecroticGrips,
         Box::new(
@@ -430,6 +475,27 @@ pub fn exotic_armor() {
                     (StatHashes::HANDLING.into(), modifiers.1), //?
                     (StatHashes::AIRBORNE.into(), modifiers.2),
                 ])
+            },
+        ),
+    );
+
+    add_hmr(
+        Perks::SpeedloaderSlacks,
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                let handling = match _input.value {
+                    0 => 0,
+                    1 => 40,
+                    2 => 40,
+                    3 => 45,
+                    4 => 50,
+                    5 => 55,
+                    _ => 55,
+                };
+                HandlingModifierResponse {
+                    stat_add: handling,
+                    ..Default::default()
+                }
             },
         ),
     );

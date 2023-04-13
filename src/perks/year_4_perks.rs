@@ -3,11 +3,12 @@ use std::collections::HashMap;
 use crate::d2_enums::{StatHashes, WeaponType};
 
 use super::{
-    add_dmr, add_epr, add_fmr, add_hmr, add_mmr, add_rmr, add_rsmr, add_sbr, add_vmr, clamp,
+    add_dmr, add_epr, add_flmr, add_fmr, add_hmr, add_mmr, add_rmr, add_rsmr, add_sbr, add_vmr,
+    clamp,
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
-        HandlingModifierResponse, MagazineModifierResponse, RangeModifierResponse, RefundResponse,
-        ReloadModifierResponse, VelocityModifierResponse,
+        FlinchModifierResponse, HandlingModifierResponse, MagazineModifierResponse,
+        RangeModifierResponse, RefundResponse, ReloadModifierResponse, VelocityModifierResponse,
     },
     ModifierResponseInput, Perks,
 };
@@ -359,6 +360,14 @@ pub fn year_4_perks() {
                 out.insert(StatHashes::AIRBORNE.into(), 30);
             };
             out
+        }),
+    );
+
+    add_flmr(
+        Perks::PerfectFloat,
+        Box::new(|_input: ModifierResponseInput| -> FlinchModifierResponse {
+            let val = if _input.value > 0 { 0.65 } else { 1.0 };
+            FlinchModifierResponse { flinch_scale: val }
         }),
     );
 
