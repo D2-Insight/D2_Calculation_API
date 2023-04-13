@@ -1,4 +1,4 @@
-use std::{collections::HashMap, default};
+use std::collections::HashMap;
 
 use crate::{
     d2_enums::{AmmoType, BungieHash, DamageType, StatBump, StatHashes, WeaponType},
@@ -6,525 +6,557 @@ use crate::{
 };
 
 use super::{
+    add_dmr, add_epr, add_flmr, add_fmr, add_hmr, add_mmr, add_rmr, add_rsmr, add_sbr, add_vmr,
     clamp,
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
         FlinchModifierResponse, HandlingModifierResponse, RangeModifierResponse, RefundResponse,
         ReloadModifierResponse, ReloadOverrideResponse,
     },
+    ModifierResponseInput, Perks,
 };
 
-pub(super) fn dmr_ballidorse_wrathweavers(
-    //BALLIDORSE WRATHWEAVERS
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let mut modifier = DamageModifierResponse::default();
-    let value = if _pvp { 1.05 } else { 1.15 };
-    if _input.damage_type == &DamageType::STASIS && _value >= 1 {
-        modifier.impact_dmg_scale = value;
-        modifier.explosive_dmg_scale = value;
-    }
-    return modifier;
-}
+pub fn exotic_armor() {
+    add_dmr(
+        Perks::BallindorseWrathweavers,
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
+            let mut modifier = DamageModifierResponse::default();
+            let value = if _input.pvp { 1.05 } else { 1.15 };
+            if _input.calc_data.damage_type == &DamageType::STASIS && _input.value >= 1 {
+                modifier.impact_dmg_scale = value;
+                modifier.explosive_dmg_scale = value;
+            }
+            return modifier;
+        }),
+    );
 
-pub(super) fn dmr_mechaneers_tricksleeves(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let mut dmr = DamageModifierResponse::default();
-    if _value <= 0 || _input.weapon_type != &WeaponType::SIDEARM {
-        return dmr;
-    };
-    let damage_mult = if _pvp { 1.35 } else { 2.0 };
-    dmr.explosive_dmg_scale = damage_mult;
-    dmr.impact_dmg_scale = damage_mult;
-    dmr
-}
+    add_dmr(
+        Perks::MechaneersTricksleeves,
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
+            let mut dmr = DamageModifierResponse::default();
+            if _input.value <= 0 || _input.calc_data.weapon_type != &WeaponType::SIDEARM {
+                return dmr;
+            };
+            let damage_mult = if _input.pvp { 1.35 } else { 2.0 };
+            dmr.explosive_dmg_scale = damage_mult;
+            dmr.impact_dmg_scale = damage_mult;
+            dmr
+        }),
+    );
 
-//doesnt work for sturm overcharge, (maybe) memento
-pub(super) fn dmr_lucky_pants(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let mut modifier = 1.0;
-    let special_multiplier = if _input.ammo_type == &AmmoType::SPECIAL {
-        0.5
-    } else {
-        1.0
-    };
+    //doesnt work for sturm overcharge, (maybe) memento
+    add_dmr(
+        Perks::LuckyPants,
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
+            let mut modifier = 1.0;
+            let special_multiplier = if _input.calc_data.ammo_type == &AmmoType::SPECIAL {
+                0.5
+            } else {
+                1.0
+            };
 
-    if !_pvp {
-        modifier += special_multiplier * 0.6 * _value.clamp(0, 10) as f64;
-    }
+            if !_input.pvp {
+                modifier += special_multiplier * 0.6 * _input.value.clamp(0, 10) as f64;
+            }
 
-    DamageModifierResponse {
-        impact_dmg_scale: modifier,
-        explosive_dmg_scale: modifier,
-        crit_scale: 1.0,
-    }
-}
+            DamageModifierResponse {
+                impact_dmg_scale: modifier,
+                explosive_dmg_scale: modifier,
+                crit_scale: 1.0,
+            }
+        }),
+    );
 
-pub(super) fn dmr_mask_of_bakris(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    let mut dmr = DamageModifierResponse::default();
-    let modifier = if _value > 0 && !_pvp { 1.1 } else { 1.0 };
+    add_dmr(
+        Perks::MaskOfBakris,
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
+            let mut dmr = DamageModifierResponse::default();
+            let modifier = if _input.value > 0 && !_input.pvp {
+                1.1
+            } else {
+                1.0
+            };
 
-    if _input.damage_type == &DamageType::ARC {
-        dmr.impact_dmg_scale = modifier * modifier;
-        dmr.explosive_dmg_scale = modifier * modifier;
-    } else {
-        dmr.impact_dmg_scale = modifier;
-        dmr.explosive_dmg_scale = modifier;
-    }
-    dmr
-}
+            if _input.calc_data.damage_type == &DamageType::ARC {
+                dmr.impact_dmg_scale = modifier * modifier;
+                dmr.explosive_dmg_scale = modifier * modifier;
+            } else {
+                dmr.impact_dmg_scale = modifier;
+                dmr.explosive_dmg_scale = modifier;
+            }
+            dmr
+        }),
+    );
 
-pub(super) fn sbr_tome_of_dawn(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    let mut stats = HashMap::new();
-    if _value > 0 {
-        stats.insert(StatHashes::AIRBORNE.into(), 50);
-    }
-    stats
-}
+    add_sbr(
+        Perks::TomeOfDawn,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                let mut stats = HashMap::new();
+                if _input.value > 0 {
+                    stats.insert(StatHashes::AIRBORNE.into(), 50);
+                }
+                stats
+            },
+        ),
+    );
 
-pub(super) fn flmr_tome_of_dawn(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> FlinchModifierResponse {
-    if _value > 0 {
-        FlinchModifierResponse { flinch_scale: 0.80 }
-    } else {
-        FlinchModifierResponse::default()
-    }
-}
+    add_flmr(
+        Perks::TomeOfDawn,
+        Box::new(|_input: ModifierResponseInput| -> FlinchModifierResponse {
+            if _input.value > 0 {
+                FlinchModifierResponse { flinch_scale: 0.80 }
+            } else {
+                FlinchModifierResponse::default()
+            }
+        }),
+    );
 
-pub(super) fn sbr_foetracer(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
-}
+    add_sbr(
+        Perks::Foetracer,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
+            },
+        ),
+    );
 
-pub(super) fn dmr_foetracer(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> DamageModifierResponse {
-    if _value == 0 {
-        return DamageModifierResponse::default();
-    }
-    let health_percent = _cached_data.get("health%").unwrap_or(&0.0).clone();
-    if health_percent <= 0.7 {
-        return DamageModifierResponse::default();
-    }
-    let modifier = 1.0 + (0.01 * (health_percent - 0.7) * 100.0);
-    return DamageModifierResponse {
-        impact_dmg_scale: modifier,
-        explosive_dmg_scale: modifier,
-        crit_scale: 1.0,
-    };
-}
+    add_dmr(
+        Perks::Foetracer,
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
+            let health_percent = _input.cached_data.get("health%").unwrap_or(&1.0).clone();
+            if health_percent >= 0.3 || _input.value == 0 {
+                return DamageModifierResponse::default();
+            }
+            let modifier = 1.0 + (0.3 - health_percent);
+            return DamageModifierResponse {
+                impact_dmg_scale: modifier,
+                explosive_dmg_scale: modifier,
+                crit_scale: 1.0,
+            };
+        }),
+    );
 
-//TODO: MECHANEER'S TRICKSLEEVES AUTORELOAD
+    //TODO: MECHANEER'S TRICKSLEEVES AUTORELOAD
 
-pub(super) fn sbr_mechaneers_tricksleeves(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    let mut stats = HashMap::new();
-    if _input.weapon_type == &WeaponType::SIDEARM {
-        stats.insert(StatHashes::AIRBORNE.into(), 50);
-        stats.insert(StatHashes::HANDLING.into(), 100);
-        stats.insert(StatHashes::RELOAD.into(), 100);
-    };
-    stats
-}
+    add_sbr(
+        Perks::MechaneersTricksleeves,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                let mut stats = HashMap::new();
+                if _input.calc_data.weapon_type == &WeaponType::SIDEARM {
+                    stats.insert(StatHashes::AIRBORNE.into(), 50);
+                    stats.insert(StatHashes::HANDLING.into(), 100);
+                    stats.insert(StatHashes::RELOAD.into(), 100);
+                };
+                stats
+            },
+        ),
+    );
 
-pub(super) fn sbr_oathkeeper(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    let mut stats = HashMap::new();
-    if _input.weapon_type == &WeaponType::BOW {
-        stats.insert(StatHashes::AIRBORNE.into(), 40);
-    };
-    stats
-}
+    add_hmr(
+        Perks::MechaneersTricksleeves,
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                if _input.calc_data.weapon_type == &WeaponType::SIDEARM {
+                    HandlingModifierResponse {
+                        stat_add: 100,
+                        ..Default::default()
+                    }
+                } else {
+                    HandlingModifierResponse::default()
+                }
+            },
+        ),
+    );
+    add_rsmr(
+        Perks::MechaneersTricksleeves,
+        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
+            if _input.calc_data.weapon_type == &WeaponType::SIDEARM {
+                ReloadModifierResponse {
+                    reload_stat_add: 100,
+                    ..Default::default()
+                }
+            } else {
+                ReloadModifierResponse::default()
+            }
+        }),
+    );
 
-pub(super) fn fmr_oathkeeper(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> FiringModifierResponse {
-    if _input.weapon_type == &WeaponType::BOW {
-        FiringModifierResponse {
-            burst_delay_add: -2.0 / 60.0,
-            ..Default::default()
-        }
-    } else {
-        FiringModifierResponse::default()
-    }
-}
+    add_dmr(
+        Perks::MechaneersTricksleeves,
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
+            let mult = if _input.pvp { 1.35 } else { 2.0 };
+            if _input.value > 0 && _input.calc_data.weapon_type == &WeaponType::SIDEARM {
+                DamageModifierResponse {
+                    explosive_dmg_scale: mult,
+                    impact_dmg_scale: mult,
+                    ..Default::default()
+                }
+            } else {
+                DamageModifierResponse::default()
+            }
+        }),
+    );
 
-pub(super) fn sbr_sealed_ahamkara_grasps(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    let mut stats = HashMap::new();
-    if _value > 0 {
-        stats.insert(StatHashes::AIRBORNE.into(), 50);
-    };
-    stats
-}
+    add_sbr(
+        Perks::Oathkeeper,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                let mut stats = HashMap::new();
+                if _input.calc_data.weapon_type == &WeaponType::BOW {
+                    stats.insert(StatHashes::AIRBORNE.into(), 40);
+                    stats.insert(StatHashes::DRAW_TIME.into(), 10);
+                };
+                stats
+            },
+        ),
+    );
 
-//TODO: AUTORELOAD FOR SEALED AHAMKARA GRASPS
-//TODO: LUCKY PANTS AFFECTING ACCURACY CONE
-//LUCKY PANTS ONLY WORKS FOR READY ?!?!?! crazy :(
-pub(super) fn sbr_lucky_pants(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    let mut stat = HashMap::new();
-    if _value > 0 && _input.weapon_type == &WeaponType::HANDCANNON {
-        stat.insert(StatHashes::AIRBORNE.into(), 20);
-        stat.insert(StatHashes::HANDLING.into(), 100);
-    };
-    stat
-}
+    /*add_fmr(
+        Perks::Oathkeeper,
+        Box::new(|_input: ModifierResponsInput| -> FiringModifierResponse {
+            FiringModifierResponse {
+                burst_delay_add: match _input.calc_data.intrinsic_hash {
+                    906 => -36.0 / 1100.0,
+                    905 => -40.0 / 1100.0,
+                    _ => 0.0,
+                },
+                ..Default::default()
+            }
+        }),
+    );*/
 
-pub(super) fn hmr_lucky_pants(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HandlingModifierResponse {
-    if _value > 0 && _input.weapon_type == &WeaponType::HANDCANNON {
-        return HandlingModifierResponse {
-            stat_add: 100,
-            ads_scale: 1.0,
-            draw_scale: 0.6,
-            ..Default::default()
-        };
-    }
-    return HandlingModifierResponse::default();
-}
+    add_sbr(
+        Perks::SealedAhamkaraGrasps,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                let mut stats = HashMap::new();
+                if _input.value > 0 {
+                    stats.insert(StatHashes::AIRBORNE.into(), 50);
+                };
+                stats
+            },
+        ),
+    );
 
-pub(super) fn sbr_stompees(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    HashMap::from([(StatHashes::AIRBORNE.into(), -50)])
-}
+    //TODO: AUTORELOAD FOR SEALED AHAMKARA GRASPS
+    //TODO: LUCKY PANTS AFFECTING ACCURACY CONE
+    //LUCKY PANTS ONLY WORKS FOR READY ?!?!?! crazy :(
+    add_sbr(
+        Perks::LuckyPants,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                let mut stat = HashMap::new();
+                if _input.value > 0 && _input.calc_data.weapon_type == &WeaponType::HANDCANNON {
+                    stat.insert(StatHashes::AIRBORNE.into(), 20);
+                    stat.insert(StatHashes::HANDLING.into(), 100);
+                };
+                stat
+            },
+        ),
+    );
 
-pub(super) fn sbr_no_backup_plans(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    let mut stats = HashMap::new();
-    if _input.weapon_type == &WeaponType::SHOTGUN {
-        stats.insert(StatHashes::AIRBORNE.into(), 30);
-    };
-    stats
-}
+    add_hmr(
+        Perks::LuckyPants,
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                if _input.value > 0 && _input.calc_data.weapon_type == &WeaponType::HANDCANNON {
+                    return HandlingModifierResponse {
+                        stat_add: 100,
+                        ads_scale: 1.0,
+                        draw_scale: 0.6,
+                        ..Default::default()
+                    };
+                }
+                return HandlingModifierResponse::default();
+            },
+        ),
+    );
 
-pub(super) fn sbr_actium_war_rig(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    let mut stats = HashMap::new();
-    if _input.weapon_type == &WeaponType::AUTORIFLE || _input.weapon_type == &WeaponType::MACHINEGUN
-    {
-        stats.insert(StatHashes::AIRBORNE.into(), 30);
-    }
-    stats
-}
+    add_sbr(
+        Perks::Stompees,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                HashMap::from([(StatHashes::AIRBORNE.into(), -50)])
+            },
+        ),
+    );
 
-//TODO: AUTORELOAD ON ACTIUM WAR RIG
+    add_sbr(
+        Perks::NoBackupPlans,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                let mut stats = HashMap::new();
+                if _input.calc_data.weapon_type == &WeaponType::SHOTGUN {
+                    stats.insert(StatHashes::AIRBORNE.into(), 30);
+                };
+                stats
+            },
+        ),
+    );
 
-pub(super) fn sbr_hallowfire_heart(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
-}
+    add_sbr(
+        Perks::ActiumWarRig,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                let mut stats = HashMap::new();
+                if _input.calc_data.weapon_type == &WeaponType::AUTORIFLE
+                    || _input.calc_data.weapon_type == &WeaponType::MACHINEGUN
+                {
+                    stats.insert(StatHashes::AIRBORNE.into(), 30);
+                }
+                stats
+            },
+        ),
+    );
 
-pub(super) fn sbr_lion_rampants(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    let mut stats = HashMap::new();
-    if _value > 0 {
-        stats.insert(StatHashes::AIRBORNE.into(), 50);
-    };
-    stats
-}
+    //TODO: AUTORELOAD ON ACTIUM WAR RIG
 
-pub(super) fn sbr_peacekeepers(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    let mut stats = HashMap::new();
-    if _input.weapon_type == &WeaponType::SUBMACHINEGUN {
-        stats.insert(StatHashes::AIRBORNE.into(), 40);
-        stats.insert(StatHashes::HANDLING.into(), 100);
-    };
-    stats
-}
+    add_sbr(
+        Perks::HallowfireHeart,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
+            },
+        ),
+    );
 
-pub(super) fn hmr_peacekeepers(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HandlingModifierResponse {
-    if _input.weapon_type == &WeaponType::SUBMACHINEGUN {
-        return HandlingModifierResponse {
-            stat_add: 100,
-            ads_scale: 1.0,
-            draw_scale: 0.6,
-            stow_scale: 0.6,
-        };
-    }
-    return HandlingModifierResponse::default();
-}
+    add_sbr(
+        Perks::LionRampart,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                let mut stats = HashMap::new();
+                if _input.value > 0 {
+                    stats.insert(StatHashes::AIRBORNE.into(), 50);
+                };
+                stats
+            },
+        ),
+    );
 
-pub(super) fn sbr_peregrine_greaves(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
-}
+    add_sbr(
+        Perks::Peacekeepers,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                let mut stats = HashMap::new();
+                if _input.calc_data.weapon_type == &WeaponType::SUBMACHINEGUN {
+                    stats.insert(StatHashes::AIRBORNE.into(), 40);
+                    stats.insert(StatHashes::HANDLING.into(), 100);
+                };
+                stats
+            },
+        ),
+    );
 
-pub(super) fn sbr_eye_of_another_world(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    HashMap::from([(StatHashes::AIRBORNE.into(), 15)])
-}
+    add_hmr(
+        Perks::Peacekeepers,
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                if _input.calc_data.weapon_type == &WeaponType::SUBMACHINEGUN {
+                    return HandlingModifierResponse {
+                        stat_add: 100,
+                        ads_scale: 1.0,
+                        draw_scale: 0.6,
+                        stow_scale: 0.6,
+                    };
+                }
+                return HandlingModifierResponse::default();
+            },
+        ),
+    );
 
-pub(super) fn sbr_astrocyte_verse(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    let mut stats = HashMap::new();
-    stats.insert(StatHashes::AIRBORNE.into(), 30);
-    if _value > 0 {
-        stats.insert(StatHashes::HANDLING.into(), 100);
-    }
-    stats
-}
+    add_sbr(
+        Perks::PeregrineGreaves,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                HashMap::from([(StatHashes::AIRBORNE.into(), 20)])
+            },
+        ),
+    );
 
-pub(super) fn sbr_necrotic_grip(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    let mut stats = HashMap::new();
-    if _input.intrinsic_hash == 1863355414
-        || _input.intrinsic_hash == 2965975126
-        || _input.intrinsic_hash == 2724693746
-    {
-        //Thorn, Osteo Striga, Touch of Malice
-        stats.insert(StatHashes::AIRBORNE.into(), 30);
-    };
-    stats
-}
+    add_sbr(
+        Perks::EyeOfAnotherWorld,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                HashMap::from([(StatHashes::AIRBORNE.into(), 15)])
+            },
+        ),
+    );
 
-pub(super) fn sbr_boots_of_the_assembler(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    let mut stats = HashMap::new();
-    if _input.intrinsic_hash == 2144092201 {
-        //Lumina
-        stats.insert(StatHashes::AIRBORNE.into(), 30);
-    };
-    stats
-}
+    add_sbr(
+        Perks::AstrocyteVerse,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                let mut stats = HashMap::new();
+                stats.insert(StatHashes::AIRBORNE.into(), 30);
+                if _input.value > 0 {
+                    stats.insert(StatHashes::HANDLING.into(), 100);
+                }
+                stats
+            },
+        ),
+    );
 
-pub(super) fn sbr_rain_of_fire(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    let mut stats = HashMap::new();
-    if _input.weapon_type == &WeaponType::FUSIONRIFLE
-        || _input.weapon_type == &WeaponType::LINEARFUSIONRIFLE
-    {
-        stats.insert(StatHashes::AIRBORNE.into(), 30);
-    }
-    stats
-}
+    add_hmr(
+        Perks::AstrocyteVerse,
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                HandlingModifierResponse {
+                    stat_add: 100,
+                    ..Default::default()
+                }
+            },
+        ),
+    );
 
-pub(super) fn sbr_speedloader_slacks(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    let modifiers = match _value {
-        0 => (0, 0, 0),
-        1 => (40, 40, 30),
-        2 => (40, 40, 35),
-        3 => (45, 45, 40),
-        4 => (50, 50, 45),
-        5 => (55, 55, 50),
-        _ => (55, 55, 50),
-    };
+    add_sbr(
+        Perks::NecroticGrips,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                let mut stats = HashMap::new();
+                if _input.calc_data.intrinsic_hash == 1863355414
+                    || _input.calc_data.intrinsic_hash == 2965975126
+                    || _input.calc_data.intrinsic_hash == 2724693746
+                {
+                    //Thorn, Osteo Striga, Touch of Malice
+                    stats.insert(StatHashes::AIRBORNE.into(), 30);
+                };
+                stats
+            },
+        ),
+    );
 
-    HashMap::from([
-        (StatHashes::RELOAD.into(), modifiers.0),
-        (StatHashes::HANDLING.into(), modifiers.1), //?
-        (StatHashes::AIRBORNE.into(), modifiers.2),
-    ])
-}
+    add_sbr(
+        Perks::BootsOfTheAssembler,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                let mut stats = HashMap::new();
+                if _input.calc_data.intrinsic_hash == 2144092201 {
+                    //Lumina
+                    stats.insert(StatHashes::AIRBORNE.into(), 30);
+                };
+                stats
+            },
+        ),
+    );
 
-pub(super) fn rsmr_speedloader_slacks(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> ReloadModifierResponse {
-    let modifiers = match _value {
-        0 => (0, 1.0),
-        1 => (40, 1.0),
-        2 => (40, 0.925),
-        3 => (45, 0.915),
-        4 => (50, 0.91),
-        5 => (55, 0.89),
-        _ => (55, 0.89),
-    };
+    add_sbr(
+        Perks::RainOfFire,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                let mut stats = HashMap::new();
+                if _input.calc_data.weapon_type == &WeaponType::FUSIONRIFLE
+                    || _input.calc_data.weapon_type == &WeaponType::LINEARFUSIONRIFLE
+                {
+                    stats.insert(StatHashes::AIRBORNE.into(), 30);
+                }
+                stats
+            },
+        ),
+    );
 
-    ReloadModifierResponse {
-        reload_stat_add: modifiers.0,
-        reload_time_scale: modifiers.1,
-    }
-}
+    add_sbr(
+        Perks::SpeedloaderSlacks,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                let modifiers = match _input.value {
+                    0 => (0, 0, 0),
+                    1 => (40, 40, 30),
+                    2 => (40, 40, 35),
+                    3 => (45, 45, 40),
+                    4 => (50, 50, 45),
+                    5 => (55, 55, 50),
+                    _ => (55, 55, 50),
+                };
 
-pub(super) fn sbr_lunafaction_boots(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> HashMap<BungieHash, StatBump> {
-    let mut stat = HashMap::new();
-    if _value >= 1 {
-        stat.insert(StatHashes::RELOAD.into(), 100);
-    }
-    stat
-}
+                HashMap::from([
+                    (StatHashes::RELOAD.into(), modifiers.0),
+                    (StatHashes::HANDLING.into(), modifiers.1), //?
+                    (StatHashes::AIRBORNE.into(), modifiers.2),
+                ])
+            },
+        ),
+    );
 
-pub(super) fn rsmr_lunafaction_boots(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enhanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> ReloadModifierResponse {
-    if _value >= 1 {
-        ReloadModifierResponse {
-            reload_stat_add: 100,
-            reload_time_scale: 0.9,
-        }
-    } else {
-        ReloadModifierResponse::default()
-    }
-}
+    add_hmr(
+        Perks::SpeedloaderSlacks,
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                let handling = match _input.value {
+                    0 => 0,
+                    1 => 40,
+                    2 => 40,
+                    3 => 45,
+                    4 => 50,
+                    5 => 55,
+                    _ => 55,
+                };
+                HandlingModifierResponse {
+                    stat_add: handling,
+                    ..Default::default()
+                }
+            },
+        ),
+    );
 
-pub(super) fn rmr_lunafaction_boots(
-    _input: &CalculationInput,
-    _value: u32,
-    _is_enahanced: bool,
-    _pvp: bool,
-    _cached_data: &mut HashMap<String, f64>,
-) -> RangeModifierResponse {
-    if _value >= 2 {
-        return RangeModifierResponse {
-            range_all_scale: 2.0,
-            ..Default::default()
-        };
-    }
-    RangeModifierResponse::default()
+    add_rsmr(
+        Perks::SpeedloaderSlacks,
+        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
+            let modifiers = match _input.value {
+                0 => (0, 1.0),
+                1 => (40, 1.0),
+                2 => (40, 0.925),
+                3 => (45, 0.915),
+                4 => (50, 0.91),
+                5 => (55, 0.89),
+                _ => (55, 0.89),
+            };
+
+            ReloadModifierResponse {
+                reload_stat_add: modifiers.0,
+                reload_time_scale: modifiers.1,
+            }
+        }),
+    );
+
+    add_sbr(
+        Perks::LunaFaction,
+        Box::new(
+            |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
+                let mut stat = HashMap::new();
+                if _input.value >= 1 {
+                    stat.insert(StatHashes::RELOAD.into(), 100);
+                }
+                stat
+            },
+        ),
+    );
+
+    add_rsmr(
+        Perks::LunaFaction,
+        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
+            if _input.value >= 1 {
+                ReloadModifierResponse {
+                    reload_stat_add: 100,
+                    reload_time_scale: 0.9,
+                }
+            } else {
+                ReloadModifierResponse::default()
+            }
+        }),
+    );
+
+    add_rmr(
+        Perks::LunaFaction,
+        Box::new(|_input: ModifierResponseInput| -> RangeModifierResponse {
+            if _input.value >= 2 {
+                return RangeModifierResponse {
+                    range_all_scale: 2.0,
+                    ..Default::default()
+                };
+            }
+            RangeModifierResponse::default()
+        }),
+    );
 }

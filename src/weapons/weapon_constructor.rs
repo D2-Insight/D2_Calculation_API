@@ -66,6 +66,7 @@ impl Weapon {
                         enhanced: false,
                         value: 0,
                         hash: intrinsic_alias,
+                        raw_hash: _intrinsic_hash,
                     },
                 ),
                 (
@@ -75,6 +76,7 @@ impl Weapon {
                         enhanced: false,
                         value: 0,
                         hash: 0,
+                        raw_hash: 0,
                     },
                 ),
             ]),
