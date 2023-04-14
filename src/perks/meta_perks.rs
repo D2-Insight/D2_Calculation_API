@@ -363,7 +363,7 @@ pub fn meta_perks() {
                 if _input.value == 1 {
                     damage_mod = 1.03;
                 } else if _input.value == 2 {
-                    damage_mod = 1.044;
+                    damage_mod = 1.045;
                 } else if _input.value > 2 {
                     damage_mod = 1.055;
                 } else {
