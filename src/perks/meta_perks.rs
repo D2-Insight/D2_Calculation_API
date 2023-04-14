@@ -131,7 +131,7 @@ pub fn meta_perks() {
                     };
                     if _input.calc_data.ammo_type == &AmmoType::SPECIAL {
                         return ExplosivePercentResponse {
-                            percent: 0.5 + 0.0025 * blast_radius as f64,
+                            percent: 0.5 + 0.003 * blast_radius as f64,
                             delyed: 0.0,
                             retain_base_total: true,
                         };
