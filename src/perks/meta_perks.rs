@@ -127,7 +127,7 @@ pub fn meta_perks() {
                     if blast_radius_struct.is_none() {
                         blast_radius = 0;
                     } else {
-                        blast_radius = blast_radius_struct.unwrap().val();
+                        blast_radius = blast_radius_struct.unwrap().perk_val();
                     };
                     if _input.calc_data.ammo_type == &AmmoType::SPECIAL {
                         return ExplosivePercentResponse {
