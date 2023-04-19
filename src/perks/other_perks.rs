@@ -8,7 +8,8 @@ use crate::{
 };
 
 use super::{
-    add_dmr, add_epr, add_fmr, add_hmr, add_mmr, add_rmr, add_rsmr, add_sbr, add_vmr, clamp,
+    add_dmr, add_epr, add_fmr, add_hmr, add_imr, add_mmr, add_rmr, add_rsmr, add_sbr, add_vmr,
+    clamp,
     lib::{
         CalculationInput, DamageModifierResponse, ExtraDamageResponse, FiringModifierResponse,
         FlinchModifierResponse, HandlingModifierResponse, InventoryModifierResponse,
@@ -49,16 +50,18 @@ pub fn other_perks() {
 
     add_imr(
         Perks::RapidFireFrame,
-        Box::new(|_input: ModifierResponseInput| -> InventoryModifierResponse {
-            if _input.calc_data.weapon_type == &WeaponType::SNIPER {
-                InventoryModifierResponse {
-                    inv_scale: 1.3,
-                    ..Default::default()
+        Box::new(
+            |_input: ModifierResponseInput| -> InventoryModifierResponse {
+                if _input.calc_data.weapon_type == &WeaponType::SNIPER {
+                    InventoryModifierResponse {
+                        inv_scale: 1.3,
+                        ..Default::default()
+                    }
+                } else {
+                    InventoryModifierResponse::default()
                 }
-            } else {
-                InventoryModifierResponse::default()
-            }
-        }),
+            },
+        ),
     );
 
     add_hmr(
