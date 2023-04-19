@@ -47,6 +47,20 @@ pub fn other_perks() {
         }),
     );
 
+    add_imr(
+        Perks::RapidFireFrame,
+        Box::new(|_input: ModifierResponseInput| -> InventoryModifierResponse {
+            if _input.calc_data.weapon_type == &WeaponType::SNIPER {
+                InventoryModifierResponse {
+                    inv_scale: 1.3,
+                    ..Default::default()
+                }
+            } else {
+                InventoryModifierResponse::default()
+            }
+        }),
+    );
+
     add_hmr(
         Perks::SwapMag,
         Box::new(
