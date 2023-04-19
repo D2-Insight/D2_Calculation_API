@@ -532,9 +532,9 @@
         },
 
         "subFam": {
-            "High-Impact": {"damage": 33.5,  "crit_mult": -5,    "burst_delay": 5,  "burst_size": 1, "inner_burst_delay": 0.0},
-            "Adaptive":    {"damage": 29.0,  "crit_mult": -5,    "burst_delay": 4,  "burst_size": 1, "inner_burst_delay": 0.0},
-            "Rapid-Fire":  {"damage": 18.0,  "crit_mult": -10,   "burst_delay": 2,  "burst_size": 1, "inner_burst_delay": 0.0},
+            "High-Impact": {"damage": 37.0,  "crit_mult": -5,    "burst_delay": 5,  "burst_size": 1, "inner_burst_delay": 0.0},
+            "Adaptive":    {"damage": 32.0,  "crit_mult": -5,    "burst_delay": 4,  "burst_size": 1, "inner_burst_delay": 0.0},
+            "Rapid-Fire":  {"damage": 20.0,  "crit_mult": -10,   "burst_delay": 2,  "burst_size": 1, "inner_burst_delay": 0.0},
             "Xenophage":   {"damage": 150.0, "crit_mult": -25.5, "burst_delay": 15, "burst_size": 1, "inner_burst_delay": 0.0},
             "HeirApparent":{"damage": 234.0, "crit_mult": -5,    "burst_delay": 2,  "burst_size": 1, "inner_burst_delay": 0.0}
         },
