@@ -323,8 +323,8 @@
             "WaveFrame":    {"damage": 130.0, "crit_mult": -25.5, "burst_delay": 20, "burst_size": 1, "inner_burst_delay": 0.0},
             "Lightweight":  {"damage": 200.0, "crit_mult": -25.5, "burst_delay": 20, "burst_size": 1, "inner_burst_delay": 0.0},
             "FightingLion": {"damage": 160.0, "crit_mult": -25.5, "burst_delay": 20, "burst_size": 1, "inner_burst_delay": 0.0},
-            "Adaptive":     {"damage": 285.0, "crit_mult": -25.5, "burst_delay": 15, "burst_size": 1, "inner_burst_delay": 0.0},
-            "Rapid-Fire":   {"damage": 226.0, "crit_mult": -25.5, "burst_delay": 12, "burst_size": 1, "inner_burst_delay": 0.0},
+            "Adaptive":     {"damage": 280.5, "crit_mult": -25.5, "burst_delay": 15, "burst_size": 1, "inner_burst_delay": 0.0},
+            "Rapid-Fire":   {"damage": 225.0, "crit_mult": -25.5, "burst_delay": 12, "burst_size": 1, "inner_burst_delay": 0.0},
             "Precision":    {"damage": 300.0, "crit_mult": -25.5, "burst_delay": 18, "burst_size": 1, "inner_burst_delay": 0.0},
             "Parasite":     {"damage": 835.0, "crit_mult": -25.5, "burst_delay": 18, "burst_size": 1, "inner_burst_delay": 0.0},
             "TODO":         {"damage": 0.0,   "crit_mult": -25.5, "burst_delay": 0,  "burst_size": 0, "inner_burst_delay": 0.0}
