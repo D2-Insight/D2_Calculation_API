@@ -1016,7 +1016,7 @@
             }
         },
         "subFam": {
-            "Adaptive": {"damage":12.5, "crit_mult":-7, "burst_delay":2.0, "burst_size":1, "inner_burst_delay":0.0}
+            "Adaptive": {"damage":12.5, "crit_mult":-8, "burst_delay":2.0, "burst_size":1, "inner_burst_delay":0.0}
         },
         "magProf": {
             "default": {
