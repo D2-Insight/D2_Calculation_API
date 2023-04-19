@@ -177,7 +177,7 @@
     },
     "Fusion Rifle":{
         "656200654":  {"name": "Merciless",           "cat": "default", "subFam": "High-Impact", "magProf": "default", "pve":1.20},
-        "878286503":  {"name": "Rapid-Fire Frame",    "cat": "default", "subFam": "Rapid-Fire",  "magProf": "default", "pve":1.20},
+        "878286503":  {"name": "Rapid-Fire Frame",    "cat": "default", "subFam": "Rapid-Fire",  "magProf": "default", "pve":1.12},
         "1019291327": {"name": "High-Impact Frame",   "cat": "default", "subFam": "High-Impact", "magProf": "default", "pve":1.20},
         "1186480754": {"name": "Bastion",             "cat": "default", "subFam": "Bastion",     "magProf": "default"  },
         "1294026524": {"name": "Adaptive Frame",      "cat": "default", "subFam": "Adaptive",    "magProf": "default", "pve":1.15},
@@ -241,7 +241,7 @@
             }
         },
         "subFam": {
-            "Rapid-Fire":  {"damage": 27.22, "crit_mult": -25.5, "burst_delay": 15,   "burst_size": 9, "inner_burst_delay": 1, "one_ammo": true},
+            "Rapid-Fire":  {"damage": 28.90, "crit_mult": -25.5, "burst_delay": 15,   "burst_size": 9, "inner_burst_delay": 1, "one_ammo": true},
             "High-Impact": {"damage": 66.00, "crit_mult": -25.5, "burst_delay": 29,   "burst_size": 5, "inner_burst_delay": 1, "one_ammo": true},
             "Precision":   {"damage": 40.00, "crit_mult": -25.5, "burst_delay": 23.5, "burst_size": 7, "inner_burst_delay": 1, "one_ammo": true},
             "Adaptive":    {"damage": 38.60, "crit_mult": -25.5, "burst_delay": 20 ,  "burst_size": 7, "inner_burst_delay": 1, "one_ammo": true},
@@ -1016,7 +1016,7 @@
             }
         },
         "subFam": {
-            "Adaptive": {"damage":12, "crit_mult":-5, "burst_delay":2.0, "burst_size":1, "inner_burst_delay":0.0}
+            "Adaptive": {"damage":12.5, "crit_mult":-7, "burst_delay":2.0, "burst_size":1, "inner_burst_delay":0.0}
         },
         "magProf": {
             "default": {
