@@ -214,10 +214,10 @@ pub fn meta_perks() {
             |_input: ModifierResponseInput| -> InventoryModifierResponse {
                 let mut inv_buff = if _input.value > 0 { 20 } else { 0 };
                 if _input.value == 2 {
-                    inv_buff += 15;
+                    inv_buff += 20;
                 }
                 if _input.value > 2 {
-                    inv_buff += 20;
+                    inv_buff += 30;
                 }
                 InventoryModifierResponse {
                     inv_stat_add: inv_buff,

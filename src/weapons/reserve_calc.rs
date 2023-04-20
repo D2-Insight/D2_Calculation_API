@@ -47,10 +47,10 @@ impl From<u32> for ReserveIDs {
     }
 }
 
-pub fn calc_reserves(_mag_size: f64, _mag_stat: i32, _inv_stat: i32, _id: u32) -> i32 {
+pub fn calc_reserves(_mag_size: f64, _mag_stat: i32, _inv_stat: i32, _id: u32, _scale: f64) -> i32 {
     let id = ReserveIDs::from(_id);
-    match id {
-        ReserveIDs::Primary => 9999,
+    let raw_size: f64 = match id {
+        ReserveIDs::Primary => 9999.0,
         ReserveIDs::SmallMachineGuns => small_machinegun(_mag_size, _mag_stat, _inv_stat),
         ReserveIDs::TraceRifles => trace_rifle(_mag_size, _mag_stat, _inv_stat),
         ReserveIDs::Glaive => glaives(_mag_size, _mag_stat, _inv_stat),
@@ -63,43 +63,45 @@ pub fn calc_reserves(_mag_size: f64, _mag_stat: i32, _inv_stat: i32, _id: u32) -
         ReserveIDs::RocketLaunchers => rockets(_mag_size, _mag_stat, _inv_stat),
 
         //placeholders
-        ReserveIDs::LeviathansBreath => 8,
-        ReserveIDs::Fusions => 21,
-        ReserveIDs::SmallGrenadeLaunchers => 18,
-        ReserveIDs::LargeGrenadeLaunchers => 20,
-        ReserveIDs::SpecialGrenadeLaunchers => 21,
-        ReserveIDs::LinearFusions => 21,
-        ReserveIDs::LargeMachineGuns => 400,
-        ReserveIDs::LordOfWolves => 120,
-    }
+        ReserveIDs::LeviathansBreath => 8.0,
+        ReserveIDs::Fusions => 21.0,
+        ReserveIDs::SmallGrenadeLaunchers => 18.0,
+        ReserveIDs::LargeGrenadeLaunchers => 20.0,
+        ReserveIDs::SpecialGrenadeLaunchers => 21.0,
+        ReserveIDs::LinearFusions => 21.0,
+        ReserveIDs::LargeMachineGuns => 400.0,
+        ReserveIDs::LordOfWolves => 120.0,
+    };
+    let size = raw_size * _scale;
+    size.ceil() as i32
 }
 
-fn small_machinegun(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> i32 {
+fn small_machinegun(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> f64 {
     let round_amount = _mag_size.ceil() - _mag_size;
     let offset = (-0.875 + round_amount * 2.0) * (2.0 - ((100.0 - _mag_stat as f64) / 100.0));
     let reserves =
         225.0 + offset + _inv_stat as f64 * ((225.0 + offset) * 2.0 - (225.0 + offset)) / 100.0;
-    reserves.ceil() as i32
+    reserves
 }
 
-fn trace_rifle(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> i32 {
+fn trace_rifle(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> f64 {
     let mult = _inv_stat as f64 * 0.025 + 3.5;
-    (_mag_size * mult).ceil() as i32
+    _mag_size * mult
 }
 
-fn glaives(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> i32 {
+fn glaives(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> f64 {
     let vpp = if _mag_stat >= 100 { 0.1681 } else { 0.1792 };
     let offset = if _mag_stat >= 100 { 13.44 } else { 14.44 };
-    (vpp * _inv_stat as f64 + offset).ceil() as i32
+    vpp * _inv_stat as f64 + offset
 }
 
-fn sniper_rifles(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> i32 {
+fn sniper_rifles(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> f64 {
     let vpp = if _mag_stat >= 100 { 0.14 } else { 0.12 };
     let offset = if _mag_stat >= 100 { 14.0 } else { 12.0 };
-    (vpp * _inv_stat as f64 + offset).ceil() as i32
+    vpp * _inv_stat as f64 + offset
 }
 
-fn shotguns(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> i32 {
+fn shotguns(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> f64 {
     let real_mag_size = _mag_size.ceil() as i32;
     let base_offset = match real_mag_size {
         8 => 0.0,
@@ -111,28 +113,28 @@ fn shotguns(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> i32 {
     };
     let base = (base_offset / 15.0) + 12.0;
     let mult_vpp = (2.0 / 3.0) / 100.0;
-    (base * (1.0 + mult_vpp * _inv_stat as f64)).ceil() as i32
+    base * (1.0 + mult_vpp * _inv_stat as f64)
 }
 
-fn forerunner(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> i32 {
-    (_inv_stat as f64 * 0.325 + 53.45).ceil() as i32
+fn forerunner(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> f64 {
+    _inv_stat as f64 * 0.325 + 53.45
 }
 
-fn overture(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> i32 {
+fn overture(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> f64 {
     let inv_stat = _inv_stat as f64;
-    (0.005 * (inv_stat * inv_stat) + inv_stat * -0.4 + 67.375).ceil() as i32
+    0.005 * (inv_stat * inv_stat) + inv_stat * -0.4 + 67.375
 }
 
-fn xenophage(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> i32 {
+fn xenophage(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> f64 {
     let inv_stat = _inv_stat as f64;
-    (0.01 * (inv_stat * inv_stat) + inv_stat * 0.56 + 25.91).ceil() as i32
+    0.01 * (inv_stat * inv_stat) + inv_stat * 0.56 + 25.91
 }
 
-fn eriana_vow(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> i32 {
+fn eriana_vow(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> f64 {
     let inv_stat = _inv_stat as f64;
-    (-0.00126 * (inv_stat * inv_stat) + inv_stat * 0.225 + 29.5).ceil() as i32
+    -0.00126 * (inv_stat * inv_stat) + inv_stat * 0.225 + 29.5
 }
 
-fn rockets(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> i32 {
-    (_inv_stat as f64 * 0.05 + 4.5).ceil() as i32
+fn rockets(_mag_size: f64, _mag_stat: i32, _inv_stat: i32) -> f64 {
+    _inv_stat as f64 * 0.05 + 4.5
 }
