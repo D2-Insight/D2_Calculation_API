@@ -88,6 +88,7 @@ pub fn meta_perks() {
                     //     .burst_delay_add;
                 }
             }
+
             if _input.calc_data.weapon_type == &WeaponType::BOW {
                 let draw_time = _input
                     .calc_data
@@ -97,17 +98,17 @@ pub fn meta_perks() {
                     .clone();
                 delay_add += match _input.calc_data.intrinsic_hash {
                     //Lightweights, Wishender, Ticcus, Verglas
-                    905 | 1470121888 | 3260753130 | 3659414143 => {
+                    905 | 1470121888 | 3239299468 | 2636679416 => {
                         (draw_time.perk_val() as f64 * -4.0 + 900.0) / 1100.0
                     }
                     //Precisions, Lemon, Trinity, Hierarchy
-                    906 | 2186532310 | 814876685 | 4174431791 => {
+                    906 | 2186532310 | 1573888036 | 2226793914 => {
                         (draw_time.perk_val() as f64 * -3.6 + 900.0) / 1100.0
                     }
                     //Levi Breath lol
                     1699724249 => (draw_time.perk_val() as f64 * -5.0 + 1428.0) / 1100.0,
                     _ => 0.0,
-                }
+                };
             }
             FiringModifierResponse {
                 burst_delay_add: delay_add,
