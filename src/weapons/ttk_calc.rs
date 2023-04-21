@@ -152,7 +152,13 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 shot_delay *= 1.45;
             }
 
-            if opt_bullets_fired
+            let ammo_fired;
+            if _weapon.firing_data.one_ammo {
+                ammo_fired = opt_bullets_fired/shot_burst_size;
+            } else {
+                ammo_fired = opt_bullets_fired;
+            }
+            if ammo_fired
                 >= _weapon
                     .calc_ammo_sizes(Some(calc_input.clone()), Some(&mut persistent_data), true)
                     .mag_size
@@ -284,7 +290,13 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 shot_delay *= 1.45;
             }
 
-            if bdy_bullets_fired
+            let ammo_fired;
+            if _weapon.firing_data.one_ammo {
+                ammo_fired = opt_bullets_fired/shot_burst_size;
+            } else {
+                ammo_fired = opt_bullets_fired;
+            }
+            if ammo_fired
                 >= _weapon
                     .calc_ammo_sizes(Some(calc_input.clone()), Some(&mut persistent_data), true)
                     .mag_size

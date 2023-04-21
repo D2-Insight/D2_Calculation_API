@@ -97,11 +97,11 @@ pub fn meta_perks() {
                     .clone();
                 delay_add += match _input.calc_data.intrinsic_hash {
                     //Lightweights, Wishender, Ticcus, Verglas
-                    905 | 1470121888 | 3260753130 | 3659414143 => {
+                    905 | 1470121888 | 3239299468 | 2636679416 => {
                         (draw_time.perk_val() as f64 * -4.0 + 900.0) / 1100.0
                     }
                     //Precisions, Lemon, Trinity, Hierarchy
-                    906 | 2186532310 | 814876685 | 4174431791 => {
+                    906 | 2186532310 | 1573888036 | 2226793914 => {
                         (draw_time.perk_val() as f64 * -3.6 + 900.0) / 1100.0
                     }
                     //Levi Breath lol
@@ -197,11 +197,11 @@ pub fn meta_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut stats = HashMap::new();
             if _input.value == 1 {
-                stats.insert(StatHashes::AIM_ASSIST.into(), 10);
+                stats.insert(StatHashes::AIM_ASSIST.into(), 5);
             } else if _input.value == 2 {
-                stats.insert(StatHashes::AIM_ASSIST.into(), 15);
+                stats.insert(StatHashes::AIM_ASSIST.into(), 8);
             } else if _input.value > 2 {
-                stats.insert(StatHashes::AIM_ASSIST.into(), 20);
+                stats.insert(StatHashes::AIM_ASSIST.into(), 12);
             }
             stats
         }),
