@@ -88,6 +88,7 @@ pub fn meta_perks() {
                     //     .burst_delay_add;
                 }
             }
+
             if _input.calc_data.weapon_type == &WeaponType::BOW {
                 let draw_time = _input
                     .calc_data
@@ -107,7 +108,7 @@ pub fn meta_perks() {
                     //Levi Breath lol
                     1699724249 => (draw_time.perk_val() as f64 * -5.0 + 1428.0) / 1100.0,
                     _ => 0.0,
-                }
+                };
             }
             FiringModifierResponse {
                 burst_delay_add: delay_add,
