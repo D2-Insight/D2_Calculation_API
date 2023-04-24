@@ -202,7 +202,7 @@ pub fn meta_perks() {
             } else if _input.value == 2 {
                 stats.insert(StatHashes::AIM_ASSIST.into(), 8);
             } else if _input.value > 2 {
-                stats.insert(StatHashes::AIM_ASSIST.into(), 12);
+                stats.insert(StatHashes::AIM_ASSIST.into(), 10);
             }
             stats
         }),
