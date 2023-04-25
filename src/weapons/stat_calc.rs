@@ -21,13 +21,9 @@ use crate::{
 };
 
 impl ReloadFormula {
-    fn calc_reload_time_formula(
-        &self,
-        _reload_stat: i32,
-        _modifiers: ReloadModifierResponse,
-    ) -> ReloadResponse {
-        let reload_stat = (_reload_stat + _modifiers.reload_stat_add).clamp(0, 100) as f64;
-        let reload_time = self.reload_data.solve_at(reload_stat) * _modifiers.reload_time_scale;
+    fn calc_reload_time_formula(&self, _reload_stat: i32) -> ReloadResponse {
+        let reload_stat = (_reload_stat) as f64;
+        let reload_time = self.reload_data.solve_at(reload_stat);
         ReloadResponse {
             reload_time,
             ammo_time: reload_time * self.ammo_percent,
@@ -42,26 +38,29 @@ impl Weapon {
         _cached_data: Option<&mut HashMap<String, f64>>,
         _pvp: bool,
     ) -> ReloadResponse {
-        let reload_stat = self
+        let mut reload_stat = self
             .stats
             .get(&StatHashes::RELOAD.into())
             .unwrap_or(&Stat::new())
-            .val();
+            .perk_val();
         let mut default_chd_dt = HashMap::new();
         let cached_data = _cached_data.unwrap_or(&mut default_chd_dt);
+        if self.weapon_type == WeaponType::BOW {
+            reload_stat = reload_stat.clamp(0, 80);
+        }
         let mut out;
         if _calc_input.is_some() {
             let modifiers =
                 get_reload_modifier(self.list_perks(), &_calc_input.unwrap(), _pvp, cached_data);
-            out = self.reload_formula
-                .calc_reload_time_formula(reload_stat, modifiers);
+            out = self.reload_formula.calc_reload_time_formula(reload_stat);
+            out.reload_time *= modifiers.reload_time_scale;
         } else {
-            out = self.reload_formula
-                .calc_reload_time_formula(reload_stat, ReloadModifierResponse::default());
+            out = self.reload_formula.calc_reload_time_formula(reload_stat);
         }
         if self.weapon_type == WeaponType::BOW {
             out.reload_time = out.reload_time.clamp(0.6, 5.0);
         }
+
         out
     }
 }
@@ -222,7 +221,7 @@ impl AmmoFormula {
 
         let mut reserve_size = 1;
         if _calc_inv {
-            reserve_size = calc_reserves(raw_mag_size, _mag_stat as i32, inv_stat as i32, _inv_id);
+            reserve_size = calc_reserves(raw_mag_size, _mag_stat as i32, inv_stat as i32, _inv_id, _inv_modifiers.inv_scale);
         }
         AmmoResponse {
             mag_size,

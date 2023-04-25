@@ -38,10 +38,17 @@ mod database {
 use crate::types::js_types::{
     JsAmmoResponse, JsDifficultyOptions, JsDpsResponse, JsEnemyType, JsFiringResponse,
     JsHandlingResponse, JsMetaData, JsRangeResponse, JsReloadResponse, JsResillienceSummary,
+<<<<<<< HEAD
     JsScalarResponse, JsStat,
+=======
+    JsStat,
+>>>>>>> master
 };
 #[cfg(feature = "wasm")]
 use wasm_bindgen::prelude::*;
+
+#[cfg(all(feature = "wasm", feature = "foundry"))]
+use crate::types::js_types::JsScalarResponse;
 
 //python
 #[cfg(feature = "python")]
@@ -111,6 +118,7 @@ macro_rules! console_log {
 #[wasm_bindgen(start)]
 pub fn start() {
     panic::set_hook(Box::new(console_error_panic_hook::hook));
+    perks::map_perks();
     console_log!("D2 Calculator Loaded");
 }
 
@@ -177,7 +185,7 @@ pub fn set_weapon(
 
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "getStats")]
-pub fn get_stats(_clamp: bool) -> Result<JsValue, JsValue> {
+pub fn get_stats() -> Result<JsValue, JsValue> {
     let stat_map = PERS_DATA.with(|perm_data| perm_data.borrow().weapon.stats.clone());
     let mut js_stat_map = HashMap::new();
     for (key, value) in stat_map {
@@ -210,6 +218,7 @@ pub fn add_perk(_stats: JsValue, _value: u32, _hash: u32) -> Result<(), JsValue>
         stat_buffs: serde_wasm_bindgen::from_value(_stats).unwrap(),
         enhanced: data.1,
         value: _value,
+        raw_hash: _hash,
         hash: data.0,
     };
     PERS_DATA.with(|perm_data| perm_data.borrow_mut().weapon.add_perk(perk));
@@ -225,11 +234,12 @@ pub fn query_perks() -> Vec<u32> {
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "setTraitValue")]
 pub fn change_perk_value(perk_hash: u32, new_value: u32) {
+    let data = perks::enhanced_check(perk_hash);
     PERS_DATA.with(|perm_data| {
         perm_data
             .borrow_mut()
             .weapon
-            .change_perk_val(perk_hash, new_value)
+            .change_perk_val(data.0, new_value)
     });
 }
 
@@ -391,17 +401,18 @@ pub fn get_misc_data(_dynamic_traits: bool, _pvp: bool) -> Result<JsValue, JsVal
 #[cfg(feature = "wasm")]
 #[wasm_bindgen(js_name = "setEncounter")]
 pub fn set_encounter(
-    _rpl: u32,
+    _reccomended_pl: u32,
+    _player_pl: u32,
     _override_cap: i32,
     _difficulty: JsDifficultyOptions,
     _enemy_type: JsEnemyType,
 ) -> Result<(), JsValue> {
     PERS_DATA.with(|perm_data| {
         let mut activity = &mut perm_data.borrow_mut().activity;
-        activity.rpl = _rpl;
+        activity.rpl = _reccomended_pl;
         activity.cap = _override_cap;
         activity.difficulty = _difficulty.into();
-        activity.player.pl = 2000;
+        activity.player.pl = _player_pl;
     });
     PERS_DATA.with(|perm_data| {
         let mut enemy = &mut perm_data.borrow_mut().enemy;

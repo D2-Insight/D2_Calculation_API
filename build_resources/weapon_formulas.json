@@ -123,7 +123,7 @@
         "cat": {
             "default": {
                 "range":    {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
-                "reload":   {"evpp": 0.0, "vpp": -0.0033, "offset": 0.864},
+                "reload":   {"evpp": 0.00008, "vpp": -0.0124, "offset": 1.08},
                 "handling": {
                     "ready":{"vpp": -0.002909930716, "offset": 0.7364549654},
                     "stow": {"vpp": -0.00179330254,  "offset": 0.5396466513},
@@ -153,11 +153,11 @@
             }
         },
         "subFam": {
-            "Precision":   {"damage": 100.7, "crit_mult": 0, "burst_delay": 20.5, "burst_size": 1, "inner_burst_delay": 0},
-            "Lightweight": {"damage": 85.61, "crit_mult": 5, "burst_delay": 17.5, "burst_size": 1, "inner_burst_delay": 0},
-            "Trinity":     {"damage": 34.3,  "crit_mult": 0, "burst_delay": 20.5, "burst_size": 3, "inner_burst_delay": 0},
-            "Hierarchy":   {"damage": 93.0,  "crit_mult": 5, "burst_delay": 20.5, "burst_size": 1, "inner_burst_delay": 0},
-            "leviathan":   {"damage": 345.6, "crit_mult": 5, "burst_delay": 40,   "burst_size": 1, "inner_burst_delay": 0},
+            "Precision":   {"damage": 100.7, "crit_mult": 0, "burst_delay": 0, "burst_size": 1, "inner_burst_delay": 0},
+            "Lightweight": {"damage": 85.61, "crit_mult": 5, "burst_delay": 0, "burst_size": 1, "inner_burst_delay": 0},
+            "Trinity":     {"damage": 34.3,  "crit_mult": 0, "burst_delay": 0, "burst_size": 3, "inner_burst_delay": 0},
+            "Hierarchy":   {"damage": 93.0,  "crit_mult": 5, "burst_delay": 0, "burst_size": 1, "inner_burst_delay": 0},
+            "leviathan":   {"damage": 345.6, "crit_mult": 5, "burst_delay": 0,   "burst_size": 1, "inner_burst_delay": 0},
             "test" :       {"damage": 100,   "crit_mult": 2, "burst_delay": 20,   "burst_size": 2, "inner_burst_delay": 0}
         },
         "magProf": {
@@ -177,7 +177,7 @@
     },
     "Fusion Rifle":{
         "656200654":  {"name": "Merciless",           "cat": "default", "subFam": "High-Impact", "magProf": "default", "pve":1.20},
-        "878286503":  {"name": "Rapid-Fire Frame",    "cat": "default", "subFam": "Rapid-Fire",  "magProf": "default", "pve":1.20},
+        "878286503":  {"name": "Rapid-Fire Frame",    "cat": "default", "subFam": "Rapid-Fire",  "magProf": "default", "pve":1.12},
         "1019291327": {"name": "High-Impact Frame",   "cat": "default", "subFam": "High-Impact", "magProf": "default", "pve":1.20},
         "1186480754": {"name": "Bastion",             "cat": "default", "subFam": "Bastion",     "magProf": "default"  },
         "1294026524": {"name": "Adaptive Frame",      "cat": "default", "subFam": "Adaptive",    "magProf": "default", "pve":1.15},
@@ -241,7 +241,7 @@
             }
         },
         "subFam": {
-            "Rapid-Fire":  {"damage": 27.22, "crit_mult": -25.5, "burst_delay": 15,   "burst_size": 9, "inner_burst_delay": 1, "one_ammo": true},
+            "Rapid-Fire":  {"damage": 28.90, "crit_mult": -25.5, "burst_delay": 15,   "burst_size": 9, "inner_burst_delay": 1, "one_ammo": true},
             "High-Impact": {"damage": 66.00, "crit_mult": -25.5, "burst_delay": 29,   "burst_size": 5, "inner_burst_delay": 1, "one_ammo": true},
             "Precision":   {"damage": 40.00, "crit_mult": -25.5, "burst_delay": 23.5, "burst_size": 7, "inner_burst_delay": 1, "one_ammo": true},
             "Adaptive":    {"damage": 38.60, "crit_mult": -25.5, "burst_delay": 20 ,  "burst_size": 7, "inner_burst_delay": 1, "one_ammo": true},
@@ -323,8 +323,8 @@
             "WaveFrame":    {"damage": 130.0, "crit_mult": -25.5, "burst_delay": 20, "burst_size": 1, "inner_burst_delay": 0.0},
             "Lightweight":  {"damage": 200.0, "crit_mult": -25.5, "burst_delay": 20, "burst_size": 1, "inner_burst_delay": 0.0},
             "FightingLion": {"damage": 160.0, "crit_mult": -25.5, "burst_delay": 20, "burst_size": 1, "inner_burst_delay": 0.0},
-            "Adaptive":     {"damage": 285.0, "crit_mult": -25.5, "burst_delay": 15, "burst_size": 1, "inner_burst_delay": 0.0},
-            "Rapid-Fire":   {"damage": 226.0, "crit_mult": -25.5, "burst_delay": 12, "burst_size": 1, "inner_burst_delay": 0.0},
+            "Adaptive":     {"damage": 280.5, "crit_mult": -25.5, "burst_delay": 15, "burst_size": 1, "inner_burst_delay": 0.0},
+            "Rapid-Fire":   {"damage": 225.0, "crit_mult": -25.5, "burst_delay": 12, "burst_size": 1, "inner_burst_delay": 0.0},
             "Precision":    {"damage": 300.0, "crit_mult": -25.5, "burst_delay": 18, "burst_size": 1, "inner_burst_delay": 0.0},
             "Parasite":     {"damage": 835.0, "crit_mult": -25.5, "burst_delay": 18, "burst_size": 1, "inner_burst_delay": 0.0},
             "TODO":         {"damage": 0.0,   "crit_mult": -25.5, "burst_delay": 0,  "burst_size": 0, "inner_burst_delay": 0.0}
@@ -360,7 +360,7 @@
         "3174300811": {"name": "Eriana's vow",     "cat": "Eriana",   "subFam": "Eriana",      "magProf": "eriana"},
         "3468089894": {"name": "Aggressive Frame", "cat": "120 RPM",  "subFam": "Aggressive",  "magProf": "small"},
         "3923638944": {"name": "Double Fire",      "cat": "default",  "subFam": "Aggressive",  "magProf": "small"},
-        "4045839491": {"name": "Sunshot",          "cat": "120 RPM",  "subFam": "Lightweight", "magProf": "small"},
+        "4045839491": {"name": "Sunshot",          "cat": "default",  "subFam": "Lightweight", "magProf": "small"},
         "1458010786": {"name": "Rose",             "cat": "default",  "subFam": "Adaptive",    "magProf": "small"},
 
         "cat": {
@@ -532,9 +532,9 @@
         },
 
         "subFam": {
-            "High-Impact": {"damage": 33.5,  "crit_mult": -5,    "burst_delay": 5,  "burst_size": 1, "inner_burst_delay": 0.0},
-            "Adaptive":    {"damage": 29.0,  "crit_mult": -5,    "burst_delay": 4,  "burst_size": 1, "inner_burst_delay": 0.0},
-            "Rapid-Fire":  {"damage": 18.0,  "crit_mult": -10,   "burst_delay": 2,  "burst_size": 1, "inner_burst_delay": 0.0},
+            "High-Impact": {"damage": 37.0,  "crit_mult": -5,    "burst_delay": 5,  "burst_size": 1, "inner_burst_delay": 0.0},
+            "Adaptive":    {"damage": 32.0,  "crit_mult": -5,    "burst_delay": 4,  "burst_size": 1, "inner_burst_delay": 0.0},
+            "Rapid-Fire":  {"damage": 20.0,  "crit_mult": -10,   "burst_delay": 2,  "burst_size": 1, "inner_burst_delay": 0.0},
             "Xenophage":   {"damage": 150.0, "crit_mult": -25.5, "burst_delay": 15, "burst_size": 1, "inner_burst_delay": 0.0},
             "HeirApparent":{"damage": 234.0, "crit_mult": -5,    "burst_delay": 2,  "burst_size": 1, "inner_burst_delay": 0.0}
         },
@@ -922,7 +922,7 @@
         "228577175":  {"name": "The Manticore",     "cat": "default", "subFam": "Lightweight", "magProf": "large"},
         "cat": {
             "default": {
-                "range":    {"vpp_start": 0.07,"offset_start": 10,"vpp_end": 0.0,"offset_end": 23.35, "floor_percent": 0.5},
+                "range":    {"vpp_start": 0.07,"offset_start": 9.5,"vpp_end": 0.0,"offset_end": 23.35, "floor_percent": 0.5},
                 "reload":   {"evpp": 0.0000608642, "vpp": -0.0191345, "offset": 2.62769},
                 "handling": {
                     "ready":{"vpp": -0.002376970528, "offset": 0.4710178204},
@@ -1016,7 +1016,7 @@
             }
         },
         "subFam": {
-            "Adaptive": {"damage":12, "crit_mult":-5, "burst_delay":2.0, "burst_size":1, "inner_burst_delay":0.0}
+            "Adaptive": {"damage":12.5, "crit_mult":-8, "burst_delay":2.0, "burst_size":1, "inner_burst_delay":0.0}
         },
         "magProf": {
             "default": {

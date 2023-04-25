@@ -327,41 +327,41 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
             ///////////////////////////////
 
             //RELOAD OVERRIDE//////////////
-            if mag == 0 {
-                let reload_override_responses = get_reload_overrides(
-                    perks.clone(),
-                    &after_shot_input_data,
-                    false,
-                    &mut pers_calc_data,
-                );
-                if reload_override_responses.len() > 0 {
-                    let mut final_response = ReloadOverrideResponse::invalid();
-                    for response in reload_override_responses {
-                        if response.priority > final_response.priority {
-                            final_response = response;
-                        }
-                    }
-                    if final_response.valid {
-                        total_time += final_response.reload_time;
-                        if final_response.uses_ammo {
-                            let ammo_to_add = if final_response.ammo_to_reload > reserve {
-                                reserve
-                            } else {
-                                final_response.ammo_to_reload
-                            };
-                            mag = ammo_to_add;
-                            reserve -= ammo_to_add;
-                        } else {
-                            mag = final_response.ammo_to_reload;
-                        }
-                        if final_response.count_as_reload {
-                            num_reloads += 1;
-                            start_time = total_time;
-                            shots_this_mag = 0;
-                        }
-                    }
-                }
-            }
+            // if mag == 0 {
+            //     let reload_override_responses = get_reload_overrides(
+            //         perks.clone(),
+            //         &after_shot_input_data,
+            //         false,
+            //         &mut pers_calc_data,
+            //     );
+            //     if reload_override_responses.len() > 0 {
+            //         let mut final_response = ReloadOverrideResponse::invalid();
+            //         for response in reload_override_responses {
+            //             if response.priority > final_response.priority {
+            //                 final_response = response;
+            //             }
+            //         }
+            //         if final_response.valid {
+            //             total_time += final_response.reload_time;
+            //             if final_response.uses_ammo {
+            //                 let ammo_to_add = if final_response.ammo_to_reload > reserve {
+            //                     reserve
+            //                 } else {
+            //                     final_response.ammo_to_reload
+            //                 };
+            //                 mag = ammo_to_add;
+            //                 reserve -= ammo_to_add;
+            //             } else {
+            //                 mag = final_response.ammo_to_reload;
+            //             }
+            //             if final_response.count_as_reload {
+            //                 num_reloads += 1;
+            //                 start_time = total_time;
+            //                 shots_this_mag = 0;
+            //             }
+            //         }
+            //     }
+            // }
             if mag != 0 {
                 if weapon.weapon_type == WeaponType::FUSIONRIFLE {
                     total_time += shot_burst_delay * 0.45

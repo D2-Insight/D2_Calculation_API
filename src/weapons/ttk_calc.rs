@@ -16,19 +16,8 @@ fn ceil(x: f64) -> f64 {
 }
 
 const RESILIENCE_VALUES: [f64; 11] = [
-    185.00, 186.00, 187.00, 188.00, 189.00, 190.00, 192.00, 194.00, 196.00, 198.00, 200.00,
+    185.001, 186.001, 187.001, 188.001, 189.001, 190.001, 192.001, 194.001, 196.001, 198.01, 200.00,
 ];
-
-fn average_range(_range_data: &Vec<(f64, f64)>, _wanted_percent: f64, _dmagae_floor: f64) -> f64 {
-    let mut total_range = 0.0;
-    let mut num_entries = 0.0;
-    for range_pair in _range_data {
-        total_range += (range_pair.1 - range_pair.0) * ((1.0 - _dmagae_floor) * _wanted_percent)
-            + range_pair.0;
-        num_entries += 1.0;
-    }
-    total_range / num_entries
-}
 
 #[derive(Debug, Clone, Serialize)]
 pub struct OptimalKillData {
@@ -36,9 +25,6 @@ pub struct OptimalKillData {
     pub bodyshots: i32,
     #[serde(rename = "timeTaken")]
     pub time_taken: f64,
-    //defines how far away this ttk is achievalbe if all hits ar crits
-    #[serde(rename = "achievableRange")]
-    pub achievable_range: f64,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -73,12 +59,10 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
     for i in 0..RESILIENCE_VALUES.len() {
         let health = RESILIENCE_VALUES[i] + _overshield;
 
-        let mut opt_infnite_range = false;
         let mut opt_damage_dealt = 0.0_f64;
         let mut opt_time_taken = 0.0_f64;
         let mut opt_bullets_fired = 0.0_f64;
         let mut opt_bullets_hit = 0.0_f64;
-        let mut opt_range_data_vec: Vec<(f64, f64)> = Vec::new();
         let opt_bodyshots = 0;
         let mut opt_headshots = 0;
         let mut opt_bullet_timeline: Vec<(f64, f64)> = Vec::new();
@@ -87,7 +71,7 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
         while opt_bullets_hit < 50.0 {
             //PERK CALCULATIONS////////////
 
-            persistent_data.insert("health%".to_string(), opt_damage_dealt / health);
+            persistent_data.insert("health%".to_string(), (health - opt_damage_dealt) / 70.0);
             persistent_data.insert("empowering".to_string(), 1.0);
             persistent_data.insert("debuff".to_string(), 1.0);
             let calc_input = _weapon.pvp_calc_input(
@@ -108,19 +92,6 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 true,
                 &mut persistent_data,
             );
-            let tmp_range_data = _weapon.calc_range_falloff(
-                Some(calc_input.clone()),
-                Some(&mut persistent_data),
-                true,
-            );
-            if tmp_range_data.ads_falloff_start > 998.0 {
-                opt_infnite_range = true;
-            } else {
-                opt_range_data_vec.push((
-                    tmp_range_data.ads_falloff_start,
-                    tmp_range_data.ads_falloff_end,
-                ));
-            }
             ///////////////////////////////
 
             let body_damage = (impact_dmg * dmg_mods.impact_dmg_scale)
@@ -136,7 +107,8 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
             let shot_burst_size =
                 _weapon.firing_data.burst_size as f64 + firing_mods.burst_size_add;
 
-            let mut shot_delay = if opt_bullets_hit % shot_burst_size > 0.0 && opt_bullets_hit > 0.0 {
+            let mut shot_delay = if opt_bullets_hit % shot_burst_size > 0.0 && opt_bullets_hit > 0.0
+            {
                 shot_inner_burst_delay
             } else if opt_bullets_hit == 0.0 {
                 0.0
@@ -151,8 +123,21 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 shot_delay *= 1.45;
             }
 
-            if opt_bullets_fired >= _weapon.calc_ammo_sizes(Some(calc_input.clone()), Some(&mut persistent_data), true).mag_size.into() {
-                shot_delay += _weapon.calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data), true).reload_time;
+            let ammo_fired;
+            if _weapon.firing_data.one_ammo {
+                ammo_fired = opt_bullets_fired/shot_burst_size;
+            } else {
+                ammo_fired = opt_bullets_fired;
+            }
+            if ammo_fired
+                >= _weapon
+                    .calc_ammo_sizes(Some(calc_input.clone()), Some(&mut persistent_data), true)
+                    .mag_size
+                    .into()
+            {
+                shot_delay += _weapon
+                    .calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data), true)
+                    .reload_time;
             }
 
             if opt_bullets_hit % shot_burst_size == 0.0 {
@@ -195,26 +180,10 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
             }
         }
 
-        let expolsive_percent = explosion_dmg / (impact_dmg + explosion_dmg);
-        if expolsive_percent >= 0.9 {
-            opt_infnite_range = true;
-        }
-        let dropoff_wanted: f64 =
-            ((opt_damage_dealt - health) / opt_damage_dealt) / (1.0 - expolsive_percent);
-        let range_possible = if !opt_infnite_range {
-            average_range(
-                &opt_range_data_vec,
-                dropoff_wanted,
-                _weapon.range_formula.floor_percent,
-            )
-        } else {
-            999.9
-        };
         let optimal_ttk = OptimalKillData {
             headshots: opt_timeline_headshots,
             bodyshots: opt_timeline_bodyshots,
-            time_taken: opt_time_taken,
-            achievable_range: range_possible,
+            time_taken: opt_time_taken
         };
 
         let mut bdy_bullets_hit = 0.0;
@@ -223,7 +192,9 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
         let mut bdy_damage_dealt = 0.0;
         while bdy_bullets_hit < 50.0 {
             //PERK CALCULATIONS////////////
-            persistent_data.insert("health%".to_string(), bdy_damage_dealt / health);
+            persistent_data.insert("health%".to_string(), (health - bdy_damage_dealt) / 70.0);
+            persistent_data.insert("empowering".to_string(), 1.0);
+            persistent_data.insert("debuff".to_string(), 1.0);
             let calc_input = _weapon.pvp_calc_input(
                 bdy_bullets_fired,
                 bdy_bullets_hit,
@@ -258,7 +229,8 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
             let shot_burst_size =
                 _weapon.firing_data.burst_size as f64 + firing_mods.burst_size_add;
 
-            let mut shot_delay = if bdy_bullets_hit % shot_burst_size > 0.0 && bdy_bullets_hit > 0.0 {
+            let mut shot_delay = if bdy_bullets_hit % shot_burst_size > 0.0 && bdy_bullets_hit > 0.0
+            {
                 shot_inner_burst_delay
             } else if bdy_bullets_hit == 0.0 {
                 0.0
@@ -273,8 +245,21 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
                 shot_delay *= 1.45;
             }
 
-            if bdy_bullets_fired >= _weapon.calc_ammo_sizes(Some(calc_input.clone()), Some(&mut persistent_data), true).mag_size.into() {
-                shot_delay += _weapon.calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data), true).reload_time;
+            let ammo_fired;
+            if _weapon.firing_data.one_ammo {
+                ammo_fired = opt_bullets_fired/shot_burst_size;
+            } else {
+                ammo_fired = opt_bullets_fired;
+            }
+            if ammo_fired
+                >= _weapon
+                    .calc_ammo_sizes(Some(calc_input.clone()), Some(&mut persistent_data), true)
+                    .mag_size
+                    .into()
+            {
+                shot_delay += _weapon
+                    .calc_reload_time(Some(calc_input.clone()), Some(&mut persistent_data), true)
+                    .reload_time;
             }
 
             bdy_time_taken += shot_delay;

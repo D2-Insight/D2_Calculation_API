@@ -103,6 +103,7 @@ impl<'a> CalculationInput<'a> {
         _perk_value_map: &'a HashMap<u32, u32>,
         _weapon_type: &'a WeaponType,
         _ammo_type: &'a AmmoType,
+        _damage_type: &'a DamageType,
         _crit_mult: f64,
     ) -> Self {
         Self {
@@ -117,7 +118,7 @@ impl<'a> CalculationInput<'a> {
             time_total: 0.0,
             stats: _stats,
             weapon_type: _weapon_type,
-            damage_type: &DamageType::STASIS,
+            damage_type: _damage_type,
             ammo_type: _ammo_type,
             num_reloads: 0.0,
             enemy_type: &EnemyType::ENCLAVE,

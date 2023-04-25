@@ -147,7 +147,7 @@ pub(super) fn gpl_delta(_activity: &Activity) -> f64 {
     wep_delta_mult * gear_delta_mult
 }
 
-// pub(super) fn remove_pve_bonuses(
+// add_remove_pve_bonuses(
 //     _rpl: f64,
 //     _pl: u32,
 //     _combatant_mult: f64,
