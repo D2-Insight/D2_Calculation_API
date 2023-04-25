@@ -1,4 +1,3 @@
-pub mod dps_calc;
 pub mod reserve_calc;
 pub mod stat_calc;
 pub mod ttk_calc;
@@ -17,8 +16,6 @@ use crate::perks::{
 use crate::types::rs_types::{
     AmmoFormula, DamageMods, DpsResponse, FiringData, HandlingFormula, RangeFormula, ReloadFormula,
 };
-
-use self::dps_calc::complex_dps_calc;
 
 #[derive(Debug, Clone)]
 pub struct PsuedoWeapon {}
@@ -209,9 +206,6 @@ impl Weapon {
                 stat.perk_value = b.unwrap().clone();
             }
         }
-    }
-    pub fn calc_dps(&self, _enemy: Enemy, _pl_dmg_mult: f64) -> DpsResponse {
-        complex_dps_calc(self.clone(), _enemy, _pl_dmg_mult)
     }
 }
 impl Default for Weapon {

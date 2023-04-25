@@ -38,11 +38,7 @@ mod database {
 use crate::types::js_types::{
     JsAmmoResponse, JsDifficultyOptions, JsDpsResponse, JsEnemyType, JsFiringResponse,
     JsHandlingResponse, JsMetaData, JsRangeResponse, JsReloadResponse, JsResillienceSummary,
-<<<<<<< HEAD
-    JsScalarResponse, JsStat,
-=======
     JsStat,
->>>>>>> master
 };
 #[cfg(feature = "wasm")]
 use wasm_bindgen::prelude::*;

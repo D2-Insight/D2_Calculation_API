@@ -210,52 +210,52 @@ pub fn year_2_perks() {
         }),
     );
 
-    add_dmr(
-        Perks::ExplosiveLight,
-        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
-            let shots = if _input.is_enhanced { 7.0 } else { 6.0 };
-            let shots_left = _input.value as f64 * shots - _input.calc_data.total_shots_fired;
-            if shots_left <= 0.0 {
-                return DamageModifierResponse::default();
-            };
-            if _input.calc_data.weapon_type == &WeaponType::GRENADELAUNCHER {
-                let blast_radius_struct =
-                let blast_radius;
-                if blast_radius_struct.is_none() {
-                    blast_radius = 0;
-                } else {
-                    blast_radius = blast_radius_struct.unwrap().val();
-                };
-                if _input.calc_data.ammo_type == &AmmoType::HEAVY {
-                    let expl_percent = 0.7 + 0.00175 * blast_radius as f64;
-                    let impt_percent = 1.0 - expl_percent;
-                    let expl_mult = 0.875 / expl_percent * 1.6;
-                    let impt_mult = 0.125 / impt_percent;
-                    return DamageModifierResponse {
-                        impact_dmg_scale: impt_mult,
-                        explosive_dmg_scale: expl_mult,
-                        crit_scale: 1.0,
-                    };
-                }
-                if _input.calc_data.ammo_type == &AmmoType::SPECIAL {
-                    let expl_percent = 0.5 + 0.0025 * blast_radius as f64;
-                    let impt_percent = 1.0 - expl_percent;
-                    let expl_mult = 0.75 / expl_percent * 1.6;
-                    let impt_mult = 0.25 / impt_percent;
-                    return DamageModifierResponse {
-                        impact_dmg_scale: impt_mult,
-                        explosive_dmg_scale: expl_mult,
-                        crit_scale: 1.0,
-                    };
-                }
-            };
-            DamageModifierResponse {
-                explosive_dmg_scale: 1.25,
-                impact_dmg_scale: 1.25,
-                crit_scale: 1.0,
-            }
-        }),
-    );
+    // add_dmr(
+    //     Perks::ExplosiveLight,
+    //     Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
+    //         let shots = if _input.is_enhanced { 7.0 } else { 6.0 };
+    //         let shots_left = _input.value as f64 * shots - _input.calc_data.total_shots_fired;
+    //         if shots_left <= 0.0 {
+    //             return DamageModifierResponse::default();
+    //         };
+    //         if _input.calc_data.weapon_type == &WeaponType::GRENADELAUNCHER {
+    //             let blast_radius_struct =
+    //             let blast_radius;
+    //             if blast_radius_struct.is_none() {
+    //                 blast_radius = 0;
+    //             } else {
+    //                 blast_radius = blast_radius_struct.unwrap().val();
+    //             };
+    //             if _input.calc_data.ammo_type == &AmmoType::HEAVY {
+    //                 let expl_percent = 0.7 + 0.00175 * blast_radius as f64;
+    //                 let impt_percent = 1.0 - expl_percent;
+    //                 let expl_mult = 0.875 / expl_percent * 1.6;
+    //                 let impt_mult = 0.125 / impt_percent;
+    //                 return DamageModifierResponse {
+    //                     impact_dmg_scale: impt_mult,
+    //                     explosive_dmg_scale: expl_mult,
+    //                     crit_scale: 1.0,
+    //                 };
+    //             }
+    //             if _input.calc_data.ammo_type == &AmmoType::SPECIAL {
+    //                 let expl_percent = 0.5 + 0.0025 * blast_radius as f64;
+    //                 let impt_percent = 1.0 - expl_percent;
+    //                 let expl_mult = 0.75 / expl_percent * 1.6;
+    //                 let impt_mult = 0.25 / impt_percent;
+    //                 return DamageModifierResponse {
+    //                     impact_dmg_scale: impt_mult,
+    //                     explosive_dmg_scale: expl_mult,
+    //                     crit_scale: 1.0,
+    //                 };
+    //             }
+    //         };
+    //         DamageModifierResponse {
+    //             explosive_dmg_scale: 1.25,
+    //             impact_dmg_scale: 1.25,
+    //             crit_scale: 1.0,
+    //         }
+    //     }),
+    // );
 
     add_sbr(
         Perks::ExplosiveLight,

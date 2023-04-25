@@ -62,7 +62,7 @@ fn lerp(a: f64, b: f64, t: f64) -> f64 {
     a + (b - a) * t
 }
 
-#[derive(Clone, Debug, Default, Serialize)]
+#[derive(Clone, Debug, Default, Serialize, Deserialize)]
 pub struct Perk {
     pub stat_buffs: HashMap<u32, i32>,
     pub enhanced: bool,
