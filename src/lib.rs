@@ -14,6 +14,7 @@ mod test;
 pub mod types;
 pub mod weapons;
 pub mod dps;
+pub mod simulation;
 
 use crate::perks::{Perk, Perks};
 use crate::weapons::{Stat, Weapon};
