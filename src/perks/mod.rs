@@ -387,9 +387,12 @@ pub enum Perks {
     Roadborn = 3413860062,
     MarkovChain = 2814973067,
     MementoMori = 647617635,
+    MarkOfTheDevourer = 1863355414,
+    ToxicOverload = 4015745376,
 
     //energy exotic
     LagragianSight = 2881100038,
+    PoisonArrows = 2186532310,
     IgnitionTrigger = 961505134,
     GuidanceRing = 2226793914,
     FirstGlance = 3174300811,

@@ -879,7 +879,7 @@ pub fn exotic_perks() {
         let dmg_modifier = if _input.value > 0 && _input.pvp { 17.5 } else if _input.value > 0 { 2.0 } else { 1.0 };
         ExtraDamageResponse { 
             additive_damage: dmg * dmg_modifier,
-            time_for_additive_damage: (0.5 * 4) + 0.05,
+            time_for_additive_damage: (0.5 * 4 as f64) + 0.05,
             increment_total_time: false,
             times_to_hit: 4,
             hit_at_same_time: false,
