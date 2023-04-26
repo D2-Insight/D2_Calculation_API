@@ -873,4 +873,98 @@ pub fn exotic_perks() {
             }
         }),
     );
+
+    add_edr(Perks::MarkOfTheDevourer, Box::new(|_input| -> ExtraDamageResponse { // haven't added the thorn perk anywhere else, will need to do that probably
+        let dmg = if _input.pvp { 0.4 } else { 8.5 };
+        let dmg_modifier = if _input.value > 0 && _input.pvp { 17.5 } else if _input.value > 0 { 2.0 } else { 1.0 };
+        ExtraDamageResponse { 
+            additive_damage: dmg * dmg_modifier,
+            time_for_additive_damage: (0.5 * 4) + 0.05,
+            increment_total_time: false,
+            times_to_hit: 4,
+            hit_at_same_time: false,
+            is_dot: true,
+            weapon_scale: true,
+            crit_scale: false,
+            combatant_scale: true 
+        }
+        }),
+    );
+
+    add_edr(Perks::ToxicOverload, Box::new(|_input| -> ExtraDamageResponse { // haven't added the osteo perk anywhere else, will need to do that probably
+        let dmg = if _input.pvp { 5.0 } else {34.0 }; // pvp value uncertain, no scaling for the pve damage ( should increase by 7.7% per tick)
+        let delay = if _input.pvp { 0.7 } else { 0.5 };
+        let total_ticks = if _input.pvp { 19 } else { 19 }; // value is unknown for pvp
+        ExtraDamageResponse { 
+            additive_damage: dmg,
+            time_for_additive_damage: delay * total_ticks as f64,
+            increment_total_time: false,
+            times_to_hit: total_ticks, 
+            hit_at_same_time: false,
+            is_dot: true,
+            weapon_scale: true,
+            crit_scale: false,
+            combatant_scale: true 
+        }
+        }),
+    );
+
+    add_edr(Perks::PoisonArrows, Box::new(|_input| -> ExtraDamageResponse { // haven't added the lemon arc anywhere else, will need to do that probably
+        let dmg = if _input.pvp { 1.88 } else { 29.0 };
+        ExtraDamageResponse { 
+            additive_damage: dmg,
+            time_for_additive_damage: 0.5 * 6 as f64,
+            increment_total_time: false,
+            times_to_hit: 6, 
+            hit_at_same_time: false,
+            is_dot: true,
+            weapon_scale: true,
+            crit_scale: false,
+            combatant_scale: true 
+        }
+        }),
+    );
+
+    add_edr(Perks::PerfectFith, Box::new(|_input| -> ExtraDamageResponse { 
+        let dmg = if _input.pvp { 78.0 } else { 101.0 };
+        ExtraDamageResponse { 
+            additive_damage: dmg,
+            time_for_additive_damage: 0.0,
+            increment_total_time: false,
+            times_to_hit: 1, 
+            hit_at_same_time: true,
+            is_dot: false,
+            weapon_scale: true,
+            crit_scale: false,
+            combatant_scale: true 
+        }
+        }),
+    );
+
+    // Outbreak, will do later because of all the nanite shenenigans
+    // 12 precision hits within 2.5 seconds = 2 - 4 nanites "Deterministic outcomes in Destiny? Impossible" - fps (I LOVE A RANDOM AMOUNT OF NANITES)
+    // precision kill = 9 nanites
+    // nanites increasing outbreak dmg and other nanite damage
+    // catalyst = +4 nanites on each nanite death, each deal 7 dmg. 
+    // WHY SO COMPLICATED BUGNO PLS
+
+    // add_edr(Perks::CorruptionSpreads, Box::new(|_input| -> ExtraDamageResponse { 
+    //     let dmg = if _input.pvp { 42 } else { 42 }; // pvp value unknown
+    //     let nanites = if _input.value > 0 { }
+    //     ExtraDamageResponse { 
+    //         additive_damage: dmg,
+    //         time_for_additive_damage: 0.5 * 6 as f64,
+    //         increment_total_time: false,
+    //         times_to_hit: nanites, 
+    //         hit_at_same_time: false,
+    //         is_dot: true, // is it though? idk
+    //         weapon_scale: true,
+    //         crit_scale: false, // can nanites crit with div?
+    //         combatant_scale: true 
+    //     }
+    //     }),
+    // );
+
+
+
 }

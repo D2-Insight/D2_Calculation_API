@@ -13,7 +13,7 @@ use super::{
         FlinchModifierResponse, HandlingModifierResponse, RangeModifierResponse, RefundResponse,
         ReloadModifierResponse, ReloadOverrideResponse,
     },
-    ModifierResponseInput, Perks,
+    ModifierResponseInput, Perks, add_edr,
 };
 
 pub fn exotic_armor() {
@@ -426,6 +426,27 @@ pub fn exotic_armor() {
             },
         ),
     );
+
+    add_edr(
+        Perks::NecroticGrips,
+        Box::new(
+            |_input: ModifierResponseInput| -> ExtraDamageResponse {
+                let dmg = if _input.pvp { 5.0 } else {34.0 }; // pvp value uncertain, no scaling for the pve damage ( should increase by 7.7% per tick)
+                let delay = if _input.pvp { 0.7 } else { 0.5 };
+                let total_ticks = if _input.pvp { 19 } else { 19 }; // value is unknown for pvp
+                ExtraDamageResponse { 
+                    additive_damage: dmg,
+                    time_for_additive_damage: delay * total_ticks as f64,
+                    increment_total_time: false,
+                    times_to_hit: total_ticks, 
+                    hit_at_same_time: false,
+                    is_dot: true,
+                    weapon_scale: true, // this may be wrong, idk exactly what it does
+                    crit_scale: false,
+                    combatant_scale: false 
+                }
+            }),
+        );
 
     add_sbr(
         Perks::BootsOfTheAssembler,
