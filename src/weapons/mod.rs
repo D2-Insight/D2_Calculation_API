@@ -239,3 +239,8 @@ impl Default for Weapon {
         }
     }
 }
+
+// //making this separate for organization
+// impl Weapon {
+//     pub fn get_damage(&self)
+// }

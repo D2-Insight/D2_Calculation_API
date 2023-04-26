@@ -382,7 +382,7 @@ pub fn year_5_perks() {
     );
 
     add_rmr(
-        Perks::WellOfRadiance,
+        Perks::WellRounded,
         Box::new(|_input: ModifierResponseInput| -> RangeModifierResponse {
             let val = clamp(_input.value, 0, 2) as i32;
             let stat_base = if _input.is_enhanced { 12 } else { 10 };

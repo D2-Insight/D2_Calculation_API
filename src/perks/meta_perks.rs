@@ -198,11 +198,11 @@ pub fn meta_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut stats = HashMap::new();
             if _input.value == 1 {
-                stats.insert(StatHashes::AIM_ASSIST.into(), 10);
+                stats.insert(StatHashes::AIM_ASSIST.into(), 5);
             } else if _input.value == 2 {
-                stats.insert(StatHashes::AIM_ASSIST.into(), 15);
+                stats.insert(StatHashes::AIM_ASSIST.into(), 8);
             } else if _input.value > 2 {
-                stats.insert(StatHashes::AIM_ASSIST.into(), 20);
+                stats.insert(StatHashes::AIM_ASSIST.into(), 10);
             }
             stats
         }),
