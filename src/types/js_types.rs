@@ -175,10 +175,6 @@ pub struct JsOptimalKillData {
     #[serde(rename = "timeTaken")]
     #[wasm_bindgen(js_name = "timeTaken")]
     pub time_taken: f64,
-    //defines how far away this ttk is achievalbe if all hits ar crits
-    #[serde(rename = "achievableRange")]
-    #[wasm_bindgen(js_name = "achievableRange")]
-    pub achievable_range: f64,
 }
 impl From<OptimalKillData> for JsOptimalKillData {
     fn from(optimal: OptimalKillData) -> Self {
@@ -186,7 +182,6 @@ impl From<OptimalKillData> for JsOptimalKillData {
             headshots: optimal.headshots,
             bodyshots: optimal.bodyshots,
             time_taken: optimal.time_taken,
-            achievable_range: optimal.achievable_range,
         }
     }
 }
