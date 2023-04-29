@@ -18,8 +18,8 @@ pub mod year_6_perks;
 use std::borrow::BorrowMut;
 use std::collections::HashMap;
 
-use num_enum::FromPrimitive;
 use enum_into_usize::IntoUsize;
+use num_enum::FromPrimitive;
 use serde::{Deserialize, Serialize};
 
 use crate::d2_enums::{BungieHash, StatBump, StatHashes, WeaponType};
@@ -92,6 +92,8 @@ pub fn enhanced_check(_hash: u32) -> (u32, bool) {
 pub enum Perks {
     //Meta perks
     BuiltIn = 0,
+    #[num_enum(default)]
+    Ignore = 1,
     RallyBarricade = 444,
     EmpRift = 555,
 
@@ -421,8 +423,7 @@ pub enum Perks {
     SleeperCatalyst = 2142466730,
     TractorCannon = 1210807262,
 
-    #[num_enum(default)]
-    Ignore = 69420,
+
 }
 
 #[derive(Debug)]
@@ -435,19 +436,19 @@ pub struct ModifierResponseInput<'a> {
 }
 
 pub struct PersistentModifierResponses {
-    pub sbr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> HashMap<BungieHash, StatBump>>>>,
-    pub dmr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> DamageModifierResponse>>>,
-    pub hmr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> HandlingModifierResponse>>>,
-    pub rmr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> RangeModifierResponse>>>,
+    pub sbr: Vec<Option<Box<dyn Fn(ModifierResponseInput) -> HashMap<BungieHash, StatBump>>>>,
+    pub dmr: Vec<Option<Box<dyn Fn(ModifierResponseInput) -> DamageModifierResponse>>>,
+    pub hmr: Vec<Option<Box<dyn Fn(ModifierResponseInput) -> HandlingModifierResponse>>>,
+    pub rmr: Vec<Option<Box<dyn Fn(ModifierResponseInput) -> RangeModifierResponse>>>,
     pub rsmr: Vec<Option<Box<dyn Fn(ModifierResponseInput) -> ReloadModifierResponse>>>,
-    pub fmr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> FiringModifierResponse>>>,
+    pub fmr: Vec<Option<Box<dyn Fn(ModifierResponseInput) -> FiringModifierResponse>>>,
     pub flmr: Vec<Option<Box<dyn Fn(ModifierResponseInput) -> FlinchModifierResponse>>>,
-    pub edr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> ExtraDamageResponse>>>,
-    pub rr:   Vec<Option<Box<dyn Fn(ModifierResponseInput) -> RefundResponse>>>,
-    pub vmr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> VelocityModifierResponse>>>,
-    pub epr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> ExplosivePercentResponse>>>,
-    pub mmr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> MagazineModifierResponse>>>,
-    pub imr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> InventoryModifierResponse>>>,
+    pub edr: Vec<Option<Box<dyn Fn(ModifierResponseInput) -> ExtraDamageResponse>>>,
+    pub rr: Vec<Option<Box<dyn Fn(ModifierResponseInput) -> RefundResponse>>>,
+    pub vmr: Vec<Option<Box<dyn Fn(ModifierResponseInput) -> VelocityModifierResponse>>>,
+    pub epr: Vec<Option<Box<dyn Fn(ModifierResponseInput) -> ExplosivePercentResponse>>>,
+    pub mmr: Vec<Option<Box<dyn Fn(ModifierResponseInput) -> MagazineModifierResponse>>>,
+    pub imr: Vec<Option<Box<dyn Fn(ModifierResponseInput) -> InventoryModifierResponse>>>,
 }
 impl PersistentModifierResponses {
     fn is_empty(&self) -> bool {
@@ -484,19 +485,19 @@ impl PersistentModifierResponses {
             temp_imr.push(None);
         }
         Self {
-            sbr:  temp_sbr,
-            dmr:  temp_dmr,
-            hmr:  temp_hmr,
-            rmr:  temp_rmr,
+            sbr: temp_sbr,
+            dmr: temp_dmr,
+            hmr: temp_hmr,
+            rmr: temp_rmr,
             rsmr: temp_rsmr,
-            fmr:  temp_fmr,
+            fmr: temp_fmr,
             flmr: temp_flmr,
-            edr:  temp_edr,
-            rr:   temp_rr,
-            vmr:  temp_vmr,
-            epr:  temp_epr,
-            mmr:  temp_mmr,
-            imr:  temp_imr,
+            edr: temp_edr,
+            rr: temp_rr,
+            vmr: temp_vmr,
+            epr: temp_epr,
+            mmr: temp_mmr,
+            imr: temp_imr,
         }
     }
 }
