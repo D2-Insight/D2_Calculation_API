@@ -424,6 +424,9 @@ pub enum Perks {
     Ignore = 69420,
 }
 
+//make a macro to read an enum and make a match statement for it each varient will be a match arm
+
+
 #[derive(Debug)]
 pub struct ModifierResponseInput<'a> {
     calc_data: &'a CalculationInput<'a>,

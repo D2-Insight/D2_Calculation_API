@@ -407,3 +407,10 @@ impl Default for ModifierResponseSummary {
         }
     }
 }
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
+enum StatusReason {
+    Static(u32), //static value for basic handling
+    Simulation(u32), //variable values used in simulation
+    Secondary(u32)
+}
