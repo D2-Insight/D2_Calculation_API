@@ -19,6 +19,7 @@ use std::borrow::BorrowMut;
 use std::collections::HashMap;
 
 use num_enum::FromPrimitive;
+use enum_into_usize::IntoUsize;
 use serde::{Deserialize, Serialize};
 
 use crate::d2_enums::{BungieHash, StatBump, StatHashes, WeaponType};
@@ -86,7 +87,7 @@ pub fn enhanced_check(_hash: u32) -> (u32, bool) {
 
 // all armor pekrs are for the future but wanted to started to compile them now
 
-#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, FromPrimitive)]
+#[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, FromPrimitive, IntoUsize)]
 #[repr(u32)]
 pub enum Perks {
     //Meta perks
@@ -432,30 +433,76 @@ pub struct ModifierResponseInput<'a> {
     pvp: bool,
     cached_data: &'a mut HashMap<String, f64>,
 }
-#[derive(Default)]
+
 pub struct PersistentModifierResponses {
-    pub sbr: HashMap<Perks, Box<dyn Fn(ModifierResponseInput) -> HashMap<BungieHash, StatBump>>>,
-    pub dmr: HashMap<Perks, Box<dyn Fn(ModifierResponseInput) -> DamageModifierResponse>>,
-    pub hmr: HashMap<Perks, Box<dyn Fn(ModifierResponseInput) -> HandlingModifierResponse>>,
-    pub rmr: HashMap<Perks, Box<dyn Fn(ModifierResponseInput) -> RangeModifierResponse>>,
-    pub rsmr: HashMap<Perks, Box<dyn Fn(ModifierResponseInput) -> ReloadModifierResponse>>,
-    pub fmr: HashMap<Perks, Box<dyn Fn(ModifierResponseInput) -> FiringModifierResponse>>,
-    pub flmr: HashMap<Perks, Box<dyn Fn(ModifierResponseInput) -> FlinchModifierResponse>>,
-    pub edr: HashMap<Perks, Box<dyn Fn(ModifierResponseInput) -> ExtraDamageResponse>>,
-    pub rr: HashMap<Perks, Box<dyn Fn(ModifierResponseInput) -> RefundResponse>>,
-    pub vmr: HashMap<Perks, Box<dyn Fn(ModifierResponseInput) -> VelocityModifierResponse>>,
-    pub epr: HashMap<Perks, Box<dyn Fn(ModifierResponseInput) -> ExplosivePercentResponse>>,
-    pub mmr: HashMap<Perks, Box<dyn Fn(ModifierResponseInput) -> MagazineModifierResponse>>,
-    pub imr: HashMap<Perks, Box<dyn Fn(ModifierResponseInput) -> InventoryModifierResponse>>,
+    pub sbr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> HashMap<BungieHash, StatBump>>>>,
+    pub dmr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> DamageModifierResponse>>>,
+    pub hmr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> HandlingModifierResponse>>>,
+    pub rmr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> RangeModifierResponse>>>,
+    pub rsmr: Vec<Option<Box<dyn Fn(ModifierResponseInput) -> ReloadModifierResponse>>>,
+    pub fmr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> FiringModifierResponse>>>,
+    pub flmr: Vec<Option<Box<dyn Fn(ModifierResponseInput) -> FlinchModifierResponse>>>,
+    pub edr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> ExtraDamageResponse>>>,
+    pub rr:   Vec<Option<Box<dyn Fn(ModifierResponseInput) -> RefundResponse>>>,
+    pub vmr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> VelocityModifierResponse>>>,
+    pub epr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> ExplosivePercentResponse>>>,
+    pub mmr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> MagazineModifierResponse>>>,
+    pub imr:  Vec<Option<Box<dyn Fn(ModifierResponseInput) -> InventoryModifierResponse>>>,
 }
 impl PersistentModifierResponses {
     fn is_empty(&self) -> bool {
         self.sbr.is_empty()
     }
+
+    fn new() -> Self {
+        let mut temp_sbr = vec![];
+        let mut temp_dmr = vec![];
+        let mut temp_hmr = vec![];
+        let mut temp_rmr = vec![];
+        let mut temp_rsmr = vec![];
+        let mut temp_fmr = vec![];
+        let mut temp_flmr = vec![];
+        let mut temp_edr = vec![];
+        let mut temp_rr = vec![];
+        let mut temp_vmr = vec![];
+        let mut temp_epr = vec![];
+        let mut temp_mmr = vec![];
+        let mut temp_imr = vec![];
+        for _ in 0..400 {
+            temp_sbr.push(None);
+            temp_dmr.push(None);
+            temp_hmr.push(None);
+            temp_rmr.push(None);
+            temp_rsmr.push(None);
+            temp_fmr.push(None);
+            temp_flmr.push(None);
+            temp_edr.push(None);
+            temp_rr.push(None);
+            temp_vmr.push(None);
+            temp_epr.push(None);
+            temp_mmr.push(None);
+            temp_imr.push(None);
+        }
+        Self {
+            sbr:  temp_sbr,
+            dmr:  temp_dmr,
+            hmr:  temp_hmr,
+            rmr:  temp_rmr,
+            rsmr: temp_rsmr,
+            fmr:  temp_fmr,
+            flmr: temp_flmr,
+            edr:  temp_edr,
+            rr:   temp_rr,
+            vmr:  temp_vmr,
+            epr:  temp_epr,
+            mmr:  temp_mmr,
+            imr:  temp_imr,
+        }
+    }
 }
 
 thread_local! {
-    static PERK_FUNC_MAP: std::cell::RefCell<PersistentModifierResponses>  = std::cell::RefCell::new(PersistentModifierResponses::default());
+    static PERK_FUNC_MAP: std::cell::RefCell<PersistentModifierResponses>  = std::cell::RefCell::new(PersistentModifierResponses::new());
 }
 
 pub fn map_perks() {
@@ -478,91 +525,91 @@ pub fn map_perks() {
 
 impl PersistentModifierResponses {
     fn get_sbr(&self, perk: Perks, input: ModifierResponseInput) -> HashMap<BungieHash, StatBump> {
-        if let Some(func) = self.sbr.get(&perk) {
+        if let Some(func) = &self.sbr[perk as usize] {
             func(input)
         } else {
             HashMap::new()
         }
     }
     fn get_dmr(&self, perk: Perks, input: ModifierResponseInput) -> DamageModifierResponse {
-        if let Some(func) = self.dmr.get(&perk) {
+        if let Some(func) = &self.dmr[perk as usize] {
             func(input)
         } else {
             DamageModifierResponse::default()
         }
     }
     fn get_hmr(&self, perk: Perks, input: ModifierResponseInput) -> HandlingModifierResponse {
-        if let Some(func) = self.hmr.get(&perk) {
+        if let Some(func) = &self.hmr[perk as usize] {
             func(input)
         } else {
             HandlingModifierResponse::default()
         }
     }
     fn get_rmr(&self, perk: Perks, input: ModifierResponseInput) -> RangeModifierResponse {
-        if let Some(func) = self.rmr.get(&perk) {
+        if let Some(func) = &self.rmr[perk as usize] {
             func(input)
         } else {
             RangeModifierResponse::default()
         }
     }
     fn get_rsmr(&self, perk: Perks, input: ModifierResponseInput) -> ReloadModifierResponse {
-        if let Some(func) = self.rsmr.get(&perk) {
+        if let Some(func) = &self.rsmr[perk as usize] {
             func(input)
         } else {
             ReloadModifierResponse::default()
         }
     }
     fn get_fmr(&self, perk: Perks, input: ModifierResponseInput) -> FiringModifierResponse {
-        if let Some(func) = self.fmr.get(&perk) {
+        if let Some(func) = &self.fmr[perk as usize] {
             func(input)
         } else {
             FiringModifierResponse::default()
         }
     }
     fn get_flmr(&self, perk: Perks, input: ModifierResponseInput) -> FlinchModifierResponse {
-        if let Some(func) = self.flmr.get(&perk) {
+        if let Some(func) = &self.flmr[perk as usize] {
             func(input)
         } else {
             FlinchModifierResponse::default()
         }
     }
     fn get_edr(&self, perk: Perks, input: ModifierResponseInput) -> ExtraDamageResponse {
-        if let Some(func) = self.edr.get(&perk) {
+        if let Some(func) = &self.edr[perk as usize] {
             func(input)
         } else {
             ExtraDamageResponse::default()
         }
     }
     fn get_rr(&self, perk: Perks, input: ModifierResponseInput) -> RefundResponse {
-        if let Some(func) = self.rr.get(&perk) {
+        if let Some(func) = &self.rr[perk as usize] {
             func(input)
         } else {
             RefundResponse::default()
         }
     }
     fn get_vmr(&self, perk: Perks, input: ModifierResponseInput) -> VelocityModifierResponse {
-        if let Some(func) = self.vmr.get(&perk) {
+        if let Some(func) = &self.vmr[perk as usize] {
             func(input)
         } else {
             VelocityModifierResponse::default()
         }
     }
     fn get_epr(&self, perk: Perks, input: ModifierResponseInput) -> ExplosivePercentResponse {
-        if let Some(func) = self.epr.get(&perk) {
+        if let Some(func) = &self.epr[perk as usize] {
             func(input)
         } else {
             ExplosivePercentResponse::default()
         }
     }
     fn get_mmr(&self, perk: Perks, input: ModifierResponseInput) -> MagazineModifierResponse {
-        if let Some(func) = self.mmr.get(&perk) {
+        if let Some(func) = &self.mmr[perk as usize] {
             func(input)
         } else {
             MagazineModifierResponse::default()
         }
     }
     fn get_imr(&self, perk: Perks, input: ModifierResponseInput) -> InventoryModifierResponse {
-        if let Some(func) = self.imr.get(&perk) {
+        if let Some(func) = &self.imr[perk as usize] {
             func(input)
         } else {
             InventoryModifierResponse::default()
@@ -572,67 +619,67 @@ impl PersistentModifierResponses {
 
 fn add_sbr(perk: Perks, func: Box<dyn Fn(ModifierResponseInput) -> HashMap<BungieHash, StatBump>>) {
     PERK_FUNC_MAP.with(|map| {
-        map.borrow_mut().sbr.insert(perk, func);
+        map.borrow_mut().sbr.insert(perk as usize, Some(func));
     });
 }
 fn add_dmr(perk: Perks, func: Box<dyn Fn(ModifierResponseInput) -> DamageModifierResponse>) {
     PERK_FUNC_MAP.with(|map| {
-        map.borrow_mut().dmr.insert(perk, func);
+        map.borrow_mut().dmr.insert(perk as usize, Some(func));
     });
 }
 fn add_hmr(perk: Perks, func: Box<dyn Fn(ModifierResponseInput) -> HandlingModifierResponse>) {
     PERK_FUNC_MAP.with(|map| {
-        map.borrow_mut().hmr.insert(perk, func);
+        map.borrow_mut().hmr.insert(perk as usize, Some(func));
     });
 }
 fn add_rmr(perk: Perks, func: Box<dyn Fn(ModifierResponseInput) -> RangeModifierResponse>) {
     PERK_FUNC_MAP.with(|map| {
-        map.borrow_mut().rmr.insert(perk, func);
+        map.borrow_mut().rmr.insert(perk as usize, Some(func));
     });
 }
 fn add_rsmr(perk: Perks, func: Box<dyn Fn(ModifierResponseInput) -> ReloadModifierResponse>) {
     PERK_FUNC_MAP.with(|map| {
-        map.borrow_mut().rsmr.insert(perk, func);
+        map.borrow_mut().rsmr.insert(perk as usize, Some(func));
     });
 }
 fn add_fmr(perk: Perks, func: Box<dyn Fn(ModifierResponseInput) -> FiringModifierResponse>) {
     PERK_FUNC_MAP.with(|map| {
-        map.borrow_mut().fmr.insert(perk, func);
+        map.borrow_mut().fmr.insert(perk as usize, Some(func));
     });
 }
 fn add_flmr(perk: Perks, func: Box<dyn Fn(ModifierResponseInput) -> FlinchModifierResponse>) {
     PERK_FUNC_MAP.with(|map| {
-        map.borrow_mut().flmr.insert(perk, func);
+        map.borrow_mut().flmr.insert(perk as usize, Some(func));
     });
 }
 fn add_edr(perk: Perks, func: Box<dyn Fn(ModifierResponseInput) -> ExtraDamageResponse>) {
     PERK_FUNC_MAP.with(|map| {
-        map.borrow_mut().edr.insert(perk, func);
+        map.borrow_mut().edr.insert(perk as usize, Some(func));
     });
 }
 fn add_rr(perk: Perks, func: Box<dyn Fn(ModifierResponseInput) -> RefundResponse>) {
     PERK_FUNC_MAP.with(|map| {
-        map.borrow_mut().rr.insert(perk, func);
+        map.borrow_mut().rr.insert(perk as usize, Some(func));
     });
 }
 fn add_vmr(perk: Perks, func: Box<dyn Fn(ModifierResponseInput) -> VelocityModifierResponse>) {
     PERK_FUNC_MAP.with(|map| {
-        map.borrow_mut().vmr.insert(perk, func);
+        map.borrow_mut().vmr.insert(perk as usize, Some(func));
     });
 }
 fn add_epr(perk: Perks, func: Box<dyn Fn(ModifierResponseInput) -> ExplosivePercentResponse>) {
     PERK_FUNC_MAP.with(|map| {
-        map.borrow_mut().epr.insert(perk, func);
+        map.borrow_mut().epr.insert(perk as usize, Some(func));
     });
 }
 fn add_mmr(perk: Perks, func: Box<dyn Fn(ModifierResponseInput) -> MagazineModifierResponse>) {
     PERK_FUNC_MAP.with(|map| {
-        map.borrow_mut().mmr.insert(perk, func);
+        map.borrow_mut().mmr.insert(perk as usize, Some(func));
     });
 }
 fn add_imr(perk: Perks, func: Box<dyn Fn(ModifierResponseInput) -> InventoryModifierResponse>) {
     PERK_FUNC_MAP.with(|map| {
-        map.borrow_mut().imr.insert(perk, func);
+        map.borrow_mut().imr.insert(perk as usize, Some(func));
     });
 }
 

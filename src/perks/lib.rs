@@ -419,3 +419,17 @@ impl Default for ModifierResponseSummary {
         }
     }
 }
+
+// #[derive(Debug, Clone, PartialEq, Eq, Hash)]
+// pub enum ModifierResponseType {
+//     DMR, //damage modifier response
+//     HMR, //handling modifier response
+//     RMR, //range modifier response
+//     RSMR,//reload speed modifier response
+//     FMR, //firing speed modifier response
+//     FLMR,//flinch modifier response
+//     MMR, //magazine modifier response
+//     IMR, //inventory modifier response
+//     DRMR,//damage resist modifier response
+//     VMR, //velocity modifier response
+// }

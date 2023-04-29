@@ -184,6 +184,7 @@ version = "1.0.1"
 dependencies = [
  "built",
  "console_error_panic_hook",
+ "enum_into_usize",
  "num-traits",
  "num_enum",
  "pyo3",
@@ -203,6 +204,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "071a31f4ee85403370b58aca746f01041ede6f0da2730960ad001edc2b71b394"
 dependencies = [
  "cfg-if",
+]
+
+[[package]]
+name = "enum_into_usize"
+version = "0.1.0"
+source = "git+https://github.com/oh-yes-0-fps/enum_into_usize#ac46a83620da60ab8661060c2a947b67aaa9db49"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.107",
 ]
 
 [[package]]
