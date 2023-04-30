@@ -64,6 +64,17 @@ impl PerkOptionData {
             option_type: PerkValueVariant::OPTIONS,
         }
     }
+    pub fn options_raw(_options: Vec<&str>) -> PerkOptionData {
+        let mut options = vec![];
+        for option in _options {
+            options.push(option.to_string());
+        }
+        PerkOptionData {
+            stacks: (0, options.len() as u32 - 1),
+            options,
+            option_type: PerkValueVariant::OPTIONS,
+        }
+    }
 }
 
 fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
@@ -267,6 +278,9 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
 
         //exotics
         Perks::CranialSpike => Some(PerkOptionData::stacking(5)),
+        Perks::DarkForgedTrigger => Some(PerkOptionData::options_raw(
+            ["Hip-Fire", "ADS"].to_vec()
+        )),
         Perks::AgersCall => Some(PerkOptionData::toggle()),
         Perks::LagragianSight => Some(PerkOptionData::toggle()),
         Perks::StringofCurses => Some(PerkOptionData::stacking(5)),
