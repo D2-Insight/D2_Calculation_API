@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, rc::Rc};
 
 use num_traits::{Float, Zero};
 
@@ -309,15 +309,11 @@ fn test_bow_firing_data() {
     });
 }
 
-static test_val: f64 = 0.5;
 
 #[test]
 fn attribute_test() {
-    fn func() -> f64 {
-        test_val
-    }
-    let boxxed = Box::new(func);
-    let test_attribute = SimpleAttribute::new("test_attr".to_string(), boxxed, 0.0);
-    let val =  test_attribute.getf();
-    assert_eq!(val, test_val);
+    println!("{}", (0.0_f64.get_formula())());
+    let mut test = 0.0_f64;
+    let attr = SimpleAttribute::new("test".to_string(), Box::new(|| test), 0.0);
+    assert_eq!((attr.get_formula())(), 0.0);
 }

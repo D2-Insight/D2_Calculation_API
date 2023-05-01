@@ -1,17 +1,19 @@
-use std::{ops::Add, fmt::{Debug, Display}, pin::Pin};
+use std::{ops::Add, fmt::{Debug, Display}, pin::Pin, rc::Rc};
 
 
 //make atype alias for anything that has into float
-pub type AttrResolver = Box<dyn Fn() -> f64 + 'static>;
+pub type AttrResolverBox = Box<dyn Fn() -> f64>;
+pub type AttrResolver = dyn Fn() -> f64;
+
 
 pub trait Value: Display /*+ Into<f64>*/ {
-    fn get_formula(&'static self) -> AttrResolver;
+    fn get_formula<'a>(&'a self) -> &'a AttrResolver;
 
-    fn getf(&'static self) -> f64 {
+    fn getf(&self) -> f64 {
         (self.get_formula())()
     }
 
-    fn geti(&'static self) -> i32 {
+    fn geti(&self) -> i32 {
         self.getf() as i32
     }
 
@@ -20,68 +22,68 @@ pub trait Value: Display /*+ Into<f64>*/ {
     fn get_default(&self) -> f64;
 }
 
-impl Value for f64 {
-    fn get_formula(&'static self) -> AttrResolver {
-        Box::new(|| -> f64 { *self })
-    }
+// impl Value for f64 {
+//     fn get_formula<'a>(&'a self) -> &'a AttrResolver {
+//         &|| -> f64 { *self }
+//     }
 
-    fn get_equation(&self) -> String {
-        format!("{}", *self)
-    }
+//     fn get_equation(&self) -> String {
+//         format!("{}", *self)
+//     }
 
-    fn get_default(&self) -> f64 {
-        *self
-    }
-}
+//     fn get_default(&self) -> f64 {
+//         *self
+//     }
+// }
 
-impl Value for i32 {
-    fn get_formula(&'static self) -> AttrResolver {
-        Box::new(|| -> f64 { *self as f64 })
-    }
+// impl Value for i32 {
+//     fn get_formula<'a>(&'a self) -> &'a AttrResolver {
+//         &|| -> f64 { *self as f64 }
+//     }
 
-    fn get_equation(&self) -> String {
-        format!("{}", *self)
-    }
+//     fn get_equation(&self) -> String {
+//         format!("{}", *self)
+//     }
 
-    fn get_default(&self) -> f64 {
-        *self as f64
-    }
-}
+//     fn get_default(&self) -> f64 {
+//         *self as f64
+//     }
+// }
 
-impl Value for u32 {
-    fn get_formula(&'static self) -> AttrResolver {
-        Box::new(|| -> f64 { *self as f64 })
-    }
+// impl Value for u32 {
+//     fn get_formula<'a>(&'a self) -> &'a AttrResolver {
+//         // Rc::new(|| -> f64 { *self as f64 })
+//     }
 
-    fn get_equation(&self) -> String {
-        format!("{}", *self)
-    }
+//     fn get_equation(&self) -> String {
+//         format!("{}", *self)
+//     }
 
-    fn get_default(&self) -> f64 {
-        *self as f64
-    }
-}
+//     fn get_default(&self) -> f64 {
+//         *self as f64
+//     }
+// }
 
 pub trait AttributeImpl: Attribute {
-    fn add<T: Value>(&'static self, other: &'static T) -> CompoundAttribute;
+    fn add<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute>;
 
-    fn sub<T: Value>(&'static self, other: &'static T) -> CompoundAttribute;
+    fn sub<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute>;
 
-    fn mul<T: Value>(&'static self, other: &'static T) -> CompoundAttribute;
+    fn mul<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute>;
 
-    fn div<T: Value>(&'static self, other: &'static T) -> CompoundAttribute;
+    fn div<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute>;
 
-    fn pow<T: Value>(&'static self, other: &'static T) -> CompoundAttribute;
+    fn pow<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute>;
 
-    fn clamp<T: Value + 'static>(self, min: T, max: T) -> ClampedAttribute where Self: Sized + 'static {
-        ClampedAttribute { attr: Box::new(self), min: Box::new(min), max: Box::new(max) }
-    }
+    // fn clamp<T: Value + 'a>(self, min: T, max: T) -> ClampedAttribute where Self: Sized + 'a {
+    //     ClampedAttribute::new(Box::new(self), Box::new(min), Box::new(max))
+    // }
 }
 pub trait Attribute: Value {}
 
 pub struct CompoundAttribute {
     equation: String,
-    formula: AttrResolver,
+    formula: Rc<AttrResolver>,
     default: f64,
 }
 impl Into<f64> for CompoundAttribute {
@@ -99,8 +101,8 @@ impl Display for CompoundAttribute {
     }
 }
 impl Value for CompoundAttribute {
-    fn get_formula(&'static self) -> AttrResolver {
-        Box::new(|| -> f64 { (self.formula)() })
+    fn get_formula<'a>(&'a self) -> &'a AttrResolver {
+        &*self.formula
     }
 
     fn get_equation(&self) -> String {
@@ -112,61 +114,62 @@ impl Value for CompoundAttribute {
     }
 }
 impl AttributeImpl for CompoundAttribute {
-    fn add<T: Value>(&'static self, other: &'static  T) -> CompoundAttribute {
+    fn add<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) + ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.formula)() + (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.default }
+        let formula = Rc::new(|| -> f64 { (self.formula)() + (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.default })
     }
 
-    fn sub<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn sub<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) - ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.formula)() - (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.default }
+        let formula = Rc::new(|| -> f64 { (self.formula)() - (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.default })
     }
 
-    fn mul<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn mul<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) * ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.formula)() * (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.default }
+        let formula = Rc::new(|| -> f64 { (self.formula)() * (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.default })
     }
 
-    fn div<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn div<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) / ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.formula)() / (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.default }
+        let formula = Rc::new(|| -> f64 { (self.formula)() / (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.default })
     }
 
-    fn pow<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn pow<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) ^ ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.formula)().powf((other.get_formula())()) });
-        CompoundAttribute { equation, formula, default: self.default }
+        let formula = Rc::new(|| -> f64 { (self.formula)().powf((other.get_formula())()) });
+        Box::new(CompoundAttribute { equation, formula, default: self.default })
     }
 }
 impl Attribute for CompoundAttribute {}
 
-pub struct PrimAttribute {
-    val: f64
+pub struct PrimAttribute<'a> {
+    val: f64,
+    formula: &'a AttrResolver,
 }
-impl PrimAttribute {
-    pub fn new<T: Into<f64>>(value: T) -> Self {
-        Self{ val: value.into() }
+impl PrimAttribute<'_> {
+    pub fn new<T: Into<f64> + Clone>(value: T) -> Self {
+        Self{ val: value.clone().into(), formula: &|| -> f64 { value.clone().into() }}
     }
 }
-impl Into<f64> for PrimAttribute {
+impl Into<f64> for PrimAttribute<'_> {
     fn into(self) -> f64 {
         self.val
     }
 }
-impl Display for PrimAttribute {
+impl Display for PrimAttribute<'_> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("PrimAttribute")
             .field("value", &self.val)
             .finish()
     }
 }
-impl Value for PrimAttribute {
-    fn get_formula(&'static self) -> AttrResolver {
-        Box::new(|| -> f64 { self.val })
+impl Value for PrimAttribute<'_> {
+    fn get_formula<'a>(&'a self) -> &'a AttrResolver {
+        &*self.formula
     }
 
     fn get_equation(&self) -> String {
@@ -177,46 +180,46 @@ impl Value for PrimAttribute {
         self.val
     }
 }
-impl AttributeImpl for PrimAttribute {
+impl AttributeImpl for PrimAttribute<'_> {
 
-    fn add<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn add<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) + ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { self.val + (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.val }
+        let formula = Rc::new(|| -> f64 { self.val + (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.val })
     }
 
-    fn sub<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn sub<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) - ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { self.val - (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.val }
+        let formula = Rc::new(|| -> f64 { self.val - (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.val })
     }
 
-    fn mul<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn mul<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) * ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { self.val * (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.val }
+        let formula = Rc::new(|| -> f64 { self.val * (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.val })
     }
 
-    fn div<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn div<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) / ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { self.val / (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.val }
+        let formula = Rc::new(|| -> f64 { self.val / (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.val })
     }
 
-    fn pow<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn pow<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) ^ ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { self.val.powf((other.get_formula())()) });
-        CompoundAttribute { equation, formula, default: self.val }
+        let formula = Rc::new(|| -> f64 { self.val.powf((other.get_formula())()) });
+        Box::new(CompoundAttribute { equation, formula, default: self.val })
     }
 }
-impl Attribute for PrimAttribute {}
+impl Attribute for PrimAttribute<'_> {}
 
 pub struct RefAttribute {
     name: String,
-    val: Box<dyn Value + 'static>
+    val: Box<dyn Value>
 }
 impl RefAttribute {
-    pub fn new<T: Value + 'static>(name: String, value: Box<T>) -> Self {
+    pub fn new<T: Value>(name: String, value: Box<T>) -> Self {
         Self{name, val: value }
     }
 }
@@ -231,7 +234,7 @@ impl Display for RefAttribute {
 //     }
 // }
 impl Value for RefAttribute {
-    fn get_formula(&'static self) -> AttrResolver {
+    fn get_formula<'a>(&'a self) -> &'a AttrResolver {
         self.val.as_ref().clone().get_formula()
     }
 
@@ -246,45 +249,45 @@ impl Value for RefAttribute {
 }
 impl AttributeImpl for RefAttribute {
 
-    fn add<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn add<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) + ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.val.as_ref().get_formula())() + (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.val.as_ref().get_default() }
+        let formula = Rc::new(|| -> f64 { (self.val.as_ref().get_formula())() + (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.val.as_ref().get_default() })
     }
 
-    fn sub<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn sub<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) - ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.val.as_ref().get_formula())() - (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.val.as_ref().get_default() }
+        let formula = Rc::new(|| -> f64 { (self.val.as_ref().get_formula())() - (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.val.as_ref().get_default() })
     }
 
-    fn mul<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn mul<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) * ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.val.as_ref().get_formula())() * (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.val.as_ref().get_default() }
+        let formula = Rc::new(|| -> f64 { (self.val.as_ref().get_formula())() * (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.val.as_ref().get_default() })
     }
 
-    fn div<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn div<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) / ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.val.as_ref().get_formula())() / (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.val.as_ref().get_default() }
+        let formula = Rc::new(|| -> f64 { (self.val.as_ref().get_formula())() / (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.val.as_ref().get_default() })
     }
 
-    fn pow<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn pow<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) ^ ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.val.as_ref().get_formula())().powf((other.get_formula())()) });
-        CompoundAttribute { equation, formula, default: self.val.as_ref().get_default() }
+        let formula = Rc::new(|| -> f64 { (self.val.as_ref().get_formula())().powf((other.get_formula())()) });
+        Box::new(CompoundAttribute { equation, formula, default: self.val.as_ref().get_default() })
     }
 }
 impl Attribute for RefAttribute {}
 
 pub struct SimpleAttribute {
     name: String,
-    val: AttrResolver,
+    val: AttrResolverBox,
     default: f64
 }
 impl SimpleAttribute {
-    pub fn new(name: String, value: AttrResolver, default: f64) -> Self {
+    pub fn new(name: String, value: AttrResolverBox, default: f64) -> Self {
         Self{name, val: value, default }
     }
 }
@@ -297,8 +300,8 @@ impl Display for SimpleAttribute {
     }
 }
 impl Value for SimpleAttribute {
-    fn get_formula(&'static self) -> AttrResolver {
-        Box::new(|| -> f64 { (self.val)() })
+    fn get_formula<'a>(&'a self) -> &'a AttrResolver {
+        &|| -> f64 { (self.val)() }
     }
 
     fn get_equation(&self) -> String {
@@ -311,34 +314,34 @@ impl Value for SimpleAttribute {
 }
 impl AttributeImpl for SimpleAttribute {
 
-    fn add<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn add<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) + ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.val)() + (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.default }
+        let formula = Rc::new(|| -> f64 { (self.val)() + (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.default })
     }
 
-    fn sub<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn sub<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) - ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.val)() - (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.default }
+        let formula = Rc::new(|| -> f64 { (self.val)() - (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.default })
     }
 
-    fn mul<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn mul<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) * ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.val)() * (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.default }
+        let formula = Rc::new(|| -> f64 { (self.val)() * (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.default })
     }
 
-    fn div<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn div<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) / ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.val)() / (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.default }
+        let formula = Rc::new(|| -> f64 { (self.val)() / (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.default })
     }
 
-    fn pow<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn pow<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) ^ ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.val)().powf((other.get_formula())()) });
-        CompoundAttribute { equation, formula, default: self.default }
+        let formula = Rc::new(|| -> f64 { (self.val)().powf((other.get_formula())()) });
+        Box::new(CompoundAttribute { equation, formula, default: self.default })
     }
 }
 impl Attribute for SimpleAttribute {}
@@ -346,11 +349,25 @@ impl Attribute for SimpleAttribute {}
 pub struct ClampedAttribute {
     attr: Box<dyn Attribute>,
     min: Box<dyn Value>,
-    max: Box<dyn Value>
+    max: Box<dyn Value>,
+    formula: Box<dyn Fn() -> f64>
 }
 impl ClampedAttribute {
     pub fn new(attr: Box<dyn Attribute>, min: Box<dyn Value>, max: Box<dyn Value>) -> Self {
-        Self{attr, min, max}
+        let fmin = min.as_ref().get_formula();
+        let fmax = max.as_ref().get_formula();
+        let fattr = attr.as_ref().get_formula();
+        let func = (move || -> f64 {
+            let mut val = fattr();
+            if val < fmin() {
+                val = fmin();
+            }
+            if val > fmax() {
+                val = fmax();
+            }
+            val
+        });
+        Self{attr, min, max, formula: Box::new(func)}
     }
 }
 impl Display for ClampedAttribute {
@@ -366,20 +383,8 @@ impl Display for ClampedAttribute {
     }
 }
 impl Value for ClampedAttribute {
-    fn get_formula(&'static self) -> AttrResolver {
-        let attr = self.attr.as_ref().get_formula();
-        let min = self.min.as_ref().get_formula();
-        let max = self.max.as_ref().get_formula();
-        Box::new(move || -> f64 {
-            let mut val = attr();
-            if val < min() {
-                val = min();
-            }
-            if val > max() {
-                val = max();
-            }
-            val
-        })
+    fn get_formula<'a>(&'a self) -> &'a AttrResolver {
+        &self.formula
     }
 
     fn get_equation(&self) -> String {
@@ -395,37 +400,38 @@ impl Value for ClampedAttribute {
 }
 impl AttributeImpl for ClampedAttribute {
 
-    fn add<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn add<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) + ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.get_formula())() + (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.get_default() }
+        let formula = Rc::new(|| -> f64 { (self.get_formula())() + (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.get_default() })
     }
 
-    fn sub<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn sub<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) - ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.get_formula())() - (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.get_default() }
+        let formula = Rc::new(|| -> f64 { (self.get_formula())() - (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.get_default() })
     }
 
-    fn mul<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn mul<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) * ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.get_formula())() * (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.get_default() }
+        let formula = Rc::new(|| -> f64 { (self.get_formula())() * (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.get_default() })
     }
 
-    fn div<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn div<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) / ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.get_formula())() / (other.get_formula())() });
-        CompoundAttribute { equation, formula, default: self.get_default() }
+        let formula = Rc::new(|| -> f64 { (self.get_formula())() / (other.get_formula())() });
+        Box::new(CompoundAttribute { equation, formula, default: self.get_default() })
     }
 
-    fn pow<T: Value>(&'static self, other: &'static T) -> CompoundAttribute {
+    fn pow<'a, T: Value>(&'a self, other: &'a T) -> Box<CompoundAttribute> {
         let equation = format!("({}) ^ ({})", self.get_equation(), other.get_equation());
-        let formula = Box::new(|| -> f64 { (self.get_formula())().powf((other.get_formula())()) });
-        CompoundAttribute { equation, formula, default: self.get_default() }
+        let formula = Rc::new(|| -> f64 { (self.get_formula())().powf((other.get_formula())()) });
+        Box::new(CompoundAttribute { equation, formula, default: self.get_default() })
     }
 }
 impl Attribute for ClampedAttribute {}
+
 
 #[macro_export]
 macro_rules! attribute {
