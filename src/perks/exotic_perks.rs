@@ -875,7 +875,7 @@ pub fn exotic_perks() {
     );
 
 
-    add_edr(Perks::MarkOfTheDevourer, Box::new(|_input| -> ExtraDamageResponse { // haven't added the thorn perk anywhere else, will need to do that probably
+    add_edr(Perks::MarkOfTheDevourer, Box::new(|_input| -> ExtraDamageResponse {
         let dmg = if _input.pvp { 0.4 } else { 8.5 };
         let dmg_modifier = if _input.value > 0 && _input.pvp { 17.5 } else if _input.value > 0 { 2.0 } else { 1.0 };
         ExtraDamageResponse { 
@@ -892,7 +892,7 @@ pub fn exotic_perks() {
         }),
     );
 
-    add_edr(Perks::ToxicOverload, Box::new(|_input| -> ExtraDamageResponse { // haven't added the osteo perk anywhere else, will need to do that probably
+    add_edr(Perks::ToxicOverload, Box::new(|_input| -> ExtraDamageResponse {
         let dmg = if _input.pvp { 5.0 } else {34.0 }; // pvp value uncertain, no scaling for the pve damage ( should increase by 7.7% per tick)
         let delay = if _input.pvp { 0.7 } else { 0.5 };
         let total_ticks = if _input.pvp { 19 } else { 19 }; // value is unknown for pvp
@@ -910,7 +910,7 @@ pub fn exotic_perks() {
         }),
     );
 
-    add_edr(Perks::PoisonArrows, Box::new(|_input| -> ExtraDamageResponse { // haven't added the lemon arc anywhere else, will need to do that probably
+    add_edr(Perks::PoisonArrows, Box::new(|_input| -> ExtraDamageResponse {
         let dmg = if _input.pvp { 1.88 } else { 29.0 };
         ExtraDamageResponse { 
             additive_damage: dmg,
@@ -1020,5 +1020,22 @@ pub fn exotic_perks() {
             }
         }),
     );
+
+    add_edr(Perks::ArcTraps,
+            Box::new(|_input: ModifierResponseInput| -> ExtraDamageResponse {
+                let dmg = if _input.pvp { 67.5 } else { 145.0 };
+                let modifier = if _input.value > 0 { 2.0 } else { 1.0 };                
+                ExtraDamageResponse { 
+                    additive_damage: dmg * modifier,
+                    time_for_additive_damage: 10.0,
+                    increment_total_time: false,
+                    times_to_hit: 20,
+                    hit_at_same_time: false,
+                    is_dot: true,
+                    weapon_scale: true,
+                    crit_scale: false,
+                    combatant_scale: true, 
+                }
+            }))
 
 }

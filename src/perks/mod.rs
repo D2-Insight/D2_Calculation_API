@@ -423,6 +423,7 @@ pub enum Perks {
     TargetAquired = 939227542,
     SleeperCatalyst = 2142466730,
     TractorCannon = 1210807262,
+    ArcTraps = 389268985,
 
     #[num_enum(default)]
     Ignore = 69420,
