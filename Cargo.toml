@@ -1,7 +1,7 @@
 [package]
 name = "d2_calculation_api"
 edition = "2021"
-version = "1.0.1"
+version = "1.0.2"
 rust-version = "1.65"
 repository = "https://github.com/oh-yes-0-fps/D2_Calculation_API"
 build = "build.rs"
