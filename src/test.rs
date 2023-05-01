@@ -5,7 +5,7 @@ use num_traits::{Float, Zero};
 use crate::{
     d2_enums::{AmmoType, DamageType, StatHashes, WeaponType},
     weapons::{Stat, Weapon},
-    PERS_DATA,
+    PERS_DATA, attribute, attributes::*,
 };
 
 const FLOAT_DELTA: f32 = 0.0001;
@@ -307,4 +307,17 @@ fn test_bow_firing_data() {
             response.pvp_crit_mult
         );
     });
+}
+
+static test_val: f64 = 0.5;
+
+#[test]
+fn attribute_test() {
+    fn func() -> f64 {
+        test_val
+    }
+    let boxxed = Box::new(func);
+    let test_attribute = SimpleAttribute::new("test_attr".to_string(), boxxed, 0.0);
+    let val =  test_attribute.getf();
+    assert_eq!(val, test_val);
 }

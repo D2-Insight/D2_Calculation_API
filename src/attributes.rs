@@ -427,13 +427,18 @@ impl AttributeImpl for ClampedAttribute {
 }
 impl Attribute for ClampedAttribute {}
 
-
+#[macro_export]
 macro_rules! attribute {
-    ($name:ident, $value:expr) => {
-        SimpleAttribute::new(stringify!($name).to_string(), Box::new(|| -> f64 { $value.into() }), $value.into())
+    // ($name:ident, $value:expr) => {
+    //     SimpleAttribute::new(stringify!($name).to_string(), Box::new(|| -> f64 { $value.into() }), $value.into())
+    // };
+    // take in one arg of a variable and derive name and value from it
+    ($name:ident) => {
+        SimpleAttribute::new(stringify!($name).to_string(), Box::new(|| -> f64 { $name.into() }), $name.into())
     };
 }
 
+#[macro_export]
 macro_rules! attribute_ref {
     ($name:ident, $value:expr) => {
         RefAttribute::new(stringify!($name).to_string(), Box::new(|| -> f64 { $value.into() }), $value.into())
