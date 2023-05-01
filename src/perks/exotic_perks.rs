@@ -874,6 +874,7 @@ pub fn exotic_perks() {
         }),
     );
 
+
     add_edr(Perks::MarkOfTheDevourer, Box::new(|_input| -> ExtraDamageResponse { // haven't added the thorn perk anywhere else, will need to do that probably
         let dmg = if _input.pvp { 0.4 } else { 8.5 };
         let dmg_modifier = if _input.value > 0 && _input.pvp { 17.5 } else if _input.value > 0 { 2.0 } else { 1.0 };
@@ -965,6 +966,59 @@ pub fn exotic_perks() {
     //     }),
     // );
 
+    add_sbr(
+        Perks::CranialSpike,
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
+            let mut out = HashMap::new();
+            let val = clamp(_input.value, 0, 5) as i32;
+            out.insert(StatHashes::RANGE.into(), 8*val);
+            out.insert(StatHashes::AIM_ASSIST.into(), 4*val);
+            out
+        }),
+    );
 
+    add_rsmr(
+        Perks::CranialSpike,
+        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
+            let val = clamp(_input.value, 0, 5) as i32;
+            let rel = 0.97_f64.powi(val);
+            ReloadModifierResponse {
+                reload_time_scale: rel,
+                ..Default::default()
+            }
+        }),
+    );
+
+    add_rmr(
+        Perks::CranialSpike,
+        Box::new(|_input: ModifierResponseInput| -> RangeModifierResponse {
+            let val = clamp(_input.value, 0, 5) as i32;
+            RangeModifierResponse {
+                range_stat_add: 8*val,
+                ..Default::default()
+            }
+        }),
+    );
+
+    add_fmr(
+        Perks::DarkForgedTrigger,
+        Box::new(|_input: ModifierResponseInput| -> FiringModifierResponse {
+            if _input.value == 0 {
+                if _input.calc_data.perk_value_map.get(&1319823571).unwrap_or(&0) > &4 {
+                    FiringModifierResponse {
+                        burst_delay_add: -5.0 / 30.0,
+                        ..Default::default()
+                    }
+                } else {
+                    FiringModifierResponse {
+                        burst_delay_add: -1.0 / 30.0,
+                        ..Default::default()
+                    }
+                }
+            } else {
+                FiringModifierResponse::default()
+            }
+        }),
+    );
 
 }
