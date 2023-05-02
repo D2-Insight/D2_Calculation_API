@@ -57,9 +57,9 @@ pub fn exotic_perks() {
                 .get(&213689231)
                 .unwrap_or(&0);
             let buff_val = (clamp(inter_val, 0, 7) * 5) as i32;
-            out.insert(StatHashes::RELOAD.into(), buff_val);
-            out.insert(StatHashes::RANGE.into(), buff_val);
-            out.insert(StatHashes::HANDLING.into(), buff_val);
+            out.insert(StatHashes::Reload.into(), buff_val);
+            out.insert(StatHashes::Range.into(), buff_val);
+            out.insert(StatHashes::Handling.into(), buff_val);
             out
         }),
     );
@@ -164,8 +164,8 @@ pub fn exotic_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut out = HashMap::new();
             if _input.value > 0 {
-                out.insert(StatHashes::HANDLING.into(), 20);
-                out.insert(StatHashes::RELOAD.into(), 40);
+                out.insert(StatHashes::Handling.into(), 20);
+                out.insert(StatHashes::Reload.into(), 40);
             };
             out
         }),
@@ -507,9 +507,9 @@ pub fn exotic_perks() {
             let mut out = HashMap::new();
             if has_cat {
                 if _input.value == 0 {
-                    out.insert(StatHashes::STABILITY.into(), 40);
+                    out.insert(StatHashes::Stability.into(), 40);
                 } else if _input.value == 1 {
-                    out.insert(StatHashes::RELOAD.into(), 100);
+                    out.insert(StatHashes::Reload.into(), 100);
                 }
             }
             out
@@ -562,14 +562,14 @@ pub fn exotic_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut stats = HashMap::new();
             if _input.value == 1 {
-                stats.insert(StatHashes::STABILITY.into(), 20);
-                stats.insert(StatHashes::AIM_ASSIST.into(), 10);
+                stats.insert(StatHashes::Stability.into(), 20);
+                stats.insert(StatHashes::AimAssist.into(), 10);
             } else if _input.value == 2 {
-                stats.insert(StatHashes::AIRBORNE.into(), 20);
-                stats.insert(StatHashes::RELOAD.into(), 35);
+                stats.insert(StatHashes::AirborneEffect.into(), 20);
+                stats.insert(StatHashes::Reload.into(), 35);
             } else if _input.value == 3 {
-                stats.insert(StatHashes::RANGE.into(), 5);
-                stats.insert(StatHashes::HANDLING.into(), 25);
+                stats.insert(StatHashes::Range.into(), 5);
+                stats.insert(StatHashes::Handling.into(), 25);
             };
             stats
         }),
@@ -624,7 +624,7 @@ pub fn exotic_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut out = HashMap::new();
             if _input.value > 0 {
-                out.insert(StatHashes::RELOAD.into(), 70);
+                out.insert(StatHashes::Reload.into(), 70);
             }
             out
         }),
@@ -665,7 +665,7 @@ pub fn exotic_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut out = HashMap::new();
             if _input.value > 0 {
-                out.insert(StatHashes::RELOAD.into(), 100);
+                out.insert(StatHashes::Reload.into(), 100);
             }
             out
         }),
@@ -782,7 +782,7 @@ pub fn exotic_perks() {
             let zoom_stat = _input
                 .calc_data
                 .stats
-                .get(&StatHashes::ZOOM.into())
+                .get(&StatHashes::Zoom.into())
                 .unwrap_or(&Stat::new())
                 .val() as f64;
             let zoom_mult = (zoom_stat + 3.0) / zoom_stat;
@@ -803,8 +803,8 @@ pub fn exotic_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut out = HashMap::new();
             if _input.value > 0 {
-                out.insert(StatHashes::ZOOM.into(), 3);
-                out.insert(StatHashes::RANGE.into(), 30);
+                out.insert(StatHashes::Zoom.into(), 3);
+                out.insert(StatHashes::Range.into(), 30);
             }
             out
         }),
@@ -874,14 +874,13 @@ pub fn exotic_perks() {
         }),
     );
 
-
     add_sbr(
         Perks::CranialSpike,
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut out = HashMap::new();
             let val = clamp(_input.value, 0, 5) as i32;
-            out.insert(StatHashes::RANGE.into(), 8*val);
-            out.insert(StatHashes::AIM_ASSIST.into(), 4*val);
+            out.insert(StatHashes::Range.into(), 8 * val);
+            out.insert(StatHashes::AimAssist.into(), 4 * val);
             out
         }),
     );
@@ -903,7 +902,7 @@ pub fn exotic_perks() {
         Box::new(|_input: ModifierResponseInput| -> RangeModifierResponse {
             let val = clamp(_input.value, 0, 5) as i32;
             RangeModifierResponse {
-                range_stat_add: 8*val,
+                range_stat_add: 8 * val,
                 ..Default::default()
             }
         }),
@@ -913,7 +912,13 @@ pub fn exotic_perks() {
         Perks::DarkForgedTrigger,
         Box::new(|_input: ModifierResponseInput| -> FiringModifierResponse {
             if _input.value == 0 {
-                if _input.calc_data.perk_value_map.get(&1319823571).unwrap_or(&0) > &4 {
+                if _input
+                    .calc_data
+                    .perk_value_map
+                    .get(&1319823571)
+                    .unwrap_or(&0)
+                    > &4
+                {
                     FiringModifierResponse {
                         burst_delay_add: -5.0 / 30.0,
                         ..Default::default()

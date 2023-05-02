@@ -55,7 +55,7 @@ pub fn origin_perks() {
         Perks::VeistStinger,
         Box::new(|_input: ModifierResponseInput| -> FiringModifierResponse {
             FiringModifierResponse {
-                burst_delay_scale: if _input.calc_data.weapon_type == &WeaponType::BOW
+                burst_delay_scale: if _input.calc_data.weapon_type == &WeaponType::Bow
                     && _input.value > 0
                 {
                     0.85
@@ -109,10 +109,10 @@ pub fn origin_perks() {
             let reload = if _input.value > 0 { 50 } else { 0 };
             let stability = if _input.value > 0 { 20 } else { 0 };
             let aim_assist = if _input.value > 0 { 10 } else { 0 };
-            map.insert(StatHashes::RANGE.into(), range);
-            map.insert(StatHashes::RELOAD.into(), reload);
-            map.insert(StatHashes::STABILITY.into(), stability);
-            map.insert(StatHashes::AIM_ASSIST.into(), aim_assist);
+            map.insert(StatHashes::Range.into(), range);
+            map.insert(StatHashes::Reload.into(), reload);
+            map.insert(StatHashes::Stability.into(), stability);
+            map.insert(StatHashes::AimAssist.into(), aim_assist);
             map
         }),
     );
@@ -124,8 +124,8 @@ pub fn origin_perks() {
             let range = if _input.is_enhanced { 30 } else { 20 };
             let handling = if _input.is_enhanced { 40 } else { 20 };
             if _input.calc_data.time_total < 2.0 && _input.value > 0 {
-                map.insert(StatHashes::RANGE.into(), range);
-                map.insert(StatHashes::HANDLING.into(), handling);
+                map.insert(StatHashes::Range.into(), range);
+                map.insert(StatHashes::Handling.into(), handling);
             }
             map
         }),
@@ -137,7 +137,7 @@ pub fn origin_perks() {
             if _input.value == 0 || _input.pvp {
                 return DamageModifierResponse::default();
             }
-            let damage_mult = if _input.calc_data.weapon_type == &WeaponType::LINEARFUSIONRIFLE {
+            let damage_mult = if _input.calc_data.weapon_type == &WeaponType::LinearFusionRifle {
                 1.0888
             } else {
                 1.1078
@@ -155,7 +155,7 @@ pub fn origin_perks() {
         Perks::Ambush,
         Box::new(|_input: ModifierResponseInput| -> FiringModifierResponse {
             FiringModifierResponse {
-                burst_delay_scale: if _input.calc_data.weapon_type == &WeaponType::BOW
+                burst_delay_scale: if _input.calc_data.weapon_type == &WeaponType::Bow
                     && _input.value > 0
                 {
                     0.9
@@ -208,8 +208,8 @@ pub fn origin_perks() {
             if _input.calc_data.shots_fired_this_mag <= _input.calc_data.base_mag / 2.0
                 && _input.value > 0
             {
-                map.insert(StatHashes::RELOAD.into(), reload);
-                map.insert(StatHashes::STABILITY.into(), stability);
+                map.insert(StatHashes::Reload.into(), reload);
+                map.insert(StatHashes::Stability.into(), stability);
             }
             map
         }),
@@ -234,7 +234,7 @@ pub fn origin_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut map = HashMap::new();
             if _input.value > 0 {
-                map.insert(StatHashes::RELOAD.into(), 40);
+                map.insert(StatHashes::Reload.into(), 40);
             }
             map
         }),
@@ -265,7 +265,7 @@ pub fn origin_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut map = HashMap::new();
             let val = clamp(_input.value, 0, 5) as i32;
-            map.insert(StatHashes::RELOAD.into(), val * 10);
+            map.insert(StatHashes::Reload.into(), val * 10);
             map
         }),
     );
@@ -291,8 +291,8 @@ pub fn origin_perks() {
             let mut map = HashMap::new();
             let stat_bump = if _input.is_enhanced { 20 } else { 10 };
             if _input.value > 0 {
-                map.insert(StatHashes::AIM_ASSIST.into(), stat_bump);
-                map.insert(StatHashes::RANGE.into(), stat_bump);
+                map.insert(StatHashes::AimAssist.into(), stat_bump);
+                map.insert(StatHashes::Range.into(), stat_bump);
             }
             map
         }),
@@ -328,8 +328,8 @@ pub fn origin_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut map = HashMap::new();
             if _input.value > 0 {
-                map.insert(StatHashes::HANDLING.into(), 20);
-                map.insert(StatHashes::RELOAD.into(), 20);
+                map.insert(StatHashes::Handling.into(), 20);
+                map.insert(StatHashes::Reload.into(), 20);
             }
             map
         }),
@@ -371,7 +371,7 @@ pub fn origin_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut out = HashMap::new();
             if _input.value > 0 {
-                out.insert(StatHashes::HANDLING.into(), 40);
+                out.insert(StatHashes::Handling.into(), 40);
             }
             out
         }),

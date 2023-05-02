@@ -32,8 +32,8 @@ pub fn year_1_perks() {
                     reload = 55;
                 };
                 let mut out = HashMap::new();
-                out.insert(StatHashes::STABILITY.into(), stability);
-                out.insert(StatHashes::RELOAD.into(), reload);
+                out.insert(StatHashes::Stability.into(), stability);
+                out.insert(StatHashes::Reload.into(), reload);
                 out
             },
         ),
@@ -101,7 +101,7 @@ pub fn year_1_perks() {
                 let val = clamp(_input.value, 0, 15) as f64;
                 if _input.calc_data.total_shots_fired == 0.0 {
                     let mut mag_mult = 1.0;
-                    if *_input.calc_data.ammo_type == AmmoType::PRIMARY {
+                    if *_input.calc_data.ammo_type == AmmoType::Primary {
                         mag_mult += 0.2 * val;
                     } else {
                         mag_mult += 0.1 * val;
@@ -127,7 +127,7 @@ pub fn year_1_perks() {
             if _input.calc_data.total_shots_fired == 0.0 && _input.value > 0 {
                 let mut crit_mult =
                     (_input.calc_data.base_crit_mult + 1.0) / _input.calc_data.base_crit_mult;
-                if *_input.calc_data.weapon_type == WeaponType::SCOUTRIFLE {
+                if *_input.calc_data.weapon_type == WeaponType::ScoutRifle {
                     crit_mult *= 0.95;
                 }
                 return DamageModifierResponse {
@@ -219,13 +219,13 @@ pub fn year_1_perks() {
                 let mut out = HashMap::new();
                 if _input.value > 0 {
                     let reload = if _input.is_enhanced { 55 } else { 50 };
-                    out.insert(StatHashes::RELOAD.into(), reload);
+                    out.insert(StatHashes::Reload.into(), reload);
                 };
                 let mut reserves = if _input.is_enhanced { 40 } else { 30 };
-                if *_input.calc_data.weapon_type == WeaponType::GRENADELAUNCHER {
+                if *_input.calc_data.weapon_type == WeaponType::GrenadeLauncher {
                     reserves -= 10;
                 };
-                out.insert(StatHashes::INVENTORY_SIZE.into(), reserves);
+                out.insert(StatHashes::InventorySize.into(), reserves);
                 out
             },
         ),
@@ -282,14 +282,14 @@ pub fn year_1_perks() {
             |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut handling = if _input.is_enhanced { 35 } else { 30 };
                 let mut stabiltiy = if _input.is_enhanced { 25 } else { 20 };
-                if *_input.calc_data.weapon_type == WeaponType::FUSIONRIFLE {
+                if *_input.calc_data.weapon_type == WeaponType::FusionRifle {
                     handling = handling / 2;
                     stabiltiy = stabiltiy / 2;
                 };
                 let mut out = HashMap::new();
                 if _input.value > 0 {
-                    out.insert(StatHashes::HANDLING.into(), handling);
-                    out.insert(StatHashes::STABILITY.into(), stabiltiy);
+                    out.insert(StatHashes::Handling.into(), handling);
+                    out.insert(StatHashes::Stability.into(), stabiltiy);
                 }
                 out
             },
@@ -301,7 +301,7 @@ pub fn year_1_perks() {
         Box::new(
             |_input: ModifierResponseInput| -> HandlingModifierResponse {
                 let mut handling = if _input.is_enhanced { 35 } else { 30 };
-                if *_input.calc_data.weapon_type == WeaponType::FUSIONRIFLE {
+                if *_input.calc_data.weapon_type == WeaponType::FusionRifle {
                     handling = handling / 2;
                 };
                 if _input.value > 0 {
@@ -320,7 +320,7 @@ pub fn year_1_perks() {
         Perks::FullAutoTrigger,
         Box::new(|_input: ModifierResponseInput| -> FiringModifierResponse {
             let mut delay_mult = 1.0;
-            if *_input.calc_data.weapon_type == WeaponType::SHOTGUN {
+            if *_input.calc_data.weapon_type == WeaponType::Shotgun {
                 delay_mult = 0.91;
             };
             FiringModifierResponse {
@@ -350,8 +350,8 @@ pub fn year_1_perks() {
             |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut out = HashMap::new();
                 if _input.value > 0 {
-                    out.insert(StatHashes::AIM_ASSIST.into(), 15);
-                    out.insert(StatHashes::STABILITY.into(), 25);
+                    out.insert(StatHashes::AimAssist.into(), 15);
+                    out.insert(StatHashes::Stability.into(), 25);
                 };
                 out
             },
@@ -362,8 +362,8 @@ pub fn year_1_perks() {
         Perks::HipFireGrip,
         Box::new(|_input: ModifierResponseInput| -> RangeModifierResponse {
             let mut hf_range_scale = 1.2;
-            if *_input.calc_data.weapon_type == WeaponType::FUSIONRIFLE
-                || *_input.calc_data.weapon_type == WeaponType::SHOTGUN
+            if *_input.calc_data.weapon_type == WeaponType::FusionRifle
+                || *_input.calc_data.weapon_type == WeaponType::Shotgun
                 || _input.calc_data.intrinsic_hash == 2770223582
             //last word
             {
@@ -396,7 +396,7 @@ pub fn year_1_perks() {
                 let aim_assist = if _input.is_enhanced { 11 } else { 10 };
                 let mut out = HashMap::new();
                 if _input.value >= 1 {
-                    out.insert(StatHashes::AIM_ASSIST.into(), aim_assist);
+                    out.insert(StatHashes::AimAssist.into(), aim_assist);
                 }
                 out
             },
@@ -411,8 +411,8 @@ pub fn year_1_perks() {
                 let range = if _input.is_enhanced { 30 } else { 25 };
                 let mut out = HashMap::new();
                 if _input.value > 0 {
-                    out.insert(StatHashes::AIM_ASSIST.into(), aim_assist);
-                    out.insert(StatHashes::RANGE.into(), range);
+                    out.insert(StatHashes::AimAssist.into(), aim_assist);
+                    out.insert(StatHashes::Range.into(), range);
                 }
                 out
             },
@@ -441,7 +441,7 @@ pub fn year_1_perks() {
             |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut out = HashMap::new();
                 if _input.value > 0 {
-                    out.insert(StatHashes::RELOAD.into(), 70);
+                    out.insert(StatHashes::Reload.into(), 70);
                 }
                 out
             },
@@ -494,8 +494,8 @@ pub fn year_1_perks() {
                 let range = if _input.is_enhanced { 25 } else { 20 };
                 let mut out = HashMap::new();
                 if _input.value > 0 {
-                    out.insert(StatHashes::STABILITY.into(), stability);
-                    out.insert(StatHashes::RANGE.into(), range);
+                    out.insert(StatHashes::Stability.into(), stability);
+                    out.insert(StatHashes::Range.into(), range);
                 }
                 out
             },
@@ -506,7 +506,7 @@ pub fn year_1_perks() {
         Perks::SlideShot,
         Box::new(|_input: ModifierResponseInput| -> RangeModifierResponse {
             let range;
-            if *_input.calc_data.weapon_type == WeaponType::FUSIONRIFLE {
+            if *_input.calc_data.weapon_type == WeaponType::FusionRifle {
                 range = 0; //only applies to first proj so like should do alot less
             } else if _input.value > 0 {
                 range = if _input.is_enhanced { 25 } else { 20 }
@@ -528,8 +528,8 @@ pub fn year_1_perks() {
                 let handling = if _input.is_enhanced { 25 } else { 20 };
                 let mut out = HashMap::new();
                 if _input.value > 0 {
-                    out.insert(StatHashes::STABILITY.into(), stability);
-                    out.insert(StatHashes::HANDLING.into(), handling);
+                    out.insert(StatHashes::Stability.into(), stability);
+                    out.insert(StatHashes::Handling.into(), handling);
                 }
                 out
             },
@@ -554,7 +554,7 @@ pub fn year_1_perks() {
         Box::new(
             |_input: ModifierResponseInput| -> HandlingModifierResponse {
                 let mut ads_mult = 0.5;
-                if *_input.calc_data.ammo_type == AmmoType::SPECIAL {
+                if *_input.calc_data.ammo_type == AmmoType::Special {
                     ads_mult = 0.8; //its 0.8 from my testing idk
                 };
                 HandlingModifierResponse {
@@ -570,12 +570,12 @@ pub fn year_1_perks() {
         Box::new(
             |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut stability = if _input.is_enhanced { 44 } else { 40 };
-                if *_input.calc_data.weapon_type == WeaponType::FUSIONRIFLE {
+                if *_input.calc_data.weapon_type == WeaponType::FusionRifle {
                     stability = stability / 4;
                 }
                 let mut out = HashMap::new();
                 if _input.value > 0 {
-                    out.insert(StatHashes::STABILITY.into(), stability);
+                    out.insert(StatHashes::Stability.into(), stability);
                 }
                 out
             },
@@ -678,7 +678,7 @@ pub fn year_1_perks() {
                 };
                 let mut out = HashMap::new();
                 if _input.value > 0 {
-                    out.insert(StatHashes::HANDLING.into(), handling);
+                    out.insert(StatHashes::Handling.into(), handling);
                 }
                 out
             },
@@ -708,7 +708,7 @@ pub fn year_1_perks() {
             let mut damage_mult = if _input.value > 0 { 0.5 } else { 0.0 };
             let duration = if _input.is_enhanced { 5.0 } else { 4.0 };
             if _input.calc_data.time_total > duration
-                || _input.calc_data.damage_type != &DamageType::KINETIC
+                || _input.calc_data.damage_type != &DamageType::Kinetic
             {
                 damage_mult = 0.0;
             };
@@ -743,7 +743,7 @@ pub fn year_1_perks() {
             |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut map = HashMap::new();
                 if _input.value > 0 {
-                    map.insert(StatHashes::HANDLING.into(), 100);
+                    map.insert(StatHashes::Handling.into(), 100);
                 }
                 map
             },
@@ -774,7 +774,7 @@ pub fn year_1_perks() {
             |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut map = HashMap::new();
                 if _input.value > 0 {
-                    map.insert(StatHashes::HANDLING.into(), 50);
+                    map.insert(StatHashes::Handling.into(), 50);
                 }
                 map
             },
@@ -787,7 +787,7 @@ pub fn year_1_perks() {
             |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
                 let mut map = HashMap::new();
                 if _input.value > 0 {
-                    map.insert(StatHashes::RELOAD.into(), 100);
+                    map.insert(StatHashes::Reload.into(), 100);
                 }
                 map
             },
@@ -816,7 +816,7 @@ pub fn year_1_perks() {
                 let mut map = HashMap::new();
                 let buff = if _input.is_enhanced { 35 } else { 30 };
                 if _input.value > 0 {
-                    map.insert(StatHashes::STABILITY.into(), buff);
+                    map.insert(StatHashes::Stability.into(), buff);
                 }
                 map
             },

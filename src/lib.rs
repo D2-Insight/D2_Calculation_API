@@ -8,7 +8,7 @@ pub mod d2_enums;
 pub mod enemies;
 pub mod logging;
 pub mod perks;
-pub mod attributes;
+pub mod attribute_framework;
 #[cfg(test)]
 mod test;
 pub mod types;

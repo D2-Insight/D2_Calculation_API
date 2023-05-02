@@ -37,7 +37,7 @@ pub fn other_perks() {
     add_rsmr(
         Perks::RapidFireFrame,
         Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
-            if _input.value > 0 || _input.calc_data.weapon_type == &WeaponType::SHOTGUN {
+            if _input.value > 0 || _input.calc_data.weapon_type == &WeaponType::Shotgun {
                 ReloadModifierResponse {
                     reload_stat_add: 0,
                     reload_time_scale: 0.80,
@@ -52,7 +52,7 @@ pub fn other_perks() {
         Perks::RapidFireFrame,
         Box::new(
             |_input: ModifierResponseInput| -> InventoryModifierResponse {
-                if _input.calc_data.weapon_type == &WeaponType::SNIPER {
+                if _input.calc_data.weapon_type == &WeaponType::Sniper {
                     InventoryModifierResponse {
                         inv_scale: 1.3,
                         ..Default::default()
@@ -128,9 +128,9 @@ pub fn other_perks() {
         Perks::OphidianAspect,
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut stats = HashMap::new();
-            stats.insert(StatHashes::HANDLING.into(), 35);
-            stats.insert(StatHashes::RELOAD.into(), 35);
-            stats.insert(StatHashes::AIRBORNE.into(), 10);
+            stats.insert(StatHashes::Handling.into(), 35);
+            stats.insert(StatHashes::Reload.into(), 35);
+            stats.insert(StatHashes::AirborneEffect.into(), 10);
             stats
         }),
     );
@@ -140,8 +140,8 @@ pub fn other_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut stats = HashMap::new();
             if _input.value >= 1 {
-                stats.insert(StatHashes::HANDLING.into(), 100);
-                stats.insert(StatHashes::RELOAD.into(), 100);
+                stats.insert(StatHashes::Handling.into(), 100);
+                stats.insert(StatHashes::Reload.into(), 100);
             }
             stats
         }),
@@ -183,7 +183,7 @@ pub fn other_perks() {
         Perks::Amplified,
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut stats = HashMap::new();
-            stats.insert(StatHashes::HANDLING.into(), 40);
+            stats.insert(StatHashes::Handling.into(), 40);
             stats
         }),
     );
@@ -221,7 +221,7 @@ pub fn other_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut stats = HashMap::new();
             if _input.value > 0 {
-                stats.insert(StatHashes::RELOAD.into(), 50);
+                stats.insert(StatHashes::Reload.into(), 50);
             };
             stats
         }),
@@ -246,7 +246,7 @@ pub fn other_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut stats = HashMap::new();
             if _input.value > 0 {
-                stats.insert(StatHashes::RELOAD.into(), 50);
+                stats.insert(StatHashes::Reload.into(), 50);
             };
             stats
         }),
@@ -257,7 +257,7 @@ pub fn other_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut stats = HashMap::new();
             if _input.value > 0 {
-                stats.insert(StatHashes::AIRBORNE.into(), 20);
+                stats.insert(StatHashes::AirborneEffect.into(), 20);
             };
             stats
         }),
@@ -269,8 +269,8 @@ pub fn other_perks() {
             let mut stats = HashMap::new();
             let val = clamp(_input.value, 0, 3) as i32;
             if _input.value > 0 {
-                stats.insert(StatHashes::HANDLING.into(), 20 * val);
-                stats.insert(StatHashes::RELOAD.into(), 20 * val);
+                stats.insert(StatHashes::Handling.into(), 20 * val);
+                stats.insert(StatHashes::Reload.into(), 20 * val);
             };
             stats
         }),
@@ -308,7 +308,7 @@ pub fn other_perks() {
             if _input.value > 0 {
                 buff += 50;
             };
-            stats.insert(StatHashes::AIRBORNE.into(), buff);
+            stats.insert(StatHashes::AirborneEffect.into(), buff);
             stats
         }),
     );
@@ -318,9 +318,9 @@ pub fn other_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut stats = HashMap::new();
             if _input.value > 0 {
-                stats.insert(StatHashes::AIRBORNE.into(), 20);
-                stats.insert(StatHashes::AIM_ASSIST.into(), 15);
-                stats.insert(StatHashes::STABILITY.into(), 30);
+                stats.insert(StatHashes::AirborneEffect.into(), 20);
+                stats.insert(StatHashes::AimAssist.into(), 15);
+                stats.insert(StatHashes::Stability.into(), 30);
             };
             stats
         }),
@@ -440,7 +440,7 @@ pub fn other_perks() {
     add_dmr(
         Perks::FullChoke,
         Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
-            if _input.calc_data.weapon_type == &WeaponType::SHOTGUN
+            if _input.calc_data.weapon_type == &WeaponType::Shotgun
                 && _input.calc_data.base_crit_mult < 1.15
             {
                 DamageModifierResponse {
@@ -457,7 +457,7 @@ pub fn other_perks() {
     add_fmr(
         Perks::AcceleratedCoils,
         Box::new(|_input: ModifierResponseInput| -> FiringModifierResponse {
-            if _input.calc_data.weapon_type == &WeaponType::LINEARFUSIONRIFLE {
+            if _input.calc_data.weapon_type == &WeaponType::LinearFusionRifle {
                 return FiringModifierResponse {
                     burst_delay_add: -0.033,
                     ..Default::default()
@@ -473,7 +473,7 @@ pub fn other_perks() {
     add_fmr(
         Perks::LiquidCoils,
         Box::new(|_input: ModifierResponseInput| -> FiringModifierResponse {
-            if _input.calc_data.weapon_type == &WeaponType::LINEARFUSIONRIFLE {
+            if _input.calc_data.weapon_type == &WeaponType::LinearFusionRifle {
                 return FiringModifierResponse {
                     burst_delay_add: 0.033,
                     ..Default::default()
@@ -519,7 +519,7 @@ pub fn other_perks() {
             } else {
                 1.0
             };
-            if _input.calc_data.weapon_type == &WeaponType::SHOTGUN {
+            if _input.calc_data.weapon_type == &WeaponType::Shotgun {
                 FiringModifierResponse {
                     burst_delay_add: -(tick_amount / 30.0),
                     ..Default::default()
@@ -535,9 +535,9 @@ pub fn other_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut map = HashMap::new();
             if _input.value > 0 {
-                map.insert(StatHashes::AIRBORNE.into(), 30);
-                map.insert(StatHashes::RELOAD.into(), 40);
-                map.insert(StatHashes::HANDLING.into(), 40);
+                map.insert(StatHashes::AirborneEffect.into(), 30);
+                map.insert(StatHashes::Reload.into(), 40);
+                map.insert(StatHashes::Handling.into(), 40);
             }
             map
         }),

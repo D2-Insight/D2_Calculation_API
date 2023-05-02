@@ -52,7 +52,7 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
     let explosion_dmg = tmp_dmg_prof.1;
     let mut crit_mult = tmp_dmg_prof.2;
     // let damage_delay = tmp_dmg_prof.3;
-    if _weapon.weapon_type == WeaponType::SHOTGUN && _weapon.firing_data.burst_size == 12 {
+    if _weapon.weapon_type == WeaponType::Shotgun && _weapon.firing_data.burst_size == 12 {
         crit_mult = 1.0; // shawty has no crits
     }
 
@@ -117,15 +117,15 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
             };
 
             if _weapon.hash == 4289226715 { // vex mythoclast
-            } else if _weapon.weapon_type == WeaponType::LINEARFUSIONRIFLE {
+            } else if _weapon.weapon_type == WeaponType::LinearFusionRifle {
                 shot_delay *= 1.95;
-            } else if _weapon.weapon_type == WeaponType::FUSIONRIFLE {
+            } else if _weapon.weapon_type == WeaponType::FusionRifle {
                 shot_delay *= 1.45;
             }
 
             let ammo_fired;
             if _weapon.firing_data.one_ammo {
-                ammo_fired = opt_bullets_fired/shot_burst_size;
+                ammo_fired = opt_bullets_fired / shot_burst_size;
             } else {
                 ammo_fired = opt_bullets_fired;
             }
@@ -183,7 +183,7 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
         let optimal_ttk = OptimalKillData {
             headshots: opt_timeline_headshots,
             bodyshots: opt_timeline_bodyshots,
-            time_taken: opt_time_taken
+            time_taken: opt_time_taken,
         };
 
         let mut bdy_bullets_hit = 0.0;
@@ -239,15 +239,15 @@ pub fn calc_ttk(_weapon: &Weapon, _overshield: f64) -> Vec<ResillienceSummary> {
             };
 
             if _weapon.hash == 4289226715 { //vex mythoclast
-            } else if _weapon.weapon_type == WeaponType::LINEARFUSIONRIFLE {
+            } else if _weapon.weapon_type == WeaponType::LinearFusionRifle {
                 shot_delay *= 1.95;
-            } else if _weapon.weapon_type == WeaponType::FUSIONRIFLE {
+            } else if _weapon.weapon_type == WeaponType::FusionRifle {
                 shot_delay *= 1.45;
             }
 
             let ammo_fired;
             if _weapon.firing_data.one_ammo {
-                ammo_fired = opt_bullets_fired/shot_burst_size;
+                ammo_fired = opt_bullets_fired / shot_burst_size;
             } else {
                 ammo_fired = opt_bullets_fired;
             }

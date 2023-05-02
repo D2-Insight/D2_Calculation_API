@@ -24,8 +24,8 @@ pub fn year_6_perks() {
                 range_bonus = 10;
                 reload_bonus = 30;
             };
-            map.insert(StatHashes::RANGE.into(), range_bonus);
-            map.insert(StatHashes::RELOAD.into(), reload_bonus);
+            map.insert(StatHashes::Range.into(), range_bonus);
+            map.insert(StatHashes::Reload.into(), reload_bonus);
             map
         }),
     );
@@ -57,10 +57,10 @@ pub fn year_6_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut map = HashMap::new();
             let val = clamp(_input.value, 0, 5) as i32;
-            map.insert(StatHashes::RANGE.into(), val * 5);
-            map.insert(StatHashes::HANDLING.into(), val * 5);
-            map.insert(StatHashes::RELOAD.into(), val * 5);
-            map.insert(StatHashes::STABILITY.into(), val * 5);
+            map.insert(StatHashes::Range.into(), val * 5);
+            map.insert(StatHashes::Handling.into(), val * 5);
+            map.insert(StatHashes::Reload.into(), val * 5);
+            map.insert(StatHashes::Stability.into(), val * 5);
             map
         }),
     );
@@ -122,7 +122,7 @@ pub fn year_6_perks() {
                 let val = clamp(_input.value, 0, 15) as f64;
                 if _input.calc_data.total_shots_fired == 0.0 {
                     let mut mag_mult = 1.0;
-                    if *_input.calc_data.ammo_type == AmmoType::PRIMARY {
+                    if *_input.calc_data.ammo_type == AmmoType::Primary {
                         mag_mult += 0.1 * val;
                     } else {
                         mag_mult += 0.2 * val;

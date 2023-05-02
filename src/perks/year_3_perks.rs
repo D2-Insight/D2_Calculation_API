@@ -35,15 +35,15 @@ pub fn year_3_perks() {
             let mut stats = HashMap::new();
             let ev = if _input.is_enhanced { 5 } else { 0 };
             if _input.value == 1 {
-                stats.insert(StatHashes::STABILITY.into(), 20 + ev);
+                stats.insert(StatHashes::Stability.into(), 20 + ev);
             } else if _input.value == 2 {
-                stats.insert(StatHashes::RELOAD.into(), 50 + ev);
+                stats.insert(StatHashes::Reload.into(), 50 + ev);
             } else if _input.value == 3 {
-                stats.insert(StatHashes::HANDLING.into(), 50 + ev);
+                stats.insert(StatHashes::Handling.into(), 50 + ev);
             } else if _input.value == 4 {
-                stats.insert(StatHashes::RECOIL_DIR.into(), 20 + ev);
+                stats.insert(StatHashes::RecoilDir.into(), 20 + ev);
             } else if _input.value == 5 {
-                stats.insert(StatHashes::AIRBORNE.into(), 20 + ev);
+                stats.insert(StatHashes::AirborneEffect.into(), 20 + ev);
             };
             stats
         }),
@@ -84,8 +84,8 @@ pub fn year_3_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut stats = HashMap::new();
             if _input.value > 0 {
-                stats.insert(StatHashes::HANDLING.into(), 40);
-                stats.insert(StatHashes::RANGE.into(), 20);
+                stats.insert(StatHashes::Handling.into(), 40);
+                stats.insert(StatHashes::Range.into(), 20);
             };
             stats
         }),
@@ -148,11 +148,11 @@ pub fn year_3_perks() {
                 || *_input.calc_data.enemy_type == EnemyType::CHAMPION
                 || *_input.calc_data.enemy_type == EnemyType::VEHICLE
             {
-                if *_input.calc_data.ammo_type == AmmoType::PRIMARY {
+                if *_input.calc_data.ammo_type == AmmoType::Primary {
                     buff = 1.2;
-                } else if *_input.calc_data.ammo_type == AmmoType::SPECIAL {
+                } else if *_input.calc_data.ammo_type == AmmoType::Special {
                     buff = 1.15;
-                } else if *_input.calc_data.ammo_type == AmmoType::HEAVY {
+                } else if *_input.calc_data.ammo_type == AmmoType::Heavy {
                     buff = 1.1;
                 }
             }

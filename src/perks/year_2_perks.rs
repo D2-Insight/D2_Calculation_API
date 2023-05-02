@@ -21,7 +21,7 @@ pub fn year_2_perks() {
             let mut stats = HashMap::new();
             let ae_per_stack = if _input.is_enhanced { 35 } else { 30 };
             let ae = ae_per_stack * _input.value as i32;
-            stats.insert(StatHashes::AIRBORNE.into(), ae);
+            stats.insert(StatHashes::AirborneEffect.into(), ae);
             stats
         }),
     );
@@ -121,7 +121,7 @@ pub fn year_2_perks() {
             if _input.calc_data.time_total > duration {
                 reload = 0;
             };
-            stats.insert(StatHashes::RELOAD.into(), reload);
+            stats.insert(StatHashes::Reload.into(), reload);
             stats
         }),
     );
@@ -226,9 +226,9 @@ pub fn year_2_perks() {
                 5,
             );
             let mut stats = HashMap::new();
-            stats.insert(StatHashes::RELOAD.into(), rel_values[entry_to_get as usize]);
+            stats.insert(StatHashes::Reload.into(), rel_values[entry_to_get as usize]);
             stats.insert(
-                StatHashes::STABILITY.into(),
+                StatHashes::Stability.into(),
                 stab_values[entry_to_get as usize],
             );
             stats
@@ -255,7 +255,7 @@ pub fn year_2_perks() {
         Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
             let mut damage_mult = 1.0;
             if _input.value > 0 {
-                damage_mult = if *_input.calc_data.weapon_type == WeaponType::SWORD {
+                damage_mult = if *_input.calc_data.weapon_type == WeaponType::Sword {
                     1.35
                 } else {
                     1.4
@@ -328,16 +328,16 @@ pub fn year_2_perks() {
             if shots_left <= 0.0 {
                 return DamageModifierResponse::default();
             };
-            if _input.calc_data.weapon_type == &WeaponType::GRENADELAUNCHER {
+            if _input.calc_data.weapon_type == &WeaponType::GrenadeLauncher {
                 let blast_radius_struct =
-                    _input.calc_data.stats.get(&StatHashes::BLAST_RADIUS.into());
+                    _input.calc_data.stats.get(&StatHashes::BlastRadius.into());
                 let blast_radius;
                 if blast_radius_struct.is_none() {
                     blast_radius = 0;
                 } else {
                     blast_radius = blast_radius_struct.unwrap().val();
                 };
-                if _input.calc_data.ammo_type == &AmmoType::HEAVY {
+                if _input.calc_data.ammo_type == &AmmoType::Heavy {
                     let expl_percent = 0.7 + 0.00175 * blast_radius as f64;
                     let impt_percent = 1.0 - expl_percent;
                     let expl_mult = 0.875 / expl_percent * 1.6;
@@ -348,7 +348,7 @@ pub fn year_2_perks() {
                         crit_scale: 1.0,
                     };
                 }
-                if _input.calc_data.ammo_type == &AmmoType::SPECIAL {
+                if _input.calc_data.ammo_type == &AmmoType::Special {
                     let expl_percent = 0.5 + 0.0025 * blast_radius as f64;
                     let impt_percent = 1.0 - expl_percent;
                     let expl_mult = 0.75 / expl_percent * 1.6;
@@ -373,7 +373,7 @@ pub fn year_2_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut out = HashMap::new();
             if _input.value > 0 {
-                out.insert(StatHashes::BLAST_RADIUS.into(), 100);
+                out.insert(StatHashes::BlastRadius.into(), 100);
             };
             out
         }),
@@ -384,7 +384,7 @@ pub fn year_2_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut out = HashMap::new();
             if _input.value > 0 {
-                out.insert(StatHashes::HANDLING.into(), 30);
+                out.insert(StatHashes::Handling.into(), 30);
             };
             out
         }),

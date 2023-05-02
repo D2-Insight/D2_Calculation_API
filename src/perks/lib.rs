@@ -96,7 +96,7 @@ impl<'a> CalculationInput<'a> {
             time_this_mag: 0.0,
             stats: _stats,
             weapon_type: _weapon_type,
-            damage_type: &DamageType::STASIS,
+            damage_type: &DamageType::Stasis,
             ammo_type: _ammo_type,
             handling_data: _handling_data,
             num_reloads: 0.0,

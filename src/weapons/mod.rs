@@ -233,9 +233,9 @@ impl Default for Weapon {
             handling_formula: HandlingFormula::default(),
             reload_formula: ReloadFormula::default(),
 
-            weapon_type: WeaponType::UNKNOWN,
-            damage_type: DamageType::UNKNOWN,
-            ammo_type: AmmoType::UNKNOWN,
+            weapon_type: WeaponType::Unknown,
+            damage_type: DamageType::Unknown,
+            ammo_type: AmmoType::Unknown,
         }
     }
 }

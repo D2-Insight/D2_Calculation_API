@@ -23,13 +23,13 @@ pub fn meta_perks() {
         Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
             let mut crit_scale = 1.0;
             let mut dmg_scale = 1.0;
-            if *_input.calc_data.weapon_type == WeaponType::LINEARFUSIONRIFLE && !_input.pvp {
+            if *_input.calc_data.weapon_type == WeaponType::LinearFusionRifle && !_input.pvp {
                 crit_scale *= 1.15;
             };
-            if *_input.calc_data.damage_type == DamageType::KINETIC && !_input.pvp {
-                if _input.calc_data.ammo_type == &AmmoType::PRIMARY {
+            if *_input.calc_data.damage_type == DamageType::Kinetic && !_input.pvp {
+                if _input.calc_data.ammo_type == &AmmoType::Primary {
                     dmg_scale *= 1.1;
-                } else if _input.calc_data.ammo_type == &AmmoType::SPECIAL {
+                } else if _input.calc_data.ammo_type == &AmmoType::Special {
                     dmg_scale *= 1.15;
                 };
             };
@@ -48,8 +48,8 @@ pub fn meta_perks() {
                     .unwrap()
                     .to_owned()
                     .into();
-                if stat_bump_id == StatHashes::CHARGE_TIME
-                    && _input.calc_data.weapon_type == &WeaponType::FUSIONRIFLE
+                if stat_bump_id == StatHashes::ChargeTime
+                    && _input.calc_data.weapon_type == &WeaponType::FusionRifle
                 {
                     // dmg_scale *=
                     //     dmr_chargetime_mw(_input, _input.value, is_enhanced, _pvp, _cached_data).impact_dmg_scale;
@@ -83,17 +83,17 @@ pub fn meta_perks() {
                     .unwrap()
                     .to_owned()
                     .into();
-                if stat_bump_id == StatHashes::CHARGE_TIME {
+                if stat_bump_id == StatHashes::ChargeTime {
                     // delay_add += fmr_accelerated_coils(_input, _input.value, is_enhanced, _pvp, _cached_data)
                     //     .burst_delay_add;
                 }
             }
 
-            if _input.calc_data.weapon_type == &WeaponType::BOW {
+            if _input.calc_data.weapon_type == &WeaponType::Bow {
                 let draw_time = _input
                     .calc_data
                     .stats
-                    .get(&StatHashes::DRAW_TIME.into())
+                    .get(&StatHashes::DrawTime.into())
                     .unwrap()
                     .clone();
                 delay_add += match _input.calc_data.intrinsic_hash {
@@ -121,22 +121,22 @@ pub fn meta_perks() {
         Perks::BuiltIn,
         Box::new(
             |_input: ModifierResponseInput| -> ExplosivePercentResponse {
-                if *_input.calc_data.weapon_type == WeaponType::GRENADELAUNCHER {
+                if *_input.calc_data.weapon_type == WeaponType::GrenadeLauncher {
                     let blast_radius_struct =
-                        _input.calc_data.stats.get(&StatHashes::BLAST_RADIUS.into());
+                        _input.calc_data.stats.get(&StatHashes::BlastRadius.into());
                     let blast_radius;
                     if blast_radius_struct.is_none() {
                         blast_radius = 0;
                     } else {
                         blast_radius = blast_radius_struct.unwrap().perk_val();
                     };
-                    if _input.calc_data.ammo_type == &AmmoType::SPECIAL {
+                    if _input.calc_data.ammo_type == &AmmoType::Special {
                         return ExplosivePercentResponse {
                             percent: 0.5 + 0.003 * blast_radius as f64,
                             delyed: 0.0,
                             retain_base_total: true,
                         };
-                    } else if _input.calc_data.ammo_type == &AmmoType::HEAVY {
+                    } else if _input.calc_data.ammo_type == &AmmoType::Heavy {
                         return ExplosivePercentResponse {
                             percent: 0.7 + 0.00175 * blast_radius as f64,
                             delyed: 0.0,
@@ -144,7 +144,7 @@ pub fn meta_perks() {
                         };
                     };
                 }
-                if *_input.calc_data.weapon_type == WeaponType::ROCKET
+                if *_input.calc_data.weapon_type == WeaponType::Rocket
                     && _input.calc_data.intrinsic_hash < 1000
                 //ensures not exotic
                 {
@@ -198,11 +198,11 @@ pub fn meta_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut stats = HashMap::new();
             if _input.value == 1 {
-                stats.insert(StatHashes::AIM_ASSIST.into(), 5);
+                stats.insert(StatHashes::AimAssist.into(), 5);
             } else if _input.value == 2 {
-                stats.insert(StatHashes::AIM_ASSIST.into(), 8);
+                stats.insert(StatHashes::AimAssist.into(), 8);
             } else if _input.value > 2 {
-                stats.insert(StatHashes::AIM_ASSIST.into(), 10);
+                stats.insert(StatHashes::AimAssist.into(), 10);
             }
             stats
         }),
@@ -239,7 +239,7 @@ pub fn meta_perks() {
                 inv_buff += 20;
             }
             let mut stats = HashMap::new();
-            stats.insert(StatHashes::INVENTORY_SIZE.into(), inv_buff);
+            stats.insert(StatHashes::InventorySize.into(), inv_buff);
             stats
         }),
     );
@@ -277,7 +277,7 @@ pub fn meta_perks() {
                 if _input.value > 2 {
                     reload_stat_buff += 5;
                 };
-                stats.insert(StatHashes::RELOAD.into(), reload_stat_buff);
+                stats.insert(StatHashes::Reload.into(), reload_stat_buff);
             };
             stats
         }),
@@ -302,8 +302,8 @@ pub fn meta_perks() {
         Perks::RallyBarricade,
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut stats = HashMap::new();
-            stats.insert(StatHashes::STABILITY.into(), 30);
-            stats.insert(StatHashes::RELOAD.into(), 100);
+            stats.insert(StatHashes::Stability.into(), 30);
+            stats.insert(StatHashes::Reload.into(), 100);
             stats
         }),
     );

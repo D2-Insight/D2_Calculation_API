@@ -19,8 +19,8 @@ pub fn year_5_perks() {
             let duration = if _input.is_enhanced { 3.0 } else { 2.5 };
             let mut delay_mult = 1.0;
             if _input.calc_data.time_total < duration && _input.value > 0 {
-                if *_input.calc_data.weapon_type == WeaponType::MACHINEGUN
-                    || *_input.calc_data.weapon_type == WeaponType::SUBMACHINEGUN
+                if *_input.calc_data.weapon_type == WeaponType::MachineGun
+                    || *_input.calc_data.weapon_type == WeaponType::SubMachineGun
                 {
                     delay_mult = 0.7;
                 } else {
@@ -43,8 +43,8 @@ pub fn year_5_perks() {
             let val = clamp(_input.value, 0, 4) as i32;
             let stability_boost = 8 * val;
             let range_boost = 5 * val;
-            map.insert(StatHashes::RANGE.into(), range_boost);
-            map.insert(StatHashes::STABILITY.into(), stability_boost);
+            map.insert(StatHashes::Range.into(), range_boost);
+            map.insert(StatHashes::Stability.into(), stability_boost);
             map
         }),
     );
@@ -107,7 +107,7 @@ pub fn year_5_perks() {
             if _input.value > 0 {
                 range_bonus = 20;
             };
-            map.insert(StatHashes::RANGE.into(), range_bonus);
+            map.insert(StatHashes::Range.into(), range_bonus);
             map
         }),
     );
@@ -116,9 +116,9 @@ pub fn year_5_perks() {
         Perks::GutShot,
         Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
             let high_weapons = [
-                WeaponType::AUTORIFLE,
-                WeaponType::HANDCANNON,
-                WeaponType::BOW,
+                WeaponType::AutoRifle,
+                WeaponType::HandCannon,
+                WeaponType::Bow,
             ];
             let dmg_scale: f64;
             let crit_scale: f64;
@@ -148,7 +148,7 @@ pub fn year_5_perks() {
             if _input.value > 0 {
                 stability_boost = 30;
             };
-            map.insert(StatHashes::STABILITY.into(), stability_boost);
+            map.insert(StatHashes::Stability.into(), stability_boost);
             map
         }),
     );
@@ -187,7 +187,7 @@ pub fn year_5_perks() {
         Perks::Slickdraw,
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut map = HashMap::new();
-            map.insert(StatHashes::HANDLING.into(), 100);
+            map.insert(StatHashes::Handling.into(), 100);
             map
         }),
     );
@@ -206,10 +206,10 @@ pub fn year_5_perks() {
                 reload_boost = 35;
                 handling_boost = 35;
             };
-            out.insert(StatHashes::STABILITY.into(), stability_boost);
-            out.insert(StatHashes::RANGE.into(), range_boost);
-            out.insert(StatHashes::RELOAD.into(), reload_boost);
-            out.insert(StatHashes::HANDLING.into(), handling_boost);
+            out.insert(StatHashes::Stability.into(), stability_boost);
+            out.insert(StatHashes::Range.into(), range_boost);
+            out.insert(StatHashes::Reload.into(), reload_boost);
+            out.insert(StatHashes::Handling.into(), handling_boost);
             out
         }),
     );
@@ -274,7 +274,7 @@ pub fn year_5_perks() {
             if _input.value > 0 {
                 handling = 100;
             };
-            map.insert(StatHashes::HANDLING.into(), handling);
+            map.insert(StatHashes::Handling.into(), handling);
             map
         }),
     );
@@ -357,9 +357,9 @@ pub fn year_5_perks() {
             let mut map = HashMap::new();
             let stat_base = if _input.is_enhanced { 12 } else { 10 };
             let stat_bump = stat_base * val;
-            map.insert(StatHashes::STABILITY.into(), stat_bump);
-            map.insert(StatHashes::RANGE.into(), stat_bump);
-            map.insert(StatHashes::HANDLING.into(), stat_bump);
+            map.insert(StatHashes::Stability.into(), stat_bump);
+            map.insert(StatHashes::Range.into(), stat_bump);
+            map.insert(StatHashes::Handling.into(), stat_bump);
             map
         }),
     );
@@ -436,7 +436,7 @@ pub fn year_5_perks() {
             if _input.calc_data.shots_fired_this_mag <= _input.calc_data.base_mag / 2.0
                 && _input.value > 0
             {
-                map.insert(StatHashes::RELOAD.into(), reload_add);
+                map.insert(StatHashes::Reload.into(), reload_add);
             }
             map
         }),
@@ -449,9 +449,9 @@ pub fn year_5_perks() {
             let mut map = HashMap::new();
             let stat_base = 10;
             let stat_bump = stat_base * val;
-            map.insert(StatHashes::STABILITY.into(), stat_bump);
-            map.insert(StatHashes::RELOAD.into(), stat_bump);
-            map.insert(StatHashes::HANDLING.into(), stat_bump);
+            map.insert(StatHashes::Stability.into(), stat_bump);
+            map.insert(StatHashes::Reload.into(), stat_bump);
+            map.insert(StatHashes::Handling.into(), stat_bump);
             map
         }),
     );
@@ -509,7 +509,7 @@ pub fn year_5_perks() {
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut map = HashMap::new();
             if _input.value > 0 {
-                map.insert(StatHashes::HANDLING.into(), 100);
+                map.insert(StatHashes::Handling.into(), 100);
             }
             map
         }),

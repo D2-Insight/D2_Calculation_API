@@ -363,14 +363,14 @@ pub fn complex_dps_calc(_weapon: Weapon, _enemy: Enemy, _pl_dmg_mult: f64) -> Dp
             //     }
             // }
             if mag != 0 {
-                if weapon.weapon_type == WeaponType::FUSIONRIFLE {
+                if weapon.weapon_type == WeaponType::FusionRifle {
                     total_time += shot_burst_delay * 0.45
-                } else if weapon.weapon_type == WeaponType::LINEARFUSIONRIFLE {
+                } else if weapon.weapon_type == WeaponType::LinearFusionRifle {
                     total_time += shot_burst_delay * 0.95
                 }
             }
             ///////////////////////////////
-            if weapon.ammo_type == AmmoType::PRIMARY {
+            if weapon.ammo_type == AmmoType::Primary {
                 if total_shots_fired > maximum_shots {
                     reserve = 0;
                     break;

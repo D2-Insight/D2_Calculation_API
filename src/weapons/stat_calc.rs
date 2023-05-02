@@ -40,12 +40,12 @@ impl Weapon {
     ) -> ReloadResponse {
         let mut reload_stat = self
             .stats
-            .get(&StatHashes::RELOAD.into())
+            .get(&StatHashes::Reload.into())
             .unwrap_or(&Stat::new())
             .perk_val();
         let mut default_chd_dt = HashMap::new();
         let cached_data = _cached_data.unwrap_or(&mut default_chd_dt);
-        if self.weapon_type == WeaponType::BOW {
+        if self.weapon_type == WeaponType::Bow {
             reload_stat = reload_stat.clamp(0, 80);
         }
         let mut out;
@@ -57,7 +57,7 @@ impl Weapon {
         } else {
             out = self.reload_formula.calc_reload_time_formula(reload_stat);
         }
-        if self.weapon_type == WeaponType::BOW {
+        if self.weapon_type == WeaponType::Bow {
             out.reload_time = out.reload_time.clamp(0.6, 5.0);
         }
 
@@ -110,12 +110,12 @@ impl Weapon {
     ) -> RangeResponse {
         let range_stat = self
             .stats
-            .get(&StatHashes::RANGE.into())
+            .get(&StatHashes::Range.into())
             .unwrap_or(&Stat::new())
             .val();
         let zoom_stat = self
             .stats
-            .get(&StatHashes::ZOOM.into())
+            .get(&StatHashes::Zoom.into())
             .unwrap_or(&Stat::new())
             .val();
         let mut default_chd_dt = HashMap::new();
@@ -172,7 +172,7 @@ impl Weapon {
     ) -> HandlingResponse {
         let handling_stat = self
             .stats
-            .get(&StatHashes::HANDLING.into())
+            .get(&StatHashes::Handling.into())
             .unwrap_or(&Stat::new())
             .val();
         let mut default_chd_dt = HashMap::new();
@@ -221,7 +221,13 @@ impl AmmoFormula {
 
         let mut reserve_size = 1;
         if _calc_inv {
-            reserve_size = calc_reserves(raw_mag_size, _mag_stat as i32, inv_stat as i32, _inv_id, _inv_modifiers.inv_scale);
+            reserve_size = calc_reserves(
+                raw_mag_size,
+                _mag_stat as i32,
+                inv_stat as i32,
+                _inv_id,
+                _inv_modifiers.inv_scale,
+            );
         }
         AmmoResponse {
             mag_size,
@@ -239,12 +245,12 @@ impl Weapon {
     ) -> AmmoResponse {
         let mag_stat = self
             .stats
-            .get(&StatHashes::MAGAZINE.into())
+            .get(&StatHashes::Magazine.into())
             .unwrap_or(&Stat::new())
             .val();
         let inv_stat = self
             .stats
-            .get(&StatHashes::INVENTORY_SIZE.into())
+            .get(&StatHashes::InventorySize.into())
             .unwrap_or(&Stat::new())
             .val();
         let mut out;
@@ -281,10 +287,10 @@ impl Weapon {
                 self.ammo_formula.reserve_id,
             );
         }
-        if mag_stat > 90 && self.weapon_type == WeaponType::SNIPER {
+        if mag_stat > 90 && self.weapon_type == WeaponType::Sniper {
             out.mag_size += 1;
         }
-        if self.weapon_type == WeaponType::SIDEARM {
+        if self.weapon_type == WeaponType::Sidearm {
             out.mag_size = ((out.mag_size as f64 / 3.0).round() * 3.0) as i32;
         }
         out
@@ -333,9 +339,9 @@ impl Weapon {
         let crit_mult = tmp_dmg_prof.2;
 
         let fd = self.firing_data;
-        let extra_charge_delay = if self.weapon_type == WeaponType::FUSIONRIFLE {
+        let extra_charge_delay = if self.weapon_type == WeaponType::FusionRifle {
             0.45
-        } else if self.weapon_type == WeaponType::LINEARFUSIONRIFLE {
+        } else if self.weapon_type == WeaponType::LinearFusionRifle {
             0.95
         } else {
             0.0
@@ -426,27 +432,27 @@ impl Weapon {
 
         //stability
         let stability_percent = match self.weapon_type {
-            WeaponType::AUTORIFLE => 0.25,
-            WeaponType::SUBMACHINEGUN => 0.25,
-            WeaponType::BOW => 0.25,
-            WeaponType::PULSERIFLE => 0.2,
-            WeaponType::SCOUTRIFLE => 0.2,
-            WeaponType::SIDEARM => 0.2,
-            WeaponType::MACHINEGUN => 0.2,
-            WeaponType::HANDCANNON => 0.15,
-            WeaponType::TRACERIFLE => 0.15,
-            WeaponType::FUSIONRIFLE => 0.1,
-            WeaponType::SHOTGUN => 0.1,
-            WeaponType::SNIPER => 0.1,
-            WeaponType::GRENADELAUNCHER => 0.1,
-            WeaponType::LINEARFUSIONRIFLE => 0.1,
-            WeaponType::ROCKET => 0.1,
+            WeaponType::AutoRifle => 0.25,
+            WeaponType::SubMachineGun => 0.25,
+            WeaponType::Bow => 0.25,
+            WeaponType::PulseRifle => 0.2,
+            WeaponType::ScoutRifle => 0.2,
+            WeaponType::Sidearm => 0.2,
+            WeaponType::MachineGun => 0.2,
+            WeaponType::HandCannon => 0.15,
+            WeaponType::Tracerifle => 0.15,
+            WeaponType::FusionRifle => 0.1,
+            WeaponType::Shotgun => 0.1,
+            WeaponType::Sniper => 0.1,
+            WeaponType::GrenadeLauncher => 0.1,
+            WeaponType::LinearFusionRifle => 0.1,
+            WeaponType::Rocket => 0.1,
             _ => 0.0,
         };
 
         let total_stability: f64 = self
             .stats
-            .get(&StatHashes::STABILITY.into())
+            .get(&StatHashes::Stability.into())
             .unwrap_or(&Stat::new())
             .perk_val()
             .clamp(0, 100)
@@ -476,30 +482,30 @@ impl Weapon {
 
         //Range/Velocity stat to m/s
         let mut velocity = match self.weapon_type {
-            WeaponType::GLAIVE => {
+            WeaponType::Glaive => {
                 f64::from(
                     self.stats
-                        .get(&StatHashes::RANGE.into())
+                        .get(&StatHashes::Range.into())
                         .unwrap_or(&Stat::new())
                         .perk_val()
                         .clamp(0, 100),
                 ) * 0.4
                     + 60.0
             }
-            WeaponType::GRENADELAUNCHER => {
+            WeaponType::GrenadeLauncher => {
                 f64::from(
                     self.stats
-                        .get(&StatHashes::VELOCITY.into())
+                        .get(&StatHashes::Velocity.into())
                         .unwrap_or(&Stat::new())
                         .perk_val()
                         .clamp(0, 100),
                 ) * 0.384
                     + 29.6
             }
-            WeaponType::ROCKET => {
+            WeaponType::Rocket => {
                 f64::from(
                     self.stats
-                        .get(&StatHashes::VELOCITY.into())
+                        .get(&StatHashes::Velocity.into())
                         .unwrap_or(&Stat::new())
                         .perk_val()
                         .clamp(0, 100),
@@ -522,12 +528,12 @@ impl Weapon {
     pub fn calc_perfect_draw(&self) -> Seconds {
         let stability: f64 = self
             .stats
-            .get(&StatHashes::STABILITY.into())
+            .get(&StatHashes::Stability.into())
             .unwrap_or(&Stat::new())
             .perk_val()
             .clamp(0, 100)
             .into();
-        if self.perks.get(&1449897496).is_some() && self.weapon_type == WeaponType::BOW {
+        if self.perks.get(&1449897496).is_some() && self.weapon_type == WeaponType::Bow {
             return Seconds::INFINITY;
         }
         match self.intrinsic_hash {
@@ -540,19 +546,19 @@ impl Weapon {
 
 impl Weapon {
     pub fn calc_shield_duration(&self) -> Seconds {
-        if self.weapon_type == WeaponType::GLAIVE {
+        if self.weapon_type == WeaponType::Glaive {
             let shield_duration: f64 = self
                 .stats
-                .get(&StatHashes::SHIELD_DURATION.into())
+                .get(&StatHashes::ShieldDuration.into())
                 .unwrap_or(&Stat::new())
                 .perk_val()
                 .clamp(0, 100)
                 .into();
             return shield_duration * 0.11 + 6.65;
-        } else if self.weapon_type == WeaponType::SWORD {
+        } else if self.weapon_type == WeaponType::Sword {
             let guard_endruance: f64 = self
                 .stats
-                .get(&StatHashes::GUARD_ENDURANCE.into())
+                .get(&StatHashes::GuardEndurance.into())
                 .unwrap_or(&Stat::new())
                 .perk_val()
                 .clamp(0, 100)
@@ -574,7 +580,7 @@ impl Weapon {
 
         if matches!(
             self.weapon_type,
-            WeaponType::ROCKET | WeaponType::GRENADELAUNCHER | WeaponType::GLAIVE
+            WeaponType::Rocket | WeaponType::GrenadeLauncher | WeaponType::Glaive
         ) {
             buffer.insert(
                 "velocity".to_string(),
@@ -582,12 +588,12 @@ impl Weapon {
             );
         };
 
-        if matches!(self.weapon_type, WeaponType::GLAIVE) {
+        if matches!(self.weapon_type, WeaponType::Glaive) {
             // add "| WeaponType::SWORD" to matches when swords work
             buffer.insert("shield_duration".to_string(), self.calc_shield_duration());
         }
 
-        if self.weapon_type == WeaponType::BOW {
+        if self.weapon_type == WeaponType::Bow {
             buffer.insert("perfect_draw".to_string(), self.calc_perfect_draw());
         }
 

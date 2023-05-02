@@ -3,7 +3,7 @@ use std::{borrow::Borrow, cell::RefCell, collections::HashMap, pin::Pin, rc::Rc}
 use num_traits::{Float, Zero};
 
 use crate::{
-    attributes::*,
+    attribute_framework::attributes::*,
     d2_enums::{AmmoType, DamageType, StatHashes, WeaponType},
     weapons::{Stat, Weapon},
     PERS_DATA,
@@ -37,10 +37,10 @@ fn setup_pulse() {
     )
     .unwrap();
     let mut stats = HashMap::new();
-    stats.insert(StatHashes::RELOAD.into(), Stat::from(50));
-    stats.insert(StatHashes::HANDLING.into(), Stat::from(50));
-    stats.insert(StatHashes::RANGE.into(), Stat::from(50));
-    stats.insert(StatHashes::ZOOM.into(), Stat::from(15));
+    stats.insert(StatHashes::Reload.into(), Stat::from(50));
+    stats.insert(StatHashes::Handling.into(), Stat::from(50));
+    stats.insert(StatHashes::Range.into(), Stat::from(50));
+    stats.insert(StatHashes::Zoom.into(), Stat::from(15));
     new_weapon.set_stats(stats);
     PERS_DATA.with(|perm_data| {
         perm_data.borrow_mut().weapon = new_weapon;
@@ -52,13 +52,13 @@ fn test_pulse_setup() {
     setup_pulse();
     PERS_DATA.with(|perm_data| {
         let mut weapon = perm_data.borrow().weapon.clone();
-        assert_eq!(weapon.damage_type, DamageType::KINETIC);
-        assert_eq!(weapon.ammo_type, AmmoType::PRIMARY);
+        assert_eq!(weapon.damage_type, DamageType::Kinetic);
+        assert_eq!(weapon.ammo_type, AmmoType::Primary);
         assert_eq!(weapon.intrinsic_hash, 69420);
-        assert_eq!(weapon.weapon_type, WeaponType::PULSERIFLE);
+        assert_eq!(weapon.weapon_type, WeaponType::PulseRifle);
         let test_stat = weapon
             .get_stats()
-            .get(&(StatHashes::HANDLING.into()))
+            .get(&(StatHashes::Handling.into()))
             .unwrap()
             .val();
         assert_eq!(test_stat, 50, "test_stat: {}", test_stat);
@@ -187,10 +187,10 @@ fn setup_bow() {
     )
     .unwrap();
     let mut stats = HashMap::new();
-    stats.insert(StatHashes::RELOAD.into(), Stat::from(50));
-    stats.insert(StatHashes::HANDLING.into(), Stat::from(50));
-    stats.insert(StatHashes::RANGE.into(), Stat::from(50));
-    stats.insert(StatHashes::ZOOM.into(), Stat::from(15));
+    stats.insert(StatHashes::Reload.into(), Stat::from(50));
+    stats.insert(StatHashes::Handling.into(), Stat::from(50));
+    stats.insert(StatHashes::Range.into(), Stat::from(50));
+    stats.insert(StatHashes::Zoom.into(), Stat::from(15));
     new_weapon.set_stats(stats);
     PERS_DATA.with(|perm_data| {
         perm_data.borrow_mut().weapon = new_weapon;
@@ -202,13 +202,13 @@ fn test_bow_setup() {
     setup_bow();
     PERS_DATA.with(|perm_data| {
         let mut weapon = perm_data.borrow().weapon.clone();
-        assert_eq!(weapon.damage_type, DamageType::STRAND);
-        assert_eq!(weapon.ammo_type, AmmoType::SPECIAL);
+        assert_eq!(weapon.damage_type, DamageType::Strand);
+        assert_eq!(weapon.ammo_type, AmmoType::Special);
         assert_eq!(weapon.intrinsic_hash, 696969);
-        assert_eq!(weapon.weapon_type, WeaponType::BOW);
+        assert_eq!(weapon.weapon_type, WeaponType::Bow);
         let test_stat = weapon
             .get_stats()
-            .get(&(StatHashes::HANDLING.into()))
+            .get(&(StatHashes::Handling.into()))
             .unwrap()
             .val();
         assert_eq!(test_stat, 50, "test_stat: {}", test_stat);
@@ -351,4 +351,8 @@ fn attr_test() {
     assert_eq!(sum2.val(), 20.0);
     tst.set_prim_val(10.0);
     assert_eq!(sum2.val(), 25.0);
+    let mut end = sum2.stub("Sum");
+    let modi = Modifier::scale(10.0);
+    end.modify(modi);
+    assert_eq!(end.value(), 250.0);
 }
