@@ -1,11 +1,11 @@
-use std::{collections::HashMap, rc::Rc};
+use std::{collections::HashMap, rc::Rc, cell::RefCell};
 
 use num_traits::{Float, Zero};
 
 use crate::{
     d2_enums::{AmmoType, DamageType, StatHashes, WeaponType},
     weapons::{Stat, Weapon},
-    PERS_DATA, attribute, attributes::*,
+    PERS_DATA, attributes::*,
 };
 
 const FLOAT_DELTA: f32 = 0.0001;
@@ -309,11 +309,27 @@ fn test_bow_firing_data() {
     });
 }
 
+struct TestyTest {
+    pub val: f64,
+}
+impl TestyTest {
+    pub fn test(&self) -> f64 {
+        self.val
+    }
+    pub fn addy(&self) -> Attribute {
+        Attribute::Lambda(Box::new(|| self.test()))
+    }
+    pub fn set_val(&mut self, val: f64) {
+        self.val = val;
+    }
+}
 
 #[test]
-fn attribute_test() {
-    println!("{}", (0.0_f64.get_formula())());
-    let mut test = 0.0_f64;
-    let attr = SimpleAttribute::new("test".to_string(), Box::new(|| test), 0.0);
-    assert_eq!((attr.get_formula())(), 0.0);
+fn attr_test() {
+    let bruh = RefCell::new(TestyTest { val: 5.0 });
+    let mut attr1 = Attribute::PrimF(10.0);
+    let attr2 = bruh.borrow().addy();
+    bruh.borrow_mut().set_val(20.0);
+    attr1 = attr1.add(attr2);
+    assert_eq!(attr1.val(), 20.0);
 }
