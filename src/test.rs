@@ -1,4 +1,4 @@
-use std::{collections::HashMap, rc::Rc, cell::RefCell};
+use std::{collections::HashMap, rc::Rc, cell::RefCell, pin::Pin};
 
 use num_traits::{Float, Zero};
 
@@ -309,27 +309,34 @@ fn test_bow_firing_data() {
     });
 }
 
+
+
+
+
+
+
 struct TestyTest {
-    pub val: f64,
+    pub val: Attribute,
 }
 impl TestyTest {
-    pub fn test(&self) -> f64 {
-        self.val
+    pub fn new(val: f64) -> Self {
+        Self {
+            val: Attribute::Ref(RefCell::new(val)),
+        }
     }
-    pub fn addy(&self) -> Attribute {
-        Attribute::Lambda(Box::new(|| self.test()))
+    pub fn addy(&self) -> &Attribute {
+        &self.val
     }
-    pub fn set_val(&mut self, val: f64) {
-        self.val = val;
+    pub fn set_val(&self, val: f64) {
+        self.val.inner().unwrap().replace(val);
     }
 }
 
 #[test]
 fn attr_test() {
-    let bruh = RefCell::new(TestyTest { val: 5.0 });
-    let mut attr1 = Attribute::PrimF(10.0);
-    let attr2 = bruh.borrow().addy();
-    bruh.borrow_mut().set_val(20.0);
-    attr1 = attr1.add(attr2);
-    assert_eq!(attr1.val(), 20.0);
+    let test_struct = TestyTest::new(5.0);
+    let attr1 = test_struct.addy();
+    assert_eq!(attr1.val(), 5.0);
+    test_struct.set_val(10.0);
+    assert_eq!(attr1.val(), 10.0);
 }

@@ -21,10 +21,15 @@ impl Resolver {
     }
 }
 
+pub trait LambdaTrait {
+    fn call(&mut self, path: String) -> f64;
+}
+
 pub enum Attribute {
     PrimF(f64),
     PrimI(i32),
-    Lambda(Box<dyn Fn() -> f64>),
+    Ref(RefCell<f64>),
+    // Lambda(Box<dyn LambdaTrait + 'a>, String),
     Compound(Box<Resolver>),
     None
 }
@@ -33,7 +38,8 @@ impl Debug for Attribute {
         match self {
             Attribute::PrimF(fl) => write!(f, "PrimF({})", *fl),
             Attribute::PrimI(int) => write!(f, "PrimI({})", *int),
-            Attribute::Lambda(_) => write!(f, "Lambda"),
+            // Attribute::Lambda(_, p) => write!(f, "Lambda: {}", p),
+            Attribute::Ref(_) => write!(f, "Ref"),
             Attribute::Compound(_) => write!(f, "Compound"),
             Attribute::None => write!(f, "None")
         }
@@ -63,8 +69,9 @@ impl Attribute {
         match self {
             Attribute::PrimF(f) => *f,
             Attribute::PrimI(i) => *i as f64,
+            Attribute::Ref(r) => *r.borrow(),
             Attribute::Compound(resolver) => resolver.resolve(),
-            Attribute::Lambda(func) => func(),
+            // Attribute::Lambda(lambda, str) => lambda.call(str.clone()),
             Attribute::None => 0.0
         }
     }
@@ -131,6 +138,13 @@ impl Attribute {
             attribute2: Attribute::None,
             operator: Operator::CLP(min, max)
         }))
+    }
+
+    pub fn inner(&self) -> Option<&RefCell<f64>> {
+        match self {
+            Attribute::Ref(cell) => Some(cell),
+            _ => None
+        }
     }
 }
 impl From<Attribute> for f64 {
