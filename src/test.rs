@@ -1,11 +1,12 @@
-use std::{collections::HashMap, rc::Rc, cell::RefCell, pin::Pin};
+use std::{borrow::Borrow, cell::RefCell, collections::HashMap, pin::Pin, rc::Rc};
 
 use num_traits::{Float, Zero};
 
 use crate::{
+    attributes::*,
     d2_enums::{AmmoType, DamageType, StatHashes, WeaponType},
     weapons::{Stat, Weapon},
-    PERS_DATA, attributes::*,
+    PERS_DATA,
 };
 
 const FLOAT_DELTA: f32 = 0.0001;
@@ -28,11 +29,11 @@ fn setup_pulse() {
         }
     }
     let mut new_weapon = Weapon::generate_weapon(
-        hash,                         //bozo as u32 :)
-        13,          //pulse
-        69420,       //test pulse
-        1,             //primary
-        3373582085,  //kinetic
+        hash,       //bozo as u32 :)
+        13,         //pulse
+        69420,      //test pulse
+        1,          //primary
+        3373582085, //kinetic
     )
     .unwrap();
     let mut stats = HashMap::new();
@@ -168,7 +169,6 @@ fn test_pulse_firing_data() {
     });
 }
 
-
 fn setup_bow() {
     let vec = Vec::<u8>::from("harm".to_string());
     let mut hash = 0;
@@ -179,11 +179,11 @@ fn setup_bow() {
         }
     }
     let mut new_weapon = Weapon::generate_weapon(
-        hash,                         //harm turned himslf into a u32! Funniest shit I've ever seen
-        31,          //bow
-        696969,      //test bow
-        2,             //special
-        3949783978,  //strand
+        hash,       //harm turned himslf into a u32! Funniest shit I've ever seen
+        31,         //bow
+        696969,     //test bow
+        2,          //special
+        3949783978, //strand
     )
     .unwrap();
     let mut stats = HashMap::new();
@@ -300,43 +300,54 @@ fn test_bow_firing_data() {
             "explosive damage: {}",
             response.pvp_explosion_damage
         );
-        assert!(cmp_floats(response.burst_delay, 20.0/30.0), "draw time: {}", response.burst_delay);
         assert!(
-            cmp_floats(response.pvp_crit_mult, 1.5 + (2.0/51.0)),
+            cmp_floats(response.burst_delay, 20.0 / 30.0),
+            "draw time: {}",
+            response.burst_delay
+        );
+        assert!(
+            cmp_floats(response.pvp_crit_mult, 1.5 + (2.0 / 51.0)),
             "crit mult: {}",
             response.pvp_crit_mult
         );
     });
 }
 
-
-
-
-
-
-
-struct TestyTest {
-    pub val: Attribute,
+struct TestyTest<'a> {
+    pub attr_val: Attribute<'a>,
+    pub prim_val: f64,
 }
-impl TestyTest {
+impl TestyTest<'_> {
+    pub fn get_val(&self) -> f64 {
+        self.prim_val
+    }
     pub fn new(val: f64) -> Self {
         Self {
-            val: Attribute::Ref(RefCell::new(val)),
+            attr_val: Attribute::Ref(RefCell::new(val)),
+            prim_val: val,
         }
     }
-    pub fn addy(&self) -> &Attribute {
-        &self.val
+    pub fn attr(&self) -> &Attribute {
+        &self.attr_val
     }
-    pub fn set_val(&self, val: f64) {
-        self.val.inner().unwrap().replace(val);
+    pub fn attr_prim(&self) -> Attribute {
+        Attribute::Lambda(Box::new(|| self.get_val()))
+    }
+    pub fn set_prim_val(&mut self, val: f64) {
+        self.prim_val = val;
+    }
+    pub fn set_attr_val(&self, val: f64) {
+        self.attr_val.inner().unwrap().replace(val);
     }
 }
 
 #[test]
 fn attr_test() {
-    let test_struct = TestyTest::new(5.0);
-    let attr1 = test_struct.addy();
-    assert_eq!(attr1.val(), 5.0);
-    test_struct.set_val(10.0);
-    assert_eq!(attr1.val(), 10.0);
+    let tst = TestyTest::new(5.0);
+    let attr = tst.attr_prim();
+    let prim = Attribute::PrimF(5.0);
+    let sum = attr.add(&prim);
+    let sum2 = sum.add(&Attribute::PrimI(10));
+    assert_eq!(sum2.val(), 20.0);
+    // assert_eq!(sum2.val(), 25.0);
 }
