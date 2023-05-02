@@ -315,16 +315,16 @@ fn test_bow_firing_data() {
 
 struct TestyTest<'a> {
     pub attr_val: Attribute<'a>,
-    pub prim_val: f64,
+    pub prim_val: RefCell<f64>,
 }
 impl TestyTest<'_> {
     pub fn get_val(&self) -> f64 {
-        self.prim_val
+        self.prim_val.borrow().clone()
     }
     pub fn new(val: f64) -> Self {
         Self {
             attr_val: Attribute::Ref(RefCell::new(val)),
-            prim_val: val,
+            prim_val: RefCell::new(val),
         }
     }
     pub fn attr(&self) -> &Attribute {
@@ -333,8 +333,8 @@ impl TestyTest<'_> {
     pub fn attr_prim(&self) -> Attribute {
         Attribute::Lambda(Box::new(|| self.get_val()))
     }
-    pub fn set_prim_val(&mut self, val: f64) {
-        self.prim_val = val;
+    pub fn set_prim_val(&self, val: f64) {
+        self.prim_val.replace(val);
     }
     pub fn set_attr_val(&self, val: f64) {
         self.attr_val.inner().unwrap().replace(val);
@@ -349,5 +349,6 @@ fn attr_test() {
     let sum = attr.add(&prim);
     let sum2 = sum.add(&Attribute::PrimI(10));
     assert_eq!(sum2.val(), 20.0);
-    // assert_eq!(sum2.val(), 25.0);
+    tst.set_prim_val(10.0);
+    assert_eq!(sum2.val(), 25.0);
 }

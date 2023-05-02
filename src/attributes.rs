@@ -2,8 +2,6 @@ use std::{
     cell::RefCell,
     fmt::{Debug, Display},
     ops::Add,
-    pin::Pin,
-    rc::Rc,
 };
 
 #[derive(Debug)]
@@ -87,61 +85,61 @@ impl Attribute<'_> {
         }))
     }
 
-    // pub fn sub<'a>(&self, other: &Attribute) -> Attribute {
-    //     Attribute::Compound(Box::new(Resolver {
-    //         attribute1: self,
-    //         attribute2: other,
-    //         operator: Operator::Sub
-    //     }))
-    // }
+    pub fn sub<'a>(&'a self, other: &'a Attribute) -> Attribute {
+        Attribute::Compound(Box::new(Resolver {
+            attribute1: self,
+            attribute2: other,
+            operator: Operator::Sub
+        }))
+    }
 
-    // pub fn mul<'a>(&self, other: &Attribute) -> Attribute {
-    //     Attribute::Compound(Box::new(Resolver {
-    //         attribute1: self,
-    //         attribute2: other,
-    //         operator: Operator::Mul
-    //     }))
-    // }
+    pub fn mul<'a>(&'a self, other: &'a Attribute) -> Attribute {
+        Attribute::Compound(Box::new(Resolver {
+            attribute1: self,
+            attribute2: other,
+            operator: Operator::Mul
+        }))
+    }
 
-    // pub fn div<'a>(&self, other: &Attribute) -> Attribute {
-    //     Attribute::Compound(Box::new(Resolver {
-    //         attribute1: self,
-    //         attribute2: other,
-    //         operator: Operator::Div
-    //     }))
-    // }
+    pub fn div<'a>(&'a self, other: &'a Attribute) -> Attribute {
+        Attribute::Compound(Box::new(Resolver {
+            attribute1: self,
+            attribute2: other,
+            operator: Operator::Div
+        }))
+    }
 
-    // pub fn modu<'a>(&self, other: &Attribute) -> Attribute {
-    //     Attribute::Compound(Box::new(Resolver {
-    //         attribute1: self,
-    //         attribute2: other,
-    //         operator: Operator::Mod
-    //     }))
-    // }
+    pub fn modu<'a>(&'a self, other: &'a Attribute) -> Attribute {
+        Attribute::Compound(Box::new(Resolver {
+            attribute1: self,
+            attribute2: other,
+            operator: Operator::Mod
+        }))
+    }
 
-    // pub fn pow<'a>(&'a self, other: &'a Attribute) -> Attribute<'a> {
-    //     Attribute::Compound(Box::new(Resolver {
-    //         attribute1: self,
-    //         attribute2: other,
-    //         operator: Operator::Pow
-    //     }))
-    // }
+    pub fn pow<'a>(&'a self, other: &'a Attribute) -> Attribute<'a> {
+        Attribute::Compound(Box::new(Resolver {
+            attribute1: self,
+            attribute2: other,
+            operator: Operator::Pow
+        }))
+    }
 
-    // pub fn abs(&self) -> Attribute {
-    //     Attribute::Compound(Box::new(Resolver {
-    //         attribute1: self,
-    //         attribute2: &Attribute::None,
-    //         operator: Operator::Abs
-    //     }))
-    // }
+    pub fn abs(&self) -> Attribute {
+        Attribute::Compound(Box::new(Resolver {
+            attribute1: self,
+            attribute2: &Attribute::None,
+            operator: Operator::Abs
+        }))
+    }
 
-    // pub fn clamp(&self, min: f64, max: f64) -> Attribute {
-    //     Attribute::Compound(Box::new(Resolver {
-    //         attribute1: self,
-    //         attribute2: &Attribute::None,
-    //         operator: Operator::CLP(min, max)
-    //     }))
-    // }
+    pub fn clamp(&self, min: f64, max: f64) -> Attribute {
+        Attribute::Compound(Box::new(Resolver {
+            attribute1: self,
+            attribute2: &Attribute::None,
+            operator: Operator::CLP(min, max)
+        }))
+    }
 
     pub fn inner(&self) -> Option<&RefCell<f64>> {
         match self {
