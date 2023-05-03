@@ -190,6 +190,7 @@ pub enum Perks {
     TexBalancedStock = 2437618208,
     SearchParty = 2250679103,
     FieldTested = 2120661319,
+    HarmonicResonance = 3186078099,
 
     //season 1 | year 1
     KillClip = 1015611457,

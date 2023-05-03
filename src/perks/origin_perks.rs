@@ -403,4 +403,48 @@ pub fn origin_perks() {
             }
         }),
     );
+
+    add_sbr(
+        Perks::HarmonicResonance,
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
+            let mut out = HashMap::new();
+            if _input.value == 1 {
+                out.insert(StatHashes::HANDLING.into(), 10);
+            }
+            if _input.value > 1 {
+                out.insert(StatHashes::RELOAD.into(), 20);
+                out.insert(StatHashes::HANDLING.into(), 20);
+            }
+            out
+        }),
+    );
+
+    add_rsmr(
+        Perks::HarmonicResonance,
+        Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
+            let stat_bump = if _input.value > 1 { 20 } else { 0 };
+            if _input.value > 0 {
+                ReloadModifierResponse {
+                    reload_stat_add: stat_bump,
+                    reload_time_scale: 0.95,
+                    ..Default::default()
+                }
+            } else {
+                ReloadModifierResponse::default()
+            }
+        }),
+    );
+
+    add_hmr(
+        Perks::HarmonicResonance,
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                let stat_bump = 10 * clamp(_input.value, 0, 2);
+                HandlingModifierResponse {
+                    stat_add: stat_bump as i32,
+                    ..Default::default()
+                }
+            },
+        ),
+    );
 }
