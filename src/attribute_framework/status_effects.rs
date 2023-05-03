@@ -30,7 +30,7 @@ pub trait StatusEffect {
 }
 
 
-pub struct StackableStatusEffect {
+pub struct ExpirableStatusEffect {
     pub expiration: f64,
     pub stacks: i32,
     pub reproccable: bool,
@@ -38,7 +38,7 @@ pub struct StackableStatusEffect {
     pub scope: StatusEffectScope,
     pub modifiers: HashMap<AttributeKey, Box<dyn Fn(i32) -> ModifierSet>>,
 }
-impl StatusEffect for StackableStatusEffect {
+impl StatusEffect for ExpirableStatusEffect {
     fn is_active(&mut self, inp: UpdateInput) -> bool {
         inp.time < self.expiration
     }
@@ -60,11 +60,11 @@ impl StatusEffect for StackableStatusEffect {
     }
 }
 
-pub struct UnendingStatusEffect {
+pub struct ConstantStatusEffect {
     pub scope: StatusEffectScope,
     pub modifiers: HashMap<AttributeKey, Box<dyn Fn(i32) -> ModifierSet>>,
 }
-impl StatusEffect for UnendingStatusEffect {
+impl StatusEffect for ConstantStatusEffect {
     fn is_active(&mut self, _inp: UpdateInput) -> bool {
         true
     }
@@ -81,4 +81,34 @@ impl StatusEffect for UnendingStatusEffect {
         }
     }
 }
+
+pub struct ShotCountStatusEffect {
+    pub shots: i32,
+    pub scope: StatusEffectScope,
+    pub reproccable: bool,
+    pub modifiers: HashMap<AttributeKey, Box<dyn Fn(i32) -> ModifierSet>>,
+}
+impl StatusEffect for ShotCountStatusEffect {
+    fn is_active(&mut self, inp: UpdateInput) -> bool {
+        inp.bullets < self.shots
+    }
+
+    fn scope(&self) -> StatusEffectScope {
+        self.scope.clone()
+    }
+
+    fn get_modifiers(&self, key: AttributeKey) -> ModifierSet {
+        if self.modifiers.contains_key(&key) {
+            self.modifiers[&key](1)
+        } else {
+            ModifierSet::new()
+        }
+    }
+
+    fn should_requery(&self) -> bool {
+        self.reproccable
+    }
+}
+
+
 
