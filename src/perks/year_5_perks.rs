@@ -119,6 +119,7 @@ pub fn year_5_perks() {
                 WeaponType::AUTORIFLE,
                 WeaponType::HANDCANNON,
                 WeaponType::BOW,
+                WeaponType::SCOUTRIFLE
             ];
             let dmg_scale: f64;
             let crit_scale: f64;
