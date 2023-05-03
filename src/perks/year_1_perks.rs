@@ -67,7 +67,7 @@ pub fn year_1_perks() {
         Box::new(
             |_input: ModifierResponseInput| -> HandlingModifierResponse {
                 let val = clamp(_input.value, 0, 2) as i32;
-                let time_scale = 0.75_f64.powi(val);
+                let time_scale = 0.9_f64.powi(val);
                 HandlingModifierResponse {
                     stat_add: 0,
                     draw_scale: time_scale,
