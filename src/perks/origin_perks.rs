@@ -131,6 +131,33 @@ pub fn origin_perks() {
         }),
     );
 
+    add_rmr(
+        Perks::Ambush,
+        Box::new(|_input: ModifierResponseInput| -> RangeModifierResponse {
+            let range_add = if _input.is_enhanced { 30 } else { 20 };
+            if _input.calc_data.time_total < 2.0 && _input.value > 0 {
+                RangeModifierResponse {
+                    range_stat_add: range_add,
+                    ..Default::default()
+                }
+            } else {
+                RangeModifierResponse::default()
+            }
+        }),
+    );
+
+    add_hmr(
+        Perks::Ambush,
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, f32> {
+            let mut map = HashMap::new();
+            let handling_mult = if _input.is_enhanced { 1.4 } else { 1.2 };
+            if _input.calc_data.time_total < 2.0 && _input.value > 0 {
+                map.insert(StatHashes::HANDLING.into(), handling_mult);
+            }
+            map
+        }),
+    );
+
     add_dmr(
         Perks::Ambush,
         Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
