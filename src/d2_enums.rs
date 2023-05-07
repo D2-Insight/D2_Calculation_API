@@ -37,7 +37,7 @@ pub enum WeaponType {
     Unknown = 0,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, FromPrimitive, IntoPrimitive)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, FromPrimitive, IntoPrimitive, Serialize)]
 #[repr(u32)]
 pub enum StatHashes {
     Accuracy = 1591432999,

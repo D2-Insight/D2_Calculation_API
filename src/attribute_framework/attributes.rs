@@ -6,6 +6,44 @@ use std::{
 
 use super::AttributeKey;
 
+
+impl From<f64> for Attribute<'_> {
+    fn from(f: f64) -> Self {
+        Attribute::PrimF(f)
+    }
+}
+
+impl From<i32> for Attribute<'_> {
+    fn from(i: i32) -> Self {
+        Attribute::PrimI(i)
+    }
+}
+
+impl From<Attribute<'_>> for f64 {
+    fn from(a: Attribute) -> Self {
+        a.float()
+    }
+}
+
+impl From<Attribute<'_>> for i32 {
+    fn from(a: Attribute) -> Self {
+        a.int()
+    }
+}
+
+impl From<Attribute<'_>> for bool {
+    fn from(a: Attribute) -> Self {
+        a.bool()
+    }
+}
+
+impl From<Attribute<'_>> for u32 {
+    fn from(a: Attribute) -> Self {
+        a.uint()
+    }
+}
+
+
 #[derive(Debug)]
 pub struct Resolver<'a> {
     attribute1: &'a Attribute<'a>,
@@ -23,6 +61,14 @@ impl Resolver<'_> {
             Operator::Pow => self.attribute1.val().powf(self.attribute2.val()),
             Operator::Abs => self.attribute1.val().abs(),
             Operator::CLP(min, max) => self.attribute1.val().max(max).min(min),
+            Operator::RND(precision, multiple_of) => {
+                //round to the nearest multiple of multiple_of
+                let mut val = self.attribute1.val() / multiple_of as f64;
+                val = val.round() * multiple_of as f64;
+                //round to the nearest precision
+                val = (val * 10_f64.powi(precision as i32)).round() / 10_f64.powi(precision as i32);
+                val
+            }
         }
     }
 }
@@ -34,6 +80,7 @@ pub enum Attribute<'a> {
     Ref(RefCell<f64>),
     Lambda(Box<dyn Fn() -> f64 + 'a>),
     Compound(Box<Resolver<'a>>),
+    Bool(bool),
     None,
 }
 impl Debug for Attribute<'_> {
@@ -41,10 +88,10 @@ impl Debug for Attribute<'_> {
         match self {
             Attribute::PrimF(fl) => write!(f, "PrimF({})", *fl),
             Attribute::PrimI(int) => write!(f, "PrimI({})", *int),
-            // Attribute::Lambda(_, p) => write!(f, "Lambda: {}", p),
-            Attribute::Ref(_) => write!(f, "Ref"),
-            Attribute::Lambda(_) => write!(f, "SideEffect"),
-            Attribute::Compound(_) => write!(f, "Compound"),
+            Attribute::Ref(rf) => write!(f, "Ref({})", rf.borrow().to_owned()),
+            Attribute::Lambda(fun) => write!(f, "SideEffect({})", fun()),
+            Attribute::Compound(res) => write!(f, "Compound({})", res.resolve()),
+            Attribute::Bool(b) => write!(f, "Bool({})", *b),
             Attribute::None => write!(f, "None"),
         }
     }
@@ -65,6 +112,7 @@ pub enum Operator {
     Pow,
     Abs,
     CLP(f64, f64),
+    RND(u32, u32),
 }
 
 impl Attribute<'_> {
@@ -75,8 +123,31 @@ impl Attribute<'_> {
             Attribute::Ref(r) => *r.borrow(),
             Attribute::Compound(resolver) => resolver.resolve(),
             Attribute::Lambda(f) => f(),
+            Attribute::Bool(b) => *b as i32 as f64,
             Attribute::None => 0.0,
         }
+    }
+
+    pub fn bool(&self) -> bool {
+        match self {
+            Attribute::Bool(b) => *b,
+            _ => self.val() != 0.0,
+        }
+    }
+
+    pub fn int(&self) -> i32 {
+        match self {
+            Attribute::PrimI(i) => *i,
+            _ => self.val() as i32,
+        }
+    }
+
+    pub fn float(&self) -> f64 {
+        self.val()
+    }
+
+    pub fn uint(&self) -> u32 {
+        self.val() as u32
     }
 
     pub fn add<'a>(&'a self, other: &'a Attribute) -> Attribute {
@@ -143,16 +214,23 @@ impl Attribute<'_> {
         }))
     }
 
+    pub fn round(&self, precision: u32, multiple_of: u32) -> Attribute {
+        Attribute::Compound(Box::new(Resolver {
+            attribute1: self,
+            attribute2: &Attribute::None,
+            operator: Operator::RND(precision, multiple_of)
+        }))
+    }
+
     pub fn inner(&self) -> Option<&RefCell<f64>> {
         match self {
             Attribute::Ref(cell) => Some(cell),
             _ => None,
         }
     }
-}
-impl From<Attribute<'_>> for f64 {
-    fn from(attr: Attribute) -> Self {
-        attr.val()
+
+    pub fn freeze(&self) -> Attribute {
+        Attribute::PrimF(self.val())
     }
 }
 
