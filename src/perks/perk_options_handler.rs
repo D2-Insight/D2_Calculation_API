@@ -130,6 +130,8 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::Ambush => Some(PerkOptionData::toggle()),
         Perks::TexBalancedStock => Some(PerkOptionData::toggle()),
         Perks::SearchParty => Some(PerkOptionData::static_()),
+        Perks::HarmonicResonance => Some(PerkOptionData::stacking(2)),
+        Perks::FieldTested => Some(PerkOptionData::stacking(5)),
 
         //season 1 | year 1
         Perks::KillClip => Some(PerkOptionData::toggle()),
@@ -328,6 +330,8 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::HuntersTrance => Some(PerkOptionData::static_()),
         Perks::RideTheBull => Some(PerkOptionData::stacking(2)),
         Perks::NobleRounds => Some(PerkOptionData::toggle()),
+        Perks::MementoMori => Some(PerkOptionData::toggle()),
+        Perks::TractorCannon => Some(PerkOptionData::toggle()),
 
         Perks::DexterityMod => Some(PerkOptionData::stacking(3)),
         Perks::ReserveMod => Some(PerkOptionData::stacking(3)),
@@ -351,6 +355,8 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::Weaken => Some(PerkOptionData::static_()),
         Perks::WardOfDawn => Some(PerkOptionData::static_()),
         Perks::BannerShield => Some(PerkOptionData::static_()),
+        Perks::DeadFall => Some(PerkOptionData::toggle()),
+        Perks::MoebiusQuiver => Some(PerkOptionData::toggle()),
 
         Perks::PathOfTheBurningSteps => Some(PerkOptionData::stacking(4)),
         Perks::MantleOfBattleHarmony => Some(PerkOptionData::static_()),
@@ -377,8 +383,20 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::RainOfFire => Some(PerkOptionData::static_()),
         Perks::SpeedloaderSlacks => Some(PerkOptionData::stacking(5)),
         Perks::PeregrineGreaves => Some(PerkOptionData::static_()),
+        Perks::Gyrfalcon => Some(PerkOptionData::toggle()),
+        Perks::AeonInsight => Some(PerkOptionData::toggle()),
+        Perks::Felwinters => Some(PerkOptionData::toggle()),
 
-        _ => None,
+        //misc
+        Perks::UmbralSharpening => Some(PerkOptionData::stacking(5)),
+        Perks::EnhancedScannerAugment => Some(PerkOptionData::toggle()),
+        Perks::Demolitionist => Some(PerkOptionData::static_()),
+        Perks::FullStop => Some(PerkOptionData::static_()),
+        Perks::HakkeHeavyBurst => Some(PerkOptionData::static_()),
+
+
+
+        Perks::Ignore => None,
     }
 }
 

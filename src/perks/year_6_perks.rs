@@ -56,34 +56,58 @@ pub fn year_6_perks() {
         Perks::FieldTested,
         Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
             let mut map = HashMap::new();
-            let val = clamp(_input.value, 0, 5) as i32;
-            map.insert(StatHashes::RANGE.into(), val * 5);
-            map.insert(StatHashes::HANDLING.into(), val * 5);
-            map.insert(StatHashes::RELOAD.into(), val * 5);
-            map.insert(StatHashes::STABILITY.into(), val * 5);
+            if _input.value > 4 {
+                map.insert(StatHashes::RANGE.into(), 20);
+                map.insert(StatHashes::RELOAD.into(), 55);
+            } else if _input.value == 4 {
+                map.insert(StatHashes::RANGE.into(), 12);
+                map.insert(StatHashes::RELOAD.into(), 35);
+            } else if _input.value == 3 {
+                map.insert(StatHashes::RANGE.into(), 9);
+                map.insert(StatHashes::RELOAD.into(), 20);
+            } else if _input.value == 2 {
+                map.insert(StatHashes::RANGE.into(), 6);
+                map.insert(StatHashes::RELOAD.into(), 10);
+            } else if _input.value == 1 {
+                map.insert(StatHashes::RELOAD.into(), 5);
+                map.insert(StatHashes::RANGE.into(), 3);
+            }
             map
         }),
     );
 
-    add_hmr(
-        Perks::FieldTested,
-        Box::new(
-            |_input: ModifierResponseInput| -> HandlingModifierResponse {
-                let val = clamp(_input.value, 0, 5) as i32;
-                HandlingModifierResponse {
-                    stat_add: val * 5,
-                    ..Default::default()
-                }
-            },
-        ),
-    );
+    // add_hmr(
+    //     Perks::FieldTested,
+    //     Box::new(
+    //         |_input: ModifierResponseInput| -> HandlingModifierResponse {
+    //             let val = clamp(_input.value, 0, 5) as i32;
+    //             HandlingModifierResponse {
+    //                 stat_add: val * 5,
+    //                 ..Default::default()
+    //             }
+    //         },
+    //     ),
+    // );
 
     add_rsmr(
         Perks::FieldTested,
         Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
-            let val = clamp(_input.value, 0, 5) as i32;
+            let reload_bump;
+            if _input.value > 4 {
+                reload_bump = 55;
+            } else if _input.value == 4 {
+                reload_bump = 35;
+            } else if _input.value == 3 {
+                reload_bump = 20;
+            } else if _input.value == 2 {
+                reload_bump = 10;
+            } else if _input.value == 1 {
+                reload_bump = 5;
+            } else {
+                reload_bump = 0;
+            };
             ReloadModifierResponse {
-                reload_stat_add: val * 5,
+                reload_stat_add: reload_bump,
                 ..Default::default()
             }
         }),
@@ -92,9 +116,22 @@ pub fn year_6_perks() {
     add_rmr(
         Perks::FieldTested,
         Box::new(|_input: ModifierResponseInput| -> RangeModifierResponse {
-            let val = clamp(_input.value, 0, 5) as i32;
+            let range_bump;
+            if _input.value > 4 {
+                range_bump = 20;
+            } else if _input.value == 4 {
+                range_bump = 12;
+            } else if _input.value == 3 {
+                range_bump = 9;
+            } else if _input.value == 2 {
+                range_bump = 6;
+            } else if _input.value == 1 {
+                range_bump = 3;
+            } else {
+                range_bump = 0;
+            };
             RangeModifierResponse {
-                range_stat_add: val * 5,
+                range_stat_add: range_bump,
                 ..Default::default()
             }
         }),
