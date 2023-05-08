@@ -22,18 +22,15 @@ pub fn year_1_perks() {
         Perks::ThreatDetector,
         Box::new(
             |_input: ModifierResponseInput| -> HashMap<BungieHash, StatBump> {
-                let mut stability = 0;
-                let mut reload = 0;
-                if _input.value == 1 {
-                    stability = 15;
-                    reload = 15;
-                } else if _input.value == 2 {
-                    stability = 40;
-                    reload = 55;
+                let stats = match _input.value {
+                    0 => (0, 0, 0),
+                    1 => (15, 15, 25),
+                    _ => (40, 55, 100),
                 };
                 let mut out = HashMap::new();
-                out.insert(StatHashes::STABILITY.into(), stability);
-                out.insert(StatHashes::RELOAD.into(), reload);
+                out.insert(StatHashes::STABILITY.into(), stats.0);
+                out.insert(StatHashes::RELOAD.into(), stats.1);
+                out.insert(StatHashes::HANDLING.into(), stats.2);
                 out
             },
         ),
@@ -62,14 +59,21 @@ pub fn year_1_perks() {
         }),
     );
 
+    //Confirmed by harm <3
     add_hmr(
         Perks::ThreatDetector,
         Box::new(
             |_input: ModifierResponseInput| -> HandlingModifierResponse {
                 let val = clamp(_input.value, 0, 2) as i32;
+                let stat = match val {
+                    0 => 0,
+                    1 => 25,
+                    2 => 100,
+                    _ => 100,
+                };
                 let time_scale = 0.9_f64.powi(val);
                 HandlingModifierResponse {
-                    stat_add: 0,
+                    stat_add: stat,
                     draw_scale: time_scale,
                     stow_scale: time_scale,
                     ads_scale: time_scale,
