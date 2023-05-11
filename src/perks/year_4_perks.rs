@@ -442,11 +442,21 @@ pub fn year_4_perks() {
         }),
     );
 
+    add_sbr(
+        Perks::FireFly,
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
+            let mut buffer: HashMap<u32, i32> = HashMap::new();
+            if _input.value > 0 {
+                buffer.insert(StatHashes::RELOAD.into(), 50);
+            }
+            buffer
+        }),
+    );
+
     add_rsmr(
         Perks::FireFly,
         Box::new(|_input: ModifierResponseInput| -> ReloadModifierResponse {
-            let duration = if _input.is_enhanced { 7.0 } else { 6.0 };
-            if _input.value > 0 && _input.calc_data.time_total < duration {
+            if _input.value > 0 { 
                 ReloadModifierResponse {
                     reload_stat_add: 50,
                     reload_time_scale: 1.0,
