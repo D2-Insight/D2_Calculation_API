@@ -352,6 +352,11 @@ pub enum Perks {
     ParacausalAffinity = 3215448563,
     EnviousAssasin = 968510818,
 
+    //season 21 | year 6
+    CollectiveAction = 3324494224,
+    Discord = 3978468247,
+    Bipod = 1439600632,
+
     //subclass
     OnYourMark = 3066103999,
     Hedrons = 3469412970,
@@ -421,6 +426,7 @@ pub enum Perks {
     TargetAquired = 939227542,
     SleeperCatalyst = 2142466730,
     TractorCannon = 1210807262,
+    BlackHole = 3905543891,
 
     #[num_enum(default)]
     Ignore = 69420,

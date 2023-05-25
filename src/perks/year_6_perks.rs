@@ -10,7 +10,7 @@ use super::{
         MagazineModifierResponse, RangeModifierResponse, RefundResponse, ReloadModifierResponse,
         VelocityModifierResponse,
     },
-    ModifierResponseInput, Perks,
+    ModifierResponseInput, Perks, add_imr,
 };
 
 pub fn year_6_perks() {
@@ -177,5 +177,75 @@ pub fn year_6_perks() {
                 }
             },
         ),
+    );
+
+    add_dmr(
+        Perks::CollectiveAction,
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
+            let dmg_boost = if _input.value > 0 { 1.2 } else { 1.0 };
+            DamageModifierResponse {
+                impact_dmg_scale: dmg_boost,
+                explosive_dmg_scale: dmg_boost,
+                crit_scale: 1.0,
+            }
+        }),
+    );
+
+    add_sbr(
+        Perks::Discord,
+        Box::new(|_input: ModifierResponseInput| -> HashMap<u32, i32> {
+            let mut map = HashMap::new();
+            if _input.value > 0 {
+                map.insert(StatHashes::AIRBORNE.into(), 30);
+            }
+            map
+        }),
+    );
+
+    add_hmr(
+        Perks::Discord,
+        Box::new(
+            |_input: ModifierResponseInput| -> HandlingModifierResponse {
+                let ads_mult = if _input.value > 0 { 0.75 } else { 1.0 };
+                HandlingModifierResponse {
+                    ads_scale: ads_mult,
+                    ..Default::default()
+                }
+            },
+        ),
+    );
+
+    add_mmr(
+        Perks::Bipod,
+        Box::new(
+            |_input: ModifierResponseInput| -> MagazineModifierResponse {
+                MagazineModifierResponse {
+                    magazine_scale: 2.0,
+                    ..Default::default()
+                }
+            },
+        ),
+    );
+
+    add_imr(Perks::Bipod,
+        Box::new(
+            |_input: ModifierResponseInput| -> InventoryModifierResponse {
+                InventoryModifierResponse {
+                    inv_scale: 1.75,
+                    ..Default::default()
+                }
+            },
+        ),
+    );
+
+    add_dmr(
+        Perks::Bipod,
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
+            DamageModifierResponse {
+                impact_dmg_scale: 0.6,
+                explosive_dmg_scale: 0.6,
+                crit_scale: 1.0,
+            }
+        }),
     );
 }

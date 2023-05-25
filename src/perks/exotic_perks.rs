@@ -929,4 +929,16 @@ pub fn exotic_perks() {
             }
         }),
     );
+
+    add_dmr(
+        Perks::BlackHole,
+        Box::new(|_input: ModifierResponseInput| -> DamageModifierResponse {
+            let buff = ((_input.calc_data.shots_fired_this_mag+1f64) % 2.0) * 0.35;
+            DamageModifierResponse {
+                explosive_dmg_scale: 1.0 + buff,
+                impact_dmg_scale: 1.0 + buff,
+                ..Default::default()
+            }
+        }),
+    )
 }

@@ -278,6 +278,11 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::EnviousAssasin => Some(PerkOptionData::stacking(15)),
         // Perks::FieldTested => Some(PerkOptionData::stacking(5)),
 
+        //season 21 | year 6
+        Perks::CollectiveAction => Some(PerkOptionData::toggle()),
+        Perks::Discord => Some(PerkOptionData::toggle()),
+        Perks::Bipod => Some(PerkOptionData::static_()),
+
         //exotics
         Perks::CranialSpike => Some(PerkOptionData::stacking(5)),
         Perks::DarkForgedTrigger => Some(PerkOptionData::options_raw(
@@ -332,6 +337,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::NobleRounds => Some(PerkOptionData::toggle()),
         Perks::MementoMori => Some(PerkOptionData::toggle()),
         Perks::TractorCannon => Some(PerkOptionData::toggle()),
+        Perks::BlackHole => Some(PerkOptionData::static_()),
 
         Perks::DexterityMod => Some(PerkOptionData::stacking(3)),
         Perks::ReserveMod => Some(PerkOptionData::stacking(3)),
