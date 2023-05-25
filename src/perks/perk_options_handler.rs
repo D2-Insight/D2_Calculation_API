@@ -365,7 +365,9 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::MoebiusQuiver => Some(PerkOptionData::toggle()),
 
         Perks::PathOfTheBurningSteps => Some(PerkOptionData::stacking(4)),
-        Perks::MantleOfBattleHarmony => Some(PerkOptionData::static_()),
+        Perks::EternalWarrior => Some(PerkOptionData::stacking(4)),
+        Perks::MantleOfBattleHarmony => Some(PerkOptionData::toggle()),
+        Perks::SanguineAlchemy => Some(PerkOptionData::toggle()),
         Perks::MaskOfBakris => Some(PerkOptionData::options(["one buff", "both buffs"].to_vec())),
         Perks::BallindorseWrathweavers => Some(PerkOptionData::toggle()),
         Perks::LunaFaction => Some(PerkOptionData::options(
@@ -392,6 +394,7 @@ fn hash_to_perk_option_data(_hash: u32) -> Option<PerkOptionData> {
         Perks::Gyrfalcon => Some(PerkOptionData::toggle()),
         Perks::AeonInsight => Some(PerkOptionData::toggle()),
         Perks::Felwinters => Some(PerkOptionData::toggle()),
+        Perks::RaijusHarness => Some(PerkOptionData::toggle()),
 
         //misc
         Perks::UmbralSharpening => Some(PerkOptionData::stacking(5)),
