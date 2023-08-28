@@ -28,14 +28,14 @@ fn srg_buff(_cached_data: &mut HashMap<String, f64>, _desired_tier: u32, _is_pvp
         1 => 1.1,
         2 => 1.17,
         3 => 1.22,
-        _ => 1.25,
+        4.. => 1.25,
     };
     let pvp_buff = match _desired_tier {
         0 => 1.0,
         1 => 1.03,
         2 => 1.045,
         3 => 1.055,
-        _ => 1.06,
+        4.. => 1.06,
     };
     let buff = if _is_pvp { pvp_buff } else { pve_buff };
     let current_buff = _cached_data.get("surge").unwrap_or(&1.0).to_owned();
