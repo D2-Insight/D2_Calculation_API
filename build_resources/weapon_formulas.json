@@ -183,7 +183,7 @@
                 "range": {
                     "vpp_start": 0.0404, "offset_start": 10.73,
                     "vpp_end": 0.318, "offset_end": 14.705,
-                    "floor_percent": 0.5, "fusion": true, "ads_mult": 1.3
+                    "floor_percent": 0.5, "ads_mult": 1.3
                 },
                 "reload": {"evpp": 0.0000615281, "vpp": -0.0198054, "offset": 2.82857040000000},
                 "handling": {
@@ -191,13 +191,12 @@
                     "stow": {"vpp": -0.002863515313, "offset": 0.4445712383},
                     "ads": {"vpp": -0.001693741678, "offset": 0.4112330226}
                 },
-                "combatant_scalars": {"vehicle": 2.18, "boss": 2.55, "champion": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
+                "combatant_scalars": {"vehicle": 2.12, "boss": 2.55, "champion": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
             },
             "1KV": {
                 "extends": "default",
                 "range": {"vpp_start": 0.0,"offset_start": 999.0,"vpp_end": 0.0,"offset_end": 999.9, "floor_percent": 0.999},
-                "reload": {},
-                "combatant_scalars": {"vehicle": 2.63, "boss": 2.55, "champion": 2.55, "miniboss": 2.55, "elite": 2.55, "minor": 2.73}
+                "reload": {}
             },
             "InfiRange": {
                 "extends": "default",
@@ -215,7 +214,7 @@
                     "stow": {"vpp": -0.00268436, "offset": 0.48414822},
                     "ads":  {"vpp": -0.001875,   "offset": 0.38975   }
                 },
-                "combatant_scalars": {"vehicle": 2.0, "boss": 2.0, "champion": 2.0, "miniboss": 2.0, "elite": 2.0, "minor": 2.0}
+                "combatant_scalars": {"vehicle": 2.0, "boss": 2.0, "champion": 2.0, "miniboss": 2.0, "elite": 2.5, "minor": 2.5}
             }
         },
         "subFam": {
@@ -429,15 +428,15 @@
                     "stow": {"vpp": -0.002863515313, "offset": 0.4445712383},
                     "ads":  {"vpp": -0.001693741678, "offset": 0.4112330226}
                 },
-                "combatant_scalars": {"vehicle": 1.81, "boss": 1.54, "champion": 1.64, "miniboss": 1.64, "elite": 1.92, "minor": 2.03}
+                "combatant_scalars": { "vehicle": 1.81, "boss": 1.54, "champion": 1.64, "miniboss": 1.64, "elite": 1.92, "minor": 2.03}
             },
             "exotic": {
                 "extends": "default",
-                "combatant_scalars": {"vehicle": 1.81, "boss": 1.81, "champion": 1.92, "miniboss": 1.92, "elite": 1.92, "minor": 2.03}
+                "combatant_scalars": { "boss": 1.81, "champion": 1.92, "miniboss": 1.92 }
             },
             "arbalest": {
                 "extends": "default",
-                "combatant_scalars": {"vehicle": 1.81, "boss": 1.54, "champion": 1.23, "miniboss": 1.64, "elite": 1.92, "minor": 2.03}
+                "combatant_scalars": { "champion": 1.23, "miniboss": 1.64, "elite": 1.92 }
             }
         },
 
